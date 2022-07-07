@@ -1,0 +1,90 @@
+$projectButton : #A176C1;
+$activeBorder  : #9043CA;
+$buttonText    : #FFFFFF;
+$activeBG      : #F9F1FF;
+$grayBorder    : #E6E6E6;
+$green         : #87D385;
+$greenHover    : #64B657;
+$greenActive   : #316c28;
+$red           : #FF9393;
+$redHover      : #DA7070;
+$redActive     : #ae1c1c;
+
+* {
+    font-family: 'Rubik', sans-serif;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 16px;
+    box-sizing: border-box;
+
+    cursor: pointer;
+
+    transition: background-color .5s;
+}
+
+.button-primary {
+    background-color: $projectButton;
+    color: $buttonText;      
+}
+
+.button-primary:hover, .button-secondary:hover {
+    background-color: $activeBorder;
+    color: $buttonText;
+    border: none;
+}
+
+.button-primary:active {
+    background-color: #511182;
+}
+
+.button-secondary {
+    background-color: $activeBG;
+    color: $projectButton;
+    border: 1px solid $activeBorder;
+}
+
+.button-secondary:active {
+    background-color: #511182;
+    color: $buttonText;
+    border: none;
+}
+
+.button-disabled {
+    background-color: $activeBG;
+    color: $grayBorder;
+
+    cursor: not-allowed;
+}
+
+.button-accept {
+    background-color: $green;
+    color: $buttonText;
+}
+
+.button-accept:hover {
+    background-color: $greenHover;
+}
+
+.button-accept:active {
+    background-color: $greenActive;
+}
+
+.button-decline {
+    background-color: $red;
+    color: $buttonText;
+}
+
+.button-decline:hover {
+    background-color: $redHover;
+}
+
+.button-decline:active {
+    background-color: $redActive;
+}
