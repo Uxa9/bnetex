@@ -1,14 +1,17 @@
-import logo from './logo.svg';
-import './styles/style.scss';
-
 import Button from './components/button';
+import Header from './components/pageTemplate/header';
+
+import './styles/style.scss';
 
 const App = () => {
     return (
-        <Button
-            text="aboba"
-            type="decline"
-        />
+        <>
+            <Header />
+            <Button
+                text="aboba"
+                type="decline"
+            />
+        </>
     );
 }
 
