@@ -7,10 +7,6 @@ const App = () => {
     return (
         <>
             <Header />
-            <Button
-                text="aboba"
-                type="decline"
-            />
         </>
     );
 }

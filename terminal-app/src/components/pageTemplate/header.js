@@ -2,6 +2,7 @@ import NightMode from "../../images/icons/nightMode";
 import Wallet    from "../../images/icons/wallet";
 import Case      from "../../images/icons/case";
 import User      from "../../images/icons/user";
+import logo      from "../../images/logo.svg";
 
 /**
  * 
@@ -9,26 +10,36 @@ import User      from "../../images/icons/user";
 const Header = () => {
 
     return (
-        <header>
-            <div>
+        <header
+            className="page-header"
+        >
+            <div
+                className="header-left-side"
+            >
                 <div
                     className="logo"
                 >
-
+                    <img src={logo} />
                 </div>
-                <select>
-                    <option>
-                        Начинающий
-                    </option>
-                    <option>
-                        Уверенный
-                    </option>
-                    <option>
-                        Pro-версия
-                    </option>
-                </select>
+                <div
+                    className="custom-select"
+                >
+                    <select>
+                        <option value="beginner">
+                            Начинающий
+                        </option>
+                        <option value="advanced">
+                            Уверенный
+                        </option>
+                        <option value="pro">
+                            Pro-версия
+                        </option>
+                    </select>
+                </div>
             </div>
-            <div>
+            <div
+                className="header-right-side"
+            >
                 <div>
                     <NightMode />
                 </div>

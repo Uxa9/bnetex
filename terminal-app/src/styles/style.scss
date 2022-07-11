@@ -1,6 +1,13 @@
+* {
+    font-family: 'Rubik', sans-serif;
+}
+
+// Buttons
+
 $projectButton : #A176C1;
 $activeBorder  : #9043CA;
 $buttonText    : #FFFFFF;
+$mainActive    : #511182;
 $activeBG      : #F9F1FF;
 $grayBorder    : #E6E6E6;
 $green         : #87D385;
@@ -9,10 +16,6 @@ $greenActive   : #316c28;
 $red           : #FF9393;
 $redHover      : #DA7070;
 $redActive     : #ae1c1c;
-
-* {
-    font-family: 'Rubik', sans-serif;
-}
 
 .button {
     display: flex;
@@ -41,7 +44,7 @@ $redActive     : #ae1c1c;
 }
 
 .button-primary:active {
-    background-color: #511182;
+    background-color: $mainActive;
 }
 
 .button-secondary {
@@ -51,7 +54,7 @@ $redActive     : #ae1c1c;
 }
 
 .button-secondary:active {
-    background-color: #511182;
+    background-color: $mainActive;
     color: $buttonText;
     border: none;
 }
@@ -87,4 +90,56 @@ $redActive     : #ae1c1c;
 
 .button-decline:active {
     background-color: $redActive;
+}
+
+// Header
+
+$headerHeight : 72px;
+
+.page-header {
+    width: 100vw;
+    height: $headerHeight;
+    
+    padding: 0 30px;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left-side, .header-right-side {
+    display: flex;
+}
+
+.header-left-side {
+    .logo {
+        padding-right: 40px;
+    }
+}
+
+.header-right-side {
+    div {
+        height: 32px;
+
+        display: flex;
+        align-items: center ;
+        margin-left: 40px;
+
+        transition: color .5s;
+
+        cursor: pointer;
+
+        span {
+            margin-left: 10px;
+        }
+
+        &:hover {
+            color: $projectButton;
+        }
+
+        &:active {
+            color: $mainActive;
+        }
+    }
 }
