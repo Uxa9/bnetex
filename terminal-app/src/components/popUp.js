@@ -1,4 +1,4 @@
-import Cross from "../../images/icons/delete";
+import Cross from "../images/icons/delete";
 
 const PopUp = props => {
 
