@@ -8,7 +8,7 @@ const PopUp = props => {
         >
             <div
                 className="popup-background"
-                onClick={() => alert('aboba')}
+                onClick={props.closeFunc}
             />
             <div
                 className="popup"
@@ -19,7 +19,11 @@ const PopUp = props => {
                     <span>
                         {props.title}
                     </span>
-                    <Cross />
+                    <Cross 
+                        height={'24px'}
+                        width={'24px'}
+                        onClick={props.closeFunc}
+                    />
                 </div>
                 <div
                     className="popup-content"

@@ -1,22 +1,4 @@
-* {
-    font-family: 'Rubik', sans-serif;
-}
-
-// Common things
-
-.minus-icon {
-    width: 26px;
-    height: 26px;
-
-    &::after {
-        width: 26px;
-        height: 4px;
-
-        background-color: #D9D9D9;
-    }
-}
-
-// Buttons
+// global variables
 
 $projectButton : #A176C1;
 $activeBorder  : #9043CA;
@@ -30,6 +12,102 @@ $greenActive   : #316c28;
 $red           : #FF9393;
 $redHover      : #DA7070;
 $redActive     : #ae1c1c;
+$grayText      : #9D9D9D;
+
+@font-face {
+    font-family: 'Rubik';
+    src: url('../fonts/Rubik-Regular.ttf'),
+         url('../fonts/Rubik-Black.ttf'),
+         url('../fonts/Rubik-BlackItalic.ttf'),
+         url('../fonts/Rubik-Bold.ttf'),
+         url('../fonts/Rubik-BoldItalic.ttf'),
+         url('../fonts/Rubik-ExtraBold.ttf'),
+         url('../fonts/Rubik-ExtraBoldItalic.ttf'),
+         url('../fonts/Rubik-Italic.ttf'),
+         url('../fonts/Rubik-Light.ttf'),
+         url('../fonts/Rubik-LightItalic.ttf'),
+         url('../fonts/Rubik-Medium.ttf'),
+         url('../fonts/Rubik-MediumItalic.ttf'),
+         url('../fonts/Rubik-SemiBold.ttf'),
+         url('../fonts/Rubik-SemiBoldItalic.ttf');
+}
+
+* {
+    font-family: 'Rubik', sans-serif;
+}
+
+// Common things
+
+@mixin icon-container-actions {
+    cursor: pointer;
+
+    &::before, &::after {
+        display: block;
+        content: '';
+    
+        position: absolute;
+        top: 50%;
+        left: 50%;
+    
+        transform: translate(-50%, -50%);
+
+        transition: background-color .5s;
+    }
+
+    &:hover {
+        &::before, &::after {
+            background-color: $activeBorder;
+        }
+    }
+
+    &:active {
+        &::before, &::after {
+            background-color: $mainActive;
+        }
+    }
+}
+
+.minus-icon {
+    position: relative;
+
+    width: 26px;
+    height: 26px;
+
+    @include icon-container-actions();
+
+    &::after {
+
+        width: 26px;
+        height: 4px;
+
+        background-color: #D9D9D9;
+    }
+}
+
+.plus-icon {
+    position: relative;
+
+    width: 26px;
+    height: 26px;
+
+    @include icon-container-actions();
+
+    &::after {
+        width: 26px;
+        height: 4px;
+
+        background-color: #D9D9D9;
+    }
+
+    &::before {
+        width: 4px;
+        height: 26px;
+
+        background-color: #D9D9D9;
+    }    
+}
+
+// Buttons
 
 .button {
     display: flex;
@@ -168,6 +246,8 @@ $headerHeight : 72px;
     
 }
 
+// pop-up
+
 .popup-container {
     width: 100vw;
     height: 100vh;
@@ -234,6 +314,12 @@ $headerHeight : 72px;
                 color: $grayBorder;
 
                 cursor: pointer;
+
+                transition: color .5s;
+
+                &:hover {
+                    color: $grayText;
+                }
             }
         }
 
@@ -253,4 +339,166 @@ $headerHeight : 72px;
             font-size: 16px;
         }
     }
+}
+
+// credit lever pop-up
+
+.credit-lever-header {
+    color: $grayText;
+    font-size: 14px;
+}
+
+.credit-lever-display {
+    display: flex;
+
+    height: 50px;
+
+    margin-top: 10px;
+    padding: 0 15px;
+    box-sizing: border-box;
+
+    align-items: center;
+
+    background-color: #F7F7F7;
+    border: solid 1px $grayBorder;
+    border-radius: 5px;
+}
+
+.credit-lever-level {
+    flex-grow: 1;
+
+    font-size: 20px;
+    
+    text-align: center;
+}
+
+.slider-lever-container {
+    height: 17px;
+    font-size: 14px;
+    font-weight: 300;
+    padding: 15px 0 7px;
+    
+    text-align: center;
+    
+    color: $grayText;
+}
+
+// .lever-range-selector {
+//     height: 5px;
+//     accent-color: $projectButton;
+// }
+
+// .lever-range-selector::-webkit-slider-thumb {
+//     background: #030003;
+//     cursor: pointer;
+//     -webkit-appearance: none;
+//     // margin-top: -7px;
+// }
+
+.lever-range-selector {
+    height: 21px;
+    -webkit-appearance: none;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.lever-range-selector:focus {
+    outline: none;
+}
+
+.lever-range-selector::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 0px 0px 0px #002200;
+    background: #A176C1;
+    border-radius: 0px;
+    border: 0px solid #18D501;
+}
+
+.lever-range-selector::-webkit-slider-thumb {
+    box-shadow: 0px 0px 0px #00AA00;
+    border: 0px solid #83E584;
+    height: 15px;
+    width: 15px;
+    border-radius: 15px;
+    background: #9043CA;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -5px;
+}
+
+.lever-range-selector:focus::-webkit-slider-runnable-track {
+    background: #A176C1;
+}
+
+.lever-range-selector::-moz-range-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 0px 0px 0px #002200;
+    background: #A176C1;
+    border-radius: 0px;
+    border: 0px solid #18D501;
+}
+
+.lever-range-selector::-moz-range-thumb {
+    box-shadow: 0px 0px 0px #00AA00;
+    border: 0px solid #83E584;
+    height: 15px;
+    width: 15px;
+    border-radius: 15px;
+    background: #9043CA;
+    cursor: pointer;
+}
+
+.lever-range-selector::-ms-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    animate: 0.2s;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+}
+
+.lever-range-selector::-ms-fill-lower {
+    background: #A176C1;
+    border: 0px solid #18D501;
+    border-radius: 0px;
+    box-shadow: 0px 0px 0px #002200;
+}
+.lever-range-selector::-ms-fill-upper {
+    background: #A176C1;
+    border: 0px solid #18D501;
+    border-radius: 0px;
+    box-shadow: 0px 0px 0px #002200;
+}
+.lever-range-selector::-ms-thumb {
+    margin-top: 1px;
+    box-shadow: 0px 0px 0px #00AA00;
+    border: 0px solid #83E584;
+    height: 15px;
+    width: 15px;
+    border-radius: 15px;
+    background: #9043CA;
+    cursor: pointer;
+}
+.lever-range-selector:focus::-ms-fill-lower {
+    background: #A176C1;
+}
+.lever-range-selector:focus::-ms-fill-upper {
+    background: #A176C1;
+}
+
+.leverage-list {
+    display: flex;
+    justify-content: space-between;
+    
+    font-weight: 300;
+    font-size: 14px;
+
+    color: $grayText;
 }
