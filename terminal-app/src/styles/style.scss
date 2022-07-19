@@ -13,6 +13,7 @@ $red           : #FF9393;
 $redHover      : #DA7070;
 $redActive     : #ae1c1c;
 $grayText      : #9D9D9D;
+$graySeparator : #F7F7F7;
 
 @font-face {
     font-family: 'Rubik';
@@ -240,13 +241,31 @@ $headerHeight : 72px;
     position: relative;
 
     select {
-        display: none;
-    }
-
-    
+        border: none;
+    }    
 }
 
 // pop-up
+
+@keyframes popUpEmerge {
+    0% {
+        transform: translateX(60px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes popUpBackground {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
 
 .popup-container {
     width: 100vw;
@@ -275,6 +294,8 @@ $headerHeight : 72px;
 
         background: rgba(52, 44, 44, 0.3);
         backdrop-filter: blur(10px);
+
+        animation: popUpBackground .4s;
     }
 
     .popup {
@@ -291,6 +312,8 @@ $headerHeight : 72px;
 
         position: relative;
         z-index: 10001;
+
+        animation: popUpEmerge .4s ease-out;
         
         .popup-header {
             font-style: normal;
@@ -305,6 +328,7 @@ $headerHeight : 72px;
 
             span {
                 max-width: 80%;
+                white-space: pre-line;
             }
 
             svg {
@@ -358,7 +382,7 @@ $headerHeight : 72px;
 
     align-items: center;
 
-    background-color: #F7F7F7;
+    background-color: $graySeparator;
     border: solid 1px $grayBorder;
     border-radius: 5px;
 }
@@ -588,6 +612,73 @@ $headerHeight : 72px;
             width: 90%;
             font-size: 14px;
             white-space: pre-line;
+        }
+    }
+}
+
+// margin select popup
+
+.margin-selector {
+    display: flex;
+
+    div {
+        width: 50%;
+        box-sizing: border-box;
+
+        padding: 7px 0;
+
+        text-align: center;
+        font-size: 14px;
+        color: $grayText;
+        cursor: pointer;
+
+        border: 1px solid $grayBorder;
+
+        transition: color .4s, border-color .4s, background-color .4s;
+
+        &:first-child {
+            border-radius: 5px 0px 0px 5px;
+        }
+
+        &:last-child {
+            border-radius: 0px 5px 5px 0px;
+        }
+
+        &:hover {
+            border-color: $projectButton;
+            color: $projectButton;
+        }
+    }
+
+    .active {
+        border-color: $activeBorder;
+        color: $activeBorder;
+        background-color: $activeBG;
+
+        &:hover {
+            border-color: $activeBorder;
+            color: $activeBorder;
+        }
+    }
+}
+
+.margin-text {
+    p {
+        font-weight: 400;
+        font-size: 14px;
+    
+        color: $grayText;
+        line-height: 17px;
+
+        &:first-child {
+            padding-bottom: 25px;
+            margin-bottom: 25px;
+
+            border-bottom: 1px solid $graySeparator;
+        }
+
+        &:last-child {
+            margin: 25px 0 40px;
         }
     }
 }

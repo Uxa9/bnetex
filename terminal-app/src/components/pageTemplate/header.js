@@ -31,7 +31,7 @@ const Header = () => {
                         <option value="advanced">
                             Уверенный
                         </option>
-                        <option value="pro">
+                        <option value="pro" disabled>
                             Pro-версия
                         </option>
                     </select>
@@ -41,22 +41,34 @@ const Header = () => {
                 className="header-right-side"
             >
                 <div>
-                    <NightMode />
+                    <NightMode 
+                        height='22px'
+                        width='22px'
+                    />
                 </div>
                 <div>
-                    <Wallet />
+                    <Wallet 
+                        height='22px'
+                        width='22px'
+                    />
                     <span>
                         Кошельки
                     </span>
                 </div>
                 <div>
-                    <Case />
+                    <Case
+                        height='22px'
+                        width='22px' 
+                    />
                     <span>
                         Депозиты
                     </span>
                 </div>
                 <div>
-                    <User />
+                    <User
+                        height='22px'
+                        width='22px' 
+                    />
                     <span>
                         Профиль
                     </span>

@@ -15,7 +15,7 @@ const Button = props => {
                 height : props.height || '50px'
             }}
         >
-            {props.text}
+            {props.children}
         </div>
     )
 }

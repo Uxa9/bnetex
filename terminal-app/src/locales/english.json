@@ -1,7 +1,16 @@
 {
-    "credit_lever_title"  : "Change credit lever",
-    "credit_lever_header" : "Credit lever",
-    "credit_lever_warning_first" : "Maximum position at current leverage:",
-    "credit_lever_warning_second" : "Please note that leverage changing will also apply for open positions and open orders.",
-    "credit_lever_warning_third"  : "Selecting higher leverage such as [10x] increases your liquidation risk. Always manage your risk levels."
+    "credit_lever_title"              : "Change credit lever",
+    "credit_lever_header"             : "Credit lever",
+    "credit_lever_warning_first"      : "Maximum position at current leverage:",
+    "credit_lever_warning_second"     : "Please note that leverage changing will also apply for open positions and open orders.",
+    "credit_lever_warning_third"      : "Selecting higher leverage such as [10x] increases your liquidation risk. Always manage your risk levels.",
+
+    "margin_mode"                     : "BTC/USDT Perpetual Margin Mode",
+    "margin_cross"                    : "Cross",
+    "margin_isolated"                 : "Isolated",
+    "margin_mode_warning_first"       : "Switching the margin mode will only apply it to the selected contract.",
+    "margin_mode_warning_second_name" : "Cross Margin Mode:",
+    "margin_mode_warning_second"      : "All cross positions under the same margin asset share the same asset cross margin balance. In the event of liquidation, your assets full margin balance along with any remaining open positions under the asset may be forfeited.",
+    "margin_mode_warning_third_name"  : "Isolated Margin Mode:",
+    "margin_mode_warning_third"       : "Manage your risk on individual positions by restricting the amount of margin allocated to each. If the margin ratio of a position reached 100%, the position will be liquidated. Margin can be added or removed to positions using this mode."
 }

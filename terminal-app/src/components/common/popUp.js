@@ -1,4 +1,6 @@
-import Cross from "../images/icons/delete";
+import Cross from "../../images/icons/delete";
+
+import Button from "./button";
 
 const PopUp = props => {
 
@@ -30,11 +32,14 @@ const PopUp = props => {
                 >
                     {props.children}
                 </div>
-                <div
-                    className="popup-bottom-button button button-primary"
+                <Button
+                    height="50px"
+                    width="100%"
+                    className="popup-bottom-button"
+                    type={props.confirmType || "primary"}
                 >
                     {props.confirmText || "Подтвердить"}
-                </div>
+                </Button>
             </div>            
         </div>
     )
