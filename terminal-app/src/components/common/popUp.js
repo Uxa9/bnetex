@@ -21,11 +21,14 @@ const PopUp = props => {
                     <span>
                         {props.title}
                     </span>
-                    <Cross 
-                        height={'24px'}
-                        width={'24px'}
+                    <div
                         onClick={props.closeFunc}
-                    />
+                    >
+                        <Cross 
+                            height={'24px'}
+                            width={'24px'}
+                        />
+                    </div>    
                 </div>
                 <div
                     className="popup-content"
@@ -37,6 +40,7 @@ const PopUp = props => {
                     width="100%"
                     className="popup-bottom-button"
                     type={props.confirmType || "primary"}
+                    onClickFunc={props.acceptFunc}
                 >
                     {props.confirmText || "Подтвердить"}
                 </Button>

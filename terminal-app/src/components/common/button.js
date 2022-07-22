@@ -14,6 +14,7 @@ const Button = props => {
                 width  : props.width  || '200px',
                 height : props.height || '50px'
             }}
+            onClick={props.onClickFunc}
         >
             {props.children}
         </div>

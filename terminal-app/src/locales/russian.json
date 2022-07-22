@@ -20,5 +20,13 @@
 
     "wallets"                         : "Кошельки",
     "deposits"                        : "Депозиты",
-    "profile"                         : "Профиль"
+    "profile"                         : "Профиль",
+
+    "trade_market"                    : "Маркет",
+    "trade_tpsl"                      : "TP/SL",
+    "available"                       : "Доступно",
+    "maximum"                         : "Максимум",
+
+    "price"                           : "Цена", 
+    "amount"                          : "Количество"     
 }

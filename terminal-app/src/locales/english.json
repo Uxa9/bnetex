@@ -20,5 +20,13 @@
 
     "wallets"                         : "Wallets",
     "deposits"                        : "Deposits",
-    "profile"                         : "Profile"
+    "profile"                         : "Profile",
+
+    "trade_market"                    : "Market",
+    "trade_tpsl"                      : "TP/SL",
+    "available"                       : "Wallet",
+    "maximum"                         : "Maximum",
+
+    "price"                           : "Price", 
+    "amount"                          : "Amount" 
 }

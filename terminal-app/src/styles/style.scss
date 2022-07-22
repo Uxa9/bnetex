@@ -85,7 +85,7 @@ $graySeparator : #F7F7F7;
         width: 26px;
         height: 4px;
 
-        background-color: #D9D9D9;
+        background-color: $grayText;
     }
 }
 
@@ -101,15 +101,25 @@ $graySeparator : #F7F7F7;
         width: 26px;
         height: 4px;
 
-        background-color: #D9D9D9;
+        background-color: $grayText;
     }
 
     &::before {
         width: 4px;
         height: 26px;
 
-        background-color: #D9D9D9;
+        background-color: $grayText;
     }    
+}
+
+.block {
+    background: #FFFFFF;
+    box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.05);
+    border-radius: 20px;
+}
+
+body {
+    min-height: 100vh;
 }
 
 // Buttons
@@ -258,7 +268,7 @@ $headerHeight : 72px;
         align-items: center;
         height: 100%;
 
-        cursor: pointer;
+        cursor: default;
         
         .select-arrow {
             display: flex;
@@ -309,6 +319,8 @@ $headerHeight : 72px;
         transform: scaleY(0);
         transform-origin: top;
         transition: transform .3s;
+
+        background-color: #FFFFFF;
 
         .select-dropdown-option {
             display: flex;
@@ -783,6 +795,67 @@ $headerHeight : 72px;
 
         &:last-child {
             margin: 25px 0 40px;
+        }
+    }
+}
+
+// terminal common
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+    padding: 20px 30px 70px;
+}
+
+// terminal beginner
+
+.chart-and-terminal {
+    display: flex;
+
+    .chart-view {
+        flex-grow: 1;
+    }
+    
+    .beginner-terminal {
+        flex-grow: 1;
+    
+        max-width: 450px;
+
+        padding: 30px 20px;
+
+        box-sizing: border-box;
+    
+        .margin-and-lever-selector {
+            display: flex;
+            
+            justify-content: space-between;
+            align-items: center;
+
+            .selector-select-button {
+                flex-grow: 1;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                font-size: 14px;
+
+                background-color: $activeBG;
+                border-radius: 20px;
+
+                max-width: 190px;
+                height: 30px;
+
+                cursor: pointer;
+
+                transition: background-color .4s;
+
+                &:hover {
+                    background-color: $grayBorder;
+                }
+            }
         }
     }
 }
