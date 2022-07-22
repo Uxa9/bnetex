@@ -8,7 +8,7 @@ import _l from '../locales/index';
 
 import '../styles/style.scss';
 
-const LeverPopUp = () => {
+const LeverPopUp = props => {
     const [lever, setLever] = useState(1);
     const [maxSum, setMaxSum] = useState(300000000);
     const [sliderLever, showSliderLever] = useState(false);
@@ -25,6 +25,10 @@ const LeverPopUp = () => {
             setLever(Number(lever) +1);
         }
     }
+
+    useEffect(() => {
+        setLever(props.lever);
+    }, []);
     
     useEffect(() => {
         slider.current.value = lever;
@@ -74,6 +78,8 @@ const LeverPopUp = () => {
     return (
         <PopUp 
             title={_l.credit_lever_title}
+            closeFunc={props.closeFunc}
+            acceptFunc={() => props.acceptFunc(lever)}
         >
             <span
                 className="credit-lever-header"

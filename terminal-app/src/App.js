@@ -56,7 +56,9 @@ const App = props => {
             }
             {leverPopUp &&
                 <LeverPopUp
-
+                    acceptFunc={acceptLeverPopUp}
+                    closeFunc={closeLeverPopUp}
+                    lever={lever}
                 />
             }
             <div
