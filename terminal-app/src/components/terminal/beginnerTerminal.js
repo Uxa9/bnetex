@@ -1,5 +1,7 @@
 import _l from '../../locales/index';
 
+import Edit from '../../images/icons/edit';
+
 const BeginnerTerminal = props => {
 
     return (
@@ -67,6 +69,32 @@ const BeginnerTerminal = props => {
                     type="number"
                     placeholder={_l.amount}
                 />
+                <div
+                    className='money-type-switcher-and-edit'
+                >
+                    <div
+                        className='money-type-switcher'
+                    >
+                        <div
+                            className='money-type-selector'
+                        >
+                            %
+                        </div>
+                        <div
+                            className='money-type-selector'
+                        >
+                            $
+                        </div>
+                    </div>
+                    <div
+                        className='money-type-edit'
+                    >
+                        <Edit 
+                            width='20px'
+                            height='20px'
+                        />
+                    </div>
+                </div>
             </div>
             <div
                 className="trade-tpsl-field"
