@@ -118,6 +118,33 @@ $graySeparator : #F7F7F7;
     border-radius: 20px;
 }
 
+.user-selector-field {
+    box-sizing: border-box;
+
+    border: 1px solid $grayBorder;
+    
+    color: $grayText;
+
+    transition: border-color .3s, 
+                background-color .3s, 
+                color .3s;
+
+    cursor: pointer;
+
+    &:hover {
+        border-color: $activeBorder;
+        z-index: 2;
+    }
+}
+
+.user-selector-field-active {
+    background-color: $activeBG;
+    color: $activeBorder;
+    border-color: $activeBorder;
+
+    z-index: 2;
+}
+
 body {
     min-height: 100vh;
 }
@@ -857,5 +884,210 @@ $headerHeight : 72px;
                 }
             }
         }
+
+        .trade-type {
+            display: flex;
+
+            margin: 20px 0 40px;
+
+            .trade-type-selector {
+                width: 120px;
+                height: 30px;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                &:first-child {
+                    border-radius: 5px 0 0 5px;
+                }
+
+                &:last-child {
+                    position: relative;
+                    left: -1px;
+
+                    border-radius: 0 5px 5px 0;
+                }
+            }
+        }
     }
+
+    .trade-market-field {
+        .trade-market-user-wallet {
+            display: flex;
+            justify-content: space-between;
+            
+            font-size: 14px;
+            
+            color: $grayText;
+
+            margin-bottom: 10px;
+
+            b {
+                color: black;
+            }
+        }
+
+        .money-type-switcher-and-edit {
+            display: flex;
+            margin: 40px 0 20px;
+
+            font-size: 14px;
+            
+            .money-type-switcher {
+                display: flex;
+
+
+                .money-type-selector {
+                    width: 25px;
+                    height: 25px;
+    
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+    
+                    &:first-child {
+                        border-radius: 5px 0 0 5px;
+                    }
+    
+                    &:last-child {
+                        position: relative;
+                        left: -1px;
+    
+                        border-radius: 0 5px 5px 0;
+                    }
+                }
+            }
+
+            .money-type-edit {
+                cursor: pointer;
+
+                margin-left: 10px;
+
+                transition: color .3s;
+                
+                &:hover {
+                    color: $activeBorder;
+                }
+            }
+        }
+
+        .percent-selector,
+        .money-selector {
+            display: flex;
+            margin: 20px 0 47px;
+            
+            .amount-selector {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                
+                width: 20%;
+                height: 57px;
+
+                &:first-child {
+                    border-radius: 10px 0 0 10px;
+                }
+
+                &:last-child {
+                    position: relative;
+                    left: -1px;
+
+                    border-radius: 0 10px 10px 0;
+                }
+            }
+        }
+
+        .buy-and-sell-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .final-price-calculations {
+            display: flex;
+            justify-content: space-between;
+
+            margin-top: 20px;
+            
+            .long-calculations,
+            .short-calculations {
+                width: 190px;
+                
+                >div {
+                    display: flex;
+                    justify-content: space-between;
+
+                    margin-top: 11px;
+                    
+                    span {
+                        &:first-child {
+                            color: $grayText;
+                        }
+
+                        &:last-child {
+                            color: black;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Orders, positions, and history
+
+.history-and-actives {
+    display: flex;
+
+    margin-top: 20px;
+}
+
+.history-and-orders {
+    flex-grow: 1;
+
+    .tabs {
+        display: flex;
+
+        padding: 20px;
+
+        .tab {
+            display: flex;
+            align-items: center;
+            font-weight: 400;
+            font-size: 20px;
+
+            color: $grayText;
+
+            margin-right: 60px;
+
+            position: relative;
+
+            .tab-counter {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                position: absolute;
+                right: -28px;
+
+                width: 20px;
+                height: 20px;
+
+                box-sizing: border-box;
+
+                font-size: 14px;
+
+                border: 2px solid $grayText;
+                border-radius: 50%;
+            }
+        }
+    }
+}
+
+.actives {
+    flex-grow: 1;
+    
+    max-width: 450px;
+
+    margin-left: 20px;
 }

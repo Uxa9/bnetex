@@ -28,5 +28,12 @@
     "maximum"                         : "Maximum",
 
     "price"                           : "Price", 
-    "amount"                          : "Amount" 
+    "amount"                          : "Amount",
+
+    "buy_long"                        : "Buy/Long",
+    "sell_short"                      : "Sell/Short",
+
+    "liquidation_price"               : "Est. Liq. Price",
+    "price_cost"                      : "Cost",
+    "price_max"                       : "Max"
 }

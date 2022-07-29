@@ -25,8 +25,20 @@
     "trade_market"                    : "Маркет",
     "trade_tpsl"                      : "TP/SL",
     "available"                       : "Доступно",
-    "maximum"                         : "Максимум",
+    "maximum"                         : "Макс.",
 
     "price"                           : "Цена", 
-    "amount"                          : "Количество"     
+    "amount"                          : "Количество",
+
+    "buy_long"                        : "Купить/Лонг",
+    "sell_short"                      : "Продать/Шорт",
+
+    "liquidation_price"               : "Расч. цена ликв.",
+    "price_cost"                      : "Стоимость",
+    "price_max"                       : "Макс.",
+
+    "positions"                       : "Позиции",
+    "open_orders"                     : "Открытые ордера",
+    "orders_history"                  : "История ордеров",
+    "deals_history"                   : "История сделок"
 }

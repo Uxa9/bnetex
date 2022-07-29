@@ -79,6 +79,85 @@ const App = props => {
                         evokeLeverSelector={() => showLeverPopUp(true)}
                     />
                 </div>
+                <div
+                    className="history-and-actives"
+                >
+                    <div
+                        className="block history-and-orders"
+                    >
+                        <div
+                            className="tabs"
+                        >
+                            <div
+                                className="tab"
+                            >
+                                {_l.positions}
+                                <div
+                                    className="tab-counter"
+                                >
+                                    1
+                                </div>
+                            </div>
+                            <div
+                                className="tab"
+                            >
+                                {_l.open_orders}
+                                <div
+                                    className="tab-counter"
+                                >
+                                    2
+                                </div>
+                            </div>
+                            <div
+                                className="tab"
+                            >
+                                {_l.orders_history}
+                            </div>
+                            <div
+                                className="tab"
+                            >
+                                {_l.deals_history}
+                            </div>
+                        </div>
+                        <div
+                            className="positions-table"
+                        >
+                            <div
+                                className="position-header"
+                            >
+                                <span>
+                                    Символ
+                                </span>
+                                <span>
+                                    Размер
+                                </span>
+                                <span>
+                                    Цена входа
+                                </span>
+                                <span>
+                                    Цена маркировки
+                                </span>
+                                <span>
+                                    Цена ликвидации
+                                </span>
+                                <span>
+                                    Маржа
+                                </span>
+                                <span>
+                                    PnL
+                                </span>
+                                <span>
+                                    Закрыть все позиции
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        className="block actives"
+                    >
+
+                    </div>
+                </div>
             </div>
         </div>
     );
