@@ -66,6 +66,13 @@ const BeginnerTerminal = props => {
                         </b>
                     </div>
                 </div>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column'
+                    }}
+                >
+
                 <input
                     type="number"
                     placeholder={_l.price}
@@ -74,6 +81,7 @@ const BeginnerTerminal = props => {
                     type="number"
                     placeholder={_l.amount}
                 />
+                </div>
                 <div
                     className='money-type-switcher-and-edit'
                 >
@@ -106,7 +114,8 @@ const BeginnerTerminal = props => {
                     className="percent-selector"
                 >
                     <div
-                        className="amount-selector user-selector-field"
+                        className="amount-selector user-selector-field
+                        user-selector-field-active"
                     >
                         1%
                     </div>

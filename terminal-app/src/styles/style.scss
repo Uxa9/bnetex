@@ -1045,40 +1045,34 @@ $headerHeight : 72px;
 .history-and-orders {
     flex-grow: 1;
 
-    .tabs {
+    min-height: 260px;
+
+    .positions-table {
+        height: 50px;
+
         display: flex;
+        align-items: center;
 
-        padding: 20px;
+        border-color: $graySeparator;
+        border-style: solid;
+        border-width: 1px 0;
 
-        .tab {
+        padding: 0 20px;
+
+        color: $grayText;
+
+        .position-header {
             display: flex;
-            align-items: center;
-            font-weight: 400;
-            font-size: 20px;
+            justify-content: space-between;
+            width: 100%;
 
-            color: $grayText;
+            span {
+                margin-right: 40px;
 
-            margin-right: 60px;
-
-            position: relative;
-
-            .tab-counter {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                position: absolute;
-                right: -28px;
-
-                width: 20px;
-                height: 20px;
-
-                box-sizing: border-box;
-
-                font-size: 14px;
-
-                border: 2px solid $grayText;
-                border-radius: 50%;
+                &:last-child {
+                    margin-left: auto;
+                    color: $activeBorder;
+                }
             }
         }
     }
@@ -1087,7 +1081,91 @@ $headerHeight : 72px;
 .actives {
     flex-grow: 1;
     
-    max-width: 450px;
+    min-width: 450px;
 
     margin-left: 20px;
+}
+
+.tabs {
+    display: flex;
+
+    padding: 0 20px;
+
+    .tab {
+        display: flex;
+        align-items: center;
+        font-weight: 400;
+        font-size: 20px;
+
+        height: 64px;
+
+        color: $grayText;
+
+        margin-right: 30px;
+        padding-right: 30px;
+
+        position: relative;
+
+        cursor: pointer;
+
+        transition: color .3s;
+
+        .tab-counter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            position: absolute;
+            right: 2px;
+
+            width: 20px;
+            height: 20px;
+
+            box-sizing: border-box;
+
+            color: $grayText;
+
+            font-size: 14px;
+
+            border: 2px solid $grayText;
+            border-radius: 50%;
+
+            transition: color .3s, border-color .3s;
+        }
+
+        &:hover {
+            color: $activeBorder;
+        }
+    }
+
+    .tab-active {
+        border-bottom: 2px solid $activeBorder;
+
+        color: $activeBorder;
+
+        .tab-counter {
+            color: $activeBorder;
+            border-color: $activeBorder;
+        }
+    }
+
+}
+.buttons {
+    padding: 30px;
+    width: 100%;
+    display: flex;
+
+    box-sizing: border-box;
+    justify-content: space-between;
+}
+
+input[type=number] {
+    padding: 10px 0;
+    height: 30px;
+    font-size: 16px;
+    margin: 20px 0 0;
+
+    text-indent: 20px;
+    border-radius: 10px;
+    border: 1px solid #E6E6E6;
 }

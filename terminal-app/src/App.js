@@ -89,7 +89,7 @@ const App = props => {
                             className="tabs"
                         >
                             <div
-                                className="tab"
+                                className="tab tab-active"
                             >
                                 {_l.positions}
                                 <div
@@ -155,7 +155,36 @@ const App = props => {
                     <div
                         className="block actives"
                     >
-
+                        <div
+                            className="tabs"
+                        >
+                            <div
+                                className="tab tab-active"
+                            >
+                                Активы
+                            </div>
+                            <div
+                                className="tab"
+                            >
+                                Коэффициент маржи
+                            </div>
+                        </div>
+                        <div
+                            className='buttons'
+                        >
+                            <Button
+                                type="primary"
+                                width="180px"
+                            >
+                                Купить актив
+                            </Button>
+                            <Button
+                                type="secondary"
+                                width="180px"
+                            >
+                                Перевод средств
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
