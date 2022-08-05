@@ -1,4 +1,5 @@
-import Button from '../common/button';
+import Button     from '../common/button';
+import OrderInput from './orderInput';
 
 import Edit from '../../images/icons/edit';
 
@@ -66,13 +67,6 @@ const BeginnerTerminal = props => {
                         </b>
                     </div>
                 </div>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column'
-                    }}
-                >
-
                 <input
                     type="number"
                     placeholder={_l.price}
@@ -81,7 +75,6 @@ const BeginnerTerminal = props => {
                     type="number"
                     placeholder={_l.amount}
                 />
-                </div>
                 <div
                     className='money-type-switcher-and-edit'
                 >
@@ -113,12 +106,9 @@ const BeginnerTerminal = props => {
                 <div
                     className="percent-selector"
                 >
-                    <div
-                        className="amount-selector user-selector-field
-                        user-selector-field-active"
-                    >
-                        1%
-                    </div>
+                    <OrderInput
+                        
+                    />
                     <div
                         className="amount-selector user-selector-field"
                     >
