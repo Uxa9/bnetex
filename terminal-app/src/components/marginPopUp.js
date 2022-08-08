@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import PopUp  from './common/popUp';
+import PopUp  from './UIKit/popUp';
 
 import _l from '../locales/index';
 

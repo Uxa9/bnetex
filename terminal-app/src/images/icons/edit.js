@@ -1,7 +1,7 @@
 const Edit = (size) => {
     return (
         <svg width={size.width} height={size.height} viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M79.8159 26.5012H39C30.7157 26.5012 24 33.217 24 41.5012V110C24 118.284 30.7157 125 39 125H107.499C115.783 125 122.499 118.284 122.499 110V69.1839" stroke="currentColor" strokeWidth="5" stroke-linecap="round"/>
+            <path d="M79.8159 26.5012H39C30.7157 26.5012 24 33.217 24 41.5012V110C24 118.284 30.7157 125 39 125H107.499C115.783 125 122.499 118.284 122.499 110V69.1839" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
             <rect x="96.0521" y="33.0439" width="4.87617" height="50.9309" transform="rotate(45 96.0521 33.0439)" fill="currentColor"/>
             <path d="M109.393 33.8388L117.643 42.0882C120.572 45.0171 120.572 49.7658 117.643 52.6948L112.591 57.7463L93.7352 38.8903L98.7867 33.8388C101.716 30.9099 106.464 30.9099 109.393 33.8388Z" stroke="currentColor" strokeWidth="5"/>
             <rect x="114.517" y="52.4348" width="4.87617" height="50.9309" transform="rotate(45 114.517 52.4348)" fill="currentColor"/>

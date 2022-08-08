@@ -145,6 +145,44 @@ $graySeparator : #F7F7F7;
     z-index: 2;
 }
 
+.edit-selector-field {
+    text-align: center;
+    font-size: 18px;
+
+    color: black;
+    background: $graySeparator;
+
+    outline: none;
+}
+
+.edit-selector-field:focus {
+    outline: none;
+
+    border-color: $activeBorder;
+}
+
+.toggle-type-switcher {
+    display: flex;
+
+    .toggle-type-selector {
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:first-child {
+            border-radius: 5px 0 0 5px;
+        }
+
+        &:last-child {
+            position: relative;
+            left: -1px;
+
+            border-radius: 0 5px 5px 0;
+        }
+    }
+}
+
 body {
     min-height: 100vh;
 }
@@ -890,7 +928,7 @@ $headerHeight : 72px;
 
             margin: 20px 0 40px;
 
-            .trade-type-selector {
+            > div {
                 width: 120px;
                 height: 30px;
 
@@ -933,47 +971,84 @@ $headerHeight : 72px;
             margin: 40px 0 20px;
 
             font-size: 14px;
-            
+
             .money-type-switcher {
-                display: flex;
-
-
-                .money-type-selector {
+                >div {
                     width: 25px;
                     height: 25px;
-    
+                }
+            }
+
+            .edit-mode-menu {
+
+                display: flex;
+                align-items: center;
+
+                .money-type-edit {
                     display: flex;
-                    justify-content: center;
                     align-items: center;
+
+                    cursor: pointer;
     
-                    &:first-child {
-                        border-radius: 5px 0 0 5px;
+                    margin-left: 10px;
+    
+                    transition: color .3s;
+                    
+                    &:hover {
+                        color: $activeBorder;
                     }
+                }
     
-                    &:last-child {
-                        position: relative;
-                        left: -1px;
-    
-                        border-radius: 0 5px 5px 0;
+                .money-type-edit-active {
+                    color: $mainActive;
+                }
+
+                >span {
+                    padding-bottom: 7px;
+                    margin: 0 5px;
+
+                    cursor: pointer;
+
+                    border-width: 0 0 1px;
+                    border-style: solid;
+
+                    transition: all .3s;
+                }
+
+                .save-button {
+                    color: $green;
+                    border-color: $green;
+
+                    &:hover {
+                        color: $greenHover;
+                        border-color: $greenHover;
+                    }
+
+                    &:active {
+                        color: $greenActive;
+                        border-color: $greenActive;
+                    }
+                }
+
+                .cancel-button {
+                    color: $red;
+                    border-bottom-color: $red;
+
+                    &:hover {
+                        color: $redHover;
+                        border-color: $redHover;
+                    }
+
+                    &:active {
+                        color: $redActive;
+                        border-color: $redActive;
                     }
                 }
             }
 
-            .money-type-edit {
-                cursor: pointer;
-
-                margin-left: 10px;
-
-                transition: color .3s;
-                
-                &:hover {
-                    color: $activeBorder;
-                }
-            }
         }
 
-        .percent-selector,
-        .money-selector {
+        .user-values-selector {
             display: flex;
             margin: 20px 0 47px;
             

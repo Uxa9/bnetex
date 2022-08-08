@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-import PopUp from './common/popUp';
+import PopUp from './UIKit/popUp';
 
 import Info from '../images/icons/info';
 
