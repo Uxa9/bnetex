@@ -1,0 +1,10 @@
+@import 'fontsMap';
+@import 'reset';
+@import 'variables';
+@import 'src/styles/colors/map';
+@import 'src/styles/colors/schema/themes';
+@import '../assets/fonts/font-face.scss';
+
+* {
+    font-family: 'Rubik', sans-serif;
+}

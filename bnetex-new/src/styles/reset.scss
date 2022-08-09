@@ -1,0 +1,76 @@
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:focus, :active {
+  outline: none;
+}
+
+a,
+a:visited,
+a:hover {
+  text-decoration: none;
+}
+
+a:focus, a:active {
+  outline: none;
+}
+
+nav, footer, header, aside {
+  display: block;
+}
+
+html, body, #root {
+  @extend .body-2;
+
+  height: 100%;
+  width: 100%;
+  line-height: 1;
+  font-size: 14px;
+  text-size-adjust: 100%;
+}
+
+input, button, textarea {
+  font-family: inherit;
+  outline: none !important;
+  box-shadow: none;
+}
+
+input {
+  border: 1px solid $bc900;
+
+  &::-ms-clear {
+    display: none;
+  }
+}
+
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+ul li {
+  list-style: none;
+}
+
+img {
+  vertical-align: top;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: 400;
+}
+
+button {
+  @extend .body-2;
+
+  background-color: inherit;
+  cursor: pointer;
+}

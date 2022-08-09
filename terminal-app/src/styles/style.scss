@@ -1,19 +1,19 @@
 // global variables
 
-$projectButton : #A176C1;
-$activeBorder  : #9043CA;
-$buttonText    : #FFFFFF;
-$mainActive    : #511182;
-$activeBG      : #F9F1FF;
-$grayBorder    : #E6E6E6;
-$green         : #87D385;
-$greenHover    : #64B657;
-$greenActive   : #316c28;
-$red           : #FF9393;
-$redHover      : #DA7070;
-$redActive     : #ae1c1c;
-$grayText      : #9D9D9D;
-$graySeparator : #F7F7F7;
+$projectButton: #a176c1;
+$activeBorder: #9043ca;
+$buttonText: #ffffff;
+$mainActive: #511182;
+$activeBG: #f9f1ff;
+$grayBorder: #e6e6e6;
+$green: #87d385;
+$greenHover: #64b657;
+$greenActive: #316c28;
+$red: #ff9393;
+$redHover: #da7070;
+$redActive: #ae1c1c;
+$grayText: #9d9d9d;
+$graySeparator: #f7f7f7;
 
 @mixin dropDownShadow {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -21,20 +21,13 @@ $graySeparator : #F7F7F7;
 
 @font-face {
     font-family: 'Rubik';
-    src: url('../fonts/Rubik-Regular.ttf') format('.ttf'),
-         url('../fonts/Rubik-Black.ttf') format('.ttf'),
-         url('../fonts/Rubik-BlackItalic.ttf') format('.ttf'),
-         url('../fonts/Rubik-Bold.ttf') format('.ttf'),
-         url('../fonts/Rubik-BoldItalic.ttf') format('.ttf'),
-         url('../fonts/Rubik-ExtraBold.ttf') format('.ttf'),
-         url('../fonts/Rubik-ExtraBoldItalic.ttf') format('.ttf'),
-         url('../fonts/Rubik-Italic.ttf') format('.ttf'),
-         url('../fonts/Rubik-Light.ttf') format('.ttf'),
-         url('../fonts/Rubik-LightItalic.ttf') format('.ttf'),
-         url('../fonts/Rubik-Medium.ttf') format('.ttf'),
-         url('../fonts/Rubik-MediumItalic.ttf') format('.ttf'),
-         url('../fonts/Rubik-SemiBold.ttf') format('.ttf'),
-         url('../fonts/Rubik-SemiBoldItalic.ttf') format('.ttf');
+    src: url('../fonts/Rubik-Regular.ttf') format('.ttf'), url('../fonts/Rubik-Black.ttf') format('.ttf'),
+        url('../fonts/Rubik-BlackItalic.ttf') format('.ttf'), url('../fonts/Rubik-Bold.ttf') format('.ttf'),
+        url('../fonts/Rubik-BoldItalic.ttf') format('.ttf'), url('../fonts/Rubik-ExtraBold.ttf') format('.ttf'),
+        url('../fonts/Rubik-ExtraBoldItalic.ttf') format('.ttf'), url('../fonts/Rubik-Italic.ttf') format('.ttf'),
+        url('../fonts/Rubik-Light.ttf') format('.ttf'), url('../fonts/Rubik-LightItalic.ttf') format('.ttf'),
+        url('../fonts/Rubik-Medium.ttf') format('.ttf'), url('../fonts/Rubik-MediumItalic.ttf') format('.ttf'),
+        url('../fonts/Rubik-SemiBold.ttf') format('.ttf'), url('../fonts/Rubik-SemiBoldItalic.ttf') format('.ttf');
 }
 
 * {
@@ -46,27 +39,30 @@ $graySeparator : #F7F7F7;
 @mixin icon-container-actions {
     cursor: pointer;
 
-    &::before, &::after {
+    &::before,
+    &::after {
         display: block;
         content: '';
-    
+
         position: absolute;
         top: 50%;
         left: 50%;
-    
+
         transform: translate(-50%, -50%);
 
-        transition: background-color .5s;
+        transition: background-color 0.5s;
     }
 
     &:hover {
-        &::before, &::after {
+        &::before,
+        &::after {
             background-color: $activeBorder;
         }
     }
 
     &:active {
-        &::before, &::after {
+        &::before,
+        &::after {
             background-color: $mainActive;
         }
     }
@@ -81,7 +77,6 @@ $graySeparator : #F7F7F7;
     @include icon-container-actions();
 
     &::after {
-
         width: 26px;
         height: 4px;
 
@@ -109,11 +104,11 @@ $graySeparator : #F7F7F7;
         height: 26px;
 
         background-color: $grayText;
-    }    
+    }
 }
 
 .block {
-    background: #FFFFFF;
+    background: #ffffff;
     box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.05);
     border-radius: 20px;
 }
@@ -122,12 +117,10 @@ $graySeparator : #F7F7F7;
     box-sizing: border-box;
 
     border: 1px solid $grayBorder;
-    
+
     color: $grayText;
 
-    transition: border-color .3s, 
-                background-color .3s, 
-                color .3s;
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
 
     cursor: pointer;
 
@@ -165,7 +158,6 @@ $graySeparator : #F7F7F7;
     display: flex;
 
     .toggle-type-selector {
-
         display: flex;
         justify-content: center;
         align-items: center;
@@ -201,15 +193,16 @@ body {
 
     cursor: pointer;
 
-    transition: background-color .5s;
+    transition: background-color 0.5s;
 }
 
 .button-primary {
     background-color: $projectButton;
-    color: $buttonText;      
+    color: $buttonText;
 }
 
-.button-primary:hover, .button-secondary:hover {
+.button-primary:hover,
+.button-secondary:hover {
     background-color: $activeBorder;
     color: $buttonText;
     border: none;
@@ -266,12 +259,12 @@ body {
 
 // Header
 
-$headerHeight : 72px;
+$headerHeight: 72px;
 
 .page-header {
     width: 100vw;
     height: $headerHeight;
-    
+
     padding: 0 30px;
     box-sizing: border-box;
 
@@ -282,7 +275,8 @@ $headerHeight : 72px;
     align-items: center;
 }
 
-.header-left-side, .header-right-side {
+.header-left-side,
+.header-right-side {
     display: flex;
     align-items: center;
     height: 100%;
@@ -299,10 +293,10 @@ $headerHeight : 72px;
         height: 32px;
 
         display: flex;
-        align-items: center ;
+        align-items: center;
         margin-left: 40px;
 
-        transition: color .5s;
+        transition: color 0.5s;
 
         cursor: pointer;
 
@@ -334,24 +328,25 @@ $headerHeight : 72px;
         height: 100%;
 
         cursor: default;
-        
+
         .select-arrow {
             display: flex;
             align-items: center;
 
             height: 20px;
 
-            transition: transform .5s;
+            transition: transform 0.5s;
 
-            &::before, &::after {
+            &::before,
+            &::after {
                 display: block;
                 content: '';
-                
+
                 width: 12px;
                 height: 1px;
 
                 border-radius: 4px;
-                
+
                 background-color: black;
 
                 margin-left: 10px;
@@ -360,7 +355,7 @@ $headerHeight : 72px;
             &::before {
                 transform: rotate(45deg);
             }
-            
+
             &::after {
                 transform: translateX(-14px) rotate(135deg);
             }
@@ -383,9 +378,9 @@ $headerHeight : 72px;
 
         transform: scaleY(0);
         transform-origin: top;
-        transition: transform .3s;
+        transition: transform 0.3s;
 
-        background-color: #FFFFFF;
+        background-color: #ffffff;
 
         .select-dropdown-option {
             display: flex;
@@ -395,7 +390,7 @@ $headerHeight : 72px;
 
             cursor: pointer;
 
-            transition: background-color .4s;
+            transition: background-color 0.4s;
 
             &:hover {
                 background-color: $activeBG;
@@ -476,13 +471,13 @@ $headerHeight : 72px;
         background: rgba(52, 44, 44, 0.3);
         backdrop-filter: blur(10px);
 
-        animation: popUpBackground .4s;
+        animation: popUpBackground 0.4s;
     }
 
     .popup {
         width: 447px;
         box-sizing: border-box;
-    
+
         padding: 30px 20px;
 
         background-color: $buttonText;
@@ -494,8 +489,8 @@ $headerHeight : 72px;
         position: relative;
         z-index: 10001;
 
-        animation: popUpEmerge .4s ease-out;
-        
+        animation: popUpEmerge 0.4s ease-out;
+
         .popup-header {
             font-style: normal;
             font-weight: 400;
@@ -505,7 +500,6 @@ $headerHeight : 72px;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            
 
             span {
                 max-width: 80%;
@@ -519,7 +513,7 @@ $headerHeight : 72px;
 
                 cursor: pointer;
 
-                transition: color .5s;
+                transition: color 0.5s;
 
                 &:hover {
                     color: $grayText;
@@ -572,7 +566,7 @@ $headerHeight : 72px;
     flex-grow: 1;
 
     font-size: 20px;
-    
+
     text-align: center;
 }
 
@@ -582,9 +576,8 @@ $headerHeight : 72px;
     font-weight: 300;
     padding: 15px 0 7px;
 
-    
     color: $grayText;
-    transition: opacity .2s;
+    transition: opacity 0.2s;
 }
 
 // .lever-range-selector {
@@ -604,19 +597,18 @@ $headerHeight : 72px;
     -webkit-appearance: none;
     margin: 10px 0;
     width: 100%;
-    
+
     &:focus {
         outline: none;
     }
-    
+
     &::-webkit-slider-runnable-track {
         width: 100%;
         height: 5px;
-        
+
         cursor: pointer;
         animate: 0.2s;
 
-    
         background-color: transparent;
     }
 
@@ -631,20 +623,20 @@ $headerHeight : 72px;
         position: relative;
         z-index: 9999;
     }
-    
+
     &::-moz-range-track {
         width: 100%;
         height: 5px;
         cursor: pointer;
         animate: 0.2s;
-        background: #A176C1;
+        background: #a176c1;
     }
 
     &::-moz-range-thumb {
         height: 15px;
         width: 15px;
         border-radius: 15px;
-        background: #9043CA;
+        background: #9043ca;
         cursor: pointer;
     }
 
@@ -657,37 +649,37 @@ $headerHeight : 72px;
         border-color: transparent;
         color: transparent;
     }
-    
+
     &::-ms-fill-lower {
-        background: #A176C1;;
+        background: #a176c1;
     }
-    
+
     &::-ms-fill-upper {
-        background: #A176C1;
+        background: #a176c1;
     }
-    
+
     &::-ms-thumb {
         margin-top: 1px;
         height: 15px;
         width: 15px;
         border-radius: 15px;
-        background: #9043CA;
+        background: #9043ca;
         cursor: pointer;
     }
-    
+
     &:focus::-ms-fill-lower {
-        background: #A176C1;
+        background: #a176c1;
     }
-    
+
     &:focus::-ms-fill-upper {
-        background: #A176C1;
+        background: #a176c1;
     }
 }
 
 .leverage-list {
     display: flex;
     justify-content: space-between;
-    
+
     font-weight: 300;
     font-size: 14px;
 
@@ -695,7 +687,7 @@ $headerHeight : 72px;
 
     -moz-user-select: none;
     -khtml-user-select: none;
-    user-select: none;   
+    user-select: none;
 }
 
 .leverage-list {
@@ -712,7 +704,7 @@ $headerHeight : 72px;
             width: 9px;
             height: 9px;
             border-radius: 50%;
-            
+
             background-color: $activeBorder;
             border: 2px solid $activeBG;
 
@@ -721,7 +713,6 @@ $headerHeight : 72px;
 
             cursor: pointer;
             // transition: border .5s;
-
         }
         &:hover::before {
             filter: brightness(150%);
@@ -771,7 +762,7 @@ $headerHeight : 72px;
         color: $grayText;
 
         font-size: 14px;
-        
+
         li {
             overflow-y: hidden;
             transition: max-height 0.2s ease-out;
@@ -781,14 +772,14 @@ $headerHeight : 72px;
 
     .lever-warn {
         display: flex;
-    
+
         color: $red;
-    
+
         svg {
             position: relative;
             top: -5px;
         }
-    
+
         span {
             width: 90%;
             font-size: 14px;
@@ -815,7 +806,7 @@ $headerHeight : 72px;
 
         border: 1px solid $grayBorder;
 
-        transition: color .4s, border-color .4s, background-color .4s;
+        transition: color 0.4s, border-color 0.4s, background-color 0.4s;
 
         &:first-child {
             border-radius: 5px 0px 0px 5px;
@@ -847,7 +838,7 @@ $headerHeight : 72px;
     p {
         font-weight: 400;
         font-size: 14px;
-    
+
         color: $grayText;
         line-height: 17px;
 
@@ -882,19 +873,19 @@ $headerHeight : 72px;
     .chart-view {
         flex-grow: 1;
     }
-    
+
     .beginner-terminal {
         flex-grow: 1;
-    
+
         max-width: 450px;
 
         padding: 30px 20px;
 
         box-sizing: border-box;
-    
+
         .margin-and-lever-selector {
             display: flex;
-            
+
             justify-content: space-between;
             align-items: center;
 
@@ -915,7 +906,7 @@ $headerHeight : 72px;
 
                 cursor: pointer;
 
-                transition: background-color .4s;
+                transition: background-color 0.4s;
 
                 &:hover {
                     background-color: $grayBorder;
@@ -954,9 +945,9 @@ $headerHeight : 72px;
         .trade-market-user-wallet {
             display: flex;
             justify-content: space-between;
-            
+
             font-size: 14px;
-            
+
             color: $grayText;
 
             margin-bottom: 10px;
@@ -973,14 +964,13 @@ $headerHeight : 72px;
             font-size: 14px;
 
             .money-type-switcher {
-                >div {
+                > div {
                     width: 25px;
                     height: 25px;
                 }
             }
 
             .edit-mode-menu {
-
                 display: flex;
                 align-items: center;
 
@@ -989,21 +979,21 @@ $headerHeight : 72px;
                     align-items: center;
 
                     cursor: pointer;
-    
+
                     margin-left: 10px;
-    
-                    transition: color .3s;
-                    
+
+                    transition: color 0.3s;
+
                     &:hover {
                         color: $activeBorder;
                     }
                 }
-    
+
                 .money-type-edit-active {
                     color: $mainActive;
                 }
 
-                >span {
+                > span {
                     padding-bottom: 7px;
                     margin: 0 5px;
 
@@ -1012,7 +1002,7 @@ $headerHeight : 72px;
                     border-width: 0 0 1px;
                     border-style: solid;
 
-                    transition: all .3s;
+                    transition: all 0.3s;
                 }
 
                 .save-button {
@@ -1045,18 +1035,17 @@ $headerHeight : 72px;
                     }
                 }
             }
-
         }
 
         .user-values-selector {
             display: flex;
             margin: 20px 0 47px;
-            
+
             .amount-selector {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                
+
                 width: 20%;
                 height: 57px;
 
@@ -1083,17 +1072,17 @@ $headerHeight : 72px;
             justify-content: space-between;
 
             margin-top: 20px;
-            
+
             .long-calculations,
             .short-calculations {
                 width: 190px;
-                
-                >div {
+
+                > div {
                     display: flex;
                     justify-content: space-between;
 
                     margin-top: 11px;
-                    
+
                     span {
                         &:first-child {
                             color: $grayText;
@@ -1155,7 +1144,7 @@ $headerHeight : 72px;
 
 .actives {
     flex-grow: 1;
-    
+
     min-width: 450px;
 
     margin-left: 20px;
@@ -1183,7 +1172,7 @@ $headerHeight : 72px;
 
         cursor: pointer;
 
-        transition: color .3s;
+        transition: color 0.3s;
 
         .tab-counter {
             display: flex;
@@ -1205,7 +1194,7 @@ $headerHeight : 72px;
             border: 2px solid $grayText;
             border-radius: 50%;
 
-            transition: color .3s, border-color .3s;
+            transition: color 0.3s, border-color 0.3s;
         }
 
         &:hover {
@@ -1223,7 +1212,6 @@ $headerHeight : 72px;
             border-color: $activeBorder;
         }
     }
-
 }
 .buttons {
     padding: 30px;
@@ -1234,7 +1222,7 @@ $headerHeight : 72px;
     justify-content: space-between;
 }
 
-input[type=number] {
+input[type='number'] {
     padding: 10px 0;
     height: 30px;
     font-size: 16px;
@@ -1242,5 +1230,5 @@ input[type=number] {
 
     text-indent: 20px;
     border-radius: 10px;
-    border: 1px solid #E6E6E6;
+    border: 1px solid #e6e6e6;
 }
