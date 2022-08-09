@@ -183,6 +183,53 @@ $graySeparator : #F7F7F7;
     }
 }
 
+.number-input-field {
+    position: relative;
+    margin: 20px 0 0;
+
+    display: flex;
+
+    span {
+        position: absolute;
+        z-index: 2;
+        background-color: white;
+        top: 39px;
+        
+        &:first-child {
+            color: $grayText;
+            left: 20px;
+        }
+
+        &:last-child {
+            right: 20px;
+        }
+    }
+    
+    input {
+        width: 100%;
+        height: 56px;
+    
+        box-sizing: border-box;
+    
+        outline: none;
+        padding: 10px 80px 10px 120px;
+        font-size: 16px;
+    
+        border-radius: 10px;
+        border: 1px solid #E6E6E6;
+
+        text-align: right;
+    
+        -moz-appearance: textfield;
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
+
+}
+
 body {
     min-height: 100vh;
 }
@@ -1232,15 +1279,4 @@ $headerHeight : 72px;
 
     box-sizing: border-box;
     justify-content: space-between;
-}
-
-input[type=number] {
-    padding: 10px 0;
-    height: 30px;
-    font-size: 16px;
-    margin: 20px 0 0;
-
-    text-indent: 20px;
-    border-radius: 10px;
-    border: 1px solid #E6E6E6;
 }

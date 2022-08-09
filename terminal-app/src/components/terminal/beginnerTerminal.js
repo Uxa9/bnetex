@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 
-import { Button, OrderInput, ToggleButton } from '../UIKit';
+import { Button, OrderInput, ToggleButton, NumInput } from '../UIKit';
 import LeverPopUp  from '../../components/leverPopUp'
 import MarginPopUp from '../../components/marginPopUp'
 
@@ -62,14 +62,25 @@ const BeginnerTerminal = props => {
         }
     }
 
+    const tradeTypeChangeHandler = value => {
+        if (value == 'left') {
+            setTradeType('market');
+            return;
+        }
+
+        if (value == 'right') {
+            setTradeType('tpsl');
+            return;
+        }
+    }
+
     const getDataFromInput = (value, n, type) => {
         let newValues = type == 'precent' ?
             userPercentValues :
             userAmountValues;
         
         newValues[n] = value;
-console.log(userPercentValues);
-console.log(userAmountValues);
+
         type == 'percent' ? 
             localStorage.setItem('percent', newValues) :
             localStorage.setItem('amount', newValues);
@@ -85,7 +96,6 @@ console.log(userAmountValues);
         if (type == 'amount') {
             setUserAmountValues(newValues);
         }
-
     };
 
     return (
@@ -127,287 +137,294 @@ console.log(userAmountValues);
                     className="trade-type"
                     leftField={_l.trade_market}
                     rightField={_l.trade_tpsl}
+                    handleChange={tradeTypeChangeHandler}
                 />
-                <div
-                    className="trade-market-field"
-                >
+                {
+                    tradeType == 'market' &&
                     <div
-                        className="trade-market-user-wallet"
+                        className="trade-market-field"
                     >
-                        <div>
-                            <span>
-                                {`${_l.available} - `}
-                            </span>
-                            <b>
-                                {`10 000 USDT`}
-                            </b>
+                        <div
+                            className="trade-market-user-wallet"
+                        >
+                            <div>
+                                <span>
+                                    {`${_l.available} - `}
+                                </span>
+                                <b>
+                                    {`10 000 USDT`}
+                                </b>
+                            </div>
+                            <div>
+                                <span>
+                                    {`${_l.maximum} - `}
+                                </span>
+                                <b>
+                                    {`100 000 USDT`}
+                                </b>
+                            </div>
                         </div>
-                        <div>
-                            <span>
-                                {`${_l.maximum} - `}
-                            </span>
-                            <b>
-                                {`100 000 USDT`}
-                            </b>
-                        </div>
-                    </div>
-                    {/* <input
-                        type="number"
-                        placeholder={_l.price}
-                    /> */}
-                    <input
-                        type="number"
-                        placeholder={_l.amount}
-                    />
-                    <div
-                        className='money-type-switcher-and-edit'
-                    >
-                        <ToggleButton
-                            className='money-type-switcher'
-                            leftField={'%'}
-                            rightField={'$'}
-                            handleChange={moneySwitchHandler}
+                        {/* <input
+                            type="number"
+                            placeholder={_l.price}
+                        /> */}
+                        <NumInput
+                            prefix={_l.amount}
+                            suffix={'USDT'}
                         />
                         <div
-                            className="edit-mode-menu"
+                            className='money-type-switcher-and-edit'
                         >
+                            <ToggleButton
+                                className='money-type-switcher'
+                                leftField={'%'}
+                                rightField={'$'}
+                                handleChange={moneySwitchHandler}
+                            />
                             <div
-                                className={mode == 'edit' ? 
-                                    'money-type-edit money-type-edit-active' : 
-                                    'money-type-edit'
-                                }
-                                onClick={() => setMode('edit')}
+                                className="edit-mode-menu"
                             >
-                                <Edit 
-                                    width='20px'
-                                    height='20px'
-                                />
+                                <div
+                                    className={mode == 'edit' ? 
+                                        'money-type-edit money-type-edit-active' : 
+                                        'money-type-edit'
+                                    }
+                                    onClick={() => setMode('edit')}
+                                >
+                                    <Edit 
+                                        width='20px'
+                                        height='20px'
+                                    />
+                                </div>
+                                { mode == 'edit' &&
+                                    <>
+                                        <span
+                                            className="save-button"
+                                            onClick={inputChangeHandler}
+                                        >
+                                            Сохранить
+                                        </span>
+                                        <span
+                                            className="cancel-button"
+                                            onClick={() => setMode('view')}
+                                        >
+                                            Отменить
+                                        </span>
+                                    </>
+                                }
                             </div>
-                            { mode == 'edit' &&
+                        </div>
+                        <div
+                            className="user-values-selector"
+                        >
+                            {
+                                tradeMode == 'percent' &&
                                 <>
-                                    <span
-                                        className="save-button"
-                                        onClick={inputChangeHandler}
-                                    >
-                                        Сохранить
-                                    </span>
-                                    <span
-                                        className="cancel-button"
-                                        onClick={() => setMode('view')}
-                                    >
-                                        Отменить
-                                    </span>
+                                    <OrderInput
+                                        mode={mode}
+                                        value={userPercentValues[0]}
+                                        suffix="%"
+                                        sendValue={(value) => getDataFromInput(value, 0, 'percent')}
+                                        forceSendValue={forceSendValue}
+                                    />                    
+                                    <OrderInput
+                                        mode={mode}
+                                        value={userPercentValues[1]}
+                                        suffix="%"
+                                        sendValue={(value) => getDataFromInput(value, 1, 'percent')}
+                                        forceSendValue={forceSendValue}
+                                    />
+                                    <OrderInput
+                                        mode={mode}
+                                        value={userPercentValues[2]}
+                                        suffix="%"
+                                        sendValue={(value) => getDataFromInput(value, 2, 'percent')}
+                                        forceSendValue={forceSendValue}
+                                    />
+                                    <OrderInput
+                                        mode={mode}
+                                        value={userPercentValues[3]}
+                                        suffix="%"
+                                        sendValue={(value) => getDataFromInput(value, 3, 'percent')}
+                                        forceSendValue={forceSendValue}
+                                    />
+                                    <OrderInput
+                                        mode={mode}
+                                        value={userPercentValues[4]}
+                                        suffix="%"
+                                        sendValue={(value) => getDataFromInput(value, 4, 'percent')}
+                                        forceSendValue={forceSendValue}
+                                    />
+                                </>
+                            }
+                            {
+                                tradeMode == 'amount' &&
+                                <>
+                                    <OrderInput
+                                        mode={mode}
+                                        value={userAmountValues[0]}
+                                        suffix="$"
+                                        sendValue={(value) => getDataFromInput(value, 0, 'amount')}
+                                        forceSendValue={forceSendValue}
+                                    />                    
+                                    <OrderInput
+                                        mode={mode}
+                                        value={userAmountValues[1]}
+                                        suffix="$"
+                                        sendValue={(value) => getDataFromInput(value, 1, 'amount')}
+                                        forceSendValue={forceSendValue}
+                                    />
+                                    <OrderInput
+                                        mode={mode}
+                                        value={userAmountValues[2]}
+                                        suffix="$"
+                                        sendValue={(value) => getDataFromInput(value, 2, 'amount')}
+                                        forceSendValue={forceSendValue}
+                                    />
+                                    <OrderInput
+                                        mode={mode}
+                                        value={userAmountValues[3]}
+                                        suffix="$"
+                                        sendValue={(value) => getDataFromInput(value, 3, 'amount')}
+                                        forceSendValue={forceSendValue}
+                                    />
+                                    <OrderInput
+                                        mode={mode}
+                                        value={userAmountValues[4]}
+                                        suffix="$"
+                                        sendValue={(value) => getDataFromInput(value, 4, 'amount')}
+                                        forceSendValue={forceSendValue}
+                                    />
                                 </>
                             }
                         </div>
+                        {/* <div
+                            className="money-selector"
+                        >
+                            <div
+                                className="amount-selector user-selector-field"
+                            >
+                                1$
+                            </div>
+                            <div
+                                className="amount-selector user-selector-field"
+                            >
+                                5$
+                            </div>
+                            <div
+                                className="amount-selector user-selector-field"
+                            >
+                                10$
+                            </div>
+                            <div
+                                className="amount-selector user-selector-field"
+                            >
+                                50$
+                            </div>
+                            <div
+                                className="amount-selector user-selector-field"
+                            >
+                                100$
+                            </div>
+                        </div> */}
+                        <div
+                            className="buy-and-sell-buttons"
+                        >
+                            <Button
+                                type='accept'
+                                width="190px"
+                            >
+                                {_l.buy_long}
+                            </Button>
+                            <Button
+                                type='decline'
+                                width="190px"
+                            >
+                                {_l.sell_short}
+                            </Button>
+                        </div>
+                        <div
+                            className="final-price-calculations"
+                        >
+                            <div
+                                className="long-calculations"
+                            >
+                                <div
+                                    className="liquidation-price"
+                                >
+                                    <span>
+                                        {_l.liquidation_price}
+                                    </span>
+                                    <span>
+                                        --
+                                    </span>
+                                </div>
+                                <div
+                                    className="price-cost"
+                                >
+                                    <span>
+                                        {_l.price_cost}
+                                    </span>
+                                    <span>
+                                        100.00 USDT
+                                    </span>
+                                </div>
+                                <div
+                                    className="max-price"
+                                >
+                                    <span>
+                                        {_l.price_max}
+                                    </span>
+                                    <span>
+                                        100 000.00 USDT
+                                    </span>
+                                </div>
+                            </div>
+                            <div
+                                className="short-calculations"
+                            >
+                                <div
+                                    className="liquidation-price"
+                                >
+                                    <span>
+                                        {_l.liquidation_price}
+                                    </span>
+                                    <span>
+                                        --
+                                    </span>
+                                </div>
+                                <div
+                                    className="price-cost"
+                                >
+                                    <span>
+                                        {_l.price_cost}
+                                    </span>
+                                    <span>
+                                        100.00 USDT
+                                    </span>
+                                </div>
+                                <div
+                                    className="max-price"
+                                >
+                                    <span>
+                                        {_l.price_max}
+                                    </span>
+                                    <span>
+                                        100 000.00 USDT
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                }
+                {
+                    tradeType == 'tpsl' &&
                     <div
-                        className="user-values-selector"
+                        className="trade-tpsl-field"
                     >
-                        {
-                            tradeMode == 'percent' &&
-                            <>
-                                <OrderInput
-                                    mode={mode}
-                                    value={userPercentValues[0]}
-                                    suffix="%"
-                                    sendValue={(value) => getDataFromInput(value, 0, 'percent')}
-                                    forceSendValue={forceSendValue}
-                                />                    
-                                <OrderInput
-                                    mode={mode}
-                                    value={userPercentValues[1]}
-                                    suffix="%"
-                                    sendValue={(value) => getDataFromInput(value, 1, 'percent')}
-                                    forceSendValue={forceSendValue}
-                                />
-                                <OrderInput
-                                    mode={mode}
-                                    value={userPercentValues[2]}
-                                    suffix="%"
-                                    sendValue={(value) => getDataFromInput(value, 2, 'percent')}
-                                    forceSendValue={forceSendValue}
-                                />
-                                <OrderInput
-                                    mode={mode}
-                                    value={userPercentValues[3]}
-                                    suffix="%"
-                                    sendValue={(value) => getDataFromInput(value, 3, 'percent')}
-                                    forceSendValue={forceSendValue}
-                                />
-                                <OrderInput
-                                    mode={mode}
-                                    value={userPercentValues[4]}
-                                    suffix="%"
-                                    sendValue={(value) => getDataFromInput(value, 4, 'percent')}
-                                    forceSendValue={forceSendValue}
-                                />
-                            </>
-                        }
-                        {
-                            tradeMode == 'amount' &&
-                            <>
-                                <OrderInput
-                                    mode={mode}
-                                    value={userAmountValues[0]}
-                                    suffix="$"
-                                    sendValue={(value) => getDataFromInput(value, 0, 'amount')}
-                                    forceSendValue={forceSendValue}
-                                />                    
-                                <OrderInput
-                                    mode={mode}
-                                    value={userAmountValues[1]}
-                                    suffix="$"
-                                    sendValue={(value) => getDataFromInput(value, 1, 'amount')}
-                                    forceSendValue={forceSendValue}
-                                />
-                                <OrderInput
-                                    mode={mode}
-                                    value={userAmountValues[2]}
-                                    suffix="$"
-                                    sendValue={(value) => getDataFromInput(value, 2, 'amount')}
-                                    forceSendValue={forceSendValue}
-                                />
-                                <OrderInput
-                                    mode={mode}
-                                    value={userAmountValues[3]}
-                                    suffix="$"
-                                    sendValue={(value) => getDataFromInput(value, 3, 'amount')}
-                                    forceSendValue={forceSendValue}
-                                />
-                                <OrderInput
-                                    mode={mode}
-                                    value={userAmountValues[4]}
-                                    suffix="$"
-                                    sendValue={(value) => getDataFromInput(value, 4, 'amount')}
-                                    forceSendValue={forceSendValue}
-                                />
-                            </>
-                        }
+                    
                     </div>
-                    {/* <div
-                        className="money-selector"
-                    >
-                        <div
-                            className="amount-selector user-selector-field"
-                        >
-                            1$
-                        </div>
-                        <div
-                            className="amount-selector user-selector-field"
-                        >
-                            5$
-                        </div>
-                        <div
-                            className="amount-selector user-selector-field"
-                        >
-                            10$
-                        </div>
-                        <div
-                            className="amount-selector user-selector-field"
-                        >
-                            50$
-                        </div>
-                        <div
-                            className="amount-selector user-selector-field"
-                        >
-                            100$
-                        </div>
-                    </div> */}
-                    <div
-                        className="buy-and-sell-buttons"
-                    >
-                        <Button
-                            type='accept'
-                            width="190px"
-                        >
-                            {_l.buy_long}
-                        </Button>
-                        <Button
-                            type='decline'
-                            width="190px"
-                        >
-                            {_l.sell_short}
-                        </Button>
-                    </div>
-                    <div
-                        className="final-price-calculations"
-                    >
-                        <div
-                            className="long-calculations"
-                        >
-                            <div
-                                className="liquidation-price"
-                            >
-                                <span>
-                                    {_l.liquidation_price}
-                                </span>
-                                <span>
-                                    --
-                                </span>
-                            </div>
-                            <div
-                                className="price-cost"
-                            >
-                                <span>
-                                    {_l.price_cost}
-                                </span>
-                                <span>
-                                    100.00 USDT
-                                </span>
-                            </div>
-                            <div
-                                className="max-price"
-                            >
-                                <span>
-                                    {_l.price_max}
-                                </span>
-                                <span>
-                                    100 000.00 USDT
-                                </span>
-                            </div>
-                        </div>
-                        <div
-                            className="short-calculations"
-                        >
-                            <div
-                                className="liquidation-price"
-                            >
-                                <span>
-                                    {_l.liquidation_price}
-                                </span>
-                                <span>
-                                    --
-                                </span>
-                            </div>
-                            <div
-                                className="price-cost"
-                            >
-                                <span>
-                                    {_l.price_cost}
-                                </span>
-                                <span>
-                                    100.00 USDT
-                                </span>
-                            </div>
-                            <div
-                                className="max-price"
-                            >
-                                <span>
-                                    {_l.price_max}
-                                </span>
-                                <span>
-                                    100 000.00 USDT
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    className="trade-tpsl-field"
-                >
-                
-                </div>
+                }
             </div>
         </>
     )
