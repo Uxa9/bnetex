@@ -1,8 +1,20 @@
+import { FC, ReactNode } from "react";
 import Cross from "../../images/icons/delete";
 
 import Button from "./button";
 
-const PopUp = props => {
+interface PopUpProps{
+    closeFunc: () => any,
+    acceptFunc: () => any,
+    title: string,
+    confirmText: string,
+    confirmType?: 'submit' | 'reset' | 'button',
+    children: ReactNode
+}
+
+const PopUp:FC<PopUpProps> = props => {
+
+    const {closeFunc, acceptFunc, title, confirmText, confirmType, children} = props;
 
     return (
         <div
@@ -10,7 +22,7 @@ const PopUp = props => {
         >
             <div
                 className="popup-background"
-                onClick={props.closeFunc}
+                onClick={closeFunc}
             />
             <div
                 className="popup"
@@ -19,10 +31,10 @@ const PopUp = props => {
                     className="popup-header"
                 >
                     <span>
-                        {props.title}
+                        {title}
                     </span>
                     <div
-                        onClick={props.closeFunc}
+                        onClick={closeFunc}
                     >
                         <Cross 
                             height={'24px'}
@@ -33,16 +45,16 @@ const PopUp = props => {
                 <div
                     className="popup-content"
                 >
-                    {props.children}
+                    {children}
                 </div>
                 <Button
                     height="50px"
                     width="100%"
                     className="popup-bottom-button"
-                    type={props.confirmType || "primary"}
-                    onClickFunc={props.acceptFunc}
+                    type={confirmType ?? "button"}
+                    onClick={acceptFunc}
                 >
-                    {props.confirmText || "Подтвердить"}
+                    {confirmText ?? "Подтвердить"}
                 </Button>
             </div>            
         </div>
