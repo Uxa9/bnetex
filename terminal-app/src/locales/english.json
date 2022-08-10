@@ -35,5 +35,13 @@
 
     "liquidation_price"               : "Est. Liq. Price",
     "price_cost"                      : "Cost",
-    "price_max"                       : "Max"
+    "price_max"                       : "Max",
+
+    "positions"                       : "Positions",
+    "open_orders"                     : "Open orders",
+    "orders_history"                  : "Orders history",
+    "deals_history"                   : "Deals history",
+
+    "what_is_tpsl"                    : "What is TP/SL",
+    "what_is_tpsl_tooltip"            : ""
 }

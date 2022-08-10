@@ -227,7 +227,6 @@ $graySeparator : #F7F7F7;
             margin: 0;
         }
     }
-
 }
 
 body {
@@ -970,10 +969,29 @@ $headerHeight : 72px;
             }
         }
 
+        .trade-type-and-tooltip {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            
+            margin: 20px 0 40px;
+
+            .tpsl-tooltip {
+                display: flex;
+                align-items: center;
+
+                line-height: 25px;
+
+                color: $grayText;
+
+                span {
+                    margin-right: 5px;
+                }
+            }
+        }
+
         .trade-type {
             display: flex;
-
-            margin: 20px 0 40px;
 
             > div {
                 width: 120px;

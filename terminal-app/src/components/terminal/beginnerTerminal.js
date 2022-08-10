@@ -7,7 +7,7 @@ import { Button, OrderInput, ToggleButton, NumInput } from '../UIKit';
 import LeverPopUp  from '../../components/leverPopUp'
 import MarginPopUp from '../../components/marginPopUp'
 
-import Edit from '../../images/icons/edit';
+import {Edit, Info} from '../../images/icons/index';
 
 import _l from '../../locales/index';
 
@@ -132,13 +132,31 @@ const BeginnerTerminal = props => {
                     >
                         {`${lever}x`}
                     </div>
-                </div>            
-                <ToggleButton
-                    className="trade-type"
-                    leftField={_l.trade_market}
-                    rightField={_l.trade_tpsl}
-                    handleChange={tradeTypeChangeHandler}
-                />
+                </div>
+                <div
+                    className="trade-type-and-tooltip"
+                >
+                    <ToggleButton
+                        className="trade-type"
+                        leftField={_l.trade_market}
+                        rightField={_l.trade_tpsl}
+                        handleChange={tradeTypeChangeHandler}
+                    />
+                    {
+                        tradeType == 'tpsl' &&
+                        <div
+                            className="tpsl-tooltip"
+                        >
+                            <span>
+                                Что такое TP/SL
+                            </span>
+                            <Info 
+                                width="25px"
+                                height="25px"
+                            />
+                        </div>
+                    }
+                </div>
                 {
                     tradeType == 'market' &&
                     <div

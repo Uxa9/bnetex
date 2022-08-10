@@ -40,5 +40,8 @@
     "positions"                       : "Позиции",
     "open_orders"                     : "Открытые ордера",
     "orders_history"                  : "История ордеров",
-    "deals_history"                   : "История сделок"
+    "deals_history"                   : "История сделок",
+
+    "what_is_tpsl"                    : "Что такое TP/SL",
+    "what_is_tpsl_tooltip"            : ""
 }
