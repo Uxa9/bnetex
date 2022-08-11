@@ -193,7 +193,7 @@ $graySeparator : #F7F7F7;
         position: absolute;
         z-index: 2;
         background-color: white;
-        top: 39px;
+        top: 20px;
         
         &:first-child {
             color: $grayText;
@@ -227,6 +227,14 @@ $graySeparator : #F7F7F7;
             margin: 0;
         }
     }
+}
+
+.positive {
+    color: $green;
+}
+
+.negative {
+    color: $red;
 }
 
 body {
@@ -1044,98 +1052,6 @@ $headerHeight : 72px;
                 }
             }
 
-            .edit-mode-menu {
-
-                display: flex;
-                align-items: center;
-
-                .money-type-edit {
-                    display: flex;
-                    align-items: center;
-
-                    cursor: pointer;
-    
-                    margin-left: 10px;
-    
-                    transition: color .3s;
-                    
-                    &:hover {
-                        color: $activeBorder;
-                    }
-                }
-    
-                .money-type-edit-active {
-                    color: $mainActive;
-                }
-
-                >span {
-                    padding-bottom: 7px;
-                    margin: 0 5px;
-
-                    cursor: pointer;
-
-                    border-width: 0 0 1px;
-                    border-style: solid;
-
-                    transition: all .3s;
-                }
-
-                .save-button {
-                    color: $green;
-                    border-color: $green;
-
-                    &:hover {
-                        color: $greenHover;
-                        border-color: $greenHover;
-                    }
-
-                    &:active {
-                        color: $greenActive;
-                        border-color: $greenActive;
-                    }
-                }
-
-                .cancel-button {
-                    color: $red;
-                    border-bottom-color: $red;
-
-                    &:hover {
-                        color: $redHover;
-                        border-color: $redHover;
-                    }
-
-                    &:active {
-                        color: $redActive;
-                        border-color: $redActive;
-                    }
-                }
-            }
-
-        }
-
-        .user-values-selector {
-            display: flex;
-            margin: 20px 0 47px;
-            
-            .amount-selector {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                
-                width: 20%;
-                height: 57px;
-
-                &:first-child {
-                    border-radius: 10px 0 0 10px;
-                }
-
-                &:last-child {
-                    position: relative;
-                    left: -1px;
-
-                    border-radius: 0 10px 10px 0;
-                }
-            }
         }
 
         .buy-and-sell-buttons {
@@ -1170,6 +1086,148 @@ $headerHeight : 72px;
                     }
                 }
             }
+        }
+    }
+
+    .trade-tpsl-field {
+        .trade-tpsl-info {
+            margin-bottom: 40px;
+
+            .trade-tpsl-info-row {
+                display: flex;
+                justify-content: space-between;
+                
+                margin: 15px 0;
+                span {
+
+                    &:first-child {
+                        color: $grayText;
+                    }
+                }
+            }
+        }
+
+        .tspl-selector-and-edit {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .user-values-selector {
+            flex-grow: 1;
+            margin: 0;
+
+            max-width: 205px;
+            .amount-selector {
+                width: 25%;
+                height: 30px;
+            }
+        }
+
+        .tpsl-input-fields {
+            margin-bottom: 30px;
+        }
+    }
+
+    .user-values-selector {
+        display: flex;
+        margin: 20px 0 47px;
+        
+        .amount-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            height: 57px;
+            width: 20%;
+
+            &:first-child {
+                border-radius: 10px 0 0 10px;
+            }
+
+            &:last-child {
+                position: relative;
+                left: -1px;
+
+                border-radius: 0 10px 10px 0;
+            }
+        }
+    }
+
+    .money-type-edit {
+        display: flex;
+        align-items: center;
+
+        cursor: pointer;
+
+        margin-left: 10px;
+
+        transition: color .3s;
+        
+        &:hover {
+            color: $activeBorder;
+        }
+    }
+
+    .money-type-edit-active {
+        color: $mainActive;
+    }
+
+    .edit-mode-menu {
+
+        display: flex;
+        align-items: center;
+
+        >span {
+            padding-bottom: 7px;
+            margin: 0 5px;
+
+            cursor: pointer;
+
+            border-width: 0 0 1px;
+            border-style: solid;
+
+            transition: all .3s;
+        }
+
+        .save-button {
+            color: $green;
+            border-color: $green;
+
+            &:hover {
+                color: $greenHover;
+                border-color: $greenHover;
+            }
+
+            &:active {
+                color: $greenActive;
+                border-color: $greenActive;
+            }
+        }
+
+        .cancel-button {
+            color: $red;
+            border-bottom-color: $red;
+
+            &:hover {
+                color: $redHover;
+                border-color: $redHover;
+            }
+
+            &:active {
+                color: $redActive;
+                border-color: $redActive;
+            }
+        }
+    }
+
+    .pnl-text {
+        font-size: 14px;
+        line-height: 20px;
+
+        color: $grayText;
+
+        .pnl-text-bold {
+            color: black;
         }
     }
 }
@@ -1290,6 +1348,7 @@ $headerHeight : 72px;
     }
 
 }
+
 .buttons {
     padding: 30px;
     width: 100%;

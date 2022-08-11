@@ -22,6 +22,7 @@ const BeginnerTerminal = props => {
     const [forceSendValue, setForceSendValue]       = useState(false);
     const [userPercentValues, setUserPercentValues] = useState([1, 5, 10, 50, 100]);
     const [userAmountValues, setUserAmountValues]   = useState([1, 15, 10, 50, 100]);
+    const [userTPSLValues, setUserTPSLValues]       = useState([1, "3/1", "5/1", "10/1"]);
 
     const [marginPopUp, showMarginPopUp] = useState(false);
     const [leverPopUp,  showLeverPopUp]  = useState(false);
@@ -97,6 +98,68 @@ const BeginnerTerminal = props => {
             setUserAmountValues(newValues);
         }
     };
+
+    const takeProfitText = () => {
+        return (
+            <>
+                <span>
+                    {_l.when}
+                </span>
+                <b
+                    className="pnl-text-bold"
+                >
+                    {` ${_l.mark_price_lc} `}
+                </b>
+                <span>
+                    {_l.reach}
+                </span>
+                <b
+                    className="pnl-text-bold"
+                >
+                    {` 19000.00 `/* mark price */}
+                </b>
+                <span>
+                    {_l.take_profit_text}
+                </span>
+                <span
+                    className="positive"
+                >
+                    {` 2.28`/* PnL */}
+                </span>
+            </>
+        )
+    }
+
+    const stopLossText = () => {
+        return (
+            <>
+                <span>
+                    {_l.when}
+                </span>
+                <b
+                    className="pnl-text-bold"
+                >
+                    {` ${_l.mark_price_lc} `}
+                </b>
+                <span>
+                    {_l.reach}
+                </span>
+                <b
+                    className="pnl-text-bold"
+                >
+                    {` 19000.00 `/* mark price */}
+                </b>
+                <span>
+                    {_l.take_profit_text}
+                </span>
+                <span
+                    className="negative"
+                >
+                    {` -2.28`/* PnL */}
+                </span>
+            </>
+        )
+    }
 
     return (
         <>
@@ -440,7 +503,132 @@ const BeginnerTerminal = props => {
                     <div
                         className="trade-tpsl-field"
                     >
-                    
+                        <div
+                            className="trade-tpsl-info"
+                        >
+                            <p
+                                className="trade-tpsl-info-row"
+                            >
+                                <span>
+                                    {_l.futures}
+                                </span>
+                                <span>
+                                    {`BTC/USDT ${_l.perpetual} / ${_l.long} 10х`}
+                                </span>
+                            </p>
+                            <p
+                                className="trade-tpsl-info-row"
+                            >
+                                <span>
+                                    {`${_l.entry_price} (USDT)`}
+                                </span>
+                                <span>
+                                    19190.00
+                                </span>
+                            </p>
+                            <p
+                                className="trade-tpsl-info-row"
+                            >
+                                <span>
+                                    {`${_l.mark_price} (USDT)`}
+                                </span>
+                                <span>
+                                    19174.40
+                                </span>
+                            </p>
+                        </div>
+                        <div
+                            className='tspl-selector-and-edit'
+                        >
+                            <div
+                                className="user-values-selector"
+                            >
+                                <OrderInput
+                                    mode={mode}
+                                    value={userTPSLValues[0]}
+                                    suffix="%"
+                                    sendValue={(value) => getDataFromInput(value, 0, 'tpsl-pair')}
+                                    forceSendValue={forceSendValue}
+                                />                    
+                                <OrderInput
+                                    mode={mode}
+                                    value={userTPSLValues[1]}
+                                    sendValue={(value) => getDataFromInput(value, 1, 'tpsl-pair')}
+                                    forceSendValue={forceSendValue}
+                                />
+                                <OrderInput
+                                    mode={mode}
+                                    value={userTPSLValues[2]}
+                                    sendValue={(value) => getDataFromInput(value, 2, 'tpsl-pair')}
+                                    forceSendValue={forceSendValue}
+                                />
+                                <OrderInput
+                                    mode={mode}
+                                    value={userTPSLValues[3]}
+                                    sendValue={(value) => getDataFromInput(value, 3, 'tpsl-pair')}
+                                    forceSendValue={forceSendValue}
+                                />
+                            </div>
+                            <div
+                                className="edit-mode-menu"
+                            >
+                                <div
+                                    className={mode == 'edit' ? 
+                                        'money-type-edit money-type-edit-active' : 
+                                        'money-type-edit'
+                                    }
+                                    onClick={() => setMode('edit')}
+                                >
+                                    <Edit 
+                                        width='20px'
+                                        height='20px'
+                                    />
+                                </div>
+                                { mode == 'edit' &&
+                                    <>
+                                        <span
+                                            className="save-button"
+                                            onClick={inputChangeHandler}
+                                        >
+                                            Сохранить
+                                        </span>
+                                        <span
+                                            className="cancel-button"
+                                            onClick={() => setMode('view')}
+                                        >
+                                            Отменить
+                                        </span>
+                                    </>
+                                }
+                            </div>
+                        </div>
+                        <div
+                            className="tpsl-input-fields"
+                        >
+                            <NumInput
+                                prefix={_l.take_profit}
+                                suffix={'USDT'}
+                            />
+                            <p
+                                className="pnl-text"
+                            >
+                                {takeProfitText()}
+                            </p>
+                            <NumInput
+                                prefix={_l.stop_loss}
+                                suffix={'USDT'}
+                            />
+                            <p
+                                className="pnl-text"
+                            >
+                                {stopLossText()}
+                            </p>
+                        </div>
+                        <Button
+                            width="100%"
+                        >
+                            {_l.confirm}
+                        </Button>
                     </div>
                 }
             </div>

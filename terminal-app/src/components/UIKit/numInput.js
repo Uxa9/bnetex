@@ -13,7 +13,6 @@ const NumInput = props => {
                 {props.prefix}
             </span>
             <input
-                className='number-input-field'
                 type="number"
                 value={value}
                 onChange={e => setValue(e.target.value)}

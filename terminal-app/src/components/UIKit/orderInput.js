@@ -35,7 +35,7 @@ const OrderInput = props => {
                 <div
                     className="amount-selector user-selector-field"
                 >
-                    {`${value}${props.suffix}`}
+                    {`${value}${props.suffix || ''}`}
                 </div>
             }
             { props.mode == 'edit' && 
