@@ -4,11 +4,14 @@
   border: 0;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-:focus, :active {
+:focus,
+:active {
   outline: none;
 }
 
@@ -18,16 +21,21 @@ a:hover {
   text-decoration: none;
 }
 
-a:focus, a:active {
+a:focus,
+a:active {
   outline: none;
 }
 
-nav, footer, header, aside {
+nav,
+footer,
+header,
+aside {
   display: block;
 }
 
-html, body, #root {
-  @extend .body-2;
+html,
+body,
+#root {
 
   height: 100%;
   width: 100%;
@@ -36,15 +44,15 @@ html, body, #root {
   text-size-adjust: 100%;
 }
 
-input, button, textarea {
+input,
+button,
+textarea {
   font-family: inherit;
   outline: none !important;
   box-shadow: none;
 }
 
 input {
-  border: 1px solid $bc900;
-
   &::-ms-clear {
     display: none;
   }
@@ -63,13 +71,17 @@ img {
   vertical-align: top;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-size: inherit;
   font-weight: 400;
 }
 
 button {
-  @extend .body-2;
 
   background-color: inherit;
   cursor: pointer;

@@ -1,7 +1,7 @@
-import { FC, ReactNode } from "react";
-import Cross from "../../images/icons/delete";
+import { FC, ReactNode } from 'react';
+import {ReactComponent as Cross} from '../../assets/images/delete.svg';
 
-import Button from "./button";
+import Button from './button';
 
 interface PopUpProps{
     closeFunc: () => any,
@@ -51,14 +51,14 @@ const PopUp:FC<PopUpProps> = props => {
                     height="50px"
                     width="100%"
                     className="popup-bottom-button"
-                    type={confirmType ?? "button"}
+                    type={confirmType ?? 'button'}
                     onClick={acceptFunc}
                 >
-                    {confirmText ?? "Подтвердить"}
+                    {confirmText ?? 'Подтвердить'}
                 </Button>
             </div>            
         </div>
-    )
-}
+    );
+};
 
 export default PopUp;

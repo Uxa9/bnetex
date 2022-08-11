@@ -1,9 +1,9 @@
-import { Navigate, Route, Routes } from "react-router-dom"
-import { AppLinksEnum } from "./appLinks"
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { AppLinksEnum } from './appLinks';
 
 const AppRoutes = () => {
 
-    const { HOME, AUTH, REGISTRATION, P2P, TERMINAL, DASHBOARD, BUY_CRYPTO } = AppLinksEnum
+    const { HOME, AUTH, REGISTRATION, P2P, TERMINAL, DASHBOARD, BUY_CRYPTO } = AppLinksEnum;
 
     return (
         <Routes>
@@ -16,7 +16,7 @@ const AppRoutes = () => {
             <Route path={P2P}></Route>
             <Route path={BUY_CRYPTO}></Route>
         </Routes>
-    )
-}
+    );
+};
 
-export default AppRoutes
+export default AppRoutes;

@@ -1,38 +1,58 @@
-import { useState } from 'react';
+import classNames from 'classnames';
+import { FC, useState } from 'react';
 
-const ToggleButton = props => {
-    const [alignment, setAlignment] = useState('left' || props.alignment);
+interface ToggleButtonProps{
+    alignment?: AlignmentType,
+    handleChange: (value: any) => void,
+    className: string,
+    leftField: any,
+    rightField: any
+}
 
-    const handleAlignment = value => {
-        setAlignment(value);
+type AlignmentType = 'left' | 'right'
 
-        props.handleChange(value);
-    }
+// toDo
+// Разобрать компонент на toggleButton и toggleButtonGroup (как на mui)
+// убрать непонятные пропсы
+// переезд на scss модули
 
-    const classHandler = type => {
-        return ( type == alignment ) ?
-            'toggle-type-selector user-selector-field user-selector-field-active' :
-            'toggle-type-selector user-selector-field';
-    }
+const ToggleButton:FC<ToggleButtonProps> = props => {
+
+    const [alignment, setAlignment] = useState<AlignmentType>('left' || props.alignment);
+
+    const handleAlignment = (alignment: AlignmentType) => {
+        setAlignment(alignment);
+
+        // Это что такое???
+        props.handleChange(alignment);
+    };
+
+    const fieldClass = 'toggle-type-selector user-selector-field';
     
     return (
         <div
             className={`toggle-type-switcher ${props.className}`}
         >
             <div
-                className={classHandler('left')}
+                className={classNames(
+                    fieldClass,
+                    {'user-selector-field-active': alignment === 'left'}
+                )}
                 onClick={() => handleAlignment('left')}
             >
                 {props.leftField}
             </div>
             <div
-                className={classHandler('right')}
+                className={classNames(
+                    fieldClass,
+                    {'user-selector-field-active': alignment === 'right'}
+                )}
                 onClick={() => handleAlignment('right')}
             >
                 {props.rightField}
             </div>
         </div>
     );
-}
+};
 
 export default ToggleButton;

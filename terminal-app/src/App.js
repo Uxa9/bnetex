@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 
 import Button from './components/UIKit/button';
 import Header from './components/pageTemplate/header';
-import PopUp  from './components/UIKit/popUp';
+import PopUp from './components/UIKit/popUp';
 
-import LeverPopUp  from './components/leverPopUp';
+import LeverPopUp from './components/leverPopUp';
 import MarginPopUp from './components/marginPopUp';
 
 import Info from './images/icons/info';
@@ -15,8 +15,12 @@ import './styles/style.scss';
 
 import BeginnerTerminal from './components/terminal/beginnerTerminal';
 
+
+import abstractImg from './images/main__abstract-line.svg'
+import { NumInput } from './components/UIKit';
+
 const App = props => {
-    const [switcher, setSwitcher]   = useState(false);
+    const [switcher, setSwitcher] = useState(false);
 
     return (
         <div
@@ -26,7 +30,7 @@ const App = props => {
             <div
                 className="content-wrapper"
             >
-                <div
+                {/* <div
                     className="chart-and-terminal"
                 >
                     <div
@@ -144,7 +148,22 @@ const App = props => {
                             </Button>
                         </div>
                     </div>
-                </div>
+                </div> */}
+
+                <section className='mainPage__intro'>
+                   <div>
+                   <h1 className='intro-text'>
+                        Инновационный статистический алгоритм
+                        <img src={abstractImg} alt='' />
+                    </h1> 
+
+                    <div>
+                        <NumInput 
+                        />
+                    </div>
+                   </div>
+
+                </section>
             </div>
         </div>
     );

@@ -14,26 +14,30 @@ const OrderInput: FC<OrderInputProps> = props => {
 
     const [value, setValue] = useState<number>(prop_value || 1);
 
-    const changeInputValue = (value: number) => {
+    const MAX_PERCENT_VALUE = 100;
 
-        if (value <= 0) {
+    const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+        const inputValue = event.currentTarget.valueAsNumber;
+
+        if (inputValue <= 0) {
             setValue(0);
             return;
         }
 
         if (suffix === '%') {
-            value <= 100 ? setValue(value) : setValue(100);
+            inputValue <= MAX_PERCENT_VALUE ? setValue(inputValue) : setValue(MAX_PERCENT_VALUE);
             return;
         }
 
-        setValue(value);
-    }
+        setValue(inputValue);
+    };
 
 
     // Это что кста?
     useEffect(() => {
         forceSendValue && sendValue(value);
-    }, [forceSendValue])
+    }, [forceSendValue]);
 
     return (
         <>
@@ -47,12 +51,12 @@ const OrderInput: FC<OrderInputProps> = props => {
                 <input
                     value={value}
                     type={'number'}
-                    onChange={e => changeInputValue(e.target.value)}
+                    onChange={handleInput}
                     className="amount-selector user-selector-field edit-selector-field"
                 />
             }
         </>
     );
-}
+};
 
 export default OrderInput;

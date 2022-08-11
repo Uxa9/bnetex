@@ -119,7 +119,7 @@
         "react/jsx-tag-spacing": [
             1,
             {
-                "beforeSelfClosing": "never",
+                "beforeSelfClosing": "always",
                 "afterOpening": "never"
             }
         ]
