@@ -7,8 +7,8 @@ interface PopUpProps{
     closeFunc: () => any,
     acceptFunc: () => any,
     title: string,
-    confirmText: string,
-    confirmType?: 'submit' | 'reset' | 'button',
+    confirmText?: string,
+    confirmType?: 'primary' | 'secondary' | 'accept' | 'decline' | 'disabled',
     children: ReactNode
 }
 
@@ -51,7 +51,7 @@ const PopUp:FC<PopUpProps> = props => {
                     height="50px"
                     width="100%"
                     className="popup-bottom-button"
-                    type={confirmType ?? 'button'}
+                    buttonStyle={confirmType ?? 'primary'}
                     onClick={acceptFunc}
                 >
                     {confirmText ?? 'Подтвердить'}

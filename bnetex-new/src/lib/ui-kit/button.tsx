@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { ButtonHTMLAttributes, FC, ReactNode } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
-    buttonStyle?: 'primary' | 'secondary' | 'accept' | 'decline',
+    buttonStyle?: 'primary' | 'secondary' | 'accept' | 'decline' | 'disabled',
     width?: string,
     height?: string,
     children?: ReactNode
