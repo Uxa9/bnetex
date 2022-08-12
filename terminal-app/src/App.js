@@ -13,6 +13,7 @@ import _l from './locales/index';
 
 import './styles/style.scss';
 
+import AdvancedTerminal from './components/terminal/advancedTerminal';
 import BeginnerTerminal from './components/terminal/beginnerTerminal';
 
 const App = props => {
@@ -27,19 +28,13 @@ const App = props => {
                 className="content-wrapper"
             >
                 <div
-                    className="chart-and-terminal"
+                    className="chart-and-history"
                 >
                     <div
                         className="chart-view"
                     >
                         когда-нибудь тут что-то будет
                     </div>
-                    <BeginnerTerminal
-                    />
-                </div>
-                <div
-                    className="history-and-actives"
-                >
                     <div
                         className="block history-and-orders"
                     >
@@ -110,6 +105,12 @@ const App = props => {
                             </div>
                         </div>
                     </div>
+                </div>
+                <AdvancedTerminal />
+                <div
+                    className="terminal-and-actives"
+                >
+                    <BeginnerTerminal />
                     <div
                         className="block actives"
                     >

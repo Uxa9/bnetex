@@ -239,6 +239,13 @@ $graySeparator : #F7F7F7;
 
 body {
     min-height: 100vh;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 // Buttons
@@ -323,7 +330,7 @@ body {
 $headerHeight : 72px;
 
 .page-header {
-    width: 100vw;
+    width: 100%;
     height: $headerHeight;
     
     padding: 0 30px;
@@ -922,322 +929,415 @@ $headerHeight : 72px;
 
 .content-wrapper {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    // flex-direction: column;
 
     box-sizing: border-box;
-    padding: 20px 30px 70px;
+    margin: 20px 30px 70px;
 }
 
 // terminal beginner
 
-.chart-and-terminal {
+.chart-and-history {
     display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    margin-right: 20px;
 
     .chart-view {
         flex-grow: 1;
     }
     
-    .beginner-terminal {
-        flex-grow: 1;
-    
-        max-width: 450px;
+}
+.beginner-terminal {
+    flex-grow: 1;
 
-        padding: 30px 20px;
+    max-width: 450px;
 
-        box-sizing: border-box;
-    
-        .margin-and-lever-selector {
-            display: flex;
-            
-            justify-content: space-between;
-            align-items: center;
+    padding: 30px 20px;
 
-            .selector-select-button {
-                flex-grow: 1;
+    box-sizing: border-box;
 
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                font-size: 14px;
-
-                background-color: $activeBG;
-                border-radius: 20px;
-
-                max-width: 190px;
-                height: 30px;
-
-                cursor: pointer;
-
-                transition: background-color .4s;
-
-                &:hover {
-                    background-color: $grayBorder;
-                }
-            }
-        }
-
-        .trade-type-and-tooltip {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            
-            margin: 20px 0 40px;
-
-            .tpsl-tooltip {
-                display: flex;
-                align-items: center;
-
-                line-height: 25px;
-
-                color: $grayText;
-
-                span {
-                    margin-right: 5px;
-                }
-            }
-        }
-
-        .trade-type {
-            display: flex;
-
-            > div {
-                width: 120px;
-                height: 30px;
-
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                &:first-child {
-                    border-radius: 5px 0 0 5px;
-                }
-
-                &:last-child {
-                    position: relative;
-                    left: -1px;
-
-                    border-radius: 0 5px 5px 0;
-                }
-            }
-        }
-    }
-
-    .trade-market-field {
-        .trade-market-user-wallet {
-            display: flex;
-            justify-content: space-between;
-            
-            font-size: 14px;
-            
-            color: $grayText;
-
-            margin-bottom: 10px;
-
-            b {
-                color: black;
-            }
-        }
-
-        .money-type-switcher-and-edit {
-            display: flex;
-            margin: 40px 0 20px;
-
-            font-size: 14px;
-
-            .money-type-switcher {
-                >div {
-                    width: 25px;
-                    height: 25px;
-                }
-            }
-
-        }
-
-        .buy-and-sell-buttons {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .final-price-calculations {
-            display: flex;
-            justify-content: space-between;
-
-            margin-top: 20px;
-            
-            .long-calculations,
-            .short-calculations {
-                width: 190px;
-                
-                >div {
-                    display: flex;
-                    justify-content: space-between;
-
-                    margin-top: 11px;
-                    
-                    span {
-                        &:first-child {
-                            color: $grayText;
-                        }
-
-                        &:last-child {
-                            color: black;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    .trade-tpsl-field {
-        .trade-tpsl-info {
-            margin-bottom: 40px;
-
-            .trade-tpsl-info-row {
-                display: flex;
-                justify-content: space-between;
-                
-                margin: 15px 0;
-                span {
-
-                    &:first-child {
-                        color: $grayText;
-                    }
-                }
-            }
-        }
-
-        .tspl-selector-and-edit {
-            display: flex;
-            align-items: flex-start;
-        }
-        
-        .user-values-selector {
-            flex-grow: 1;
-            margin: 0;
-
-            max-width: 205px;
-            .amount-selector {
-                width: 25%;
-                height: 30px;
-            }
-        }
-
-        .tpsl-input-fields {
-            margin-bottom: 30px;
-        }
-    }
-
-    .user-values-selector {
+    .margin-and-lever-selector {
         display: flex;
-        margin: 20px 0 47px;
         
-        .amount-selector {
+        justify-content: space-between;
+        align-items: center;
+
+        .selector-select-button {
+            flex-grow: 1;
+
             display: flex;
             justify-content: center;
             align-items: center;
-            
-            height: 57px;
-            width: 20%;
+
+            font-size: 14px;
+
+            background-color: $activeBG;
+            border-radius: 20px;
+
+            max-width: 190px;
+            height: 30px;
+
+            cursor: pointer;
+
+            transition: background-color .4s;
+
+            &:hover {
+                background-color: $grayBorder;
+            }
+        }
+    }
+
+    .trade-type-and-tooltip {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        margin: 20px 0 40px;
+
+        .tpsl-tooltip {
+            display: flex;
+            align-items: center;
+
+            line-height: 25px;
+
+            color: $grayText;
+
+            span {
+                margin-right: 5px;
+            }
+        }
+    }
+
+    .trade-type {
+        display: flex;
+
+        > div {
+            width: 120px;
+            height: 30px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
             &:first-child {
-                border-radius: 10px 0 0 10px;
+                border-radius: 5px 0 0 5px;
             }
 
             &:last-child {
                 position: relative;
                 left: -1px;
 
-                border-radius: 0 10px 10px 0;
+                border-radius: 0 5px 5px 0;
+            }
+        }
+    }
+}
+
+.trade-market-field {
+    .trade-market-user-wallet {
+        display: flex;
+        justify-content: space-between;
+        
+        font-size: 14px;
+        
+        color: $grayText;
+
+        margin-bottom: 10px;
+
+        b {
+            color: black;
+        }
+    }
+
+    .money-type-switcher-and-edit {
+        display: flex;
+        margin: 40px 0 20px;
+
+        font-size: 14px;
+
+        .money-type-switcher {
+            >div {
+                width: 25px;
+                height: 25px;
+            }
+        }
+
+    }
+
+    .buy-and-sell-buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .final-price-calculations {
+        display: flex;
+        justify-content: space-between;
+
+        margin-top: 20px;
+        
+        .long-calculations,
+        .short-calculations {
+            width: 190px;
+            
+            >div {
+                display: flex;
+                justify-content: space-between;
+
+                margin-top: 11px;
+                
+                span {
+                    &:first-child {
+                        color: $grayText;
+                    }
+
+                    &:last-child {
+                        color: black;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.trade-tpsl-field {
+    .trade-tpsl-info {
+        margin-bottom: 40px;
+
+        .trade-tpsl-info-row {
+            display: flex;
+            justify-content: space-between;
+            
+            margin: 15px 0;
+            span {
+
+                &:first-child {
+                    color: $grayText;
+                }
             }
         }
     }
 
-    .money-type-edit {
+    .tspl-selector-and-edit {
         display: flex;
+        align-items: flex-start;
+    }
+    
+    .user-values-selector {
+        flex-grow: 1;
+        margin: 0;
+
+        max-width: 205px;
+        .amount-selector {
+            width: 25%;
+            height: 30px;
+        }
+    }
+
+    .tpsl-input-fields {
+        margin-bottom: 30px;
+    }
+}
+
+.user-values-selector {
+    display: flex;
+    margin: 20px 0 47px;
+    
+    .amount-selector {
+        display: flex;
+        justify-content: center;
         align-items: center;
+        
+        height: 57px;
+        width: 20%;
+
+        &:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        &:last-child {
+            position: relative;
+            left: -1px;
+
+            border-radius: 0 10px 10px 0;
+        }
+    }
+}
+
+.money-type-edit {
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+
+    margin-left: 10px;
+
+    transition: color .3s;
+    
+    &:hover {
+        color: $activeBorder;
+    }
+}
+
+.money-type-edit-active {
+    color: $mainActive;
+}
+
+.edit-mode-menu {
+
+    display: flex;
+    align-items: center;
+
+    >span {
+        padding-bottom: 7px;
+        margin: 0 5px;
 
         cursor: pointer;
 
-        margin-left: 10px;
+        border-width: 0 0 1px;
+        border-style: solid;
 
-        transition: color .3s;
-        
+        transition: all .3s;
+    }
+
+    .save-button {
+        color: $green;
+        border-color: $green;
+
         &:hover {
-            color: $activeBorder;
+            color: $greenHover;
+            border-color: $greenHover;
+        }
+
+        &:active {
+            color: $greenActive;
+            border-color: $greenActive;
         }
     }
 
-    .money-type-edit-active {
-        color: $mainActive;
+    .cancel-button {
+        color: $red;
+        border-bottom-color: $red;
+
+        &:hover {
+            color: $redHover;
+            border-color: $redHover;
+        }
+
+        &:active {
+            color: $redActive;
+            border-color: $redActive;
+        }
     }
+}
 
-    .edit-mode-menu {
+.pnl-text {
+    font-size: 14px;
+    line-height: 20px;
 
+    color: $grayText;
+
+    .pnl-text-bold {
+        color: black;
+    }
+}
+
+.advanced-terminal {
+    margin-right: 20px;
+
+    max-width: 450px;
+    flex-grow: 2;
+
+    font-size: 10px;
+
+    padding: 15px 16px;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: space-between;
+    
+    cursor: pointer;
+
+    .pair-row {
         display: flex;
-        align-items: center;
+        justify-content: space-between;
 
-        >span {
-            padding-bottom: 7px;
-            margin: 0 5px;
-
-            cursor: pointer;
-
-            border-width: 0 0 1px;
-            border-style: solid;
-
-            transition: all .3s;
-        }
-
-        .save-button {
-            color: $green;
-            border-color: $green;
-
-            &:hover {
-                color: $greenHover;
-                border-color: $greenHover;
-            }
-
-            &:active {
-                color: $greenActive;
-                border-color: $greenActive;
-            }
-        }
-
-        .cancel-button {
-            color: $red;
-            border-bottom-color: $red;
-
-            &:hover {
-                color: $redHover;
-                border-color: $redHover;
-            }
-
-            &:active {
-                color: $redActive;
-                border-color: $redActive;
-            }
-        }
+        padding: 2px;
+        box-sizing: border-box;
     }
 
-    .pnl-text {
-        font-size: 14px;
-        line-height: 20px;
+    .advanced-terminal-header {
+        display: flex;
+        justify-content: space-between;
 
         color: $grayText;
 
-        .pnl-text-bold {
-            color: black;
+        margin-bottom: 10px;
+    }
+
+    .traiding-pairs-total {
+        margin-top: 13px;
+        padding: 15px 10% 0;
+        border-top: 1px solid $graySeparator;
+
+        display: flex;
+        justify-content: space-around;
+        font-size: 12px;
+
+        span:nth-child(2) {
+            margin: 0 5px;
+        }
+    }
+
+    .sell-buy-history {
+        flex-grow: 2;
+
+        max-width: 150px;
+    }
+
+    .amounts {
+        flex-grow: 3;
+        margin-left: 10px;
+
+        max-width: 240px;
+
+        display: flex;
+        flex-direction: column;
+
+        .sells-rows {
+            background-color: $red;
+        }
+
+        .buys-rows {
+            background-color: $green;
+        }
+
+        .sells-rows, .buys-rows {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2px;
+        }
+
+        .amount-pairs {
+            flex-grow: 1;
+
+            padding: 2px;
+        }
+
+        .amount-pair {
+            display: flex;
+            justify-content: space-between;
         }
     }
 }
 
 // Orders, positions, and history
 
-.history-and-actives {
+.terminal-and-actives {
     display: flex;
-
-    margin-top: 20px;
+    flex-direction: column;
 }
 
 .history-and-orders {
@@ -1281,7 +1381,7 @@ $headerHeight : 72px;
     
     min-width: 450px;
 
-    margin-left: 20px;
+    margin-top: 20px;
 }
 
 .tabs {
