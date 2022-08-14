@@ -226,45 +226,251 @@ const AdvancedTerminal = props => {
     }
 
     const amountsParser = () => {
+
+        const colorParser = data => {
+            const amountsArr = data.map(pair => pair[0]);
+            const amount = Math.max(...amountsArr) - Math.min(...amountsArr);
+
+            return data.map(pair => {
+                const percent = pair[0] / amount * 100;
+
+                if ( percent <= 30 ) {
+                    return (
+                        <div
+                            className='amount-pair'
+                            style={{
+                                background : `linear-gradient(to right, #F8FAAC 0%, #F8FAAC
+                                    ${percent}%, #FFFFFF00 
+                                    ${percent}%, #FFFFFF00 100%)`
+                            }}
+                        >
+                            <span>
+                                {pair[0]}
+                            </span>
+                            <span>
+                                {pair[1]}
+                            </span>
+                        </div>
+                    );
+                }
+                
+                if ( percent <= 50 ) {
+                    return (
+                        <div
+                            className='amount-pair'
+                            style={{
+                                background : `linear-gradient(to right, #FFBA88 0%, #FFBA88
+                                    ${percent}%, #FFFFFF00 
+                                    ${percent}%, #FFFFFF00 100%)`
+                            }}
+                        >
+                            <span>
+                                {pair[0]}
+                            </span>
+                            <span>
+                                {pair[1]}
+                            </span>
+                        </div>
+                    );
+                }
+
+                return (
+                    <div
+                        className='amount-pair'
+                        style={{
+                            background : `linear-gradient(to right, #B5CFF5 0%, #B5CFF5
+                                ${percent}%, #FFFFFF00 
+                                ${percent}%, #FFFFFF00 100%)`
+                        }}
+                    >
+                        <span>
+                            {pair[0]}
+                        </span>
+                        <span>
+                            {pair[1]}
+                        </span>
+                    </div>
+                );
+            });
+        }
+
+        const colorParserv2 = (data, type) => {
+            const amountsArr = data.map(pair => pair[0]);
+            const amount = Math.max(...amountsArr) - Math.min(...amountsArr);
+
+            return data.map(pair => {
+                const percent = pair[0] / amount * 100;
+
+                if ( percent <= 30 ) {
+                    return (
+                        <div
+                            className='amount-pair'
+                            style={{
+                                background : type == 'red' ? `#FFBEBE` : `#C3F4C1`
+                            }}
+                        >
+                            <span>
+                                {pair[0]}
+                            </span>
+                            <span>
+                                {pair[1]}
+                            </span>
+                        </div>
+                    );
+                }
+                
+                if ( percent <= 50 ) {
+                    return (
+                        <div
+                            className='amount-pair'
+                            style={{
+                                background : type == 'red' ? `#FFB4B4` : `#A4F2A1`
+                            }}
+                        >
+                            <span>
+                                {pair[0]}
+                            </span>
+                            <span>
+                                {pair[1]}
+                            </span>
+                        </div>
+                    );
+                }
+                
+                if ( percent <= 90 ) {
+                    return (
+                        <div
+                            className='amount-pair'
+                            style={{
+                                background : type == 'red' ? `#FFA9A9` : `#92E98F`
+                            }}
+                        >
+                            <span>
+                                {pair[0]}
+                            </span>
+                            <span>
+                                {pair[1]}
+                            </span>
+                        </div>
+                    );
+                }
+
+                return (
+                    <div
+                        className='amount-pair'
+                        style={{
+                            background : type == 'red' ? `#FF6B6B` : `#21C11B`
+                        }}
+                    >
+                        <span>
+                            {pair[0]}
+                        </span>
+                        <span>
+                            {pair[1]}
+                        </span>
+                    </div>
+                );
+            });
+        }
+
+        const colorParserv3 = (data, type) => {
+            const amountsArr = data.map(pair => pair[0]);
+            const amount = Math.max(...amountsArr) - Math.min(...amountsArr);
+
+            return data.map(pair => {
+                const percent = pair[0] / amount * 100;
+
+                if ( percent <= 30 ) {
+                    return (
+                        <div
+                            className='amount-pair'
+                            style={{
+                                background : type == 'red' ? 
+                                    `linear-gradient(to right, #FFBEBE 0%, #FFBEBE
+                                        ${percent}%, #FFFFFF00 
+                                        ${percent}%, #FFFFFF00 100%)` : 
+                                    `linear-gradient(to right, #C3F4C1 0%, #C3F4C1
+                                        ${percent}%, #FFFFFF00 
+                                        ${percent}%, #FFFFFF00 100%)`
+                            }}
+                        >
+                            <span>
+                                {pair[0]}
+                            </span>
+                            <span>
+                                {pair[1]}
+                            </span>
+                        </div>
+                    );
+                }
+                
+                if ( percent <= 50 ) {
+                    return (
+                        <div
+                            className='amount-pair'
+                            style={{
+                                background : type == 'red' ? 
+                                    `linear-gradient(to right, #FFB4B4 0%, #FFB4B4
+                                        ${percent}%, #FFFFFF00 
+                                        ${percent}%, #FFFFFF00 100%)` : 
+                                    `linear-gradient(to right, #A4F2A1 0%, #A4F2A1
+                                        ${percent}%, #FFFFFF00 
+                                        ${percent}%, #FFFFFF00 100%)`
+                            }}
+                        >
+                            <span>
+                                {pair[0]}
+                            </span>
+                            <span>
+                                {pair[1]}
+                            </span>
+                        </div>
+                    );
+                }
+
+                return (
+                    <div
+                        className='amount-pair'
+                        style={{
+                            background : type == 'red' ? 
+                                `linear-gradient(to right, #FFA9A9 0%, #FFA9A9
+                                    ${percent}%, #FFFFFF00 
+                                    ${percent}%, #FFFFFF00 100%)` : 
+                                `linear-gradient(to right, #92E98F 0%, #92E98F
+                                    ${percent}%, #FFFFFF00 
+                                    ${percent}%, #FFFFFF00 100%)`
+                        }}
+                    >
+                        <span>
+                            {pair[0]}
+                        </span>
+                        <span>
+                            {pair[1]}
+                        </span>
+                    </div>
+                );
+            });
+        }
+
         return (
             <div
                 className="amount-pairs"
             >
                 <div
                     className="sells-rows"
+                    // style={{
+                    //     background : "transparent"
+                    // }}
                 >
-                    {data2.slice(0, 25).map(pair => {
-                        return (
-                            <div
-                                className="amount-pair"
-                            >
-                                <span>
-                                    {pair[0]}
-                                </span>
-                                <span>
-                                    {pair[1]}
-                                </span>
-                            </div> 
-                        )
-                    })}
+                    {colorParser(data2.slice(0, 25), 'red')}
                 </div>
                 <div
                     className="buys-rows"
+                    // style={{
+                    //     background : "transparent"
+                    // }}
                 >
-                    {data2.slice(25, 50).map(pair => {
-                        return (
-                            <div
-                                className="amount-pair"
-                            >
-                                <span>
-                                    {pair[0]}
-                                </span>
-                                <span>
-                                    {pair[1]}
-                                </span>
-                            </div> 
-                        )
-                    })}
+                    {colorParser(data2.slice(25, 50), 'green')}
                 </div>
             </div>
         )

@@ -33,7 +33,7 @@ const OrderInput = props => {
         <>
             { props.mode == 'view' && 
                 <div
-                    className="amount-selector user-selector-field"
+                    className="amount-selector user-selector-field disable-selection"
                 >
                     {`${value}${props.suffix || ''}`}
                 </div>
