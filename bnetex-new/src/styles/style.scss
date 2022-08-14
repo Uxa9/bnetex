@@ -19,17 +19,6 @@ $graySeparator: #f7f7f7;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-// @font-face {
-//     font-family: 'Rubik';
-//     src: url('../fonts/Rubik-Regular.ttf') format('.ttf'), url('../fonts/Rubik-Black.ttf') format('.ttf'),
-//         url('../fonts/Rubik-BlackItalic.ttf') format('.ttf'), url('../fonts/Rubik-Bold.ttf') format('.ttf'),
-//         url('../fonts/Rubik-BoldItalic.ttf') format('.ttf'), url('../fonts/Rubik-ExtraBold.ttf') format('.ttf'),
-//         url('../fonts/Rubik-ExtraBoldItalic.ttf') format('.ttf'), url('../fonts/Rubik-Italic.ttf') format('.ttf'),
-//         url('../fonts/Rubik-Light.ttf') format('.ttf'), url('../fonts/Rubik-LightItalic.ttf') format('.ttf'),
-//         url('../fonts/Rubik-Medium.ttf') format('.ttf'), url('../fonts/Rubik-MediumItalic.ttf') format('.ttf'),
-//         url('../fonts/Rubik-SemiBold.ttf') format('.ttf'), url('../fonts/Rubik-SemiBoldItalic.ttf') format('.ttf');
-// }
-
 * {
     font-family: 'Rubik', sans-serif;
 }
@@ -334,6 +323,8 @@ $headerHeight: 72px;
     display: flex;
     align-items: center;
     height: 100%;
+    font-size: 18px;
+    font-family: "Rubik Light";
 }
 
 .header-left-side {
@@ -373,7 +364,7 @@ $headerHeight: 72px;
 
     height: 100%;
     font-weight: 300;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 21px;
 
     .selected-mode {

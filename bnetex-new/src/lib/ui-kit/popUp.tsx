@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import {ReactComponent as Cross} from '../../assets/images/delete.svg';
+import {ReactComponent as Cross} from '../../assets/images/icons/delete.svg';
 
 import Button from './button';
 

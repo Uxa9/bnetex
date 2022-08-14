@@ -1,3 +1,4 @@
+import MainPage from 'modules/terminal/MainPage/MainPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
 
@@ -8,7 +9,7 @@ const AppRoutes = () => {
     return (
         <Routes>
             <Route index element={<Navigate to={HOME} />} />
-            <Route path={HOME}></Route>
+            <Route path={HOME} element={<MainPage />}></Route>
             <Route path={AUTH}></Route>
             <Route path={REGISTRATION}></Route>
             <Route path={TERMINAL}></Route>

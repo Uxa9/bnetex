@@ -1,11 +1,13 @@
 import { FC, useState } from 'react';
 
-import {ReactComponent as NightMode} from '../assets/images/icons/nightMode.svg';
+// import {ReactComponent as NightMode} from '../assets/images/icons/nightMode.svg'; 
 import {ReactComponent as Wallet}    from '../assets/images/icons/wallet.svg';
 import {ReactComponent as User}      from '../assets/images/icons/user.svg';
 import {ReactComponent as Logo}      from '../assets/images/icons/logo.svg';
 
 import _l from '../locales/index';
+import { useNavigate } from 'react-router-dom';
+import { Button } from 'lib/ui-kit';
 
 // пока pro-режим отсутствует
 
@@ -19,13 +21,14 @@ interface HeaderProps{
 const headerModes = {
     'beginner': _l.beginner_level,
     'advanced': _l.advanced_level,
-};
-
+}; 
 
 const Header:FC<HeaderProps> = props => {
     const [modeSelect, openModeSelect] = useState(false);
 
     const {mode} = props;
+
+    const navigate = useNavigate();
 
     return (
         <header
@@ -37,7 +40,9 @@ const Header:FC<HeaderProps> = props => {
                 <div
                     className="logo"
                 >
-                    <Logo />
+                    <Logo 
+                        onClick={() => navigate('/')}
+                    />
                 </div>
                 <div                    
                     className={!modeSelect ? 
@@ -80,16 +85,16 @@ const Header:FC<HeaderProps> = props => {
             <div
                 className="header-right-side"
             >
-                <div>
+                {/* <div>
                     <NightMode 
-                        height='30px'
-                        width='30px'
+                        height='22px'
+                        width='22px'
                     />
-                </div>
+                </div> */}
                 <div>
                     <Wallet 
-                        height='30px'
-                        width='30px'
+                        height='22px'
+                        width='22px'
                     />
                     <span>
                         {_l.wallets}
@@ -97,8 +102,8 @@ const Header:FC<HeaderProps> = props => {
                 </div>
                 <div>
                     <User
-                        height='30px'
-                        width='30px' 
+                        height='22px'
+                        width='22px' 
                     />
                     <span>
                         {_l.profile}
