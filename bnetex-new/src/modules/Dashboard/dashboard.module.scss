@@ -24,6 +24,7 @@
     padding: 20px 0px;
     align-items: center;
     height: fit-content;
+    row-gap: 10px;
 
     .link {
         width: 100%;
@@ -37,8 +38,11 @@
         &:focus,
         &--active {
             border-left: 2px solid $activeBorder;
-            background-color: $activeBG;
             color: $activeBorder;
+        }
+
+        &--active {
+            background-color: $activeBG;
         }
     }
 }

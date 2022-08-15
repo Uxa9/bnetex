@@ -1,5 +1,6 @@
 import Dashboard from 'modules/Dashboard/dashboard';
 import FuturesWallet from 'modules/Dashboard/futuresWallet/futuresWallet';
+import MainWallet from 'modules/Dashboard/mainWallet/mainWallet';
 import Settings from 'modules/Dashboard/settings/settings';
 import MainPage from 'modules/MainPage/MainPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
@@ -20,7 +21,7 @@ const AppRoutes = () => {
                 <Route index element={<Navigate to={'tools'} />}></Route>
                 <Route path='tools' />
                 <Route path='settings' element={<Settings />} />
-                <Route path='wallet/main' />
+                <Route path='wallet/main' element={<MainWallet />} />
                 <Route path='wallet/futures' element={<FuturesWallet />} />
                 <Route path='transactions' />
             </Route>
