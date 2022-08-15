@@ -1,9 +1,21 @@
 import classNames from 'classnames';
 import Header from 'components/header';
+import { Button } from 'lib/ui-kit';
 import { Link, Outlet } from 'react-router-dom';
 import styles from './dashboard.module.scss';
 
+import Chart from 'react-apexcharts';
+import { useState } from 'react';
+
 const Dashboard = () => {
+
+    const [options, setOptions] = useState({
+        dataLabels: {enabled: false},
+        labels: ["Основной аккаунт", "Фьючерсы USD-M"],
+        colors : ['#EA018D', '#5072F7']
+    });
+
+    const [series, setSeries] = useState([80, 20]);
 
     return(
         <>

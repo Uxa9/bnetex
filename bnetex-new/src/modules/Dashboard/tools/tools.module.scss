@@ -1,0 +1,105 @@
+@import '../../../styles/variables.scss';
+
+.tools-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    p {
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 28px;
+
+        color: #4E3660;
+        margin-right: 20px;
+    }
+}
+
+.tools-header-buttons {
+    display: flex;
+    align-items: center;
+
+    font-size: 14px;
+
+    >button {
+        font-size: 14px;
+
+        &:nth-child(2) {
+            margin: 0 20px;
+        }
+    }
+
+    span {
+        font-style: normal;
+        font-weight: 700;
+        line-height: 17px;
+
+        color: $activeBorder;
+    }
+}
+
+.charts {
+    display: flex;
+    align-items: flex-start;
+}
+
+.balance-and-transactions {
+    display: flex;
+
+    margin-top: 20px;
+
+    .balance,
+    .transactions {
+        flex-grow: 1;
+        padding: 15px 20px;
+    }
+
+    .balance {
+        max-width: 600px;
+        box-sizing: border-box;
+
+        .balance-header {
+            color: $grayText;
+            margin-bottom: 10px;
+        }
+
+        .user-balance {
+            margin-bottom: 20px;
+
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 24px;
+
+            color: #4E3660;
+
+            span {
+                color: $grayText;
+            }
+        }
+    }
+
+    .transactions {
+        max-width: 380px;
+        margin-left: 20px;
+
+        div {
+            display: flex;
+            justify-content: space-between;
+            
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 17px;
+
+            span {
+                &:first-child {
+                    color: $grayText;
+                }
+
+                &:last-child {
+                    color: $activeBorder;
+                }
+            }
+        }
+    }
+
+}

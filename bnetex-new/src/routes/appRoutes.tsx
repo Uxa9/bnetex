@@ -1,5 +1,7 @@
+import TerminalInterface from 'components/terminalInterface';
 import Dashboard from 'modules/Dashboard/dashboard';
 import Settings from 'modules/Dashboard/settings/settings';
+import Tools from 'modules/Dashboard/tools/tools';
 import MainPage from 'modules/MainPage/MainPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
@@ -14,10 +16,10 @@ const AppRoutes = () => {
             <Route path={HOME} element={<MainPage />}></Route>
             <Route path={AUTH}></Route>
             <Route path={REGISTRATION}></Route>
-            <Route path={TERMINAL}></Route>
+            <Route path={TERMINAL} element={<TerminalInterface />}></Route>
             <Route path={DASHBOARD} element={<Dashboard />}>
                 <Route index element={<Navigate to={'tools'} />}></Route>
-                <Route path='tools' />
+                <Route path='tools' element={<Tools />}/>
                 <Route path='settings' element={<Settings />} />
                 <Route path='wallet/main' />
                 <Route path='wallet/futures' />
