@@ -1,0 +1,27 @@
+@import '../../../styles/variables.scss';
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+.input {
+    padding: 15px 10px;
+    border: 1px solid $grayBorder;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: 0.25s border;
+
+    &-with-bg {
+        background-color: white;
+    }
+
+    &:active,
+    &:focus {
+        border: 1px solid $activeBorder;
+    }
+}

@@ -1,0 +1,53 @@
+@import 'reset';
+@import '../assets/fonts/font-face.scss';
+@import 'variables';
+
+* {
+    font-family: 'Rubik', sans-serif;
+    color: $textColor;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+h1,
+h1 > * {
+    font-family: 'Rubik Medium', sans-serif;
+    font-weight: 500;
+    font-size: 64px;
+    line-height: 76px;
+}
+
+h2,
+h2 > * {
+    font-family: 'Rubik Medium', sans-serif;
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 56px;
+}
+
+h3,
+h3 > * {
+    font-family: 'Rubik Medium', sans-serif;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 36px;
+}
+
+.body-1 {
+    font-family: 'Rubik Regular', sans-serif;
+    font-size: 16px;
+    line-height: 19px;
+}
+
+.button-text{
+    font-family: 'Rubik Bold', sans-serif;
+    font-size: 20px;
+}
+
+.label-1 {
+    font-family: 'Rubik Regular', sans-serif;
+    font-size: 12px;
+    line-height: 14px;
+}

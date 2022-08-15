@@ -19,17 +19,6 @@ $graySeparator: #f7f7f7;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-@font-face {
-    font-family: 'Rubik';
-    src: url('../fonts/Rubik-Regular.ttf') format('.ttf'), url('../fonts/Rubik-Black.ttf') format('.ttf'),
-        url('../fonts/Rubik-BlackItalic.ttf') format('.ttf'), url('../fonts/Rubik-Bold.ttf') format('.ttf'),
-        url('../fonts/Rubik-BoldItalic.ttf') format('.ttf'), url('../fonts/Rubik-ExtraBold.ttf') format('.ttf'),
-        url('../fonts/Rubik-ExtraBoldItalic.ttf') format('.ttf'), url('../fonts/Rubik-Italic.ttf') format('.ttf'),
-        url('../fonts/Rubik-Light.ttf') format('.ttf'), url('../fonts/Rubik-LightItalic.ttf') format('.ttf'),
-        url('../fonts/Rubik-Medium.ttf') format('.ttf'), url('../fonts/Rubik-MediumItalic.ttf') format('.ttf'),
-        url('../fonts/Rubik-SemiBold.ttf') format('.ttf'), url('../fonts/Rubik-SemiBoldItalic.ttf') format('.ttf');
-}
-
 * {
     font-family: 'Rubik', sans-serif;
 }
@@ -66,13 +55,6 @@ $graySeparator: #f7f7f7;
             background-color: $mainActive;
         }
     }
-}
-
-.disable-selection {
-    -webkit-user-select: none;  
-    -moz-user-select: none;    
-    -ms-user-select: none;      
-    user-select: none;
 }
 
 .minus-icon {
@@ -164,11 +146,6 @@ $graySeparator: #f7f7f7;
 .toggle-type-switcher {
     display: flex;
 
-    -webkit-user-select: none;  
-    -moz-user-select: none;    
-    -ms-user-select: none;      
-    user-select: none;
-
     .toggle-type-selector {
         display: flex;
         justify-content: center;
@@ -198,7 +175,7 @@ $graySeparator: #f7f7f7;
         z-index: 2;
         background-color: white;
         top: 20px;
-        
+
         &:first-child {
             color: $grayText;
             left: 20px;
@@ -208,22 +185,22 @@ $graySeparator: #f7f7f7;
             right: 20px;
         }
     }
-    
+
     input {
         width: 100%;
         height: 56px;
-    
+
         box-sizing: border-box;
-    
+
         outline: none;
         padding: 10px 80px 10px 120px;
         font-size: 16px;
-    
+
         border-radius: 10px;
-        border: 1px solid #E6E6E6;
+        border: 1px solid #e6e6e6;
 
         text-align: right;
-    
+
         -moz-appearance: textfield;
         &::-webkit-outer-spin-button,
         &::-webkit-inner-spin-button {
@@ -243,13 +220,6 @@ $graySeparator: #f7f7f7;
 
 body {
     min-height: 100vh;
-
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
 }
 
 // Buttons
@@ -335,7 +305,7 @@ body {
 $headerHeight: 72px;
 
 .page-header {
-    width: 100%;
+    width: 100vw;
     height: $headerHeight;
 
     padding: 0 30px;
@@ -353,6 +323,8 @@ $headerHeight: 72px;
     display: flex;
     align-items: center;
     height: 100%;
+    font-size: 18px;
+    font-family: "Rubik Light";
 }
 
 .header-left-side {
@@ -392,7 +364,7 @@ $headerHeight: 72px;
 
     height: 100%;
     font-weight: 300;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 21px;
 
     .selected-mode {
@@ -437,13 +409,12 @@ $headerHeight: 72px;
 
     .select-dropdown {
         position: absolute;
-        top: 70px;
-
+        top: 100%;
+        padding: 10px 0px;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
-        height: 150px;
-        width: 175px;
+        row-gap: 10px;
+        z-index: 100;
 
         border-radius: 0px 0px 5px 5px;
 
@@ -459,7 +430,7 @@ $headerHeight: 72px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 42px;
+            padding: 10px 30px;
 
             cursor: pointer;
 
@@ -477,9 +448,7 @@ $headerHeight: 72px;
         .selected {
             color: $activeBorder;
 
-            &:hover {
-                background-color: transparent;
-            }
+      
         }
     }
 }
@@ -932,20 +901,16 @@ $headerHeight: 72px;
 
 .content-wrapper {
     display: flex;
-    justify-content: space-between;
-    // flex-direction: column;
+    flex-direction: column;
 
     box-sizing: border-box;
-    margin: 20px 30px 70px;
+    padding: 20px 30px 70px;
 }
 
 // terminal beginner
 
-.chart-and-history {
+.chart-and-terminal {
     display: flex;
-    flex-grow: 1;
-    flex-direction: column;
-    margin-right: 20px;
 
     .chart-view {
         flex-grow: 1;
@@ -955,21 +920,8 @@ $headerHeight: 72px;
         flex-grow: 1;
 
         max-width: 450px;
-    max-width: 450px;
 
-    padding: 30px 20px;
-
-    box-sizing: border-box;
-
-    .margin-and-lever-selector {
-        display: flex;
-        
-        justify-content: space-between;
-        align-items: center;
-
-        .selector-select-button {
-            flex-grow: 1;
-
+        padding: 30px 20px;
 
         box-sizing: border-box;
 
@@ -979,144 +931,72 @@ $headerHeight: 72px;
             justify-content: space-between;
             align-items: center;
 
-            font-size: 14px;
+            .selector-select-button {
+                flex-grow: 1;
 
-            background-color: $activeBG;
-            border-radius: 20px;
-
-            max-width: 190px;
-            height: 30px;
-
-            cursor: pointer;
-
-            transition: background-color .4s;
-
-            &:hover {
-                background-color: $grayBorder;
-            }
-        }
-    }
-
-        transition: background-color 0.4s;
-
-        .tpsl-tooltip {
-            display: flex;
-            align-items: center;
-
-            line-height: 25px;
-
-            color: $grayText;
-
-            span {
-                margin-right: 5px;
-            }
-        }
-    }
-
-    .trade-type {
-        display: flex;
-
-        > div {
-            width: 120px;
-            height: 30px;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            &:first-child {
-                border-radius: 5px 0 0 5px;
-            }
-
-            &:last-child {
-                position: relative;
-                left: -1px;
-
-                border-radius: 0 5px 5px 0;
-            }
-        }
-    }
-}
-
-.trade-market-field {
-    .trade-market-user-wallet {
-        display: flex;
-        justify-content: space-between;
-        
-        font-size: 14px;
-        
-        color: $grayText;
-
-        margin-bottom: 10px;
-
-        b {
-            color: black;
-        }
-    }
-
-    .money-type-switcher-and-edit {
-        display: flex;
-        margin: 40px 0 20px;
-
-        font-size: 14px;
-
-        .money-type-switcher {
-            >div {
-                width: 25px;
-                height: 25px;
-            }
-        }
-
-    }
-
-    .buy-and-sell-buttons {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .final-price-calculations {
-        display: flex;
-        justify-content: space-between;
-
-        margin-top: 20px;
-        
-        .long-calculations,
-        .short-calculations {
-            width: 190px;
-            
-            >div {
                 display: flex;
-                justify-content: space-between;
+                justify-content: center;
+                align-items: center;
 
-                margin-top: 11px;
-                
-                span {
-                    &:first-child {
-                        color: $grayText;
-                    }
+                font-size: 14px;
 
-                    &:last-child {
-                        color: black;
-                    }
+                background-color: $activeBG;
+                border-radius: 20px;
+
+                max-width: 190px;
+                height: 30px;
+
+                cursor: pointer;
+
+                transition: background-color 0.4s;
+
+                &:hover {
+                    background-color: $grayBorder;
                 }
             }
         }
-    }
-}
 
-.trade-tpsl-field {
-    .trade-tpsl-info {
-        margin-bottom: 40px;
-
-        .trade-tpsl-info-row {
+        .trade-type-and-tooltip {
             display: flex;
             justify-content: space-between;
-            
-            margin: 15px 0;
-            span {
+            align-items: center;
+
+            margin: 20px 0 40px;
+
+            .tpsl-tooltip {
+                display: flex;
+                align-items: center;
+
+                line-height: 25px;
+
+                color: $grayText;
+
+                span {
+                    margin-right: 5px;
+                }
+            }
+        }
+
+        .trade-type {
+            display: flex;
+
+            > div {
+                width: 120px;
+                height: 30px;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
                 &:first-child {
-                    color: $grayText;
+                    border-radius: 5px 0 0 5px;
+                }
+
+                &:last-child {
+                    position: relative;
+                    left: -1px;
+
+                    border-radius: 0 5px 5px 0;
                 }
             }
         }
@@ -1131,194 +1011,16 @@ $headerHeight: 72px;
 
             color: $grayText;
 
-        max-width: 205px;
-        .amount-selector {
-            width: 25%;
-            height: 30px;
-        }
-    }
+            margin-bottom: 10px;
 
-    .tpsl-input-fields {
-        margin-bottom: 30px;
-    }
-}
-
-.user-values-selector {
-    display: flex;
-    margin: 20px 0 47px;
-    
-    .amount-selector {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        
-        height: 57px;
-        width: 20%;
-
-        &:first-child {
-            border-radius: 10px 0 0 10px;
-        }
-
-        &:last-child {
-            position: relative;
-            left: -1px;
-
-            border-radius: 0 10px 10px 0;
-        }
-    }
-}
-
-.money-type-edit {
-    display: flex;
-    align-items: center;
-
-    cursor: pointer;
-
-    margin-left: 10px;
-
-    transition: color .3s;
-    
-    &:hover {
-        color: $activeBorder;
-    }
-}
-
-.money-type-edit-active {
-    color: $mainActive;
-}
-
-.edit-mode-menu {
-
-    display: flex;
-    align-items: center;
-
-    >span {
-        padding-bottom: 7px;
-        margin: 0 5px;
-
-        cursor: pointer;
-
-        border-width: 0 0 1px;
-        border-style: solid;
-
-        transition: all .3s;
-    }
-
-    .save-button {
-        color: $green;
-        border-color: $green;
-
-        &:hover {
-            color: $greenHover;
-            border-color: $greenHover;
-        }
-
-        &:active {
-            color: $greenActive;
-            border-color: $greenActive;
-        }
-    }
-
-    .cancel-button {
-        color: $red;
-        border-bottom-color: $red;
-
-        &:hover {
-            color: $redHover;
-            border-color: $redHover;
-        }
-
-        &:active {
-            color: $redActive;
-            border-color: $redActive;
-        }
-    }
-}
-
-.pnl-text {
-    font-size: 14px;
-    line-height: 20px;
-
-    color: $grayText;
-
-    .pnl-text-bold {
-        color: black;
-    }
-}
-
-.advanced-terminal {
-    margin-right: 20px;
-
-    max-width: 450px;
-    flex-grow: 2;
-
-    font-size: 10px;
-
-    padding: 15px 16px;
-    box-sizing: border-box;
-
-    display: flex;
-    justify-content: space-between;
-    
-    cursor: pointer;
-
-    .pair-row {
-        display: flex;
-        justify-content: space-between;
-
-        padding: 2px;
-        box-sizing: border-box;
-    }
-
-    .advanced-terminal-header {
-        display: flex;
-        justify-content: space-between;
-
-        color: $grayText;
-
-        margin-bottom: 10px;
-    }
-
-    .traiding-pairs-total {
-        margin-top: 13px;
-        padding: 15px 10% 0;
-        border-top: 1px solid $graySeparator;
-
-        display: flex;
-        justify-content: space-around;
-        font-size: 12px;
-
-        span:nth-child(2) {
-            margin: 0 5px;
-        }
-    }
-
-    .sell-buy-history {
-        flex-grow: 2;
-
-        max-width: 150px;
-    }
-
-    .amounts {
-        flex-grow: 3;
-        margin-left: 10px;
-
-        max-width: 240px;
-
-        display: flex;
-        flex-direction: column;
-
-        .sells-rows {
-            background-color: #FF939380;
-
-            div:nth-child(25) {
-                color: white !important;
-                background: $red !important;
+            b {
+                color: black;
             }
         }
 
-        .buys-rows {
-            background-color: #87D38580;
+        .money-type-switcher-and-edit {
+            display: flex;
+            margin: 40px 0 20px;
 
             font-size: 14px;
 
@@ -1328,113 +1030,16 @@ $headerHeight: 72px;
                     height: 25px;
                 }
             }
-
-            .edit-mode-menu {
-                display: flex;
-                align-items: center;
-
-                .money-type-edit {
-                    display: flex;
-                    align-items: center;
-
-                    cursor: pointer;
-
-                    margin-left: 10px;
-
-                    transition: color 0.3s;
-
-                    &:hover {
-                        color: $activeBorder;
-                    }
-                }
-
-                .money-type-edit-active {
-                    color: $mainActive;
-                }
-
-                > span {
-                    padding-bottom: 7px;
-                    margin: 0 5px;
-
-                    cursor: pointer;
-
-                    border-width: 0 0 1px;
-                    border-style: solid;
-
-                    transition: all 0.3s;
-                }
-
-                .save-button {
-                    color: $green;
-                    border-color: $green;
-
-                    &:hover {
-                        color: $greenHover;
-                        border-color: $greenHover;
-                    }
-
-                    &:active {
-                        color: $greenActive;
-                        border-color: $greenActive;
-                    }
-                }
-
-                .cancel-button {
-                    color: $red;
-                    border-bottom-color: $red;
-
-                    &:hover {
-                        color: $redHover;
-                        border-color: $redHover;
-                    }
-
-                    &:active {
-                        color: $redActive;
-                        border-color: $redActive;
-                    }
-                }
-            }
         }
 
-        .user-values-selector {
-            display: flex;
-            margin: 20px 0 47px;
-
-            .amount-selector {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                width: 20%;
-                height: 57px;
-
-                &:first-child {
-                    border-radius: 10px 0 0 10px;
-                }
-
-                &:last-child {
-                    position: relative;
-                    left: -1px;
-
-                    border-radius: 0 10px 10px 0;
-                }
-            }
-        }
-
-        .sells-rows, .buys-rows {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .amount-pairs {
-            flex-grow: 1;
-        }
-        
-        .amount-pair {
+        .buy-and-sell-buttons {
             display: flex;
             justify-content: space-between;
-            padding: 2px;
+        }
+
+        .final-price-calculations {
+            display: flex;
+            justify-content: space-between;
 
             margin-top: 20px;
 
@@ -1461,13 +1066,154 @@ $headerHeight: 72px;
             }
         }
     }
+
+    .trade-tpsl-field {
+        .trade-tpsl-info {
+            margin-bottom: 40px;
+
+            .trade-tpsl-info-row {
+                display: flex;
+                justify-content: space-between;
+
+                margin: 15px 0;
+                span {
+                    &:first-child {
+                        color: $grayText;
+                    }
+                }
+            }
+        }
+
+        .tspl-selector-and-edit {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .user-values-selector {
+            flex-grow: 1;
+            margin: 0;
+
+            max-width: 205px;
+            .amount-selector {
+                width: 25%;
+                height: 30px;
+            }
+        }
+
+        .tpsl-input-fields {
+            margin-bottom: 30px;
+        }
+    }
+
+    .user-values-selector {
+        display: flex;
+        margin: 20px 0 47px;
+
+        .amount-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            height: 57px;
+            width: 20%;
+
+            &:first-child {
+                border-radius: 10px 0 0 10px;
+            }
+
+            &:last-child {
+                position: relative;
+                left: -1px;
+
+                border-radius: 0 10px 10px 0;
+            }
+        }
+    }
+
+    .money-type-edit {
+        display: flex;
+        align-items: center;
+
+        cursor: pointer;
+
+        margin-left: 10px;
+
+        transition: color 0.3s;
+
+        &:hover {
+            color: $activeBorder;
+        }
+    }
+
+    .money-type-edit-active {
+        color: $mainActive;
+    }
+
+    .edit-mode-menu {
+        display: flex;
+        align-items: center;
+
+        > span {
+            padding-bottom: 7px;
+            margin: 0 5px;
+
+            cursor: pointer;
+
+            border-width: 0 0 1px;
+            border-style: solid;
+
+            transition: all 0.3s;
+        }
+
+        .save-button {
+            color: $green;
+            border-color: $green;
+
+            &:hover {
+                color: $greenHover;
+                border-color: $greenHover;
+            }
+
+            &:active {
+                color: $greenActive;
+                border-color: $greenActive;
+            }
+        }
+
+        .cancel-button {
+            color: $red;
+            border-bottom-color: $red;
+
+            &:hover {
+                color: $redHover;
+                border-color: $redHover;
+            }
+
+            &:active {
+                color: $redActive;
+                border-color: $redActive;
+            }
+        }
+    }
+
+    .pnl-text {
+        font-size: 14px;
+        line-height: 20px;
+
+        color: $grayText;
+
+        .pnl-text-bold {
+            color: black;
+        }
+    }
 }
 
 // Orders, positions, and history
 
-.terminal-and-actives {
+.history-and-actives {
     display: flex;
-    flex-direction: column;
+
+    margin-top: 20px;
 }
 
 .history-and-orders {
@@ -1511,7 +1257,7 @@ $headerHeight: 72px;
 
     min-width: 450px;
 
-    margin-top: 20px;
+    margin-left: 20px;
 }
 
 .tabs {
@@ -1585,16 +1331,4 @@ $headerHeight: 72px;
 
     box-sizing: border-box;
     justify-content: space-between;
-}
-
-
-input[type='number'] {
-    padding: 10px 0;
-    height: 30px;
-    font-size: 16px;
-    margin: 20px 0 0;
-
-    text-indent: 20px;
-    border-radius: 10px;
-    border: 1px solid #e6e6e6;
 }
