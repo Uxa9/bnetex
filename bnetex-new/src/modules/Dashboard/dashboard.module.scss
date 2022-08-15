@@ -1,0 +1,50 @@
+@import '../../styles/variables.scss';
+
+.wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.dashboard {
+    display: flex;
+    column-gap: 20px;
+    margin-top: 20px;
+    max-width: 1200px;
+    padding: 0px 15px;
+    width: 100%;
+}
+
+.control-menu {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    min-width: 285px;
+    flex-grow: 1;
+    padding: 20px 0px;
+    align-items: center;
+    height: fit-content;
+
+    .link {
+        width: 100%;
+        padding: 15px 20px;
+        font-weight: 300;
+        font-size: 16px;
+        transition: 0.25s all;
+        border-left: 2px solid transparent;
+
+        &:hover,
+        &:focus {
+            border-left: 2px solid $activeBorder;
+            background-color: $activeBG;
+            color: $activeBorder;
+        }
+    }
+}
+
+.separator {
+    width: 90%;
+    height: 1px;
+    margin: 20px 0px;
+    background-color: $graySeparator;
+}

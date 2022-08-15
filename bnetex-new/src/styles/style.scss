@@ -324,7 +324,7 @@ $headerHeight: 72px;
     align-items: center;
     height: 100%;
     font-size: 18px;
-    font-family: "Rubik Light";
+    font-family: 'Rubik Light';
 }
 
 .header-left-side {
@@ -447,8 +447,6 @@ $headerHeight: 72px;
 
         .selected {
             color: $activeBorder;
-
-      
         }
     }
 }
@@ -1331,4 +1329,10 @@ $headerHeight: 72px;
 
     box-sizing: border-box;
     justify-content: space-between;
+}
+
+.card {
+    background: #ffffff;
+    box-shadow: 0px 0px 60px rgba(161, 118, 193, 0.03), 0px 0px 20px rgba(161, 118, 193, 0.03);
+    border-radius: 20px;
 }
