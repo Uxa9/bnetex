@@ -409,13 +409,12 @@ $headerHeight: 72px;
 
     .select-dropdown {
         position: absolute;
-        top: 70px;
-
+        top: 100%;
+        padding: 10px 0px;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
-        height: 150px;
-        width: 175px;
+        row-gap: 10px;
+        z-index: 100;
 
         border-radius: 0px 0px 5px 5px;
 
@@ -431,7 +430,7 @@ $headerHeight: 72px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 42px;
+            padding: 10px 30px;
 
             cursor: pointer;
 
@@ -449,9 +448,7 @@ $headerHeight: 72px;
         .selected {
             color: $activeBorder;
 
-            &:hover {
-                background-color: transparent;
-            }
+      
         }
     }
 }

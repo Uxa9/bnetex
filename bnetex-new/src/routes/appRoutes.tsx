@@ -1,4 +1,4 @@
-import MainPage from 'modules/terminal/MainPage/MainPage';
+import MainPage from 'modules/MainPage/MainPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
 

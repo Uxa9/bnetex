@@ -37,7 +37,7 @@ const Button: FC<ButtonProps> = props => {
                 height : height || '50px',
             }}
         >
-            {children}
+            {children} 
         </button>
     );
 };

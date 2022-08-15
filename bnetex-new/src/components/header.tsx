@@ -24,7 +24,7 @@ const headerModes = {
 }; 
 
 const Header:FC<HeaderProps> = props => {
-    const [modeSelect, openModeSelect] = useState(false);
+    const [modeSelect, openModeSelect] = useState<boolean>(false);
 
     const {mode} = props;
 
