@@ -1,0 +1,86 @@
+@import '../../../styles/variables.scss';
+
+.wallet {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.wallet-header {
+    display: flex;
+    justify-content: space-between;
+
+    align-items: center;
+
+    &__btns {
+        display: flex;
+        column-gap: 20px;
+
+        p {
+            font-weight: 700;
+            font-size: 16px;
+            color: $activeBorder;
+            cursor: pointer;
+        }
+    }
+}
+
+.wallet-card {
+    padding: 15px 20px;
+}
+
+.wallet-items {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    row-gap: 30px;
+}
+
+.balance-item {
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+
+    &--big {
+        font-size: 24px;
+        row-gap: 10px;
+
+        &__values {
+            display: flex;
+            align-items: center;
+            column-gap: 0.5ch;
+        }
+
+        .balance-item__label {
+            font-size: 16px;
+        }
+    }
+
+    &__label {
+        color: $grayText;
+        font-size: 12px;
+        font-weight: 300;
+    }
+
+    &__value {
+        font-weight: 700;
+        &::after {
+            content: ' USD';
+        }
+    }
+
+    &__RUB {
+        color: $grayText;
+        font-weight: 500;
+
+        &::before {
+            content: '≈ ';
+        }
+
+        &::after {
+            content: ' ₽';
+        }
+    }
+}

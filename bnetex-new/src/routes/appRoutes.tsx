@@ -1,4 +1,5 @@
 import Dashboard from 'modules/Dashboard/dashboard';
+import FuturesWallet from 'modules/Dashboard/futuresWallet/futuresWallet';
 import Settings from 'modules/Dashboard/settings/settings';
 import MainPage from 'modules/MainPage/MainPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
@@ -20,7 +21,7 @@ const AppRoutes = () => {
                 <Route path='tools' />
                 <Route path='settings' element={<Settings />} />
                 <Route path='wallet/main' />
-                <Route path='wallet/futures' />
+                <Route path='wallet/futures' element={<FuturesWallet />} />
                 <Route path='transactions' />
             </Route>
             <Route path={P2P}></Route>
