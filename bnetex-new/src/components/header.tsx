@@ -91,19 +91,21 @@ const Header:FC<HeaderProps> = props => {
                         width='22px'
                     />
                 </div> */}
-                <div>
+                <div onClick={() => navigate('/dashboard/wallet/main')}>
                     <Wallet 
                         height='22px'
                         width='22px'
+                       
                     />
                     <span>
                         {_l.wallets}
                     </span>
                 </div>
-                <div>
+                <div onClick={() => navigate('/dashboard/tools')}>
                     <User
                         height='22px'
-                        width='22px' 
+                        width='22px'
+                         
                     />
                     <span>
                         {_l.profile}

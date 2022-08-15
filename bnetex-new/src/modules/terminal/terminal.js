@@ -142,3 +142,5 @@ const Terminal = () => {
         </div>
     );
 };
+
+export default Terminal;

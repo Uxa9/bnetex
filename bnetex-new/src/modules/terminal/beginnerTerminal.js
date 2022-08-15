@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-import { Button, OrderInput, ToggleButton, NumInput } from '../UIKit';
-import LeverPopUp  from '../../components/leverPopUp'
-import MarginPopUp from '../../components/marginPopUp'
-
-import {Edit, Info} from '../../images/icons/index';
+import { Button, OrderInput, ToggleButton, NumInput } from '../../lib/ui-kit';
+import LeverPopUp  from '../../components/leverPopUp';
+import MarginPopUp from '../../components/marginPopUp';
 
 import _l from '../../locales/index';
+import { Edit, Info } from 'assets/images/icons';
 
 // toDo
 // декомпозировать, перенести на tsx
@@ -15,14 +14,14 @@ const BeginnerTerminal = props => {
 
     const [mode, setMode]           = useState('view');
     const [tradeMode, setTradeMode] = useState('percent');
-    const [margin, setMargin]       = useState("cross");
+    const [margin, setMargin]       = useState('cross');
     const [lever, setLever]         = useState(20);
-    const [tradeType, setTradeType] = useState("market");
+    const [tradeType, setTradeType] = useState('market');
 
     const [forceSendValue, setForceSendValue]       = useState(false);
     const [userPercentValues, setUserPercentValues] = useState([1, 5, 10, 50, 100]);
     const [userAmountValues, setUserAmountValues]   = useState([1, 15, 10, 50, 100]);
-    const [userTPSLValues, setUserTPSLValues]       = useState([1, "3/1", "5/1", "10/1"]);
+    const [userTPSLValues, setUserTPSLValues]       = useState([1, '3/1', '5/1', '10/1']);
 
     const [marginPopUp, showMarginPopUp] = useState(false);
     const [leverPopUp,  showLeverPopUp]  = useState(false);
@@ -30,26 +29,26 @@ const BeginnerTerminal = props => {
     const acceptMarginPopUp = margin => {
         setMargin(margin);
         showMarginPopUp(false);
-    }
+    };
 
     const closeMarginPopUp = () => {
         showMarginPopUp(false);
-    }
+    };
 
     const acceptLeverPopUp = lever => {
         setLever(lever);
         showLeverPopUp(false);
-    }
+    };
 
     const closeLeverPopUp = () => {
         showLeverPopUp(false);
-    }
+    };
 
     const inputChangeHandler = async () => {
         await setForceSendValue(true);
         setForceSendValue(false);
         setMode('view');
-    }
+    };
 
     const moneySwitchHandler = value => {
         if (value == 'left') {
@@ -61,7 +60,7 @@ const BeginnerTerminal = props => {
             setTradeMode('amount');
             return;
         }
-    }
+    };
 
     const tradeTypeChangeHandler = value => {
         if (value == 'left') {
@@ -73,7 +72,7 @@ const BeginnerTerminal = props => {
             setTradeType('tpsl');
             return;
         }
-    }
+    };
 
     const getDataFromInput = (value, n, type) => {
         let newValues = type == 'precent' ?
@@ -116,7 +115,7 @@ const BeginnerTerminal = props => {
                 <b
                     className="pnl-text-bold"
                 >
-                    {` 19000.00 `/* mark price */}
+                    {' 19000.00 '/* mark price */}
                 </b>
                 <span>
                     {_l.take_profit_text}
@@ -124,11 +123,11 @@ const BeginnerTerminal = props => {
                 <span
                     className="positive"
                 >
-                    {` 2.28`/* PnL */}
+                    {' 2.28'/* PnL */}
                 </span>
             </>
-        )
-    }
+        );
+    };
 
     const stopLossText = () => {
         return (
@@ -147,7 +146,7 @@ const BeginnerTerminal = props => {
                 <b
                     className="pnl-text-bold"
                 >
-                    {` 19000.00 `/* mark price */}
+                    {' 19000.00 '/* mark price */}
                 </b>
                 <span>
                     {_l.take_profit_text}
@@ -155,11 +154,11 @@ const BeginnerTerminal = props => {
                 <span
                     className="negative"
                 >
-                    {` -2.28`/* PnL */}
+                    {' -2.28'/* PnL */}
                 </span>
             </>
-        )
-    }
+        );
+    };
 
     return (
         <>
@@ -233,7 +232,7 @@ const BeginnerTerminal = props => {
                                     {`${_l.available} - `}
                                 </span>
                                 <b>
-                                    {`10 000 USDT`}
+                                    {'10 000 USDT'}
                                 </b>
                             </div>
                             <div>
@@ -241,7 +240,7 @@ const BeginnerTerminal = props => {
                                     {`${_l.maximum} - `}
                                 </span>
                                 <b>
-                                    {`100 000 USDT`}
+                                    {'100 000 USDT'}
                                 </b>
                             </div>
                         </div>
@@ -633,7 +632,7 @@ const BeginnerTerminal = props => {
                 }
             </div>
         </>
-    )
-}
+    );
+};
 
 export default BeginnerTerminal;

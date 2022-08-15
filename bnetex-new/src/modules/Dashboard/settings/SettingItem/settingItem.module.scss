@@ -1,0 +1,36 @@
+@import '../../../../styles/variables.scss';
+
+.setting {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 3fr 1.5fr 2fr;
+}
+
+.buttons {
+    display: flex;
+    column-gap: 20px;
+    justify-content: flex-end;
+    grid-column: 3/-1;
+}
+
+.button {
+    font-size: 12px !important;
+}
+
+.active-state {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+}
+
+.icon-checkmark {
+    width: 12px;
+    height: 100%;
+    fill: $green;
+}
+
+.icon-cross {
+    width: 12px;
+    height: 100%;
+    fill: $red;
+}

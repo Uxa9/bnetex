@@ -1,21 +1,50 @@
 import classNames from 'classnames';
 import Header from 'components/header';
-import { Button } from 'lib/ui-kit';
+
+import { useEffect, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import styles from './dashboard.module.scss';
 
-import Chart from 'react-apexcharts';
-import { useState } from 'react';
+type activeSectionType = 'tools' | 'settings' | 'wallet/main' | 'wallet/futures';
+
+interface dashboardSection{
+    link: activeSectionType,
+    title: string
+}
+
+const dashboardSections: dashboardSection[] = [
+    {
+        link: 'tools',
+        title: 'Панель инструментов',
+    },
+    {
+        link: 'settings',
+        title: 'Настройки',
+    },
+    {
+        link: 'wallet/main',
+        title: 'Основной кошелек',
+    },
+    {
+        link: 'wallet/futures',
+        title: 'Фьючерсный кошелек',
+    },
+];
 
 const Dashboard = () => {
 
-    const [options, setOptions] = useState({
-        dataLabels: {enabled: false},
-        labels: ["Основной аккаунт", "Фьючерсы USD-M"],
-        colors : ['#EA018D', '#5072F7']
-    });
+    const [activeSection, setActiveSection] = useState<activeSectionType | undefined>(undefined);
 
-    const [series, setSeries] = useState([80, 20]);
+    useEffect(() => {
+        const url = window.location.href;
+
+        dashboardSections.forEach((section: dashboardSection) => {
+            if(url.match(section.link)){
+                setActiveSection(section.link);
+                return;
+            }
+        });
+    }, []);
 
     return(
         <>
@@ -24,22 +53,22 @@ const Dashboard = () => {
 
                 <main className={styles.dashboard}>
                     <aside className={classNames(styles['control-menu'], 'card')}>
-                        <Link to={'tools'} className={styles.link}>
-                            Панель инструментов
-                        </Link>
-                        <Link to={'settings'} className={styles.link}>
-                             Настройки
-                        </Link>
-                        <div className={styles.separator} ></div>
-                        <Link to={'wallet/main'} className={styles.link}>
-                            Основной кошелек
-                        </Link>
-                        <Link to={'wallet/futures'} className={styles.link}>
-                            Фьючерсный кошелек
-                        </Link>
-                        <Link to={'transactions'} className={styles.link}>
-                            История транзакций
-                        </Link>
+
+                        {
+                            dashboardSections.map((section: dashboardSection) => 
+                                <Link 
+                                    key={section.link}
+                                    to={section.link}
+                                    className={classNames(
+                                        styles.link,
+                                        { [styles['link--active']] : activeSection === section.link}
+                                    )}
+                                    onClick={() => setActiveSection(section.link)}
+                                >
+                                    {section.title}
+                                </Link>
+                            )
+                        }
                     </aside>
                     <Outlet />
                 </main>
