@@ -13,7 +13,13 @@ const AppRoutes = () => {
             <Route path={AUTH}></Route>
             <Route path={REGISTRATION}></Route>
             <Route path={TERMINAL}></Route>
-            <Route path={DASHBOARD}></Route>
+            <Route path={DASHBOARD}>
+                <Route path='/' />
+                <Route path='/settings' />
+                <Route path='/wallet/main' />
+                <Route path='/wallet/futures' />
+                <Route path='/transactions' />
+            </Route>
             <Route path={P2P}></Route>
             <Route path={BUY_CRYPTO}></Route>
         </Routes>
