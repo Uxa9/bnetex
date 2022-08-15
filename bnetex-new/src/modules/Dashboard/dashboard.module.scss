@@ -34,7 +34,8 @@
         border-left: 2px solid transparent;
 
         &:hover,
-        &:focus {
+        &:focus,
+        &--active {
             border-left: 2px solid $activeBorder;
             background-color: $activeBG;
             color: $activeBorder;
