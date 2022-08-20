@@ -20,4 +20,5 @@ export {ReactComponent as CornerArrow } from './uil_corner-down-r.svg';
 export {ReactComponent as Eye } from './uil_eye.svg';
 export {ReactComponent as EyeSlash } from './uil_eye-slash.svg';
 export {ReactComponent as Logo } from './logo.svg';
+export {ReactComponent as Login } from './uil_signin.svg';
 

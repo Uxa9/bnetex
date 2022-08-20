@@ -13,7 +13,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
 const Button: FC<ButtonProps> = props => {
 
     // Достаем пропсы и назначаем дефолтные значения, если ничего не передано
-    const {buttonStyle = 'primary', Icon, text, iconAlignment='left', className} = props;
+    const {buttonStyle = 'primary', Icon, text, iconAlignment='left', className, ...rest} = props;
 
     return (
         <button
@@ -25,6 +25,7 @@ const Button: FC<ButtonProps> = props => {
                         styles[`button_align--${iconAlignment}`],
                         className)
                 }
+            {...rest}
         >
             {Icon && <Icon />}
             {text && text}
