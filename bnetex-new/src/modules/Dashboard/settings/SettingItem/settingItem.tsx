@@ -1,8 +1,7 @@
 import { Button } from 'lib/ui-kit';
 import { FC } from 'react';
 import styles from './settingItem.module.scss';
-import {ReactComponent as CircledCross} from '../../../../assets/images/icons/circled_cross.svg';
-import {ReactComponent as CircledCheckMark} from '../../../../assets/images/icons/circled_check-mark.svg';
+import {CircledCross, CircledCheck} from '../../../../assets/images/icons';
 
 export interface SettingItemProps{
     title: string,
@@ -34,7 +33,7 @@ const SettingItem:FC<SettingItemProps> = props => {
                 <div className={styles['active-state']}>
                     {
                         activeStateText ? 
-                            <CircledCheckMark 
+                            <CircledCheck
                                 className={styles['icon-checkmark']}
                             /> : 
                             <CircledCross 
@@ -51,8 +50,6 @@ const SettingItem:FC<SettingItemProps> = props => {
                     hasActiveState && 
                     <Button
                         buttonStyle={activeStateText ? 'decline' : 'accept'}
-                        width='100px'
-                        height='25px'
                         className={styles.button}
                     >
                         {activeStateText ? 'Выключить' : 'Включить'}
@@ -61,8 +58,6 @@ const SettingItem:FC<SettingItemProps> = props => {
                 {
                     editable && 
                     <Button 
-                        width='100px'
-                        height='25px'
                         className={styles.button}
                     >
                         Изменить

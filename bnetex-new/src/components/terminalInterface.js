@@ -1,5 +1,5 @@
 import {Button} from '../lib/ui-kit/index';
-import Header from './header';
+import Header from './Header/header';
 
 import _l from '../locales/index';
 

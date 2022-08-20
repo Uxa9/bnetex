@@ -1,0 +1,18 @@
+.header {
+    display: flex;
+    padding: 12px 30px;
+    column-gap: 50px;
+    align-items: center;
+}
+
+.links {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+
+    &__main,
+    &__user {
+        display: flex;
+        column-gap: 30px;
+    }
+}

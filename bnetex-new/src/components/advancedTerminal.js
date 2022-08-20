@@ -106,7 +106,7 @@ const AdvancedTerminal = props => {
         [24,	21496],
         [49,	21494],
         [16,	21492]
-    ]
+    ];
 
     const sellBuyParser = () => {
         return (

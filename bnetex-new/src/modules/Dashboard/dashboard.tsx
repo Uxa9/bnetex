@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import Header from 'components/header';
+import Header from 'components/Header/header';
 
 import { useEffect, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
@@ -48,7 +48,6 @@ const Dashboard = () => {
 
     return(
         <>
-            <Header mode='beginner' />
             <div className={styles.wrapper}>
 
                 <main className={styles.dashboard}>

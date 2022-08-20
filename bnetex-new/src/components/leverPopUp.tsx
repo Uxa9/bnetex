@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, FC } from 'react';
 
 import PopUp from '../lib/ui-kit/popUp';
 
-import {ReactComponent as Info} from '../assets/images/icons/info.svg';
+import {Info} from '../assets/images/icons';
 
 import _l from '../locales/index';
 

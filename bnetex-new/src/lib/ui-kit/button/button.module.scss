@@ -1,0 +1,65 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
+
+.button {
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
+    padding: 10px 30px;
+    border-radius: 20px;
+    font-size: 16px;
+
+    transition: 0.25s;
+    @include color-svg(white);
+
+    svg {
+        transition: 0.25s;
+    }
+}
+
+.button_style {
+    &--primary {
+        @include dynamic-background($projectButton, $activeBorder, $mainActive);
+    }
+
+    &--secondary {
+        @include color-svg($projectButton);
+        border: 1px solid $activeBorder;
+        @include dynamic-background($activeBG, $activeBorder, $mainActive);
+
+        &:hover {
+            @include color-svg(white);
+        }
+    }
+
+    &--accept {
+        @include dynamic-background($green, $greenHover, $greenActive);
+    }
+
+    &--decline {
+        @include dynamic-background($red, $redHover, $redActive);
+    }
+
+    &--disabled {
+        background-color: $activeBG;
+        @include color-svg($grayBorder);
+        cursor: not-allowed;
+    }
+
+    &--thin {
+        @include color-svg($textColor);
+        padding: 10px 0px;
+
+        &:hover {
+            @include color-svg($activeBorder);
+        }
+
+        &:active {
+            @include color-svg($mainActive);
+        }
+    }
+}
+
+.button_align--right {
+    flex-direction: row-reverse;
+}

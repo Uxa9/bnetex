@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
-import {ReactComponent as Cross} from '../../assets/images/icons/delete.svg';
+import {Cross} from '../../assets/images/icons';
 
-import Button from './button';
+import Button from './button/button';
 
 interface PopUpProps{
     closeFunc: () => any,
@@ -48,8 +48,6 @@ const PopUp:FC<PopUpProps> = props => {
                     {children}
                 </div>
                 <Button
-                    height="50px"
-                    width="100%"
                     className="popup-bottom-button"
                     buttonStyle={confirmType ?? 'primary'}
                     onClick={acceptFunc}

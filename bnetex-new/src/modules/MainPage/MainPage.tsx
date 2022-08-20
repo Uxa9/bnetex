@@ -1,4 +1,4 @@
-import Header from 'components/header';
+import Header from 'components/Header/header';
 import styles from './MainPage.module.scss';
 import {ReactComponent as GraphicsImg} from '../../assets/images/landing__graphics.svg';
 import { Button, Input } from 'lib/ui-kit';
@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import {ReactComponent as MainBG} from '../../assets/images/landing__bg.svg';
 import {ReactComponent as PopularCoin} from '../../assets/images/landing__popular-coins.svg';
 import {ReactComponent as Earn} from '../../assets/images/landing__earn.svg';
-import {ReactComponent as AngledArrow} from '../../assets/images/icons/angled_arrow.svg';
+import {CornerArrow} from '../../assets/images/icons';
 import {ReactComponent as StartEarningBG} from '../../assets/images/landing__startEarningBg.svg';
 // import {Swiper, SwiperSlide} from 'swiper/react';
 
@@ -18,10 +18,6 @@ const MainPage = () => {
 
     return(
         <div className={styles.page}>
-            <Header 
-                mode='beginner'
-            />
-
             <div className={styles['landing-wrapper']}>
                 <div className={styles['landing-container']}>
                     <MainBG 
@@ -97,10 +93,7 @@ const MainPage = () => {
                                 className={styles['stroke-btn']}
                             >
                                 <p className='button-text'>Начать торги</p>
-                                <AngledArrow 
-                                    width={'24px'}
-                                    height={'24px'}
-                                />
+                                <CornerArrow />
                             </button>
                         </div>
                         <Earn

@@ -1,15 +1,12 @@
-@import 'src/styles/colors/map';
-@import 'src/styles/colors/states';
-
 @mixin dynamic-background($default, $hover, $active) {
-  background: $default;
+  background-color: $default;
 
   &:hover {
-    background: $hover;
+    background-color: $hover;
   }
 
   &:active {
-    background: $active;
+    background-color: $active;
   }
 }
 

@@ -1,4 +1,4 @@
-import Header from 'components/header';
+import Header from 'components/Header/header';
 import { Button } from 'lib/ui-kit';
 import _l from 'locales';
 import { useState } from 'react';

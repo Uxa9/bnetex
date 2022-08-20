@@ -13,8 +13,8 @@ const Tools = () => {
 
     const [options, setOptions] = useState({
         dataLabels: {enabled: false},
-        labels: ["Основной аккаунт", "Фьючерсы USD-M"],
-        colors : ['#EA018D', '#5072F7']
+        labels: ['Основной аккаунт', 'Фьючерсы USD-M'],
+        colors : ['#EA018D', '#5072F7'],
     });
 
     const [series, setSeries] = useState([80, 20]);
@@ -31,19 +31,13 @@ const Tools = () => {
                     className={styles['tools-header-buttons']}
                 >
                     <Button
-                        buttonStyle={"primary"}
-                        width="110px"
-                        height='30px'
-                    >
-                        Ввод
-                    </Button>
+                        buttonStyle={'primary'}
+                        text={'Ввод'}
+                    />
                     <Button
-                        buttonStyle={"secondary"}
-                        width="110px"
-                        height='30px'
-                    >
-                        Вывод
-                    </Button>
+                        buttonStyle={'secondary'}
+                        text={'Вывод'}
+                    />
                     <span>
                         Купить криптовалюту
                     </span>
@@ -69,12 +63,12 @@ const Tools = () => {
                         </span>
                     </p>
                     <div>
-                    <Chart
-                        options={options}
-                        series={series}
-                        type="donut"
-                        width="400"
-                    />
+                        <Chart
+                            options={options}
+                            series={series}
+                            type="donut"
+                            width="400"
+                        />
                     </div>
                 </div>
                 <div
@@ -100,7 +94,7 @@ const Tools = () => {
                         background: `url(${hehe__roe})`,
                         backgroundPosition: 'center',
                         backgroundSize: 'cover',
-                        margin: '0 -40px'
+                        margin: '0 -40px',
                     }}
                 >
 
@@ -113,7 +107,7 @@ const Tools = () => {
                         background: `url(${hehe__pnl})`,
                         backgroundPosition: 'center',
                         backgroundSize: 'cover',
-                        margin: '0 -40px'
+                        margin: '0 -40px',
                     }}
                 >
 
@@ -125,7 +119,7 @@ const Tools = () => {
                         background: `url(${hehe__verify})`,
                         backgroundPosition: 'center',
                         backgroundSize: 'cover',
-                        margin: '0 -40px'
+                        margin: '0 -40px',
                     }}
                 >
 

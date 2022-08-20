@@ -13,18 +13,12 @@ const MainWallet = () => {
                 <h3>Фьючерсный кошелек</h3>
                 <div className={styles['btns']}>
                     <Button
-                        width='110px'
-                        height='30px'
-                    >
-                        Ввод
-                    </Button>
+                        text='Ввод'
+                    />
                     <Button
-                        width='110px'
-                        height='30px'
                         className={styles['outlined-btn']}
-                    >
-                        Вывод
-                    </Button>
+                        text='Вывод'
+                    />
                     <p>Перевод</p>
                     <p>Купить криптовалюту</p>
                 </div>
