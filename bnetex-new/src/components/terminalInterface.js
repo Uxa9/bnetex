@@ -15,7 +15,6 @@ const TerminalInterface = props => {
         <div
             className="page-wrapper"
         >
-            <Header />
             <div
                 className="content-wrapper"
             >

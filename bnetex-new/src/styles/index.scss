@@ -7,33 +7,35 @@
     color: $textColor;
 }
 
-body {
+.svg-fill {
+    width: 100%;
+    height: fit-content;
+}
+
+body,
+html {
     overflow-x: hidden;
 }
 
-h1,
-h1 > * {
+h1 {
     font-weight: 600;
     font-size: 64px;
     line-height: 76px;
 }
 
-h2,
-h2 > * {
+h2 {
     font-weight: 600;
     font-size: 48px;
     line-height: 56px;
 }
 
-h3,
-h3 > * {
+h3 {
     font-weight: 600;
     font-size: 32px;
     line-height: 36px;
 }
 
-h4,
-h4 > * {
+h4 {
     font-weight: 600;
     font-size: 24px;
     line-height: 28px;
@@ -47,4 +49,31 @@ h4 > * {
 .label-1 {
     font-size: 12px;
     line-height: 20px;
+    color: $grayText;
+}
+
+@media screen and (max-width: 1200px) {
+    h1 {
+        font-weight: 600;
+        font-size: 48px;
+        line-height: 56px;
+    }
+
+    h2 {
+        font-weight: 600;
+        font-size: 32px;
+        line-height: 36px;
+    }
+
+    h3 {
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 28px;
+    }
+
+    h4 {
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 24px;
+    }
 }

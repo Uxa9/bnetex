@@ -1,0 +1,60 @@
+@import '../../../styles/variables.scss';
+
+.invest {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    column-gap: 60px;
+    align-items: center;
+    position: relative;
+    justify-items: end;
+
+    &__text {
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+
+        h2 {
+            max-width: 18ch;
+
+            span {
+                color: $activeBorder;
+            }
+        }
+
+        .extra-text {
+            max-width: 50ch;
+        }
+    }
+}
+
+.month-cards{
+    display: flex;
+    column-gap: 20px;
+    padding: 20px 0px;
+}
+
+.ROE-card{
+    background-color: white;
+    border-radius: 10px;
+    padding: 12px;
+    min-width: 100px;
+    box-shadow: 4px 4px 7px rgba(78, 54, 96, 0.05);
+
+    &__month{
+        margin-bottom: 10px;
+    }
+
+    &__percent{
+        color: $green;
+        font-size: 20px;
+
+        &::before{
+            content: 'от ';
+        }
+
+        &::after{
+            content: '%';
+        }
+    }
+}
+

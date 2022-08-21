@@ -1,4 +1,3 @@
-import Header from 'components/Header/header';
 import { Button } from 'lib/ui-kit';
 import _l from 'locales';
 import { useState } from 'react';
@@ -14,9 +13,6 @@ const Terminal = () => {
         <div
             className="page-wrapper"
         >
-            <Header 
-                mode='beginner'
-            />
             <div
                 className="content-wrapper"
             >

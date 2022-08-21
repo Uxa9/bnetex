@@ -1,0 +1,35 @@
+@import '../../../styles/variables.scss';
+
+.greeting-block {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    column-gap: 60px;
+    align-items: center;
+    position: relative;
+
+    .extra-text {
+        margin: 30px 0px 60px 0px;
+    }
+}
+
+.greeting-text__input-block {
+    display: flex;
+    align-items: flex-end;
+    column-gap: 30px;
+}
+
+h1 > span {
+    color: $activeBorder;
+}
+
+@media screen and (max-width: 1000px) {
+
+    .greeting-img{
+        position: absolute;
+        z-index: -1;
+        max-height: 400px ;
+        width: fit-content !important;
+        top: 0;
+        right: -150px;
+    }
+}

@@ -1,0 +1,39 @@
+.blur {
+    position: absolute;
+    filter: blur(60px);
+    border-radius: 50%;
+    --ellipse-ratio: 1.56;
+    --bg-item-height: 70vh;
+    z-index: -1;
+    opacity: 0.08;
+    max-height: 700px;
+    height: var(--bg-item-height);
+
+    &_ellipse {
+        width: calc(70vh * var(--ellipse-ratio));
+        max-width: calc(700px * var(--ellipse-ratio));
+    }
+
+    &_circle {
+        width: var(--bg-item-height);
+        max-width: 700px;
+    }
+
+    &_color {
+        &--purple {
+            background-color: #9043ca;
+        }
+
+        &--red {
+            background-color: #ff9393;
+        }
+
+        &--green {
+            background-color: #68e066;
+        }
+
+        &--blue {
+            background-color: #3b81e9;
+        }
+    }
+}

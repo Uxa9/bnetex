@@ -34,7 +34,7 @@ const Input: FC<InputProps> = props => {
                 id={id}
                 className={classNames(
                     styles.input,
-                    {[styles['input-with-bg']]: hasBackground}
+                    {[styles['input--background']]: hasBackground}
                 )}
                 {...rest}
             />

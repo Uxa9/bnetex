@@ -10,13 +10,13 @@ label {
 }
 
 .input {
-    padding: 15px 10px;
+    padding: 12px 10px;
     border: 1px solid $grayBorder;
     border-radius: 10px;
     font-size: 16px;
     transition: 0.25s border;
 
-    &-with-bg {
+    &--background {
         background-color: white;
     }
 

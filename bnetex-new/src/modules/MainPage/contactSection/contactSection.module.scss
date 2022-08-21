@@ -1,0 +1,55 @@
+@import '../../../styles/variables.scss';
+
+.container {
+    position: relative;
+}
+
+.contact-section {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 60px;
+    background: rgba(0, 0, 0, 0.01);
+    backdrop-filter: blur(16px);
+    border-radius: 20px;
+    position: relative;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+}
+
+h2 > span {
+    color: $activeBorder;
+}
+
+.links {
+    max-width: 45ch;
+
+    &__buttons {
+        padding-top: 20px;
+        display: flex;
+        column-gap: 20px;
+    }
+}
+
+.contact-button {
+    width: 100%;
+    justify-content: center;
+}
+
+.abstract-grid--L {
+    position: absolute;
+    top: -70px;
+    left: -30px;
+    z-index: -1;
+}
+
+.abstract-grid--M {
+    position: absolute;
+    bottom: -50px;
+    right: -30px;
+}

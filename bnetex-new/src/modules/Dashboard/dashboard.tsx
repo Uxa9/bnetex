@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import Header from 'components/Header/header';
 
 import { useEffect, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';

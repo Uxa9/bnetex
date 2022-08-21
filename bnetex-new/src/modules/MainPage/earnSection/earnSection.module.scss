@@ -1,0 +1,29 @@
+@import '../../../styles/variables.scss';
+
+.start-earning {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    column-gap: 60px;
+    align-items: center;
+    position: relative;
+
+    &__text {
+        display: flex;
+        flex-direction: column;
+        row-gap: 50px;
+
+        h2 > span {
+            color: $activeBorder;
+        }
+    }
+}
+
+.earn-img {
+    box-shadow: 45px 45px 45px rgba(161, 118, 193, 0.25), 7px 7px 0px rgba(161, 118, 193, 0.5);
+    backdrop-filter: blur(15px);
+    border-radius: 30px;
+    transform: matrix(0.96, 0, -0.3, 1, 0, 0);
+    width: 80%;
+    margin-left: 60px;
+    height: fit-content;
+}

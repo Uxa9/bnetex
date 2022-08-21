@@ -5,10 +5,12 @@
     display: flex;
     align-items: center;
     column-gap: 4px;
-    padding: 0px 30px;
+    padding: 12px 30px;
     border-radius: 20px;
     font-size: 16px;
     font-weight: 600;
+    height: fit-content;
+    width: fit-content;
 
     transition: 0.25s;
     @include color-svg(white);
@@ -58,6 +60,24 @@
 
         &:active {
             @include color-svg($mainActive);
+        }
+    }
+
+    &--stroke {
+        @include color-svg($activeBorder);
+        border: 1px solid;
+        border-color: $activeBorder;
+        border-radius: 10px;
+        font-weight: 500;
+
+        &:hover {
+            @include color-svg(white);
+            background-color: $activeBorder;
+        }
+
+        &:active {
+            background-color: $mainActive;
+            border-color: $mainActive;
         }
     }
 }

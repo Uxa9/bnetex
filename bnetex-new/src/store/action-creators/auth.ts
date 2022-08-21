@@ -30,7 +30,6 @@ export const checkAuthUser = () => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
             // const response = await $api.get('/auth/check-auth');
-            // dispatch({ type: AuthActionTypes.LOGIN });
             dispatch({ type: AuthActionTypes.LOGIN });
         } catch (e) {
             dispatch({
