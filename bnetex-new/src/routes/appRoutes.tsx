@@ -1,5 +1,6 @@
 import PageLayout from 'components/pageLayout';
-import TerminalInterface from 'components/terminalInterface';
+import TerminalLayout from 'modules/terminal/terminalLayout';
+import InvestorView from 'modules/terminal/investor/investorView';
 import Dashboard from 'modules/Dashboard/dashboard';
 import FuturesWallet from 'modules/Dashboard/futuresWallet/futuresWallet';
 import MainWallet from 'modules/Dashboard/mainWallet/mainWallet';
@@ -20,7 +21,9 @@ const AppRoutes = () => {
                 <Route path={HOME} element={<MainPage />}></Route>
                 <Route path={AUTH}></Route>
                 <Route path={REGISTRATION}></Route>
-                <Route path={TERMINAL} element={<TerminalInterface />}></Route>
+                <Route path={TERMINAL} element={<TerminalLayout />}>
+                    <Route path="investor" element={<InvestorView />} />
+                </Route>
                 <Route path={DASHBOARD} element={<Dashboard />}>
                     <Route index element={<Navigate to={'tools'} />}></Route>
                     <Route path='tools' element={<Tools />} />

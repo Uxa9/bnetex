@@ -1,0 +1,25 @@
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+    margin: 20px 30px 70px;
+}
+
+.chart-and-history {
+    display: flex;
+    flex-direction: column;
+    
+    flex-shrink: 1;
+    flex-grow: 2;
+    
+    width: 1400px;
+
+    margin-right: 20px;
+}
+
+.terminal-and-actives {
+    flex-grow: 1;
+
+    min-width: 450px;
+}
