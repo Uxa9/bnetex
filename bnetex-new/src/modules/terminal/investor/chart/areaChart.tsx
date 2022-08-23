@@ -1,18 +1,17 @@
 import { useEffect, FC } from 'react';
+import classNames from 'classnames';
 
 import Chart from 'react-apexcharts';
 
+import styles from './areaChart.module.scss';
+
 interface ChartProps {
     dates  : string[],
-    values : number[] 
+    values : number[],
+    title  : string
 }
 
-interface Series {
-    name : string,
-    data : number[]
-}
-
-const PnlChart:FC<ChartProps> = props => {
+const AreaChart:FC<ChartProps> = props => {
 
     const options : any = {
         chart : {
@@ -20,7 +19,7 @@ const PnlChart:FC<ChartProps> = props => {
             selection : { enabled : false },
         },
         dataLabels : { enabled : false },
-        title : { text: 'PnL' },
+        // title : { text: 'Chart' },
         stroke : { 
             width : 1,
             colors : ['#9043CA'] 
@@ -29,14 +28,15 @@ const PnlChart:FC<ChartProps> = props => {
         labels : props.dates || [],
     };
 
-    const series : Series = {
+    const series : any = {
         name : 'Доход',
         data : props.values || []
     };
 
     useEffect(() => {
-        options.labels = props.dates;
-        series.data    = props.values;
+        options.labels     = props.dates;
+        series.data        = props.values;
+        // options.title.text = props.title;
     }, []);
 
     useEffect(() => {
@@ -49,10 +49,14 @@ const PnlChart:FC<ChartProps> = props => {
 
     return (
         <div
-            className="block"
+            className={classNames("block", styles['chart-container'])}
         >
+            <span>
+                {props.title}
+            </span>
             <Chart
-                type="area"
+                type='area'
+                height='90%'
                 options={options}
                 series={[series]}
             />
@@ -60,4 +64,4 @@ const PnlChart:FC<ChartProps> = props => {
     )
 }
 
-export default PnlChart;
+export default AreaChart;
