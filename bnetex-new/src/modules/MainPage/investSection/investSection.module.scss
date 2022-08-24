@@ -7,6 +7,8 @@
     align-items: center;
     position: relative;
     justify-items: end;
+    // temp fix
+    z-index: 2;
 
     &__text {
         display: flex;
@@ -27,34 +29,33 @@
     }
 }
 
-.month-cards{
+.month-cards {
     display: flex;
     column-gap: 20px;
     padding: 20px 0px;
 }
 
-.ROE-card{
+.ROE-card {
     background-color: white;
     border-radius: 10px;
     padding: 12px;
     min-width: 100px;
     box-shadow: 4px 4px 7px rgba(78, 54, 96, 0.05);
 
-    &__month{
+    &__month {
         margin-bottom: 10px;
     }
 
-    &__percent{
+    &__percent {
         color: $green;
         font-size: 20px;
 
-        &::before{
+        &::before {
             content: 'от ';
         }
 
-        &::after{
+        &::after {
             content: '%';
         }
     }
 }
-

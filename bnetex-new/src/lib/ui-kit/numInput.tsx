@@ -1,7 +1,5 @@
 import React, { FC, InputHTMLAttributes, useState } from 'react';
 
-// че такое префикс
-
 interface NumInputProps extends InputHTMLAttributes<HTMLInputElement>{
     prefix?: string,
     value?: number,

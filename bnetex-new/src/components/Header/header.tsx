@@ -1,6 +1,6 @@
 import styles from './header.module.scss';
 
-import {Wallet, User, Logo, Settings, Login }    from '../../assets/images/icons';
+import { Wallet, User, Logo, Settings, Login } from '../../assets/images/icons';
 
 import _l from '../../locales/index';
 import { useNavigate } from 'react-router-dom';
@@ -16,14 +16,14 @@ const headerModes = {
     'beginner': _l.beginner_level,
     'advanced': _l.advanced_level,
     'investor': _l.investor_level,
-}; 
+};
 
 const Header = () => {
 
     const navigate = useNavigate();
 
     const isAuth = useTypedSelector(state => state.auth.isAuth);
-    const {login} = useActions();
+    const { login } = useActions();
 
     useEffect(() => {
         console.log(isAuth);
@@ -37,56 +37,57 @@ const Header = () => {
         <header
             className={styles.header}
         >
-            <Logo 
+            <Logo
+                className={styles.logo}
                 onClick={() => navigate('/')}
             />
             <nav className={styles.links}>
                 <div className={styles['links__main']}>
-                    <Button 
-                        text={'Фьючерсы USD-M'} 
+                    <Button
+                        text={'Фьючерсы USD-M'}
                         buttonStyle={'thin'}
                     />
-                    <Button 
-                        text={'P2P'} 
+                    <Button
+                        text={'P2P'}
                         buttonStyle={'thin'}
                     />
-                    
+
                 </div>
                 <div className={styles['links__user']}>
                     {
-                        isAuth ? 
+                        isAuth ?
                             <>
-                                <Button 
-                                    text={'Кошельки'} 
+                                <Button
+                                    text={'Кошельки'}
                                     buttonStyle={'thin'}
                                     Icon={Wallet}
                                 />
-                                <Button 
-                                    text={'Профиль'} 
+                                <Button
+                                    text={'Профиль'}
                                     buttonStyle={'thin'}
                                     Icon={User}
                                 />
                             </>
                             :
                             <>
-                                <Button 
-                                    text={'Войти'} 
+                                <Button
+                                    text={'Войти'}
                                     buttonStyle={'thin'}
                                     Icon={Login}
                                     onClick={() => testOnClick()}
                                 />
-                                <Button 
-                                    text={'Регистрация'} 
+                                <Button
+                                    text={'Регистрация'}
                                 />
                             </>
                     }
-                    <Button 
+                    <Button
                         buttonStyle={'thin'}
                         Icon={Settings}
                     />
                 </div>
             </nav>
-           
+
         </header>
     );
 };

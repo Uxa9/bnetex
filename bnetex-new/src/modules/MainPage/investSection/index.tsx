@@ -1,28 +1,32 @@
 import { CornerArrow } from 'assets/images/icons';
 import classNames from 'classnames';
 import styles from './investSection.module.scss';
-import {ReactComponent as InvestImg} from '../../../assets/images/landing__invest.svg';
+import { ReactComponent as InvestImg } from '../../../assets/images/landing__invest.svg';
 import { Button } from 'lib/ui-kit';
 import Blur from 'components/blurredBackgroundItem';
+import { useNavigate } from 'react-router-dom';
 
 const Invest = () => {
-    return(
+
+    const navigate = useNavigate();
+
+    return (
         <section className={styles['invest']}>
 
-            <Blur 
+            <Blur
                 color={'blue'}
                 top={'20%'}
-                left={'50%'} 
+                left={'50%'}
                 type={'circle'}
             />
 
-            <InvestImg 
+            <InvestImg
                 className='svg-fill'
             />
 
             <div className={styles['invest__text']}>
                 <h2>Торгуйте как <span>профессионал</span></h2>
-                <p 
+                <p
                     className={classNames('body-1', styles['extra-text'])}
                 >
                     Доверьте свои инвестиции инновационному торговому алгоритму.
@@ -59,12 +63,13 @@ const Invest = () => {
                     </div>
                 </div>
 
-                <Button 
+                <Button
                     text='Начать торги'
                     Icon={CornerArrow}
                     className={styles['stroke-btn']}
                     iconAlignment={'right'}
                     buttonStyle={'stroke'}
+                    onClick={() => navigate('/terminal/investor')}
                 />
             </div>
         </section>

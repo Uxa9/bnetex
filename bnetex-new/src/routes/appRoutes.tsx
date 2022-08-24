@@ -9,6 +9,7 @@ import Tools from 'modules/Dashboard/tools/tools';
 import MainPage from 'modules/MainPage/MainPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
+import InvestorWallet from 'modules/Dashboard/investorWallet/investorWallet';
 
 const AppRoutes = () => {
 
@@ -30,6 +31,7 @@ const AppRoutes = () => {
                     <Route path='settings' element={<Settings />} />
                     <Route path='wallet/main' element={<MainWallet />} />
                     <Route path='wallet/futures' element={<FuturesWallet />} />
+                    <Route path='wallet/investor' element={<InvestorWallet />} />
                     <Route path='transactions' />
                 </Route>
                 <Route path={P2P}></Route>
