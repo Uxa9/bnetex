@@ -7,16 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'lib/ui-kit';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { useActions } from 'lib/hooks/useActionCreators';
-import { useEffect } from 'react';
-
-// toDo
-// декомпозировать ссылки в компоненте, провести рефактор!! 
-
-const headerModes = {
-    'beginner': _l.beginner_level,
-    'advanced': _l.advanced_level,
-    'investor': _l.investor_level,
-};
 
 const Header = () => {
 
@@ -24,10 +14,6 @@ const Header = () => {
 
     const isAuth = useTypedSelector(state => state.auth.isAuth);
     const { login } = useActions();
-
-    useEffect(() => {
-        console.log(isAuth);
-    }, []);
 
     const testOnClick = () => {
         login();
