@@ -4,8 +4,20 @@ import HistoryAndOrders from './historyAndOrders/historyAndOrders';
 import { Outlet } from 'react-router-dom';
 
 import styles from './terminalLayout.module.scss';
+import { useActions } from 'lib/hooks/useActionCreators';
+import { useEffect } from 'react';
 
 const TerminalLayout = () => {
+
+    const {setIsTerminalOpen} = useActions();
+
+    useEffect(() => {
+        setIsTerminalOpen(true);
+
+        return () => {
+            setIsTerminalOpen(false);
+        }; 
+    }, []);
 
     return (
         <div
@@ -27,7 +39,7 @@ const TerminalLayout = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default TerminalLayout;

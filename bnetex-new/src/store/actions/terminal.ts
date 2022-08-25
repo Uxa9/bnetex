@@ -1,9 +1,9 @@
 import { OrderBookStep, OrderBookStyle, TerminalType } from 'lib/types/terminal';
 
 export interface TerminalState {
-    terminalType: TerminalType | null,
+    terminalType: TerminalType | undefined,
     isOpen: boolean,
-    orderBookStyle: OrderBookStyle | null,
+    orderBookStyle: OrderBookStyle,
     orderBookStep: OrderBookStep,
     error: null | string
 }

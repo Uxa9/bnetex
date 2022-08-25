@@ -1,17 +1,29 @@
+import { useActions } from 'lib/hooks/useActionCreators';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
+import { OrderBookStep, OrderBookStyle, TerminalType } from 'lib/types/terminal';
 import { ToggleButton } from 'lib/ui-kit';
 import RadioButton from 'lib/ui-kit/radioButton/radioButton';
 import RadioButtonGroup from 'lib/ui-kit/radioButton/radioButtonGroup';
 import ToggleButtonGroup from 'lib/ui-kit/toggleButton/toggleButtonGroup';
+import { useMemo } from 'react';
 import styles from './settingsMenu.module.scss';
 
 const SettingsMenu = () => {
 
-    const handleTerminalTypeChange = (value: string | number) => {
-        console.log(value);
+    const {terminalType, orderBookStep, orderBookStyle} = useTypedSelector(state => state.terminal);
+    const {changeTerminalType, changeOrderBookStep, changeOrderBookStyle} = useActions();
+
+    // Можно попробовать сразу передавать внутренние dispatch-функции в компоненты
+    const handleTerminalTypeChange = (value: TerminalType) => {
+        changeTerminalType(value);
     };
 
-    const handleStepChange = (value: string | number, name?: string) => {
-        console.log(value, name);
+    const handleStepChange = (value: OrderBookStep) => {
+        changeOrderBookStep(value);
+    };
+
+    const handleOrderBookStyleChange = (value: OrderBookStyle) => {
+        changeOrderBookStyle(value);
     };
 
     return (
@@ -20,6 +32,7 @@ const SettingsMenu = () => {
                 title='Тип терминала'
                 onChange={handleTerminalTypeChange}
                 name={'terminalType'}
+                value={useMemo(() => terminalType, [terminalType])}
             >
                 <RadioButton
                     label='Начинающий'
@@ -38,8 +51,10 @@ const SettingsMenu = () => {
             <ToggleButtonGroup
                 title='Шаг цены в стакане'
                 name='Step'
+                value={orderBookStep}
                 exclusive
                 onChange={handleStepChange}
+                asNumber
             >
                 <ToggleButton 
                     text='0.1'

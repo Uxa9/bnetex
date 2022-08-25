@@ -12,8 +12,8 @@ const RadioButton: FC<RadioButtonProps> = props => {
 
     const { onChange, label, ...rest } = props;
 
-    const inputID = useMemo(() => uuidV4(), [])
-
+    const inputID = useMemo(() => uuidV4(), []);
+    
     return (
         <label
             className={classNames(styles.container)}
@@ -37,7 +37,7 @@ const RadioButton: FC<RadioButtonProps> = props => {
             {label}
 
         </label>
-    )
-}
+    );
+};
 
 export default RadioButton;

@@ -3,17 +3,23 @@ import styles from './header.module.scss';
 import { Wallet, User, Logo, Settings, Login } from '../../assets/images/icons';
 
 import _l from '../../locales/index';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'lib/ui-kit';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { useActions } from 'lib/hooks/useActionCreators';
 import SettingsMenu from './SettingsMenu';
+import { useState } from 'react';
 
 const Header = () => {
 
     const navigate = useNavigate();
 
+    const [isSettingsOpened, setIsSettingsOpened] = useState<boolean>(false);
+
+    const toggleSettingsMenu = () => setIsSettingsOpened(prevState => !prevState);
+
     const isAuth = useTypedSelector(state => state.auth.isAuth);
+    const isTerminalOpened = useTypedSelector(state => state.terminal.isOpen);
     const { login } = useActions();
 
     const testOnClick = () => {
@@ -30,10 +36,13 @@ const Header = () => {
             />
             <nav className={styles.links}>
                 <div className={styles['links__main']}>
-                    <Button
-                        text={'Фьючерсы USD-M'}
-                        buttonStyle={'thin'}
-                    />
+                    <Link to={'terminal'}>
+                        <Button
+                            text={'Фьючерсы USD-M'}
+                            buttonStyle={'thin'}
+                        />
+                    </Link>
+
                     <Button
                         text={'P2P'}
                         buttonStyle={'thin'}
@@ -68,15 +77,23 @@ const Header = () => {
                                 />
                             </>
                     }
-                    <Button
-                        buttonStyle={'thin'}
-                        Icon={Settings}
-                    />
+
+                    {
+                        isTerminalOpened &&
+
+                            <Button
+                                buttonStyle={'thin'}
+                                Icon={Settings}
+                                onClick={toggleSettingsMenu}
+                            />
+                    }
+                   
                 </div>
             </nav>
-                    
-            <SettingsMenu />
-
+            {
+                isTerminalOpened && isSettingsOpened &&
+                    <SettingsMenu />
+            }
         </header>
     );
 };

@@ -1,7 +1,7 @@
 import { TerminalState, TerminalActionTypes, TerminalAction } from '../actions/terminal';
 
 const initialState: TerminalState = {
-    terminalType: null,
+    terminalType: 'advanced',
     isOpen: false,
     orderBookStyle: 'selection',
     orderBookStep: 0.1,
