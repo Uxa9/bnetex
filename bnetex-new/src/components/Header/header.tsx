@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'lib/ui-kit';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { useActions } from 'lib/hooks/useActionCreators';
+import SettingsMenu from './SettingsMenu';
 
 const Header = () => {
 
@@ -73,6 +74,8 @@ const Header = () => {
                     />
                 </div>
             </nav>
+                    
+            <SettingsMenu />
 
         </header>
     );

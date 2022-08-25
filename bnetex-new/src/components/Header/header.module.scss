@@ -5,6 +5,9 @@
     padding: 15px 30px;
     column-gap: 50px;
     align-items: center;
+    position: relative;
+    background-color: white;
+    border-bottom: 1px solid $grayBorder;
 }
 
 .logo {

@@ -16,13 +16,13 @@ const RadioButtonGroup: FC<RadioButtonGroupProps> = props => {
     const { title, name, children, onChange } = props;
 
     const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        onChange(event.currentTarget.value)
-    }
+        onChange(event.currentTarget.value);
+    };
 
     const propsToRadioButtons = {
         name: name,
         onChange: handleValueChange,
-    }
+    };
 
     return (
         <fieldset className={styles.container}>
@@ -33,7 +33,7 @@ const RadioButtonGroup: FC<RadioButtonGroupProps> = props => {
             </div>
 
         </fieldset>
-    )
-}
+    );
+};
 
 export default RadioButtonGroup;

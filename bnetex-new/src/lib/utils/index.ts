@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, ReactElement, ReactNode } from "react"
+import React, { PropsWithChildren, ReactElement, ReactNode } from 'react';
 
 /**
  * @param children ReactNode элементы, к которым будут применены новые пропсы
@@ -8,8 +8,8 @@ import React, { PropsWithChildren, ReactElement, ReactNode } from "react"
 
 export function renderChildrenWithProps<Type>(children: ReactNode, elementProps: any): ReactNode {
     return React.Children.map(children, (child, index) => {
-        const element = child as ReactElement<PropsWithChildren<Type>>
+        const element = child as ReactElement<PropsWithChildren<Type>>;
 
-        return React.cloneElement(element, { ...elementProps, key: index })
-    })
+        return React.cloneElement(element, { ...elementProps, key: index });
+    });
 }

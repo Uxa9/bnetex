@@ -6,15 +6,15 @@ import classNames from 'classnames';
 export interface ToggleButtonProps extends InputHTMLAttributes<HTMLInputElement> {
     text: string,
     value: string | number,
-    exclusive: boolean,
+    exclusive?: boolean,
     location?: 'left' | 'right' | 'center'
 }
 
-const RadioButton: FC<ToggleButtonProps> = props => {
+const ToggleButton: FC<ToggleButtonProps> = props => {
 
     const { text, exclusive, location = 'center', ...rest } = props;
 
-    const inputID = useMemo(() => uuidV4(), [])
+    const inputID = useMemo(() => uuidV4(), []);
 
     return (
         <>
@@ -27,14 +27,14 @@ const RadioButton: FC<ToggleButtonProps> = props => {
             />
 
             <label
-                className={classNames(styles.container, styles[`container--${location}`])}
+                className={classNames(styles.button, styles[`button--${location}`])}
                 htmlFor={inputID}
             >
                 {text}
             </label>
         </>
 
-    )
-}
+    );
+};
 
-export default RadioButton;
+export default ToggleButton;
