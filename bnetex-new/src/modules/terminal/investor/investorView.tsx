@@ -1,35 +1,12 @@
 import { useState } from 'react';
 
-import TerminalLayout from '../terminalLayout';
-import AreaChart from './chart/areaChart';
+import TradeView   from './tradeView/tradeView';
+import HistoryView from './historyView/historyView';
 
 const InvestorView = () => {
 
-    const [values, setValues] = useState<number[]>([]);
-
     return (
-        <>
-            <div
-                onClick={(() => setValues([
-                    Math.floor(Math.random() * (1000 - 100) + 100),
-                    Math.floor(Math.random() * (1000 - 100) + 100),
-                    Math.floor(Math.random() * (1000 - 100) + 100),
-                    Math.floor(Math.random() * (1000 - 100) + 100),
-                ]))}
-            >
-                change
-            </div>
-            <AreaChart 
-                dates={['0','1','2','3']}
-                values={values}
-                title="PnL"
-            />
-            <AreaChart
-                dates={['0','1','2','3']}
-                values={values}
-                title="RoE"
-            />
-        </>
+        <TradeView />
     )
 }
 
