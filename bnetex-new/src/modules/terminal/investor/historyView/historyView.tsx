@@ -1,33 +1,65 @@
 import { useState } from 'react';
 
-import AreaChart from '../chart/areaChart';
+import { NumInput, ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
+
+import styles from '../investorView.module.scss';
 
 const HistoryView = () => {
 
-    const [values, setValues] = useState<number[]>([]);
+    const [period, setPeriod] = useState("1");
 
     return (
         <>
             <div
-                onClick={(() => setValues([
-                    Math.floor(Math.random() * (1000 - 100) + 100),
-                    Math.floor(Math.random() * (1000 - 100) + 100),
-                    Math.floor(Math.random() * (1000 - 100) + 100),
-                    Math.floor(Math.random() * (1000 - 100) + 100),
-                ]))}
+                className={styles['investor-invest']}
             >
-                change
+                <p
+                    className={styles['header']}
+                >
+                    Выберите объем инвестиций (USDT)
+                </p>
+                <NumInput 
+                    prefix="10 000"
+                />
             </div>
-            <AreaChart 
-                dates={['0','1','2','3']}
-                values={values}
-                title="PnL"
-            />
-            <AreaChart
-                dates={['0','1','2','3']}
-                values={values}
-                title="RoE"
-            />
+            <div
+                className={styles['investor-prediction-period']}
+            >
+                <p
+                    className={styles['header']}
+                >
+                    Выберите срок инвестиций среди вариантов ниже
+                </p>
+                <ToggleButtonGroup 
+                    title={""} 
+                    name={""} 
+                    onChange={(value) => {
+                        setPeriod(value);
+                    }}
+                    value={period}
+                >
+                    <ToggleButton 
+                        text={"1 мес."} 
+                        value={"1"} 
+                    />
+                    <ToggleButton 
+                        text={"3 мес."} 
+                        value={"3"} 
+                    />
+                    <ToggleButton 
+                        text={"6 мес."} 
+                        value={"6"} 
+                    />
+                    <ToggleButton 
+                        text={"9 мес."} 
+                        value={"9"} 
+                    />
+                    <ToggleButton 
+                        text={"12 мес."} 
+                        value={"12"} 
+                    />
+                </ToggleButtonGroup>
+            </div>
         </>
     )
 }

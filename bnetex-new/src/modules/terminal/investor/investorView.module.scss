@@ -1,0 +1,51 @@
+@import '../../../styles/variables.scss';
+
+.investor-view-wrapper >* {
+    margin-bottom: 20px;
+}
+
+.header {
+    font-size: 14px;
+    color: $grayText;
+
+    line-height: 20px;
+}
+
+.investor-income {
+    margin-top: 20px;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.investor-income-amount {
+    font-size: 16px;
+    color: $textColor;
+}
+
+.investor-income-percent {
+    font-size: 16px;
+    color: $green;
+}
+
+.investor-balance,
+.investor-invest {
+    margin-top: 20px;
+}
+
+.investor-balance-amount {
+    font-size: 20px;
+    font-weight: 400;
+    color: $textColor;
+}
+
+.button-wrapper {
+    margin-top: 20px;
+
+    display: flex;
+    justify-content: center;
+}
+
+.investor-prediction-period {
+    margin-top: 30px;
+}

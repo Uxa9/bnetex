@@ -36,7 +36,7 @@ const Header = () => {
             />
             <nav className={styles.links}>
                 <div className={styles['links__main']}>
-                    <Link to={'terminal'}>
+                    <Link to={'terminal/investor'}>
                         <Button
                             text={'Фьючерсы USD-M'}
                             buttonStyle={'thin'}
@@ -53,16 +53,20 @@ const Header = () => {
                     {
                         isAuth ?
                             <>
-                                <Button
-                                    text={'Кошельки'}
-                                    buttonStyle={'thin'}
-                                    Icon={Wallet}
-                                />
-                                <Button
-                                    text={'Профиль'}
-                                    buttonStyle={'thin'}
-                                    Icon={User}
-                                />
+                                <Link to={'dashboard/wallet/main'}>
+                                    <Button
+                                        text={'Кошельки'}
+                                        buttonStyle={'thin'}
+                                        Icon={Wallet}
+                                    />
+                                </Link>
+                                <Link to={'dashboard'}>
+                                    <Button
+                                        text={'Профиль'}
+                                        buttonStyle={'thin'}
+                                        Icon={User}
+                                    />
+                                </Link>
                             </>
                             :
                             <>

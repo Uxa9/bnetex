@@ -5,7 +5,7 @@ import en from './english.json';
 
 let _l =  new LocalizedStrings({
     ru : ru,
-    en : en,
+    // en : en,
 });
 
 const russianLocales = [

@@ -3,7 +3,7 @@ import React, { FC, InputHTMLAttributes, useState } from 'react';
 interface NumInputProps extends InputHTMLAttributes<HTMLInputElement>{
     prefix?: string,
     value?: number,
-    suffix?: string
+    suffix?: string  // перфикс надо сделать, чтобы в него можно было передавать элемент
 }
 
 
