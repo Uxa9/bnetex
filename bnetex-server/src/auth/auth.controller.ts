@@ -3,7 +3,9 @@ import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 
-@ApiTags('Aurh')
+// todo : add api description
+
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
 
@@ -14,7 +16,7 @@ export class AuthController {
         return this.authService.login(userDto);
     }
 
-    @Post('login')
+    @Post('registration')
     registration(@Body() userDto: CreateUserDto) {
         return this.authService.registration(userDto);
     }
