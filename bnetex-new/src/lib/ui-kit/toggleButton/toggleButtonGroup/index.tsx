@@ -28,12 +28,17 @@ const ToggleButtonGroup: FC<ToggleButtonGroupProps> = props => {
     };
 
     function renderChildrenWithProps(children: ReactNode, elementProps: any): ReactNode {
+
+        const childrenLength = React.Children.count(children) - 1;
+
         return React.Children.map(children, (child, index) => {
             const element = child as ReactElement<PropsWithChildren<ToggleButtonProps>>;
 
             if(value) elementProps['checked'] = (value === element.props.value);
 
-            return React.cloneElement(element, { ...elementProps, key: index });
+            const btnLocation = index === 0 ? 'left' : index === childrenLength  ? 'right' : 'center';
+
+            return React.cloneElement(element, { ...elementProps, key: index, location: btnLocation });
         });
     }
 

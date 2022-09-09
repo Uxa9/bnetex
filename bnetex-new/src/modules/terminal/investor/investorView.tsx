@@ -10,7 +10,7 @@ import styles from './investorView.module.scss';
 
 const InvestorView = () => {
 
-    const [value, setValue] = useState("trade");
+    const [value, setValue] = useState('trade');
 
     return (
         <div
@@ -20,25 +20,25 @@ const InvestorView = () => {
                 className='block'
             >
                 <ToggleButtonGroup 
-                    title={""} 
-                    name={""} 
+                    title={''} 
+                    name={''} 
                     onChange={(value) => {
                         setValue(value);
                     }}
                     value={value}
                 >
                     <ToggleButton 
-                        text={"Торговля"} 
-                        value={"trade"} 
+                        text={'Торговля'} 
+                        value={'trade'} 
                     />
                     <ToggleButton 
-                        text={"История"} 
-                        value={"history"} 
+                        text={'История'} 
+                        value={'history'} 
                     />
                 </ToggleButtonGroup>
                 
-                {value == 'trade' && <TradeView />}
-                {value == 'history' && <HistoryView />}
+                {value === 'trade' && <TradeView />}
+                {value === 'history' && <HistoryView />}
             </div>
             <div
                 className='block'
@@ -74,7 +74,7 @@ const InvestorView = () => {
                 title={'ROE'}
             />
         </div>
-    )
-}
+    );
+};
 
 export default InvestorView;
