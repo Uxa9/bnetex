@@ -1,7 +1,7 @@
 export enum AppLinksEnum {
     HOME = 'home',
     AUTH = 'auth',
-    REGISTRATION = 'registration',
+    REGISTRATION = 'signup',
     TERMINAL = 'terminal',
     P2P = 'p2p',
     DASHBOARD = 'dashboard',

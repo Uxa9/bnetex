@@ -1,5 +1,4 @@
-import { IsNumber } from "class-validator";
-import { Column, DataType, Default } from "sequelize-typescript";
+import { IsNumber, IsString } from "class-validator";
 
 export class RefreshToken {
 
@@ -8,9 +7,8 @@ export class RefreshToken {
     })
     readonly userId : number;
 
-    @Column({
-        type : DataType.STRING,
-        allowNull : false
+    @IsString({
+        message : "Value must be a string"
     })
-    refreshToken : string;
+    readonly refreshToken : string;
 }

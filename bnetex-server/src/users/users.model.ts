@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BelongsToMany, Column, DataType, Default, Model, Table } from "sequelize-typescript";
+import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
 import { Role } from "../roles/roles.model";
 import { UserRoles } from "../roles/user-roles.model";
 
@@ -37,13 +37,13 @@ export class User extends Model<User, UserCreationAttrs> {
     email : string;
 
     @ApiProperty({
-        example : 'true',
+        example : true,
         description : 'does user confirmed e-mail or not'
     })
     @Column({
         type : DataType.BOOLEAN,
+        defaultValue : false
     })
-    @Default(false)
     isActivated : boolean;
 
     @ApiProperty({

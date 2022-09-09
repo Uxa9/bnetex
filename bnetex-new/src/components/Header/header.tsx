@@ -76,9 +76,13 @@ const Header = () => {
                                     Icon={Login}
                                     onClick={() => testOnClick()}
                                 />
-                                <Button
-                                    text={'Регистрация'}
-                                />
+                                <Link
+                                    to={'signup'}
+                                >
+                                    <Button
+                                        text={'Регистрация'}
+                                    />
+                                </Link>
                             </>
                     }
 
