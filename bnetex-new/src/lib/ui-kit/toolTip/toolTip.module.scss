@@ -1,0 +1,61 @@
+@import 'styles/mixins.scss';
+@import 'styles/variables.scss';
+
+.title {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    color: $grayText;
+    padding-top: 16px;
+
+    .iconWrapper {
+        @include size-svg(16px, 16px);
+        position: relative;
+
+        .infoIcon {
+            fill: #9d9d9d;
+        }
+    }
+
+    &--active {
+        .tip,
+        .needle {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .tip {
+            right: -8px;
+        }
+    }
+}
+
+.tip {
+    position: absolute;
+    bottom: calc(100% + 16px);
+    right: 0px;
+    width: 100vw;
+    max-width: 50ch;
+    background-color: #f6f6f6;
+    border-radius: 5px;
+    padding: 10px;
+    color: black;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.25s ease;
+
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.needle {
+    fill: #f6f6f6;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.25s ease;
+}

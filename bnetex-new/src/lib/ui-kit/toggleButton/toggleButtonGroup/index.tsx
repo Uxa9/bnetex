@@ -4,7 +4,7 @@ import ToggleButton, { ToggleButtonProps } from '../toggleButton';
 import styles from './toggleButtonGroup.module.scss';
 
 interface ToggleButtonGroupProps {
-    title: string,
+    title?: string,
     name: string,
     value?: string | number,
     onChange: (value: any, name?: string) => void
@@ -44,8 +44,9 @@ const ToggleButtonGroup: FC<ToggleButtonGroupProps> = props => {
 
     return (
         <fieldset className={styles.container}>
-            <legend className='label-1'>{title}</legend>
-
+            {title && 
+                <legend className='label-1'>{title}</legend>
+            }
             <div className={styles['toggle-buttons']}>
                 {renderChildrenWithProps(children, propsToToggleButtons)}
             </div>

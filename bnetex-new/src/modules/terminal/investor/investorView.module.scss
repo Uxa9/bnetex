@@ -1,7 +1,16 @@
 @import '../../../styles/variables.scss';
 
-.investor-view-wrapper >* {
-    margin-bottom: 20px;
+.investor-view-wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+
+    &__header{
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        column-gap: 16px;
+    }
 }
 
 .header {

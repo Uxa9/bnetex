@@ -10,9 +10,11 @@
     transition: 0.25s;
     padding: 8px 4px; 
     width: 100%;
+    color: $grayText;
 
     &:hover {
         border-color: $activeBorder;
+        color: $activeBorder;
     }
 
     &--left {

@@ -7,6 +7,7 @@ import HistoryView from './historyView/historyView';
 import AreaChart from './chart/areaChart';
 
 import styles from './investorView.module.scss';
+import ToolTip from 'lib/ui-kit/toolTip';
 
 const InvestorView = () => {
 
@@ -19,23 +20,31 @@ const InvestorView = () => {
             <div
                 className='block'
             >
-                <ToggleButtonGroup 
-                    title={''} 
-                    name={''} 
-                    onChange={(value) => {
-                        setValue(value);
-                    }}
-                    value={value}
-                >
-                    <ToggleButton 
-                        text={'Торговля'} 
-                        value={'trade'} 
+                <div className={styles['investor-view-wrapper__header']}>
+                    <ToggleButtonGroup 
+                        title={''} 
+                        name={'investor_terminal'} 
+                        onChange={(value) => {
+                            setValue(value);
+                        }}
+                        value={value}
+                    >
+                        <ToggleButton 
+                            text={'Торговля'} 
+                            value={'trade'} 
+                        />
+                        <ToggleButton 
+                            text={'История'} 
+                            value={'history'} 
+                        />
+                    </ToggleButtonGroup>
+
+                    <ToolTip 
+                        title='Что такое история?'
+                        infoText='История или история сделок - это исторические записи фактических транзакций по позициям. 
+                        В раздел попадают только исполненные ордера.'
                     />
-                    <ToggleButton 
-                        text={'История'} 
-                        value={'history'} 
-                    />
-                </ToggleButtonGroup>
+                </div>
                 
                 {value === 'trade' && <TradeView />}
                 {value === 'history' && <HistoryView />}

@@ -7,3 +7,9 @@ legend {
     width: 100%;
     column-gap: -1px;
 }
+
+.container {
+    height: fit-content;
+    // Возможно костыль
+    flex-grow: 1;
+}
