@@ -1,16 +1,10 @@
 @import '../../../styles/variables.scss';
 
-.investor-view-wrapper {
+.investor-view-wrapper__header {
     display: flex;
-    flex-direction: column;
-    row-gap: 20px;
-
-    &__header{
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        column-gap: 16px;
-    }
+    justify-content: space-between;
+    align-items: flex-end;
+    column-gap: 16px;
 }
 
 .header {

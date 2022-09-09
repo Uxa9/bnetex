@@ -10,8 +10,6 @@ import MainPage from 'modules/MainPage/MainPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
 import InvestorWallet from 'modules/Dashboard/investorWallet/investorWallet';
-import RadioButtonGroup from 'lib/ui-kit/radioButton/radioButtonGroup';
-import SettingsMenu from 'components/Header/SettingsMenu';
 
 const AppRoutes = () => {
 
@@ -38,7 +36,6 @@ const AppRoutes = () => {
                 </Route>
                 <Route path={P2P}></Route>
                 <Route path={BUY_CRYPTO}></Route>
-                <Route path='test' element={<SettingsMenu />} />
             </Route>
         </Routes>
     );

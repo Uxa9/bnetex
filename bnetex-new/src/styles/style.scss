@@ -1344,8 +1344,8 @@ $headerHeight : 72px;
 
 .history-and-orders {
     flex-grow: 1;
-
-    min-height: 260px;
+    min-height: 250px;
+    height: 100%;
 
     .positions-table {
         height: 50px;
