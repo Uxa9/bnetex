@@ -82,7 +82,7 @@ const Header = () => {
                             </>
                     }
 
-                    {
+                    {/* {
                         isTerminalOpened &&
 
                             <Button
@@ -90,14 +90,14 @@ const Header = () => {
                                 Icon={Settings}
                                 onClick={toggleSettingsMenu}
                             />
-                    }
+                    } */}
                    
                 </div>
             </nav>
-            {
+            {/* {
                 isTerminalOpened && isSettingsOpened &&
                     <SettingsMenu />
-            }
+            } */}
         </header>
     );
 };

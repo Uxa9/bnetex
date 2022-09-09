@@ -11,7 +11,9 @@ import ToolTip from 'lib/ui-kit/toolTip';
 
 const InvestorView = () => {
 
-    const [value, setValue] = useState('trade');
+    type InvestorViewType = 'trade' | 'history';
+
+    const [viewType, setViewType] = useState<InvestorViewType>('trade');
 
     return (
         <div
@@ -24,10 +26,10 @@ const InvestorView = () => {
                     <ToggleButtonGroup 
                         title={''} 
                         name={'investor_terminal'} 
-                        onChange={(value) => {
-                            setValue(value);
+                        onChange={(value: InvestorViewType) => {
+                            setViewType(value);
                         }}
-                        value={value}
+                        value={viewType}
                     >
                         <ToggleButton 
                             text={'Торговля'} 
@@ -46,8 +48,8 @@ const InvestorView = () => {
                     />
                 </div>
                 
-                {value === 'trade' && <TradeView />}
-                {value === 'history' && <HistoryView />}
+                {viewType === 'trade' && <TradeView />}
+                {viewType === 'history' && <HistoryView />}
             </div>
             <div
                 className='block'

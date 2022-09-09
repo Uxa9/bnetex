@@ -1,5 +1,4 @@
-import { Button, NumInput } from "lib/ui-kit";
-import { useState } from "react";
+import { Button, NumInput } from 'lib/ui-kit';
 import styles from '../investorView.module.scss';
 
 const TradeView = () => {
@@ -42,7 +41,7 @@ const TradeView = () => {
                 />
             </div>
         </>
-    )
-}
+    );
+};
 
 export default TradeView;
