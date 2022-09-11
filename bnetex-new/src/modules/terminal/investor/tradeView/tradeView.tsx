@@ -1,6 +1,6 @@
 import { Button, Input } from 'lib/ui-kit';
 import { blockEAndDashKey } from 'lib/utils';
-import { createRef, useRef, useState } from 'react';
+import { createRef, useState } from 'react';
 import styles from '../investorView.module.scss';
 
 const TradeView = () => {

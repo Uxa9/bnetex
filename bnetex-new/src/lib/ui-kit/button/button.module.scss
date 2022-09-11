@@ -47,6 +47,7 @@
         background-color: $activeBG;
         @include color-svg($grayBorder);
         cursor: not-allowed;
+        border: 1px solid transparent;
     }
 
     &--thin {

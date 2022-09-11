@@ -11,9 +11,6 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     errorText?: string,
 }
 
-// toDo
-// Объединить с компонентом numInput
-
 const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     
     const { hasBackground, type = 'text', errorText, postfix, ...rest } = props;
