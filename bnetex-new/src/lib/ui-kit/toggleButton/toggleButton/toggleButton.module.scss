@@ -13,21 +13,13 @@
     color: $grayText;
 
     &:hover {
-        border-color: $activeBorder;
+        border: 1px solid $activeBorder;
         color: $activeBorder;
-    }
-
-    &--left {
-        border-radius: 5px 0 0 5px;
-    }
-
-    &--right {
-        border-radius: 0 5px 5px 0;
     }
 }
 
 input:checked + .button {
-    border-color: $activeBorder;
+    border: 1px solid $activeBorder;
     color: $activeBorder;
     background-color: $activeBG;
 }

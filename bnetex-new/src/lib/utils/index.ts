@@ -13,3 +13,8 @@ export function renderChildrenWithProps<Type>(children: ReactNode, elementProps:
         return React.cloneElement(element, { ...elementProps, key: index });
     });
 }
+
+
+export const blockEAndDashKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if(['-', '+', 'e', 'E'].includes(event.key)) event.preventDefault();
+};

@@ -6,6 +6,9 @@ interface NumInputProps extends InputHTMLAttributes<HTMLInputElement>{
     suffix?: string  // перфикс надо сделать, чтобы в него можно было передавать элемент
 }
 
+/**
+ * @deprecated use Input type={number}
+ */
 
 const NumInput:FC<NumInputProps> = props => {
 
