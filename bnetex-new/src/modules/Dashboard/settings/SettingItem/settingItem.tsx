@@ -51,17 +51,15 @@ const SettingItem:FC<SettingItemProps> = props => {
                     <Button
                         buttonStyle={activeStateText ? 'decline' : 'accept'}
                         className={styles.button}
-                    >
-                        {activeStateText ? 'Выключить' : 'Включить'}
-                    </Button>
+                        text={activeStateText ? 'Выключить' : 'Включить'}
+                    />
                 }
                 {
                     editable && 
                     <Button 
                         className={styles.button}
-                    >
-                        Изменить
-                    </Button>
+                        text={'Изменить'}
+                    />
                 }
             </div>
         </div>

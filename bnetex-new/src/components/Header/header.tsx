@@ -38,15 +38,15 @@ const Header = () => {
                 <div className={styles['links__main']}>
                     <Link to={'terminal/investor'}>
                         <Button
-                            text={'Фьючерсы USD-M'}
+                            text={'Алготрейдинг'}
                             buttonStyle={'thin'}
                         />
                     </Link>
 
-                    <Button
+                    {/* <Button
                         text={'P2P'}
                         buttonStyle={'thin'}
-                    />
+                    /> */}
 
                 </div>
                 <div className={styles['links__user']}>

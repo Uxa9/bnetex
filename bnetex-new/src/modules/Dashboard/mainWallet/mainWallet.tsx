@@ -10,7 +10,7 @@ const MainWallet = () => {
     return(
         <div className={styles.wallet}>
             <div className={styles['wallet-header']}>
-                <h3>Фьючерсный кошелек</h3>
+                <h3>Основной кошелек</h3>
                 <div className={styles['btns']}>
                     <Button
                         text='Ввод'
@@ -34,9 +34,6 @@ const MainWallet = () => {
                         <p className={styles['balance-item__value']}>
                         41.4231 
                         </p>
-                        <p className={styles['balance-item__RUB']}>
-                        3 354.31
-                        </p>
                     </div>
                 </div>
 
@@ -47,9 +44,6 @@ const MainWallet = () => {
                     <p className={styles['balance-item__value']}>
                             0.0040543
                     </p>
-                    <p className={styles['balance-item__RUB']}>
-                            24 354.31
-                    </p>
                 </div>
                 <div className={styles['balance-item']}>
                     <p className={styles['balance-item__label']}>
@@ -57,9 +51,6 @@ const MainWallet = () => {
                     </p>
                     <p className={styles['balance-item__value']}>
                             0.0040543
-                    </p>
-                    <p className={styles['balance-item__RUB']}>
-                            24 354.31
                     </p>
                 </div>
             </div>
@@ -74,7 +65,6 @@ const MainWallet = () => {
                         <th>Криптовалюта</th>
                         <th>Всего</th>
                         <th>Доступно</th>
-                        <th>В ордере</th>
                         <th>Стоимость в BTC</th>
                         <th>Действия</th>
                     </thead>
@@ -83,8 +73,7 @@ const MainWallet = () => {
                             <td>USDT</td>
                             <td>124.54500314</td>
                             <td>124.54500314</td>
-                            <td>0.00000000</td>
-                            <td>0.00042314 <span className={styles.RUB}>24 354.31</span></td>
+                            <td>0.00042314</td>
                             <td className={styles.btns}>
                                 <p>Купить</p>
                                 <p>Ввод</p> 

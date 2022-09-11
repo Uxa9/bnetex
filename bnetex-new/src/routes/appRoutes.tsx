@@ -30,7 +30,7 @@ const AppRoutes = () => {
                     <Route path='tools' element={<Tools />} />
                     <Route path='settings' element={<Settings />} />
                     <Route path='wallet/main' element={<MainWallet />} />
-                    <Route path='wallet/futures' element={<FuturesWallet />} />
+                    {/* <Route path='wallet/futures' element={<FuturesWallet />} /> */}
                     <Route path='wallet/investor' element={<InvestorWallet />} />
                     <Route path='transactions' />
                 </Route>
