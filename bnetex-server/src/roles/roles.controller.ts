@@ -22,7 +22,7 @@ export class RolesController {
     }
 
     @ApiOperation({
-        summary : 'Get role by id'
+        summary : 'Get role by name'
     })
     @ApiResponse({
         status : 200,
