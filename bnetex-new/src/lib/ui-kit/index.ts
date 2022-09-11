@@ -4,3 +4,4 @@ export {default as ToggleButton} from './toggleButton/toggleButton';
 export {default as ToggleButtonGroup} from './toggleButton/toggleButtonGroup';
 export {default as NumInput} from './numInput';
 export {default as Input} from './Input/input';
+export {default as ToolTip} from './toolTip';
