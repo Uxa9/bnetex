@@ -12,7 +12,7 @@ $font-size: 16px;
     &--activeOrFilled {
         .label {
             color: $activeBorder;
-            top: -8px;
+            top: -6px;
             transform: translate(12px, 0);
             font-size: calc($font-size * 0.75);
             max-width: calc(100% - 48px);
@@ -63,6 +63,7 @@ $font-size: 16px;
     top: 50%;
     transform: translate(12px, -50%);
     font-size: $font-size;
+    z-index: 1;
 
     transition: top $rapidTransition $easing, font-size $rapidTransition $easing, color $rapidTransition $easing,
         transform $rapidTransition $easing;
@@ -84,16 +85,13 @@ $font-size: 16px;
     height: 100%;
     padding: 16px;
     border-radius: inherit;
-
-    &--background {
-        background-color: white;
-    }
+    z-index: 1;
 }
 
 .fieldset-outline {
     position: absolute;
     border-radius: inherit;
-    inset: -8px 0px 0px;
+    inset: -6px 0px 0px;
     padding: 0px 8px;
     border: 1px solid $grayBorder;
     pointer-events: none;
@@ -101,6 +99,10 @@ $font-size: 16px;
     max-width: 100%;
     width: 100%;
     min-width: 0%;
+
+    &--background {
+        background-color: white;
+    }
 
     &__legend {
         white-space: nowrap;

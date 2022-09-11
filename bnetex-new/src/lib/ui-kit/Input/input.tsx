@@ -42,10 +42,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                 <input 
                     type={type}
                     id={id}
-                    className={classNames(
-                        styles.input,
-                        {[styles['input--background']]: hasBackground}
-                    )}
+                    className={ styles.input}
                     {...rest}
                     tabIndex={1}
                     onFocus={() => setIsActive(true)}
@@ -53,7 +50,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                     ref={ref}
                 />
                 
-                <fieldset className={styles['fieldset-outline']}>
+                <fieldset className={
+                    classNames(
+                        styles['fieldset-outline'],
+                        {[styles['fieldset-outline--background']]: hasBackground}
+
+                    )}
+                >
                     <legend className={styles['fieldset-outline__legend']}>
                         <span>{label}</span>
                     </legend>
