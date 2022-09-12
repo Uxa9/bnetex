@@ -2,7 +2,7 @@ import PageLayout from 'components/pageLayout';
 import TerminalLayout from 'modules/terminal/terminalLayout';
 import InvestorView from 'modules/terminal/investor/investorView';
 import Dashboard from 'modules/Dashboard/dashboard';
-import FuturesWallet from 'modules/Dashboard/futuresWallet/futuresWallet';
+// import FuturesWallet from 'modules/Dashboard/futuresWallet/futuresWallet';
 import MainWallet from 'modules/Dashboard/mainWallet/mainWallet';
 import Settings from 'modules/Dashboard/settings/settings';
 import Tools from 'modules/Dashboard/tools/tools';
@@ -10,18 +10,17 @@ import MainPage from 'modules/MainPage/MainPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
 import InvestorWallet from 'modules/Dashboard/investorWallet/investorWallet';
+import AuthLayout from 'modules/Auth/authLayout';
 
 const AppRoutes = () => {
 
-    const { HOME, AUTH, REGISTRATION, P2P, TERMINAL, DASHBOARD, BUY_CRYPTO } = AppLinksEnum;
+    const { HOME, AUTH, REGISTRATION, LOGIN, P2P, TERMINAL, DASHBOARD, BUY_CRYPTO } = AppLinksEnum;
 
     return (
         <Routes>
             <Route element={<PageLayout />}>
                 <Route index element={<Navigate to={HOME} />} />
                 <Route path={HOME} element={<MainPage />}></Route>
-                <Route path={AUTH}></Route>
-                <Route path={REGISTRATION}></Route>
                 <Route path={TERMINAL} element={<TerminalLayout />}>
                     <Route path="investor" element={<InvestorView />} />
                 </Route>
@@ -33,6 +32,11 @@ const AppRoutes = () => {
                     {/* <Route path='wallet/futures' element={<FuturesWallet />} /> */}
                     <Route path='wallet/investor' element={<InvestorWallet />} />
                     <Route path='transactions' />
+                </Route>
+            <Route path={AUTH} element={<AuthLayout />}>
+                    <Route index element={<Navigate to={LOGIN} />}></Route>
+                    <Route path={REGISTRATION}></Route>
+                    <Route path={LOGIN}></Route>
                 </Route>
                 <Route path={P2P}></Route>
                 <Route path={BUY_CRYPTO}></Route>

@@ -1,7 +1,5 @@
 import styles from './header.module.scss';
-
 import { Wallet, User, Logo, Settings, Login } from '../../assets/images/icons';
-
 import _l from '../../locales/index';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'lib/ui-kit';
@@ -9,8 +7,10 @@ import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { useActions } from 'lib/hooks/useActionCreators';
 import SettingsMenu from './SettingsMenu';
 import { useState } from 'react';
+import { AppLinksEnum } from 'routes/appLinks';
 
 const Header = () => {
+    const { AUTH, REGISTRATION, LOGIN } = AppLinksEnum;
 
     const navigate = useNavigate();
 
@@ -74,10 +74,11 @@ const Header = () => {
                                     text={'Войти'}
                                     buttonStyle={'thin'}
                                     Icon={Login}
-                                    onClick={() => testOnClick()}
+                                    onClick={() => navigate(`${AUTH}/${LOGIN}`)}
                                 />
                                 <Button
                                     text={'Регистрация'}
+                                    onClick={() => navigate(`${AUTH}/${REGISTRATION}`)}
                                 />
                             </>
                     }
