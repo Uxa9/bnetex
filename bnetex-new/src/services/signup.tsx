@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 interface UserItemProps {
     email: string,
@@ -6,14 +6,23 @@ interface UserItemProps {
 }
 
 const signup = async (userData: UserItemProps) => {
-    try {
-        const response = await axios.post(
-            'http://localhost:5000/auth/registration',
-            userData
-        )
-    } catch (error) {
-        console.log(error);
-    }
+
+    const response = await axios.post(
+        'http://localhost:5000/auth/registration',
+        userData
+    )
+    .catch((error: Error | AxiosError) => {
+
+        if (axios.isAxiosError(error)) {
+            return error.response;
+        } else {
+            return {
+                status: 500
+            }
+        }
+    });
+
+    return response;
 }
 
 export default signup;

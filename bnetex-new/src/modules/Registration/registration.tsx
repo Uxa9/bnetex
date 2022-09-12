@@ -27,6 +27,22 @@ const Registration = () => {
     }, [userData.password]);
 
     const [isFormSent, setIsFormSent] = useState(false);
+    const [loading, isLoading] = useState(false);
+
+    const sendSignupRequest = async () => {
+        isLoading(true);
+        const response = await signup(userData);
+
+        if (response?.status === 500) {
+            alert('pizdec');
+        }
+
+        if (response?.status === 201) {
+
+        }
+
+        isLoading(false);
+    }
 
     const passwordRequirementChecker = (value: string) => {
         setPasswordReq({
@@ -148,7 +164,8 @@ const Registration = () => {
                             form="signupForm"
                             buttonStyle="primary"
                             text="Далее"
-                            onClick={() => signup(userData)}
+                            onClick={() => sendSignupRequest()}
+                            disabled={loading}
                         />
                     </div>
                 </div>

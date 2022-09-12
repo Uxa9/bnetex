@@ -56,7 +56,7 @@ export class AuthService {
         }
 
         throw new UnauthorizedException({
-            message : "Wrong or password"
+            message : "Wrong password"
         });
     }
 }
