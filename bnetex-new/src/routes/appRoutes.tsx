@@ -12,7 +12,7 @@ import { AppLinksEnum } from './appLinks';
 import InvestorWallet from 'modules/Dashboard/investorWallet/investorWallet';
 import RadioButtonGroup from 'lib/ui-kit/radioButton/radioButtonGroup';
 import SettingsMenu from 'components/Header/SettingsMenu';
-import Registration from 'modules/Registration/registration';
+import * as Registration from 'modules/Registration/index';
 
 const AppRoutes = () => {
 
@@ -24,7 +24,11 @@ const AppRoutes = () => {
                 <Route index element={<Navigate to={HOME} />} />
                 <Route path={HOME} element={<MainPage />}></Route>
                 <Route path={AUTH}></Route>
-                <Route path={REGISTRATION} element={<Registration />} />
+                <Route path={REGISTRATION}>
+                    <Route index element={<Registration.StepOne />} />
+                    <Route path='verification' element={<Registration.StepTwo />} />
+                    <Route path='success' element={<Registration.Success />} />
+                </Route>
                 <Route path={TERMINAL} element={<TerminalLayout />}>
                     <Route path="investor" element={<InvestorView />} />
                 </Route>

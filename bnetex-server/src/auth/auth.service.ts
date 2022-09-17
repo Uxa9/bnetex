@@ -4,6 +4,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../users/users.model';
+import genereateAndSendAuthCode from './genereateAndSendAuthCode';
 
 @Injectable()
 export class AuthService {
@@ -27,11 +28,28 @@ export class AuthService {
             );
         }
 
-        const hashPassword = await bcrypt.hash(userDto.password, 5);
-        const user = await this.userService.createUser({ ...userDto, password : hashPassword });
+        let authCode = await genereateAndSendAuthCode(userDto.email);
 
-        return this.generateToken(user);
+        const hashPassword = await bcrypt.hash(userDto.password, 5);
+        const user = await this.userService.createUser({ ...userDto, password : hashPassword, activationLink : authCode });
+
+        // return this.generateToken(user);
+
+        return { status: 201 };
     }
+    
+    async confirmEmail(activationLink : string, email : string) {        
+        const user = await this.userService.getUserByEmail(email);
+
+        if ( activationLink === user.activationLink ) {
+            
+            return this.generateToken(user);
+        } else {
+
+            return { status: 400 };
+        }
+    }
+
 
     async generateToken(user : User) {
         const payload = { email : user.email, id : user.id, roles : user.roles }
@@ -39,6 +57,7 @@ export class AuthService {
             token : this.jwtService.sign(payload)
         }
     }
+
 
     private async validateUser(userDto : CreateUserDto) {
         const user = await this.userService.getUserByEmail(userDto.email);

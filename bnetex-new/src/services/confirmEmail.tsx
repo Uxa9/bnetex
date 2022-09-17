@@ -1,14 +1,14 @@
 import axios, { AxiosError } from "axios";
 
-interface UserItemProps {
-    email: string,
-    password: string
+interface ConfirmEmailProps {
+    activationLink : string,
+    email          : string
 }
 
-const signup = async (userData: UserItemProps) => {
+const confirmEmail = async (userData: ConfirmEmailProps) => {
 
     const response = await axios.post(
-        'http://localhost:5000/auth/registration',
+        'http://localhost:5000/auth/confirm-email',
         userData
     )
     .catch((error: Error | AxiosError) => {
@@ -26,4 +26,4 @@ const signup = async (userData: UserItemProps) => {
     return response;
 }
 
-export default signup;
+export default confirmEmail;

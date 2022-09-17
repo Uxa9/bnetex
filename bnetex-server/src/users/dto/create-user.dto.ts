@@ -28,6 +28,13 @@ export class CreateUserDto {
     })
     readonly password: string;
 
+    @ApiProperty({
+        example : '@!TGgwe2#T@3t2t',
+        description : 'user activation link'
+    })
+    readonly activationLink: string;
+
+
     // @ApiProperty({
     //     example : 'investor',
     //     description : 'user role'

@@ -9,9 +9,9 @@ import { User } from './users.model';
 export class UsersService {
 
     constructor(@InjectModel(User) private userRepository: typeof User,
-                private roleService: RolesService) {}
+        private roleService: RolesService) { }
 
-    async createUser(dto : CreateUserDto) {
+    async createUser(dto: CreateUserDto) {
         const user = await this.userRepository.create(dto);
         const role = await this.roleService.getRoleByValue('investor');
 
@@ -22,16 +22,17 @@ export class UsersService {
     }
 
     async getAllUsers() {
-        const users = await this.userRepository.findAll({ include: { all : true }});
+        const users = await this.userRepository.findAll({ include: { all: true } });
         return users;
     }
 
     async getUserByEmail(email: string) {
-        const user = await this.userRepository.findOne({ 
-            where : {email}, 
-            include : {all : true}}
+        const user = await this.userRepository.findOne({
+            where: { email },
+            include: { all: true }
+        }
         )
-        
+
         return user;
     }
 
@@ -48,5 +49,11 @@ export class UsersService {
             'User or role not found',
             HttpStatus.NOT_FOUND
         );
+    }
+
+    async confirmEmail(id: number) {
+        const user = await this.userRepository.findByPk(id);
+
+        await user.update({ isActivated : true });
     }
 }

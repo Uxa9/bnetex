@@ -21,4 +21,9 @@ export class AuthController {
         return this.authService.registration(userDto);
     }
 
+    @Post('confirm-email')
+    confirmEmail(@Body() activationLink: string, email: string) {
+        return this.authService.confirmEmail(activationLink, email);
+    }
+
 }

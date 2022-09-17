@@ -1,3 +1,6 @@
 
 *.env
 bnetex-server/.development.env
+
+bnetex-server/node_modules
+bnetex-new/node_modules
