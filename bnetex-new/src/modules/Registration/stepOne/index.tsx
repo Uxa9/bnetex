@@ -44,18 +44,16 @@ const StepOne = () => {
 
     return (
         <RegistrationTemplate>
-            <div>
-                <RegForm 
-                    sendSignupRequest={(data) => sendSignupRequest(data)} 
-                    trackPasswordChange={(password) => setUserPassword(password)} 
-                    loading={loading} 
-                />
-                <PasswordCheck 
-                    password={userPassword}
-                    isFormSent={isFormSent}
-                    isPasswordValid={(valid) => isPasswordValid = valid}
-                />
-            </div>
+            <RegForm 
+                sendSignupRequest={(data) => sendSignupRequest(data)} 
+                trackPasswordChange={(password) => setUserPassword(password)} 
+                loading={loading} 
+            />
+            <PasswordCheck 
+                password={userPassword}
+                isFormSent={isFormSent}
+                isPasswordValid={(valid) => isPasswordValid = valid}
+            />
         </RegistrationTemplate>
     )
 }

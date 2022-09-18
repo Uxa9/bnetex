@@ -3,6 +3,9 @@ import React, { FC, useState } from "react";
 import StepOne from "./stepOne";
 import StepTwo from "./stepTwo";
 
+import styles from './registration.module.scss';
+
+
 interface RegistrationTemplateProps {
     children : React.ReactNode
 }
@@ -12,7 +15,9 @@ const RegistrationTemplate: FC<RegistrationTemplateProps> = (props) => {
     const [step, setStep] = useState(1);
 
     return (
-        <div>
+        <div
+            className={styles['page-wrapper']}
+        >
             <div
                 className="background-blur"
             >
@@ -36,7 +41,11 @@ const RegistrationTemplate: FC<RegistrationTemplateProps> = (props) => {
                     type={'circle'}
                 />        
             </div>
-            {props.children}
+            <div
+                className={styles['content-container']}
+            >
+                {props.children}
+            </div>
         </div>
     )
 }

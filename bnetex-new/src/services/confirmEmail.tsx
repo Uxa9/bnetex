@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 
 interface ConfirmEmailProps {
-    activationLink : string,
+    activationCode : string,
     email          : string
 }
 

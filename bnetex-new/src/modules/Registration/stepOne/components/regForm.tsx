@@ -1,7 +1,9 @@
-
+import classNames from 'classnames';
 import { Button, Input } from 'lib/ui-kit';
 import { FC, useEffect, useState } from 'react';
+
 import styles from '../stepOne.module.scss';
+
 
 interface RegFormProps {
     sendSignupRequest: (userData : any) => void,
@@ -22,20 +24,26 @@ const RegForm: FC<RegFormProps> = props => {
     
     return (
         <div
-            className={styles['reg-container']}
+            className={classNames(["block", styles['reg-container']])}
         >
-            <div
-                className="block"
+            <p
+                className='text-primary'
             >
-                <p>
-                    Шаг 1/2
-                </p>
-                <h2>
-                    Аккаунт
-                </h2>
-                <p>
-                    Введите адрес электронной почты и выберите надежный пароль.
-                </p>
+                Шаг 1/2
+            </p>
+            <h2
+                className={classNames('text-main', styles['container-header'])}
+            >
+                Аккаунт
+            </h2>
+            <p
+                className={classNames('text-main', styles['container-text'])}
+            >
+                Введите адрес электронной почты и выберите надежный пароль.
+            </p>
+            <div
+                className={styles['input-wrapper']}
+            >
                 <Input
                     label="Email или телефон*"
                     hasBackground={false}
@@ -47,17 +55,17 @@ const RegForm: FC<RegFormProps> = props => {
                     hasBackground={false}
                     onChange={(e) => setUserData({...userData, password: e.target.value})}
                 />
-                <div
-                    className={styles['button-wrapper']}
-                >
-                    <Button
-                        form="signupForm"
-                        buttonStyle="primary"
-                        text="Далее"
-                        onClick={() => props.sendSignupRequest(userData)}
-                        disabled={props.loading}
-                    />
-                </div>
+            </div>
+            <div
+                className={styles['button-wrapper']}
+            >
+                <Button
+                    form="signupForm"
+                    buttonStyle="primary"
+                    text="Далее"
+                    onClick={() => props.sendSignupRequest(userData)}
+                    disabled={props.loading}
+                />
             </div>
         </div>
     )

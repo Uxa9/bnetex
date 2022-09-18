@@ -54,7 +54,7 @@ const PasswordCheck: FC<PasswordCheckProps> = (props) => {
 
         const textColorRender = () => {
             if ( isFormSent ) {
-                if ( !passwordReqRowValue ) {
+                if ( !passwordReqRowValue ) {                    
                     return styles['password-check-popup-row-text-red'];
                 } else return styles['password-check-popup-row-text-green'];
             } else {
@@ -72,7 +72,7 @@ const PasswordCheck: FC<PasswordCheckProps> = (props) => {
             } else {
                 if ( passwordReqRowValue ) {
                     return (<Check />);
-                } else return (<></>)
+                } else return (<div className={styles['empty-icon']} />)
             }        
         }
 

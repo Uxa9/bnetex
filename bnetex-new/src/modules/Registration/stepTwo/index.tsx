@@ -1,3 +1,5 @@
+import classNames from "classnames";
+import { useActions } from "lib/hooks/useActionCreators";
 import { Button, Input } from "lib/ui-kit";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,17 +12,18 @@ import styles from './stepTwo.module.scss';
 const StepTwo = () => {
 
     const [loading, isLoading] = useState(false);
-    const [activationLink, setActivationLink] = useState('');
+    const [activationCode, setActivationCode] = useState('');
 
+    const { login } = useActions();
     const navigate = useNavigate();
 
     const email = localStorage.getItem('email') || '';
 
-    const sendActivationLink = async () => {
-        if ( activationLink !== '' ) {
+    const sendActivationCode = async () => {
+        if ( activationCode !== '' ) {
             isLoading(true);
 
-            const response = await confirmEmail({email, activationLink});
+            const response = await confirmEmail({email, activationCode});
     
             if (response?.status === 500) {
                 alert('pizdec');
@@ -28,6 +31,7 @@ const StepTwo = () => {
     
             if (response?.status === 201) {
                 localStorage.removeItem('email');
+
                 login(response?.data.token);
                 navigate('/signup/success');
             }
@@ -39,25 +43,33 @@ const StepTwo = () => {
     return (
         <RegistrationTemplate>
             <div
-                className="block"
+                className={classNames('block', styles['content-wrapper'])}
             >
-                <p>
+                <p
+                    className="text-primary"
+                >
                     Шаг 2/2
                 </p>
-                <h2>
+                <h2
+                    className={classNames('text-main', styles['container-header'])}
+                >
                     Верификация email
                 </h2>
-                <p>
-                    Пожалуйста, введите код подтверждения, 
-                    отправленный на {email}.
-                </p>
-                <p>
-                    Код действителен в течение m минут.
-                </p>
+                <div
+                    className={classNames("text-main", styles['container-text'])}
+                >
+                    <p>
+                        Пожалуйста, введите код подтверждения, 
+                        отправленный на {email}.
+                    </p>
+                    <p>
+                        Код действителен в течение m минут.
+                    </p>
+                </div>
                 <Input
                     label="Код подтверждения *"
                     hasBackground={false}
-                    onChange={(e) => setActivationLink(e.target.value)}
+                    onChange={(e) => setActivationCode(e.target.value)}
                 />
                 <div
                     className={styles['button-wrapper']}
@@ -66,7 +78,7 @@ const StepTwo = () => {
                         form="signupForm"
                         buttonStyle="primary"
                         text="Далее"
-                        onClick={() => sendActivationLink()}
+                        onClick={() => sendActivationCode()}
                     />
                 </div>
             </div>

@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../users/users.model';
 import genereateAndSendAuthCode from './genereateAndSendAuthCode';
+import { ConfirmEmail } from 'src/users/dto/confirm-email.dto';
 
 @Injectable()
 export class AuthService {
@@ -38,10 +39,10 @@ export class AuthService {
         return { status: 201 };
     }
     
-    async confirmEmail(activationLink : string, email : string) {        
-        const user = await this.userService.getUserByEmail(email);
+    async confirmEmail(confirmDto: ConfirmEmail) {        
+        const user = await this.userService.getUserByEmail(confirmDto.email);
 
-        if ( activationLink === user.activationLink ) {
+        if ( confirmDto.activationCode === user.activationLink ) {
             
             return this.generateToken(user);
         } else {

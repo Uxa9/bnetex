@@ -1,5 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { ConfirmEmail } from '../users/dto/confirm-email.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 
@@ -22,8 +23,8 @@ export class AuthController {
     }
 
     @Post('confirm-email')
-    confirmEmail(@Body() activationLink: string, email: string) {
-        return this.authService.confirmEmail(activationLink, email);
+    confirmEmail(@Body() confirmDto: ConfirmEmail) {
+        return this.authService.confirmEmail(confirmDto);
     }
 
 }
