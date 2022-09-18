@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import TradingViewWidget from 'react-tradingview-widget';
+
 import styles from './chartView.module.scss';
 
 const ChartView = ({className}: {className?: string}) => {
@@ -11,10 +11,10 @@ const ChartView = ({className}: {className?: string}) => {
                 className
             )}
         >
-            <TradingViewWidget 
+            {/* <TradingViewWidget 
                 symbol="BINANCE:BTCUSDT"
                 autosize={true}
-            />
+            /> */}
         </div>
     );
 };
