@@ -1,20 +1,22 @@
-// import TradingViewWidget from 'react-tradingview-widget';
-
+import classNames from 'classnames';
 
 import styles from './chartView.module.scss';
 
-const ChartView = () => {
+const ChartView = ({className}: {className?: string}) => {
 
     return (
         <div
-            className={styles['chart-container']}
+            className={classNames(
+                styles['chart-container'],
+                className
+            )}
         >
             {/* <TradingViewWidget 
                 symbol="BINANCE:BTCUSDT"
                 autosize={true}
             /> */}
         </div>
-    )
-}
+    );
+};
 
 export default ChartView;

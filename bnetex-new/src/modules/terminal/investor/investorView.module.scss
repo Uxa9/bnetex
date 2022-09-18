@@ -1,7 +1,10 @@
 @import '../../../styles/variables.scss';
 
-.investor-view-wrapper >* {
-    margin-bottom: 20px;
+.investor-view-wrapper__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    column-gap: 16px;
 }
 
 .header {
@@ -35,7 +38,7 @@
 
 .investor-balance-amount {
     font-size: 20px;
-    font-weight: 400;
+    font-weight: 500;
     color: $textColor;
 }
 
@@ -48,4 +51,13 @@
 
 .investor-prediction-period {
     margin-top: 30px;
+}
+
+
+.all-balance-btn{
+    font-size: 12px;
+    color: $activeBorder;
+    font-weight: 600;
+    width: 15ch;
+    padding-right: 12px;
 }

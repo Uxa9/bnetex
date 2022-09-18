@@ -26,17 +26,14 @@ const TerminalLayout = () => {
             <div
                 className={styles['content-wrapper']}
             >
-                <div
-                    className={styles['chart-and-history']}
-                >
-                    <ChartView />
-                    <HistoryAndOrders />
-                </div>
-                <div
-                    className={styles['terminal-and-actives']}
-                >
-                    <Outlet />
-                </div>
+
+                <ChartView 
+                    className={styles.chart}
+                />
+                <HistoryAndOrders 
+                    className={styles.history}
+                />
+                <Outlet />
             </div>
         </div>
     );

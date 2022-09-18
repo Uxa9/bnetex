@@ -1,7 +1,5 @@
 import styles from './header.module.scss';
-
 import { Wallet, User, Logo, Settings, Login } from '../../assets/images/icons';
-
 import _l from '../../locales/index';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'lib/ui-kit';
@@ -9,8 +7,10 @@ import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { useActions } from 'lib/hooks/useActionCreators';
 import SettingsMenu from './SettingsMenu';
 import { useState } from 'react';
+import { AppLinksEnum } from 'routes/appLinks';
 
 const Header = () => {
+    const { AUTH, REGISTRATION, LOGIN } = AppLinksEnum;
 
     const navigate = useNavigate();
 
@@ -38,15 +38,15 @@ const Header = () => {
                 <div className={styles['links__main']}>
                     <Link to={'terminal/investor'}>
                         <Button
-                            text={'Фьючерсы USD-M'}
+                            text={'Алготрейдинг'}
                             buttonStyle={'thin'}
                         />
                     </Link>
 
-                    <Button
+                    {/* <Button
                         text={'P2P'}
                         buttonStyle={'thin'}
-                    />
+                    /> */}
 
                 </div>
                 <div className={styles['links__user']}>
@@ -74,19 +74,16 @@ const Header = () => {
                                     text={'Войти'}
                                     buttonStyle={'thin'}
                                     Icon={Login}
-                                    onClick={() => testOnClick()}
+                                    onClick={() => navigate(`${AUTH}/${LOGIN}`)}
                                 />
-                                <Link
-                                    to={'signup'}
-                                >
-                                    <Button
-                                        text={'Регистрация'}
-                                    />
-                                </Link>
+                                <Button
+                                    text={'Регистрация'}
+                                    onClick={() => navigate(`${AUTH}/${REGISTRATION}`)}
+                                />
                             </>
                     }
 
-                    {
+                    {/* {
                         isTerminalOpened &&
 
                             <Button
@@ -94,14 +91,14 @@ const Header = () => {
                                 Icon={Settings}
                                 onClick={toggleSettingsMenu}
                             />
-                    }
+                    } */}
                    
                 </div>
             </nav>
-            {
+            {/* {
                 isTerminalOpened && isSettingsOpened &&
                     <SettingsMenu />
-            }
+            } */}
         </header>
     );
 };

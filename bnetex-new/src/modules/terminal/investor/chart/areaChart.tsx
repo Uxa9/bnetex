@@ -1,17 +1,20 @@
-import { useEffect, FC } from 'react';
+import { useEffect, FC, ReactElement } from 'react';
 import classNames from 'classnames';
 
 import Chart from 'react-apexcharts';
 
 import styles from './areaChart.module.scss';
+import { ToolTip } from 'lib/ui-kit';
 
 interface ChartProps {
     dates  : string[],
     values : number[],
-    title  : string
+    title  : string | ReactElement<typeof ToolTip>,
 }
 
 const AreaChart:FC<ChartProps> = props => {
+
+    const {dates, values, title} = props;
 
     const options : any = {
         chart : {
@@ -22,38 +25,39 @@ const AreaChart:FC<ChartProps> = props => {
         // title : { text: 'Chart' },
         stroke : { 
             width : 1,
-            colors : ['#9043CA'] 
+            colors : ['#9043CA'], 
         },
         colors : ['#9043CA', '#F1DEFF', '#F9F1FF00'],
-        labels : props.dates || [],
+        labels : dates || [],
     };
 
     const series : any = {
         name : 'Доход',
-        data : props.values || []
+        data : values || [],
     };
 
     useEffect(() => {
-        options.labels     = props.dates;
-        series.data        = props.values;
+        options.labels     = dates;
+        series.data        = values;
         // options.title.text = props.title;
     }, []);
 
     useEffect(() => {
-        options.labels = props.dates;
-    }, [props.dates]);
+        options.labels = dates;
+    }, [dates]);
 
     useEffect(() => {
-        series.data    = props.values;
-    }, [props.values]);
+        series.data    = values;
+    }, [values]);
 
     return (
         <div
-            className={classNames("block", styles['chart-container'])}
+            className={classNames('block', styles['chart-container'])}
         >
-            <span>
-                {props.title}
-            </span>
+            {
+                title
+            }
+
             <Chart
                 type='area'
                 height='90%'
@@ -61,7 +65,7 @@ const AreaChart:FC<ChartProps> = props => {
                 series={[series]}
             />
         </div>
-    )
-}
+    );
+};
 
 export default AreaChart;

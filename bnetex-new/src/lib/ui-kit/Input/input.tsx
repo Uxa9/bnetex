@@ -1,45 +1,75 @@
 import classNames from 'classnames';
 import { v4 as uuidV4 } from 'uuid';
-import { FC, InputHTMLAttributes, useMemo } from 'react';
+import React, { FC, InputHTMLAttributes, ReactNode, useMemo, useState } from 'react';
 import styles from './input.module.scss';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-    label?: string,
-    hasBackground?: boolean
+    label: string,
+    hasBackground?: boolean,
+    postfix?: ReactNode,
+    type?: 'number' | 'text' | 'search' | 'email',
+    errorText?: string,
 }
 
-// toDo
-// Объединить с компонентом numInput
-
-const Input: FC<InputProps> = props => {
+const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     
-    const { label, hasBackground, ...rest } = props;
+    const { hasBackground, type = 'text', errorText, postfix, ...rest } = props;
+
+    const label = `${props.label}${props.required ? ' *' : ''}`;
+
+    const [isActive, setIsActive] = useState<boolean>(false);
 
     const id = useMemo(() => uuidV4(), []);
+    
+    const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+        if (!event.currentTarget.value) setIsActive(false);
+    };
 
     return(
-        <div className={styles['input-wrapper']}>
-            {
-                label && 
-                <label 
-                    className={classNames('label-1', styles.label)}
-                    htmlFor={id}
-                >
-                    { label }
-                </label>
-            }
+        <div className={classNames(
+            styles['input-wrapper'],
+            {[styles['input-wrapper--activeOrFilled']]: isActive},
+            {[styles['input-wrapper--error']]: errorText}
+        )}
+        >
+            <label 
+                className={styles.label}
+                htmlFor={id}
+            >
+                { label }
+            </label>
+            <div className={styles['input-inner-container']}>
+                <input 
+                    type={type}
+                    id={id}
+                    className={ styles.input}
+                    {...rest}
+                    tabIndex={1}
+                    onFocus={() => setIsActive(true)}
+                    onBlur={handleBlur}
+                    ref={ref}
+                />
+                
+                <fieldset className={
+                    classNames(
+                        styles['fieldset-outline'],
+                        {[styles['fieldset-outline--background']]: hasBackground}
 
-            <input 
-                type="text"
-                id={id}
-                className={classNames(
-                    styles.input,
-                    {[styles['input--background']]: hasBackground}
-                )}
-                {...rest}
-            />
+                    )}
+                >
+                    <legend className={styles['fieldset-outline__legend']}>
+                        <span>{label}</span>
+                    </legend>
+                </fieldset>
+
+                {postfix}
+
+            </div>
+            <div className={styles['error-text']}>
+                {errorText}
+            </div>
         </div>
     );
-};
+});
 
 export default Input;

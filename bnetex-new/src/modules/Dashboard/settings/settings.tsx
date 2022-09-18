@@ -4,18 +4,6 @@ import SettingItem, { SettingItemProps } from './SettingItem/settingItem';
 
 const SettingItems: SettingItemProps[] = [
     {
-        title: 'Google Authenticator (рекомендуется)',
-        activeStateText: '',
-        hasActiveState: true,
-        editable: false,
-    },
-    {
-        title: 'Верификация по номеру телефона',
-        activeStateText: '(***)-***-26-93',
-        hasActiveState: true,
-        editable: true,
-    },
-    {
         title: 'Подтверждение по email',
         activeStateText: 'dmit****@mail.ru',
         hasActiveState: true,

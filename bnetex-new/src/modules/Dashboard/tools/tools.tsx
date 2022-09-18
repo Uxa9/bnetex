@@ -38,9 +38,7 @@ const Tools = () => {
                         buttonStyle={'secondary'}
                         text={'Вывод'}
                     />
-                    <span>
-                        Купить криптовалюту
-                    </span>
+                    <span>Купить криптовалюту</span>
                 </div>
             </div>
             <div
@@ -50,12 +48,12 @@ const Tools = () => {
                     className={`${styles['balance']} block`}
                 >
                     <p
-                        className={`${styles['balance-header']}`}
+                        className={styles['balance-header']}
                     >
                         Баланс
                     </p>
                     <p
-                        className={`${styles['user-balance']}`}
+                        className={styles['user-balance']}
                     >
                         0.0040543 BTC
                         <span>

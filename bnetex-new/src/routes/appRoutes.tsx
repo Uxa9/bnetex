@@ -2,7 +2,7 @@ import PageLayout from 'components/pageLayout';
 import TerminalLayout from 'modules/terminal/terminalLayout';
 import InvestorView from 'modules/terminal/investor/investorView';
 import Dashboard from 'modules/Dashboard/dashboard';
-import FuturesWallet from 'modules/Dashboard/futuresWallet/futuresWallet';
+// import FuturesWallet from 'modules/Dashboard/futuresWallet/futuresWallet';
 import MainWallet from 'modules/Dashboard/mainWallet/mainWallet';
 import Settings from 'modules/Dashboard/settings/settings';
 import Tools from 'modules/Dashboard/tools/tools';
@@ -13,10 +13,11 @@ import InvestorWallet from 'modules/Dashboard/investorWallet/investorWallet';
 import RadioButtonGroup from 'lib/ui-kit/radioButton/radioButtonGroup';
 import SettingsMenu from 'components/Header/SettingsMenu';
 import * as Registration from 'modules/Registration/index';
+import AuthLayout from 'modules/Auth/authLayout';
 
 const AppRoutes = () => {
 
-    const { HOME, AUTH, REGISTRATION, P2P, TERMINAL, DASHBOARD, BUY_CRYPTO } = AppLinksEnum;
+    const { HOME, AUTH, REGISTRATION, LOGIN, P2P, TERMINAL, DASHBOARD, BUY_CRYPTO } = AppLinksEnum;
 
     return (
         <Routes>
@@ -37,13 +38,17 @@ const AppRoutes = () => {
                     <Route path='tools' element={<Tools />} />
                     <Route path='settings' element={<Settings />} />
                     <Route path='wallet/main' element={<MainWallet />} />
-                    <Route path='wallet/futures' element={<FuturesWallet />} />
+                    {/* <Route path='wallet/futures' element={<FuturesWallet />} /> */}
                     <Route path='wallet/investor' element={<InvestorWallet />} />
                     <Route path='transactions' />
                 </Route>
+            <Route path={AUTH} element={<AuthLayout />}>
+                    <Route index element={<Navigate to={LOGIN} />}></Route>
+                    <Route path={REGISTRATION}></Route>
+                    <Route path={LOGIN}></Route>
+                </Route>
                 <Route path={P2P}></Route>
                 <Route path={BUY_CRYPTO}></Route>
-                <Route path='test' element={<SettingsMenu />} />
             </Route>
         </Routes>
     );

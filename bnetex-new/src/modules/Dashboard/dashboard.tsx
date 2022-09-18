@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+ import classNames from 'classnames';
 
 import { useEffect, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
@@ -24,10 +24,10 @@ const dashboardSections: dashboardSection[] = [
         link: 'wallet/main',
         title: 'Основной кошелек',
     },
-    {
-        link: 'wallet/futures',
-        title: 'Фьючерсный кошелек',
-    },
+    // {
+    //     link: 'wallet/futures',
+    //     title: 'Фьючерсный кошелек',
+    // }, 
     {
         link: 'wallet/investor',
         title: 'Инвестиционный кошелек',

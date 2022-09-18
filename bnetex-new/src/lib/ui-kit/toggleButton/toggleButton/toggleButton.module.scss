@@ -10,22 +10,16 @@
     transition: 0.25s;
     padding: 8px 4px; 
     width: 100%;
+    color: $grayText;
 
     &:hover {
-        border-color: $activeBorder;
-    }
-
-    &--left {
-        border-radius: 10px 0 0 10px;
-    }
-
-    &--right {
-        border-radius: 0 10px 10px 0;
+        border: 1px solid $activeBorder;
+        color: $activeBorder;
     }
 }
 
 input:checked + .button {
-    border-color: $activeBorder;
+    border: 1px solid $activeBorder;
     color: $activeBorder;
     background-color: $activeBG;
 }

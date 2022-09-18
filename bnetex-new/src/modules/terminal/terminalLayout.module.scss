@@ -1,25 +1,18 @@
 .content-wrapper {
-    display: flex;
-    justify-content: space-between;
-
-    box-sizing: border-box;
-    margin: 20px 30px 70px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: 20px;
+    row-gap: 20px;
+    padding: 20px;
 }
 
-.chart-and-history {
-    display: flex;
-    flex-direction: column;
-    
-    flex-shrink: 1;
-    flex-grow: 2;
-    
-    width: 1400px;
-
-    margin-right: 20px;
+.chart{
+    grid-column: 1/10;
+    grid-row: 1;
 }
 
-.terminal-and-actives {
-    flex-grow: 1;
-
-    min-width: 450px;
+.history{
+    grid-column: 1/10;
+    grid-row: 2;
 }
