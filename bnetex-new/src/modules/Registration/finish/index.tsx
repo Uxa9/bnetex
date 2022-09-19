@@ -42,7 +42,7 @@ const Finish = () => {
                         form="signupForm"
                         buttonStyle="primary"
                         text="Перейти в кошелек"
-                        onClick={() => navigate('../../dashboard/wallet/main')}
+                        onClick={() => navigate('../../../dashboard/wallet/main')}
                     />
                 </div>
             </div>

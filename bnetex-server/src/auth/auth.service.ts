@@ -46,8 +46,8 @@ export class AuthService {
             
             return this.generateToken(user);
         } else {
-
-            return { status: 400 };
+            
+            throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         }
     }
 

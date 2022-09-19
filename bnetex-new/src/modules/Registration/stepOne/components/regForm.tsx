@@ -45,12 +45,13 @@ const RegForm: FC<RegFormProps> = props => {
                 className={styles['input-wrapper']}
             >
                 <Input
+                    type={'email'}
                     label="Email или телефон*"
                     hasBackground={false}
                     onChange={(e) => setUserData({...userData, email: e.target.value})}
                 />
                 <Input
-                    type={'password'}
+                    type={'text'}
                     label="Пароль*"
                     hasBackground={false}
                     onChange={(e) => setUserData({...userData, password: e.target.value})}

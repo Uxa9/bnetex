@@ -33,7 +33,7 @@ const StepTwo = () => {
                 localStorage.removeItem('email');
 
                 login(response?.data.token);
-                navigate('/signup/success');
+                navigate('../success');
             }
     
             isLoading(false);

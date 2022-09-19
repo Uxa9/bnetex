@@ -35,7 +35,7 @@ const StepOne = () => {
             if (response?.status === 201) {
                 localStorage.setItem('email', userData?.email);
 
-                navigate('/signup/verification');
+                navigate('./verification');
             }
     
             isLoading(false);

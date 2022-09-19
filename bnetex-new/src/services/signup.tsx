@@ -8,7 +8,7 @@ interface UserItemProps {
 const signup = async (userData: UserItemProps) => {
 
     const response = await axios.post(
-        'http://localhost:5000/auth/registration',
+        `https://api.bnetex.com/auth/registration`,
         userData
     )
     .catch((error: Error | AxiosError) => {

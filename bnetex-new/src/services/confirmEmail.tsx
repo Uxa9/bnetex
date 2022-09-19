@@ -8,7 +8,7 @@ interface ConfirmEmailProps {
 const confirmEmail = async (userData: ConfirmEmailProps) => {
 
     const response = await axios.post(
-        'http://localhost:5000/auth/confirm-email',
+        `https://api.bnetex.com/auth/confirm-email`,
         userData
     )
     .catch((error: Error | AxiosError) => {

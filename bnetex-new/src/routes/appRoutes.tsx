@@ -24,11 +24,12 @@ const AppRoutes = () => {
             <Route element={<PageLayout />}>
                 <Route index element={<Navigate to={HOME} />} />
                 <Route path={HOME} element={<MainPage />}></Route>
-                <Route path={AUTH}></Route>
-                <Route path={REGISTRATION}>
-                    <Route index element={<Registration.StepOne />} />
-                    <Route path='verification' element={<Registration.StepTwo />} />
-                    <Route path='success' element={<Registration.Success />} />
+                <Route path={AUTH}>
+                    <Route path={REGISTRATION}>
+                        <Route index element={<Registration.StepOne />} />
+                        <Route path='verification' element={<Registration.StepTwo />} />
+                        <Route path='success' element={<Registration.Success />} />
+                    </Route>
                 </Route>
                 <Route path={TERMINAL} element={<TerminalLayout />}>
                     <Route path="investor" element={<InvestorView />} />
