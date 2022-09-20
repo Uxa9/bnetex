@@ -1,0 +1,59 @@
+@import '../../../styles/variables.scss';
+
+.password-check-popup-row {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    height: 15px;
+
+    &:not(:last-child) {
+        margin-bottom: 10px;
+    }
+
+    p {
+        margin-left: 5px;
+        line-height: 110%;
+    }
+
+    .empty-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.password-check-popup {
+    position: relative;
+    height: 100px;
+    left: 20px;
+    top: 270px;
+}
+
+.password-check-popup-row-text-green {
+    color: $green;
+}
+
+.reg-container {
+    width: 490px;
+    padding: 40px !important;
+    
+    .container-header, .container-text {
+        margin-top: 10px;
+    }
+
+    .container-header {
+        font-size: 36px;
+    }
+
+    .input-wrapper {
+        >*  {
+            margin-top: 35px;
+        }
+    }
+
+    .button-wrapper {
+        margin-top: 45px;
+        width: 100%;
+        height: 50px;
+    }
+}

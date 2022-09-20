@@ -1,0 +1,26 @@
+@import '../../styles/variables.scss';
+
+.password-check-popup-row-text-green {
+    color: $green;
+}
+
+.password-check-popup-row-text-red {
+    color: $red;
+}
+
+.page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: calc(100% - 90px);
+}
+
+.content-container {
+    max-width: 1200px;
+
+    flex-grow: 1;
+    display: flex;
+
+    justify-content: flex-start;
+}

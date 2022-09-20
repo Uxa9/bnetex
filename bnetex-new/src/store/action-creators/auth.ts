@@ -5,7 +5,7 @@ import { AuthAction, AuthActionTypes } from '../actions/auth';
 
 
 // props: login: String, password: String
-export const login = () => {
+export const login = (jwt: string) => {
 
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
@@ -16,7 +16,7 @@ export const login = () => {
             dispatch({ type: AuthActionTypes.LOGIN});
             // return response.status;
 
-            localStorage.setItem('token', 'JWT');
+            localStorage.setItem('token', jwt);
         } catch (e) {
             dispatch({
                 type: AuthActionTypes.LOGIN_ERROR,
