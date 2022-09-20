@@ -23,7 +23,8 @@ const MarginPopUp:FC<MarginPopUpProps> = props => {
     return (
         <PopUp
             title={_l.margin_mode}
-            confirmType={props.hasOrder ? 'disabled' : 'primary'}
+            confirmType={'primary'}
+            disabled={props.hasOrder}
             closeFunc={props.closeFunc}
             acceptFunc={() => props.acceptFunc(switcher)}
         >

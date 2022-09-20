@@ -1,7 +1,8 @@
 import classNames from 'classnames';
 import { v4 as uuidV4 } from 'uuid';
-import React, { FC, InputHTMLAttributes, ReactNode, useMemo, useState } from 'react';
+import React, { InputHTMLAttributes, ReactNode, useMemo, useState } from 'react';
 import styles from './input.module.scss';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     label: string,
@@ -9,20 +10,25 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     postfix?: ReactNode,
     type?: 'number' | 'text' | 'search' | 'email',
     errorText?: string,
+    inputControl?: UseFormRegisterReturn
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     
-    const { hasBackground, type = 'text', errorText, postfix, ...rest } = props;
-
+    const { hasBackground, type = 'text', errorText, postfix, inputControl, ...rest } = props;
     const label = `${props.label}${props.required ? ' *' : ''}`;
-
     const [isActive, setIsActive] = useState<boolean>(false);
-
     const id = useMemo(() => uuidV4(), []);
     
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
         if (!event.currentTarget.value) setIsActive(false);
+        props.onBlur && props.onBlur(event);
+        inputControl?.onBlur && inputControl.onBlur(event);
+    };
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        props.onChange && props.onChange(event);
+        inputControl?.onChange && inputControl.onChange(event);
     };
 
     return(
@@ -42,12 +48,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                 <input 
                     type={type}
                     id={id}
-                    className={ styles.input}
-                    {...rest}
+                    className={styles.input}
                     tabIndex={1}
                     onFocus={() => setIsActive(true)}
                     onBlur={handleBlur}
+                    onChange={handleChange}
+                    name={inputControl?.name}
                     ref={ref}
+                    {...rest}
                 />
                 
                 <fieldset className={

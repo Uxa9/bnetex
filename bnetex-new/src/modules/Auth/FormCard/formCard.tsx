@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import { Button } from 'lib/ui-kit';
-import { title } from 'process';
 import { FC, HTMLAttributes, ReactElement, ReactNode } from 'react';
 import styles from './formCard.module.scss';
 

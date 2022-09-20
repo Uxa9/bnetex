@@ -73,7 +73,8 @@ const HistoryView = () => {
                 className={styles['button-wrapper']}
             >
                 <Button
-                    buttonStyle={!inputValue ? 'disabled' : 'secondary'}
+                    buttonStyle={'secondary'}
+                    disabled={!inputValue}
                     text={'Рассчитать доход'}
                 />
             </div>
