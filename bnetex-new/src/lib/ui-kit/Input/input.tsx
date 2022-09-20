@@ -4,13 +4,13 @@ import React, { InputHTMLAttributes, ReactNode, useMemo, useState } from 'react'
 import styles from './input.module.scss';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     label: string,
     hasBackground?: boolean,
     postfix?: ReactNode,
-    type?: 'number' | 'text' | 'search' | 'email',
+    type?: 'number' | 'text' | 'search' | 'email' | 'password',
     errorText?: string,
-    inputControl?: UseFormRegisterReturn
+    inputControl?: UseFormRegisterReturn,
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
@@ -18,23 +18,25 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     const { hasBackground, type = 'text', errorText, postfix, inputControl, ...rest } = props;
     const label = `${props.label}${props.required ? ' *' : ''}`;
     const [isActive, setIsActive] = useState<boolean>(false);
+    const [isFocused, setIsFocused] = useState<boolean>(false);
     const id = useMemo(() => uuidV4(), []);
     
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
         if (!event.currentTarget.value) setIsActive(false);
-        props.onBlur && props.onBlur(event);
+        setIsFocused(false);
         inputControl?.onBlur && inputControl.onBlur(event);
     };
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        props.onChange && props.onChange(event);
-        inputControl?.onChange && inputControl.onChange(event);
+    const handleFocus = () => {
+        setIsFocused(true);
+        setIsActive(true);
     };
 
     return(
         <div className={classNames(
             styles['input-wrapper'],
             {[styles['input-wrapper--activeOrFilled']]: isActive},
+            {[styles['input-wrapper--focused']]: isFocused},
             {[styles['input-wrapper--error']]: errorText}
         )}
         >
@@ -50,11 +52,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                     id={id}
                     className={styles.input}
                     tabIndex={1}
-                    onFocus={() => setIsActive(true)}
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    name={inputControl?.name}
+                    onFocus={handleFocus}
                     ref={ref}
+                    onAnimationStart={() => setIsActive(true)}
+                    {...inputControl}
+                    onBlur={handleBlur}
                     {...rest}
                 />
                 
@@ -62,7 +64,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                     classNames(
                         styles['fieldset-outline'],
                         {[styles['fieldset-outline--background']]: hasBackground}
-
                     )}
                 >
                     <legend className={styles['fieldset-outline__legend']}>

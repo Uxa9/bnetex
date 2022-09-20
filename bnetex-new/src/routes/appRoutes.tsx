@@ -10,8 +10,6 @@ import MainPage from 'modules/MainPage/MainPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
 import InvestorWallet from 'modules/Dashboard/investorWallet/investorWallet';
-import RadioButtonGroup from 'lib/ui-kit/radioButton/radioButtonGroup';
-import SettingsMenu from 'components/Header/SettingsMenu';
 import * as Registration from 'modules/Registration/index';
 import AuthLayout from 'modules/Auth/authLayout';
 import Login from 'modules/Auth/Login/login';
