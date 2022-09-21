@@ -10,10 +10,9 @@ import MainPage from 'modules/MainPage/MainPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
 import InvestorWallet from 'modules/Dashboard/investorWallet/investorWallet';
-import RadioButtonGroup from 'lib/ui-kit/radioButton/radioButtonGroup';
-import SettingsMenu from 'components/Header/SettingsMenu';
 import * as Registration from 'modules/Registration/index';
 import AuthLayout from 'modules/Auth/authLayout';
+import Login from 'modules/Auth/Login/login';
 
 const AppRoutes = () => {
 
@@ -43,10 +42,10 @@ const AppRoutes = () => {
                     <Route path='wallet/investor' element={<InvestorWallet />} />
                     <Route path='transactions' />
                 </Route>
-            <Route path={AUTH} element={<AuthLayout />}>
+                <Route path={AUTH} element={<AuthLayout />}>
                     <Route index element={<Navigate to={LOGIN} />}></Route>
                     <Route path={REGISTRATION}></Route>
-                    <Route path={LOGIN}></Route>
+                    <Route path={LOGIN} element={<Login />}></Route>
                 </Route>
                 <Route path={P2P}></Route>
                 <Route path={BUY_CRYPTO}></Route>

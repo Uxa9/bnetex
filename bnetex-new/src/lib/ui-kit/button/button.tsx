@@ -4,7 +4,7 @@ import styles from './button.module.scss';
 import { ButtonHTMLAttributes, FC } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
-    buttonStyle?: 'primary' | 'secondary' | 'accept' | 'decline' | 'disabled' | 'thin' | 'stroke',
+    buttonStyle?: 'primary' | 'secondary' | 'accept' | 'decline' | 'thin' | 'stroke',
     Icon?: ReactSvg;
     iconAlignment?: 'left' | 'right'
     text?: string

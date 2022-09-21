@@ -2,8 +2,6 @@ import { Dispatch } from 'redux';
 import { AuthAction, AuthActionTypes } from '../actions/auth';
 
 // Тут будем делать запросы на бек для получения JWT токена авторизации пользователя
-
-
 // props: login: String, password: String
 export const login = (jwt: string) => {
 

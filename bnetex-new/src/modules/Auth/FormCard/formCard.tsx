@@ -1,13 +1,12 @@
 import classNames from 'classnames';
-import { Button } from 'lib/ui-kit';
-import { title } from 'process';
+import { Button, Input } from 'lib/ui-kit';
 import { FC, HTMLAttributes, ReactElement, ReactNode } from 'react';
 import styles from './formCard.module.scss';
 
 interface FormCardProps extends HTMLAttributes<HTMLFormElement>{
     title:string,
     subtitle?: string,
-    inputs?: ReactNode,
+    inputs?: ReactElement<typeof Input>[],
     button: ReactElement<typeof Button>,
     actions?: ReactNode,
 }
@@ -20,7 +19,7 @@ const FormCard: FC<FormCardProps> = (props) => {
         <form  
             className={classNames(
                 styles.form,
-                '.card',
+                'card',
                 className
             )}
             {...rest}
@@ -29,7 +28,6 @@ const FormCard: FC<FormCardProps> = (props) => {
                 <h3>{title}</h3>
                 <p className='body-1'>{subtitle}</p>
             </div>
-
             {inputs}
             {button}
             {actions}

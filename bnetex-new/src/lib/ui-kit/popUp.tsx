@@ -8,13 +8,14 @@ interface PopUpProps{
     acceptFunc: () => any,
     title: string,
     confirmText?: string,
-    confirmType?: 'primary' | 'secondary' | 'accept' | 'decline' | 'disabled',
-    children: ReactNode
+    confirmType?: 'primary' | 'secondary' | 'accept' | 'decline',
+    children: ReactNode,
+    disabled?: boolean
 }
 
 const PopUp:FC<PopUpProps> = props => {
 
-    const {closeFunc, acceptFunc, title, confirmText, confirmType, children} = props;
+    const {closeFunc, acceptFunc, title, confirmText, confirmType, children, disabled} = props;
 
     return (
         <div
@@ -50,6 +51,7 @@ const PopUp:FC<PopUpProps> = props => {
                 <Button
                     className="popup-bottom-button"
                     buttonStyle={confirmType ?? 'primary'}
+                    disabled={disabled}
                     onClick={acceptFunc}
                 >
                     {confirmText ?? 'Подтвердить'}

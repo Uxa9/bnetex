@@ -71,7 +71,8 @@ const TradeView = () => {
                 className={styles['button-wrapper']}
             >
                 <Button
-                    buttonStyle={!inputValue || inputError ? 'disabled' : 'accept'}
+                    buttonStyle={'accept'}
+                    disabled={!inputValue || !inputError}
                     text={'Начать работу'}
                 />
             </div>
