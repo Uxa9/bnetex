@@ -18,6 +18,12 @@
   }
 }
 
+@mixin max-width($resolution) {
+  @media (max-width: #{$resolution}px) {
+    @content;
+  }
+}
+
 @mixin size-svg($height, $width) {
   svg {
     height: $height;

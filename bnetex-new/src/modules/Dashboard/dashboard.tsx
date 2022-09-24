@@ -1,5 +1,4 @@
- import classNames from 'classnames';
-
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import styles from './dashboard.module.scss';

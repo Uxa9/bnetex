@@ -32,7 +32,7 @@ const StepTwo = () => {
             if (response?.status === 201) {
                 localStorage.removeItem('email');
 
-                login(response?.data.token);
+                // login(response?.data.token);
                 navigate('../success');
             }
     

@@ -1,26 +1,30 @@
+import { AxiosError, AxiosResponse } from 'axios';
+import useApi from 'lib/hooks/useApi';
 import { Dispatch } from 'redux';
 import { AuthAction, AuthActionTypes } from '../actions/auth';
 
-// Тут будем делать запросы на бек для получения JWT токена авторизации пользователя
-// props: login: String, password: String
-export const login = (jwt: string) => {
+const [api] = useApi();
+
+export const login = (email: string, password: string) => {
 
     return async (dispatch: Dispatch<AuthAction>) => {
-        try {
-            // const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/login`, {
-            //     login, password,
-            // });
-            // localStorage.setItem('token', response.data.token);
-            dispatch({ type: AuthActionTypes.LOGIN});
-            // return response.status;
+        await api
+            .post('/auth/confirm-email', {
+                email, password,
+            })
+            .then((response: AxiosResponse) => {
+                console.log(response);
+                dispatch({ type: AuthActionTypes.LOGIN});
+                return response;
+            })
+            .catch((error: Error | AxiosError) => {
+                dispatch({
+                    type: AuthActionTypes.LOGIN_ERROR,
+                    payload: 'Произошла ошибка при авторизации',
+                });
 
-            localStorage.setItem('token', jwt);
-        } catch (e) {
-            dispatch({
-                type: AuthActionTypes.LOGIN_ERROR,
-                payload: 'Произошла ошибка при авторизации',
+                return error.message;
             });
-        }
     };
 };
 

@@ -7,28 +7,36 @@ const AuthLayout = () => {
     
     return(
         <main className={styles.layout}>
-            <Blur 
-                color={'purple'}
-                top={'0'}
-                left={'0'} 
-                type={'ellipse'}
-                rotate={-165}
-            />
-            <Blur 
-                color={'blue'}
-                top={'-10%'}
-                left={'30%'} 
-                type={'ellipse'}
-            />
-            <Blur 
-                color={'green'}
-                top={'-30%'}
-                left={'-10%'} 
-                type={'circle'}
-            />  
             <div className={styles.container}>
+                <Blur 
+                    color={'purple'}
+                    top={'0%'}
+                    left={'-20%'} 
+                    type={'ellipse'}
+                    rotate={165}
+                />
+                <Blur 
+                    color={'blue'}
+                    top={'70%'}
+                    left={'50%'}
+                    type={'ellipse'}
+                />
+                <Blur 
+                    color={'red'}
+                    top={'-30%'}
+                    left={'0%'}
+                    type={'circle'}
+                />
+                <Blur 
+                    color={'purple'}
+                    top={'-40%'}
+                    left={'50%'}
+                    type={'circle'}
+                />
                 <Outlet />
-                <AbstractImg />
+                <AbstractImg 
+                    className={styles['abstract-img']}
+                />
             </div>
         </main>
     );

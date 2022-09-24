@@ -1,3 +1,4 @@
+import Toast from 'lib/ui-kit/toast/toast';
 import { Outlet } from 'react-router-dom';
 import Header from './Header/header';
 
@@ -8,6 +9,7 @@ const PageLayout = () => {
     return (
         <>
             <Header />
+            <Toast />
             <Outlet />
         </>
     );

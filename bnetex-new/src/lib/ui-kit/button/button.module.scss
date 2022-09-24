@@ -24,7 +24,7 @@
         @include color-svg($grayBorder);
         cursor: not-allowed;
         border: 1px solid transparent;
-        
+
         &:hover,
         &:active {
             background-color: $activeBG;
@@ -56,8 +56,8 @@
     }
 
     &--thin {
-        @include color-svg($textColor);
-        padding: 10px 0px;
+        @include color-svg($projectButton);
+        padding: 0;
         font-weight: 400;
 
         &:hover {
