@@ -1,6 +1,9 @@
+import { useActions } from 'lib/hooks/useActionCreators';
 import { Button, Input } from 'lib/ui-kit';
 import { emailValidation, requiredValidation } from 'lib/utils/hookFormValidation';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import signin from 'services/signin';
 import FormCard from '../FormCard/formCard';
 
 interface LoginFormData{
@@ -9,6 +12,9 @@ interface LoginFormData{
 }
 
 const Login = () => {
+
+    const navigate = useNavigate();
+    const { login } = useActions();
 
     const {
         register,
@@ -24,8 +30,23 @@ const Login = () => {
         reValidateMode: 'onChange',
     });
 
-    const onSubmit = (data: LoginFormData) => {
-        console.log(data);
+    const onSubmit = async (data: LoginFormData) => {
+        
+        if (isValid) {
+            const response = await signin(data);
+
+            if (response?.status === 500) {
+                alert('pizdec');
+            }
+    
+            if (response?.status === 201) {
+                localStorage.removeItem('email');
+
+                login(response?.data.token);
+                navigate('../../dashboard/wallet/main');
+            }
+        }
+
         reset();
     };
 
