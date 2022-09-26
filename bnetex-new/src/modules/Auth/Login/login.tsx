@@ -3,7 +3,7 @@ import { useActions } from 'lib/hooks/useActionCreators';
 import { useToast } from 'lib/hooks/useToast';
 import { Button, Input } from 'lib/ui-kit';
 import { emailValidation, requiredValidation } from 'lib/utils/hookFormValidation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import FormCard from '../FormCard/formCard';
 import styles from './login.module.scss';

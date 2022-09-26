@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import styles from './dashboard.module.scss';
 
-type activeSectionType = 'tools' | 'settings' | 'wallet/main' | 'wallet/futures' | 'wallet/investor';
+type activeSectionType = 'tools' | 'settings' | 'wallet/main' | 'wallet/futures' | 'wallet/investor' | 'transactions';
 
 interface dashboardSection{
     link: activeSectionType,
@@ -30,6 +30,10 @@ const dashboardSections: dashboardSection[] = [
     {
         link: 'wallet/investor',
         title: 'Инвестиционный кошелек',
+    },
+    {
+        link: 'transactions',
+        title: 'История транзакций',
     },
 ];
 

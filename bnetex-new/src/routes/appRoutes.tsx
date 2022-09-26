@@ -13,6 +13,7 @@ import InvestorWallet from 'modules/Dashboard/investorWallet/investorWallet';
 import * as Registration from 'modules/Registration/index';
 import AuthLayout from 'modules/Auth/authLayout';
 import Login from 'modules/Auth/Login/login';
+import Transactions from 'modules/Dashboard/transactions/transactions';
 
 const AppRoutes = () => {
 
@@ -40,7 +41,7 @@ const AppRoutes = () => {
                     <Route path='wallet/main' element={<MainWallet />} />
                     {/* <Route path='wallet/futures' element={<FuturesWallet />} /> */}
                     <Route path='wallet/investor' element={<InvestorWallet />} />
-                    <Route path='transactions' />
+                    <Route path='transactions' element={<Transactions />} />
                 </Route>
                 <Route path={AUTH} element={<AuthLayout />}>
                     <Route index element={<Navigate to={LOGIN} />}></Route>
