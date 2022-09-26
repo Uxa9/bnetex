@@ -66,6 +66,15 @@ export class User extends Model<User, UserCreationAttrs> {
     })
     password : string;
 
+    @ApiProperty({
+        example : '123.45',
+        description : 'amount of money on main wallet'
+    })
+    @Column({
+        type          : DataType.DOUBLE,
+    })
+    mainWallet : number;
+
     @BelongsToMany(() => Role, () => UserRoles)
     roles: Role[];
 

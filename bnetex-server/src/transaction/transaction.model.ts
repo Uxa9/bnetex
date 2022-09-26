@@ -1,10 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BelongsTo, BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
+import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
 import { User } from "../users/users.model";
 
 
 interface TransactionCreationAttrs {
-    userId : string
+    userId : number
 }
 
 @Table({
@@ -24,18 +24,34 @@ export class Transaction extends Model<Transaction, TransactionCreationAttrs> {
     })
     id : number;
 
-    @BelongsTo(() => User)
-    user : User;
-
     @ApiProperty({
         example : '1',
         description : 'user id'
     })
+    @ForeignKey(() => User)
     @Column({
-        type : DataType.INTEGER,
-        allowNull : false
+        type : DataType.INTEGER
     })
     userId : number;
+
+    // @ApiProperty({
+    //     example : '1',
+    //     description : 'user id'
+    // })
+    // @Column({
+    //     type : DataType.INTEGER,
+    //     allowNull : false
+    // })
+    // userId : number;
+    
+    @ApiProperty({
+        example : '1',
+        description : 'payment id'
+    })
+    @Column({
+        type : DataType.INTEGER
+    })
+    paymentId : number;
 
     @ApiProperty({
         example : 'processing',
@@ -54,6 +70,5 @@ export class Transaction extends Model<Transaction, TransactionCreationAttrs> {
         type : DataType.DOUBLE
     })
     amount : number;
-
 
 }
