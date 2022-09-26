@@ -25,7 +25,7 @@ export class AuthService {
 
         if (candidate) {
             throw new HttpException(
-                'User with this e-mail alreadey exists',
+                'User with this e-mail already exists',
                 HttpStatus.BAD_REQUEST
             );
         }
@@ -33,9 +33,7 @@ export class AuthService {
         let authCode = await genereateAndSendAuthCode(userDto.email);
 
         const hashPassword = await bcrypt.hash(userDto.password, 5);
-        const user = await this.userService.createUser({ ...userDto, password : hashPassword, activationLink : authCode });
-
-        // return this.generateToken(user);
+        await this.userService.createUser({ ...userDto, password : hashPassword, activationLink : authCode });
 
         return { status: 201 };
     }
