@@ -34,7 +34,7 @@ export class UsersController {
     })
     @Roles('admin')
     @UseGuards(RolesGuard)
-    @Post()
+    @Get()
     getAll() {
         return this.userService.getAllUsers();
     }
