@@ -55,4 +55,10 @@ export class UsersService {
 
         await user.update({ isActivated : true });
     }
+
+    async getUserById(id: number) {
+        const user = await this.userRepository.findByPk(id);
+
+        return user;
+    }
 }
