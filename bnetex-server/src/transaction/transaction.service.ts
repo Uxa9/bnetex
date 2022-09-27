@@ -29,10 +29,17 @@ export class TransactionService {
             'statusId': 1,
             'paymentId': status.payment_id,
             'invoiceUrl': order.invoice.invoice_url,
-            'payAddress': order.payment.pay_address
+            'payAddress': order.payment.pay_address,
+            'payCurrency': order.invoice.pay_currency
         });
 
         return transaction; // или шо надо возвращать то
+    }
+
+    async getTransaction(id: number) {
+        const transaction = await this.transactionRepository.findByPk(id);
+
+        return transaction;
     }
 
     async updateTransactionStatus(id: number, status: number) {
@@ -59,15 +66,22 @@ export class TransactionService {
             transaction.update({
                 'statusId' : 3
             });
+        } else {
+            throw new HttpException(
+                'Transaction not found',
+                HttpStatus.NOT_FOUND
+            );
+        }
 
-            const user = await this.userService.getUserById(transaction.userId);
+        const user = await this.userService.getUserById(transaction.userId);
 
+        if ( user ) {
             user.update({
                 'mainWallet' : user.mainWallet + transaction.amount
             });
         } else {
             throw new HttpException(
-                'Transaction not found',
+                'User not found',
                 HttpStatus.NOT_FOUND
             );
         }
