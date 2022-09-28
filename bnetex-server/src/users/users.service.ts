@@ -18,7 +18,10 @@ export class UsersService {
         await user.$set('roles', [role.id]);
         user.roles = [role];
 
-        return user;
+        return {
+            status: "SUCCESS",
+            message: "USER_CREATED"
+        };
     }
 
     async getAllUsers() {
@@ -45,7 +48,10 @@ export class UsersService {
         }
 
         throw new HttpException(
-            'User or role not found',
+            {
+                status: "ERROR",
+                message: "USER_NOT_FOUND"
+            },
             HttpStatus.NOT_FOUND
         );
     }
@@ -53,11 +59,31 @@ export class UsersService {
     async confirmEmail(id: number) {
         const user = await this.userRepository.findByPk(id);
 
+        if ( !user ) {
+            throw new HttpException(
+                {
+                    status: "ERROR",
+                    message: "USER_NOT_FOUND"
+                },
+                HttpStatus.NOT_FOUND
+            );
+        }
+
         await user.update({ isActivated : true });
     }
 
     async getUserById(id: number) {
         const user = await this.userRepository.findByPk(id);
+
+        if ( !user ) {
+            throw new HttpException(
+                {
+                    status: "ERROR",
+                    message: "USER_NOT_FOUND"
+                },
+                HttpStatus.NOT_FOUND
+            );
+        }
 
         return user;
     }

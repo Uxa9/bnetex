@@ -6,6 +6,7 @@ import { Payment } from './payment.service';
 import { UsersService } from '../users/users.service';
 import { TransactionStatus } from './transaction-status.model';
 import { CreateTransactionStatusDto } from './dto/create-transaction-status.dto';
+import axios from 'axios';
 
 @Injectable()
 export class TransactionService {
@@ -22,7 +23,7 @@ export class TransactionService {
 
         await payment.sync();
 
-        let order = await payment.createOrder(transaction.id, dto.amount, 'USDTTRC20', 'test');      
+        let order = await payment.createOrder(transaction.id, dto.amount, 'USDTTRC20', 'test');
         let status = await payment.getPayment(order.payment.payment_id);
 
         transaction.update({
@@ -33,7 +34,11 @@ export class TransactionService {
             'payCurrency': order.invoice.pay_currency
         });
 
-        return transaction; // или шо надо возвращать то
+        return {
+            status: "SUCCESS",
+            message: "TRANSACTION_CREATED",
+            transaction
+        }; // или шо надо возвращать то
     }
 
     async getTransaction(id: number) {
@@ -51,7 +56,10 @@ export class TransactionService {
             });
         } else {
             throw new HttpException(
-                'Transaction not found',
+                {
+                    status: "ERROR",
+                    message: 'TRANSACTION_NOT_FOUND'
+                },
                 HttpStatus.NOT_FOUND
             );
         }
@@ -61,14 +69,28 @@ export class TransactionService {
 
     async fulfillTransaction(id: number) {
         const transaction = await this.transactionRepository.findByPk(id);
-
+        
         if ( transaction ) {
-            transaction.update({
-                'statusId' : 3
-            });
+            const res = await axios.get(
+                `https://api.nowpayments.io/v1/payment/${transaction.paymentId}`,
+                { headers : { 'X-API-KEY' : process.env.PAYMENT_API_KEY } }
+            );
+            
+            if ( res.data?.payment_status !== 'finished' ) {
+                throw new HttpException(
+                    {
+                        status: "ERROR",
+                        message: "PAYMENT_NOT_APPROVED_BY_PROVIDER"
+                    },
+                    HttpStatus.FORBIDDEN
+                )
+            }
         } else {
             throw new HttpException(
-                'Transaction not found',
+                {
+                    status: "ERROR",
+                    message: 'TRANSACTION_NOT_FOUND'
+                },
                 HttpStatus.NOT_FOUND
             );
         }
@@ -81,13 +103,28 @@ export class TransactionService {
             });
         } else {
             throw new HttpException(
-                'User not found',
+                {
+                    status: "ERROR",
+                    message: 'USER_NOT_FOUND'
+                },
                 HttpStatus.NOT_FOUND
             );
         }
 
-        return transaction;
+        transaction.update({
+            'statusId' : 3
+        });
+
+        return {
+            status: "SUCCESS",
+            message: "TRANSACTION_FULFILLED"
+        };
     }
+    
+    // async fulfillTransaction(data: any) {
+    //     console.log(data);
+        
+    // }
 
     async addTransactionStatus(dto: CreateTransactionStatusDto) {
         const transactionStatus = await this.transactionStatusRepository.create(dto);
@@ -102,7 +139,10 @@ export class TransactionService {
 
         if (!transactionStatus) {
             throw new HttpException(
-                'Transaction status name not found',
+                {
+                    status: "ERROR",
+                    message: "TRANSATION_WITH_THIS_NAME_NOT_FOUND"
+                },
                 HttpStatus.NOT_FOUND
             );
         }
@@ -115,7 +155,10 @@ export class TransactionService {
 
         if (!transactionStatus) {
             throw new HttpException(
-                'Transaction status id not found',
+                {
+                    status: "ERROR",
+                    message: 'TRANSACTION_NOT_FOUND'
+                },
                 HttpStatus.NOT_FOUND
             );
         }

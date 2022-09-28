@@ -12,20 +12,28 @@ import { LoginUserDto } from '../users/dto/login-user.dto';
 export class AuthService {
 
     constructor(private userService: UsersService,
-                private jwtService: JwtService) {}
+        private jwtService: JwtService) { }
 
     async login(userDto: LoginUserDto) {
         const user = await this.validateUser(userDto);
 
-        return this.generateToken(user);
+        const token = await this.generateToken(user);
+            
+        return {
+            status: "SUCCESS",
+            message: "EMAIL_CONFIRMED",
+            ...token
+        };
     }
 
     async registration(userDto: CreateUserDto) {
         const candidate = await this.userService.getUserByEmail(userDto.email);
 
         if (candidate) {
-            throw new HttpException(
-                'User with this e-mail already exists',
+            throw new HttpException({
+                status: "ERROR",
+                message: "USER_WITH_THIS_EMAIL_ALREADY_EXISTS"
+            },
                 HttpStatus.BAD_REQUEST
             );
         }
@@ -33,39 +41,54 @@ export class AuthService {
         let authCode = await genereateAndSendAuthCode(userDto.email);
 
         const hashPassword = await bcrypt.hash(userDto.password, 5);
-        await this.userService.createUser({ ...userDto, password : hashPassword, activationLink : authCode });
+        await this.userService.createUser({ ...userDto, password: hashPassword, activationLink: authCode });
 
-        return { status: 201 };
+        return {
+            status: "SUCCESS",
+            message: "REG_SUCCESS"
+        }
     }
-    
-    async confirmEmail(confirmDto: ConfirmEmail) {        
+
+    async confirmEmail(confirmDto: ConfirmEmail) {
         const user = await this.userService.getUserByEmail(confirmDto.email);
 
-        if ( confirmDto.activationCode === user.activationLink ) {
+        if (confirmDto.activationCode === user.activationLink) {
+
+            const token = await this.generateToken(user);
             
-            return this.generateToken(user);
+            return {
+                status: "SUCCESS",
+                message: "EMAIL_CONFIRMED",
+                ...token
+            };
         } else {
-            
-            throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+
+            throw new HttpException({
+                status: "ERROR",
+                message: "WRONG_CODE"
+            },
+                HttpStatus.FORBIDDEN
+            );
         }
     }
 
+    async generateToken(user: User) {
+        const payload = { email: user.email, id: user.id, roles: user.roles }
 
-    async generateToken(user : User) {
-        const payload = { email : user.email, id : user.id, roles : user.roles }
         return {
-            token : this.jwtService.sign(payload)
+            token: this.jwtService.sign(payload)
         }
     }
 
-
-    private async validateUser(userDto : LoginUserDto) {
+    private async validateUser(userDto: LoginUserDto) {
         const user = await this.userService.getUserByEmail(userDto.email);
 
         if (!user) {
+
             throw new UnauthorizedException({
-                message : "User with this e-mail not found"
-            })
+                status: "ERROR",
+                message: "USER_NOT_FOUND"
+            });
         }
 
         const passwordEq = await bcrypt.compare(userDto.password, user.password);
@@ -75,7 +98,8 @@ export class AuthService {
         }
 
         throw new UnauthorizedException({
-            message : "Wrong password"
+            status: "ERROR",
+            message: "WRONG_PASSWORD"
         });
     }
 }

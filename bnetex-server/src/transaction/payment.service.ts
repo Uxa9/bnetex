@@ -23,7 +23,7 @@ export class Payment {
     apikey: string;
     constructor() {
         this.token = undefined;
-        this.apikey = "DNXQPER-87QM9HR-NGC3A7E-2CRZF4E";
+        this.apikey = process.env.PAYMENT_API_KEY;
     }
 
     async sync() {
