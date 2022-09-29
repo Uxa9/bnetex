@@ -49,9 +49,18 @@ export class Transaction extends Model<Transaction, TransactionCreationAttrs> {
         description : 'payment id'
     })
     @Column({
-        type : DataType.INTEGER
+        type : DataType.STRING
     })
-    paymentId : number;
+    paymentId : string;
+
+    @ApiProperty({
+        example : 'https://givememoney.com',
+        description : 'payment url'
+    })
+    @Column({
+        type : DataType.STRING
+    })
+    invoiceUrl : string;
 
     @ApiProperty({
         example : 'processing',
@@ -61,6 +70,24 @@ export class Transaction extends Model<Transaction, TransactionCreationAttrs> {
         type : DataType.INTEGER
     })
     statusId : number;
+
+    @ApiProperty({
+        example : 'Ab0b4Ab0b4Ab0b4Ab0b4',
+        description : 'payment address'
+    })
+    @Column({
+        type : DataType.STRING
+    })
+    payAddress : string;
+
+    @ApiProperty({
+        example : 'USDTTRC20',
+        description : 'payment network'
+    })
+    @Column({
+        type : DataType.STRING
+    })
+    payCurrency : string;
 
     @ApiProperty({
         example : 123.45,
