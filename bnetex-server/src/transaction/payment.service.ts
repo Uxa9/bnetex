@@ -14,7 +14,7 @@ const sequelize = new Sequelize({
 // });
 
 const api = axios.create({
-    baseURL: "https://api.nowpayments.io/v1",
+    baseURL: process.env.PAYMENT_API_LINK,
     timeout: 30000,
 });
 
@@ -39,41 +39,55 @@ export class Payment {
     }
 
     async createOrder(
-        orderid: any,
-        amount: any,
+        id: number,
+        amount: number,
         pay_currency = "USDTTRC20",
-        order_description: any
+        order_description: string,
     ) : Promise<any> {
         // Request to create payment link
-        let invoice = await api.post(
-            "/invoice",
+        // api.post(
+        //     "/payment",
+        //     {
+        //         price_amount: amount,
+        //         price_currency: "usd",
+        //         pay_currency,
+        //         ipn_callback_url: `${process.env.PAYMENT_CALLBACK_LINK}/transaction/${id}/fulfill`,
+        //         order_id: id,
+        //         order_description,
+        //         case: 'common'
+        //     },
+        //     this.getHeaders()
+        // ).then(data => payment = data)
+        // .catch(err => {
+        //     // console.log(err);
+        //     throw new Error(err)
+        // });
+
+        let response = await axios.post(
+            'https://api-sandbox.nowpayments.io/v1/payment',
             {
                 price_amount: amount,
                 price_currency: "usd",
                 pay_currency,
-                ipn_callback_url: "https://pay.bnetex.com",
-                order_id: orderid,
+                ipn_callback_url: `${process.env.PAYMENT_CALLBACK_LINK}/transaction/${id}/fulfill`,
+                order_id: id,
                 order_description,
+                case: 'success'
             },
-            this.getHeaders()
+            {
+                headers : {
+                    "X-API-KEY": '9408VNN-66KME9M-GN5SBS4-QB9D69V',
+                }
+            }
         );
 
-        // Create payment by invoice
-        let payment = await api.post('/invoice-payment', {
-            iid: invoice.data.id,
-            pay_currency
-        }, this.getHeaders())
-
-        invoice = invoice.data;
-        payment = payment.data;
-
-        return { invoice, payment };
+        return response.data;
     }
 
-    async getPayment(orderid) {
+    async getPayment(id: number) {
         await this.JWTCheker();
 
-        let status = await api.get(`/payment/${orderid}`, this.getHeaders());
+        let status = await api.get(`/payment/${id}`, this.getHeaders());
         return status.data;
     }
 

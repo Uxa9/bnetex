@@ -24,21 +24,19 @@ export class TransactionService {
         await payment.sync();
 
         let order = await payment.createOrder(transaction.id, dto.amount, 'USDTTRC20', 'test');
-        let status = await payment.getPayment(order.payment.payment_id);
+        // let status = await payment.getPayment(order.payment.payment_id);
 
         transaction.update({
             'statusId': 1,
-            'paymentId': status.payment_id,
-            'invoiceUrl': order.invoice.invoice_url,
-            'payAddress': order.payment.pay_address,
-            'payCurrency': order.invoice.pay_currency
+            'paymentId': order.payment_id,
+            'payAddress': order.pay_address,
+            'payCurrency': order.pay_currency
         });
 
         return {
             status: "SUCCESS",
-            message: "TRANSACTION_CREATED",
-            transaction
-        }; // или шо надо возвращать то
+            message: "TRANSACTION_CREATED"
+        };
     }
 
     async getTransaction(id: number) {
@@ -67,14 +65,16 @@ export class TransactionService {
         return transaction;
     }
 
-    async fulfillTransaction(id: number) {
-        const transaction = await this.transactionRepository.findByPk(id);
+    async fulfillTransaction(req: any) {        
+        const transaction = await this.transactionRepository.findOne({
+            where: { paymentId : req.payment_id.toString() }
+        });
         
         if ( transaction ) {
             const res = await axios.get(
-                `https://api.nowpayments.io/v1/payment/${transaction.paymentId}`,
+                `https://api-sandbox.nowpayments.io/v1/payment/${transaction.paymentId}`,
                 { headers : { 'X-API-KEY' : process.env.PAYMENT_API_KEY } }
-            );
+            );            
             
             if ( res.data?.payment_status !== 'finished' ) {
                 throw new HttpException(
@@ -93,6 +93,16 @@ export class TransactionService {
                 },
                 HttpStatus.NOT_FOUND
             );
+        }
+
+        if ( transaction.statusId == 3 ) {
+            throw new HttpException(
+                {
+                    status: "ERROR",
+                    message: "TRANSACTION_ALREADY_FULFILLED"
+                },
+                HttpStatus.FORBIDDEN
+            )
         }
 
         const user = await this.userService.getUserById(transaction.userId);

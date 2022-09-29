@@ -42,9 +42,9 @@ export class TransactionController {
         status : 200,
         type : Transaction
     })
-    @Get('/:id/fulfill')
-    fulfillTransaction(@Param('id') id: number) {
-        return this.transactionService.fulfillTransaction(id);
+    @Post('/:id/fulfill')
+    fulfillTransaction(@Body() req: any) {
+        return this.transactionService.fulfillTransaction(req);
     }
 
     @ApiOperation({
