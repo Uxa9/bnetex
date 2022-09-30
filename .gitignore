@@ -5,3 +5,4 @@ bnetex-server/.production.env
 
 bnetex-server/node_modules
 bnetex-new/node_modules
+*.zip
