@@ -8,6 +8,13 @@ const login = async (email: string, password: string) => {
         '/auth/login', {
             email: email,
             password: password,
+        })
+        .then((response) => {
+            const userInfo = {
+                token: response.data.token,
+                userId: response.data.userId,
+            };
+            localStorage.setItem('userInfo-BNETEX', JSON.stringify(userInfo));
         });
 };
 

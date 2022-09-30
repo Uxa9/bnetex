@@ -24,4 +24,5 @@ export {ReactComponent as Login } from './uil_signin.svg';
 export {ReactComponent as Telegram} from './uil_telegram-alt.svg';
 export {ReactComponent as Mail} from './uil_envelope.svg';
 export {ReactComponent as ToolTipNeedle} from './tool-tip.svg';
+export {ReactComponent as Spinner} from './uil_spinner.svg';
 
