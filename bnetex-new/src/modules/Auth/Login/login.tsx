@@ -1,11 +1,11 @@
 import { Eye, EyeSlash } from 'assets/images/icons';
+import { useGoToState } from 'lib/hooks/useGoToState';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
 import { Button, Input } from 'lib/ui-kit';
 import { emailValidation, requiredValidation } from 'lib/utils/hookFormValidation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { AppLinksEnum } from 'routes/appLinks';
 import login from 'services/login';
 import FormCard from '../FormCard/formCard';
@@ -22,7 +22,7 @@ const Login = () => {
 
     const { bakeToast } = useToast();
     const { isLoading, promiseWithLoading } = usePromiseWithLoading();
-    const navigate = useNavigate();
+    const {goToState} = useGoToState();
 
     const {
         register,
@@ -39,11 +39,11 @@ const Login = () => {
 
 
     // toDo сделать нормальные запросы на сервер
-    // придумать как можно чисто делать установку стейта isAuth
+    // придумать как можно чисто делать установку стейта isAuth!!!
 
     const onSubmit = async (data: LoginFormData) => {
         promiseWithLoading(login(data.email, data.password))
-            .then(() => navigate(AppLinksEnum.DASHBOARD))
+            .then(() => goToState(AppLinksEnum.DASHBOARD))
             .catch((error) => bakeToast.error(error.response?.data.message));
     };
 
@@ -105,6 +105,7 @@ const Login = () => {
                                 text={'Зарегистрироваться'}
                                 buttonStyle={'thin'}
                                 type={'button'}
+                                onClick={() => goToState(`${AppLinksEnum.AUTH}/${AppLinksEnum.REGISTRATION}`)}
                             />
                         </div>
                     </div>

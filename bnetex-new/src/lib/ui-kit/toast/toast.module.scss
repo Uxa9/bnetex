@@ -13,7 +13,7 @@
     max-width: 322px;
     z-index: 9999;
     opacity: 0;
-    transition: right 0.35s ease, opacity 0.15s;
+    transition: right 0.35s ease, opacity 0.35s;
 
     @include max-width(500) {
         width: calc(100vw - 32px);

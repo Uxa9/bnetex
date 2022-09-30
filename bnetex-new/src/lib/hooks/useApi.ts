@@ -12,10 +12,15 @@ const useApi = () => {
         },
     });
 
+    const getToken = () => {
+        const userInfo = localStorage.getItem('userInfo-BNETEX');
+        return userInfo ? JSON.parse(userInfo).token : '';
+    };
+
     const protectedApi = axios.create({
         baseURL: baseURL,
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Authorization': `Bearer ${getToken()}`,
         },
     });
 
