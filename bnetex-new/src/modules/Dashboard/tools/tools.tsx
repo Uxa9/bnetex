@@ -8,8 +8,12 @@ import { useState } from 'react';
 import hehe__roe from '../../../assets/images/hehe__roe.svg';
 import hehe__pnl from '../../../assets/images/hehe__pnl.svg';
 import hehe__verify from '../../../assets/images/hehe__verify.svg';
+import { useGoToState } from 'lib/hooks/useGoToState';
+import { AppLinksEnum } from 'routes/appLinks';
 
 const Tools = () => {
+
+    const { goToState } = useGoToState();
 
     const [options, setOptions] = useState({
         dataLabels: {enabled: false},
@@ -33,6 +37,7 @@ const Tools = () => {
                     <Button
                         buttonStyle={'primary'}
                         text={'Ввод'}
+                        onClick={() => goToState(AppLinksEnum.DEPOSIT)}
                     />
                     <Button
                         buttonStyle={'secondary'}

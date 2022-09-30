@@ -37,6 +37,18 @@
     height: fit-content;
 }
 
+.wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    max-width: 1200px;
+    padding: 20px;
+    width: 100%;
+}
+
 body,
 html {
     overflow-x: hidden;

@@ -1,0 +1,18 @@
+@import 'styles/mixins.scss';
+@import 'styles/variables.scss';
+
+.password-postfix {
+    padding: 0 8px;
+    width: fit-content;
+    cursor: pointer;
+    transition: fill 0.25s;
+
+    &:hover {
+        fill: $activeBorder;
+    }
+}
+
+.register-action {
+    display: flex;
+    column-gap: 1ch;
+}

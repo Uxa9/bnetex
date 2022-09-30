@@ -9,21 +9,19 @@ export const login = (email: string, password: string) => {
 
     return async (dispatch: Dispatch<AuthAction>) => {
         await api
-            .post('/auth/confirm-email', {
+            .post('/auth/login', {
                 email, password,
             })
             .then((response: AxiosResponse) => {
                 console.log(response);
                 dispatch({ type: AuthActionTypes.LOGIN});
-                return response;
             })
             .catch((error: Error | AxiosError) => {
+                console.log(error);
                 dispatch({
                     type: AuthActionTypes.LOGIN_ERROR,
                     payload: 'Произошла ошибка при авторизации',
                 });
-
-                return error.message;
             });
     };
 };

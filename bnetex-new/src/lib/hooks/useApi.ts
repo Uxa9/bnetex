@@ -1,13 +1,14 @@
 import axios from 'axios';
+import { Environment } from 'lib/types/environment';
 
 const useApi = () => {
-    // По хорошему убрать в .env
-    const baseURL = 'https://api.bnetex.com';
+    const { BACKEND_URL } = Environment;
+    const baseURL = process.env[BACKEND_URL];
     
     const api = axios.create({
         baseURL: baseURL,
         headers: {
-            'Content-type': 'application/json',
+            'content-type': 'application/json',
         },
     });
 

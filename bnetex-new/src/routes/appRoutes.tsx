@@ -10,27 +10,28 @@ import MainPage from 'modules/MainPage/MainPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
 import InvestorWallet from 'modules/Dashboard/investorWallet/investorWallet';
-import * as Registration from 'modules/Registration/index';
 import AuthLayout from 'modules/Auth/authLayout';
 import Login from 'modules/Auth/Login/login';
 import Transactions from 'modules/Dashboard/transactions/transactions';
+import Registration from 'modules/Auth/Registration/registration';
+import Deposit from 'modules/Payments/Deposit/deposit';
 
 const AppRoutes = () => {
 
-    const { HOME, AUTH, REGISTRATION, LOGIN, P2P, TERMINAL, DASHBOARD, BUY_CRYPTO } = AppLinksEnum;
+    const { HOME, AUTH, REGISTRATION, LOGIN, P2P, TERMINAL, DASHBOARD, DEPOSIT } = AppLinksEnum;
 
     return (
         <Routes>
             <Route element={<PageLayout />}>
                 <Route index element={<Navigate to={HOME} />} />
                 <Route path={HOME} element={<MainPage />}></Route>
-                <Route path={AUTH}>
+                {/* <Route path={AUTH}>
                     <Route path={REGISTRATION}>
                         <Route index element={<Registration.StepOne />} />
                         <Route path='verification' element={<Registration.StepTwo />} />
                         <Route path='success' element={<Registration.Success />} />
                     </Route>
-                </Route>
+                </Route> */}
                 <Route path={TERMINAL} element={<TerminalLayout />}>
                     <Route path="investor" element={<InvestorView />} />
                 </Route>
@@ -45,11 +46,11 @@ const AppRoutes = () => {
                 </Route>
                 <Route path={AUTH} element={<AuthLayout />}>
                     <Route index element={<Navigate to={LOGIN} />}></Route>
-                    <Route path={REGISTRATION}></Route>
+                    <Route path={REGISTRATION} element={<Registration />}></Route>
                     <Route path={LOGIN} element={<Login />}></Route>
                 </Route>
                 <Route path={P2P}></Route>
-                <Route path={BUY_CRYPTO}></Route>
+                <Route path={DEPOSIT} element={<Deposit />}></Route>
             </Route>
         </Routes>
     );

@@ -9,7 +9,7 @@ const TOAST_LIFESPAN: number = 3000;
 const TOAST_ANIMATION_TIME: number = 350;
 
 const Toast = () => {
-    const { toast, bakeToast } = useToast();
+    const { toast, bakeToast, clearToast } = useToast();
     const [isVisible, setIsVisible] = useState<boolean>(false);
 
     useEffect(() => {
@@ -21,13 +21,13 @@ const Toast = () => {
         await delay(TOAST_LIFESPAN)
             .then(() => setIsVisible(false))
             .then(() => delay(TOAST_ANIMATION_TIME))
-            .then(() => bakeToast(null));
+            .then(() => clearToast());
     };
 
     const closeToast = () => {
         setIsVisible(false);
         setTimeout(() => {
-            bakeToast(null);
+            clearToast();
         }, TOAST_ANIMATION_TIME);
     };
 

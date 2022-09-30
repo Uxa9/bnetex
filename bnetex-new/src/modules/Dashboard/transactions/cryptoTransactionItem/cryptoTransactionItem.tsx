@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { CryptoTransactionItemType } from 'lib/types/cryptoTransactionItem';
+import CopyButton from 'lib/ui-kit/copyButton/copyButton';
 import { formatDate } from 'lib/utils/formatDate';
 import styles from './cryptoTransactionItem.module.scss';
 
@@ -14,7 +15,7 @@ const mapType = (element: CryptoTransactionItemType['type']) => {
                 styles[`item-type--${element}`]
             )}
         >
-            {element === 'Income' ? 'Ввод' : 'Вывод'}
+            {element === 'income' ? 'Ввод' : 'Вывод'}
         </td>
     );
 };
@@ -26,7 +27,7 @@ const mapStatus = (element: CryptoTransactionItemType['status']) => {
                 styles[`item-status--${element}`]
             )}
         >
-            {element === 'Confirmed' ? 'Завершена' : 'В обработке'}
+            {element === 'confirmed' ? 'Завершена' : 'В обработке'}
         </td>
     );
 };
@@ -41,7 +42,15 @@ const CryptoTransactionItem = (props: CryptoTransactionItemProps) => {
             <td>{item.wallet}</td>
             <td>{item.coin}</td>
             <td>{item.amount}</td>
-            <td className={styles['item-destination']}>{item.destination}</td>
+            <td className={styles['item-destination']}>
+                <p>
+                    {item.destination}
+                </p>
+                <CopyButton 
+                    textToCopy={item.destination}
+                    successText={'Кошелек успешно скопирован в ваш буфер обмена'}
+                />
+            </td>
             {mapStatus(item.status)}
             <td></td>
         </>

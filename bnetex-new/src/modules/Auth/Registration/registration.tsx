@@ -1,30 +1,28 @@
 import { Eye, EyeSlash } from 'assets/images/icons';
 import { AxiosError, AxiosResponse } from 'axios';
 import useApi from 'lib/hooks/useApi';
-import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
 import { Button, Input } from 'lib/ui-kit';
 import { emailValidation, requiredValidation } from 'lib/utils/hookFormValidation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { AppLinksEnum } from 'routes/appLinks';
-import login from 'services/login';
 import FormCard from '../FormCard/formCard';
-import styles from './login.module.scss';
+import styles from './registration.module.scss';
 
-interface LoginFormData{
+interface RegistrationFormData {
     email: string,
     password: string
 }
 
-const Login = () => {
+const Registration = () => {
 
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
     const { bakeToast } = useToast();
-    const { isLoading, promiseWithLoading } = usePromiseWithLoading();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
+
+    const [api ] = useApi();
 
     const {
         register,
@@ -34,7 +32,7 @@ const Login = () => {
             errors,
             isValid,
         },
-    } = useForm<LoginFormData>({
+    } = useForm<RegistrationFormData>({
         mode: 'onChange',
         criteriaMode: 'all',
         reValidateMode: 'onChange',
@@ -44,25 +42,33 @@ const Login = () => {
     // toDo сделать нормальные запросы на сервер
     // придумать как можно чисто делать установку стейта isAuth
 
-    const onSubmit = async (data: LoginFormData) => {
-        promiseWithLoading(login(data.email, data.password))
-            .then(() => navigate(AppLinksEnum.DASHBOARD))
-            .catch((error) => bakeToast.error(error.response?.data.message));
+    const onSubmit = async (data: RegistrationFormData) => {
+        
+        if (isValid) {
+            api.post('/auth/registration', data)
+                .then((res: AxiosResponse<any>) => {
+                    localStorage.setItem('token', res.data.token);
+                })
+                .catch((error: AxiosError<any>) => {
+                    bakeToast.error(error.response?.data.message);
+                });
+        }
+
     };
 
     return(
         <>
             <FormCard 
-                title={'Добро пожаловать!'}
-                subtitle={'Войдите, чтобы получить доступ к торговле на бирже BNETEX.'}
+                title={'Аккаунт'}
+                subtitle={'Введите адрес электронной почты и выберите надежный пароль.'}
                 onSubmit={handleSubmit(onSubmit)}
                 inputs={[
                     <Input
                         label={'Email'}
                         inputControl={register('email', emailValidation)}
                         errorText={errors.email?.message}
-                        key={'email'} //Тут костыль, надо бы сделать React.Children.map, но у меня возникли с ним трудности
-                        autoComplete={'email'}
+                        key={'email'}
+                        autoComplete={'new-email'}
                     />,
                     <Input
                         label={'Пароль'}
@@ -70,7 +76,7 @@ const Login = () => {
                         errorText={errors.password?.message}
                         key={'password'}
                         type={isPasswordVisible ? 'text' : 'password'}
-                        autoComplete={'current-password'}
+                        autoComplete={'new-password'}
                         postfix={isPasswordVisible ? 
                             <EyeSlash
                                 onClick={() => setIsPasswordVisible(false)}
@@ -84,35 +90,14 @@ const Login = () => {
                 ]} 
                 button={
                     <Button 
-                        text={'Войти'}
+                        text={'Далее'}
                         type={'submit'}
                         disabled={!isValid}
                     />
-                }
-                actions={
-                    <div className={styles.actions}>
-                        <Button 
-                            text='Забыли пароль?'
-                            buttonStyle={'thin'}
-                            type={'button'}
-                            key={'forgot-password'}
-                        />
-                        <div 
-                            className={styles['register-action']}
-                            key={'register-action'}
-                        >
-                            <span className='body-1'>Нет аккаунта?</span>
-                            <Button 
-                                text={'Зарегистрироваться'}
-                                buttonStyle={'thin'}
-                                type={'button'}
-                            />
-                        </div>
-                    </div>
                 }
             />
         </>
     );
 };
 
-export default Login;
+export default Registration;

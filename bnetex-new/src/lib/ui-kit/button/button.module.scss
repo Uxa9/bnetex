@@ -10,7 +10,10 @@
     border-radius: 20px;
     font-size: 16px;
     font-weight: 600;
-    width: 100%;
+
+    &--fill-container {
+        width: 100%;
+    }
 
     transition: 0.25s;
     @include color-svg(white);

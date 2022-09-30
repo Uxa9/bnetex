@@ -14,3 +14,9 @@ export const emailValidation: RegisterOptions = {
     },
     ...requiredValidation,
 };
+
+export const numberValidation: RegisterOptions = {
+    valueAsNumber: true,
+    ...requiredValidation,
+};
+

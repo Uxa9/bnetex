@@ -8,7 +8,7 @@
 
 .transactions-table {
     font-size: 12px;
-    width: 100%;
+    max-width: 100%;
 
     &__header-row {
         color: $grayText;
@@ -20,9 +20,11 @@
     }
 
     &__row {
-        display: flex;
-        column-gap: 20px;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: minmax(60px, 15%) minmax(60px, 8%) minmax(60px, 18%) minmax(60px, 6%) 
+        minmax(60px, 6%) minmax(60px, 1fr) minmax(60px, 8%) minmax(30px, 4%);
+        column-gap: 16px;
+        align-items: center;
         justify-items: start;
         border-bottom: 1px solid $grayBorder;
         padding: 16px 20px;
