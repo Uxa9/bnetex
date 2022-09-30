@@ -35,7 +35,8 @@ export class TransactionService {
 
         return {
             status: "SUCCESS",
-            message: "TRANSACTION_CREATED"
+            message: "TRANSACTION_CREATED",
+            transaction
         };
     }
 
@@ -43,6 +44,18 @@ export class TransactionService {
         const transaction = await this.transactionRepository.findByPk(id);
 
         return transaction;
+    }
+
+    async getUserTransactions(id: number) {
+        const user = await this.userService.getUserById(id);
+
+        if ( user ) {
+            const transactions = await this.transactionRepository.findAll({
+                where : { userId: id }
+            });
+
+            return transactions;
+        }
     }
 
     async updateTransactionStatus(id: number, status: number) {

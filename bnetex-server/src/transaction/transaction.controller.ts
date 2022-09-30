@@ -36,6 +36,18 @@ export class TransactionController {
     }
 
     @ApiOperation({
+        summary : 'Get user transactions by id'
+    })
+    @ApiResponse({
+        status : 200,
+        type : Transaction
+    })
+    @Get('/user/:id')
+    getUserTransactions(@Param('id') id: number) {
+        return this.transactionService.getUserTransactions(id);
+    }
+
+    @ApiOperation({
         summary : 'Fulfill transaction'
     })
     @ApiResponse({

@@ -22,6 +22,7 @@ export class AuthService {
         return {
             status: "SUCCESS",
             message: "EMAIL_CONFIRMED",
+            userId: user.id,
             ...token
         };
     }
@@ -55,7 +56,11 @@ export class AuthService {
         if (confirmDto.activationCode === user.activationLink) {
 
             const token = await this.generateToken(user);
-            
+
+            user.update({
+                isActivated : true
+            });
+
             return {
                 status: "SUCCESS",
                 message: "EMAIL_CONFIRMED",
@@ -88,6 +93,14 @@ export class AuthService {
             throw new UnauthorizedException({
                 status: "ERROR",
                 message: "USER_NOT_FOUND"
+            });
+        }
+
+        if (!user.isActivated) {
+
+            throw new UnauthorizedException({
+                status: "ERROR",
+                message: "USER_NOT_ACTIVATED"
             });
         }
 
