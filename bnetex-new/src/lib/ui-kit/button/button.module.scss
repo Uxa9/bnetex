@@ -94,3 +94,17 @@
 .button_align--right {
     flex-direction: row-reverse;
 }
+
+.spinner {
+    animation: spin 0.35s ease infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -1,6 +1,4 @@
 import { Eye, EyeSlash } from 'assets/images/icons';
-import { AxiosError, AxiosResponse } from 'axios';
-import useApi from 'lib/hooks/useApi';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
 import { Button, Input } from 'lib/ui-kit';
@@ -29,7 +27,6 @@ const Login = () => {
     const {
         register,
         handleSubmit,
-        reset,
         formState: {
             errors,
             isValid,
@@ -49,6 +46,7 @@ const Login = () => {
             .then(() => navigate(AppLinksEnum.DASHBOARD))
             .catch((error) => bakeToast.error(error.response?.data.message));
     };
+
 
     return(
         <>
@@ -87,6 +85,7 @@ const Login = () => {
                         text={'Войти'}
                         type={'submit'}
                         disabled={!isValid}
+                        isLoading={isLoading}
                     />
                 }
                 actions={

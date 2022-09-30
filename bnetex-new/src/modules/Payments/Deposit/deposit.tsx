@@ -38,7 +38,7 @@ const Deposit = () => {
     });
 
     const onSubmit = (data: {amount: number}) => {
-
+        console.log(data);
         // В фукнкции запроса используй protectedApi из useApi, чтобы достать токен
 
         // promiseWithLoading(async функция с запросом)

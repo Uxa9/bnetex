@@ -1,3 +1,4 @@
+import { mapError } from 'lib/utils/errorMap';
 import { throwError } from 'lib/utils/errorThrower';
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
@@ -25,7 +26,7 @@ export function ToastProvider({children}: {children: ReactNode}) {
     const [ toast, setToast ] = useState<Toast | null>(null);
 
     const bakeToast = {
-        error: (message: string) => setToast({type: 'error', text: message}),
+        error: (message: string) => setToast({type: 'error', text: mapError(message)}),
         success: (message: string) => setToast({type: 'success', text: message}),
     };
 
