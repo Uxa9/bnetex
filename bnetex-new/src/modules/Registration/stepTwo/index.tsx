@@ -1,10 +1,8 @@
 import classNames from "classnames";
-import { useActions } from "lib/hooks/useActionCreators";
 import { Button, Input } from "lib/ui-kit";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import confirmEmail from "services/confirmEmail";
-import { login } from "store/action-creators/auth";
 import RegistrationTemplate from "../registrationTemplate"
 
 import styles from './stepTwo.module.scss';
@@ -14,7 +12,6 @@ const StepTwo = () => {
     const [loading, isLoading] = useState(false);
     const [activationCode, setActivationCode] = useState('');
 
-    const { login } = useActions();
     const navigate = useNavigate();
 
     const email = localStorage.getItem('email') || '';

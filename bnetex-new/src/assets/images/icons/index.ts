@@ -21,6 +21,7 @@ export {ReactComponent as Eye } from './uil_eye.svg';
 export {ReactComponent as EyeSlash } from './uil_eye-slash.svg';
 export {ReactComponent as Logo } from './logo.svg';
 export {ReactComponent as Login } from './uil_signin.svg';
+export {ReactComponent as Logout } from './uil_signin.svg';
 export {ReactComponent as Telegram} from './uil_telegram-alt.svg';
 export {ReactComponent as Mail} from './uil_envelope.svg';
 export {ReactComponent as ToolTipNeedle} from './tool-tip.svg';

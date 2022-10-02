@@ -1,30 +1,24 @@
 import styles from './header.module.scss';
-import { Wallet, User, Logo, Settings, Login } from '../../assets/images/icons';
-import _l from '../../locales/index';
+import { Wallet, User, Logo, Login, Logout } from '../../assets/images/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'lib/ui-kit';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
-import { useActions } from 'lib/hooks/useActionCreators';
-import SettingsMenu from './SettingsMenu';
-import { useState } from 'react';
+// import SettingsMenu from './SettingsMenu';
+// import { useState } from 'react';
 import { AppLinksEnum } from 'routes/appLinks';
+import { useGoToState } from 'lib/hooks/useGoToState';
+import { useActions } from 'lib/hooks/useActionCreators';
 
 const Header = () => {
     const { AUTH, REGISTRATION, LOGIN } = AppLinksEnum;
-
-    const navigate = useNavigate();
-
-    const [isSettingsOpened, setIsSettingsOpened] = useState<boolean>(false);
-
-    const toggleSettingsMenu = () => setIsSettingsOpened(prevState => !prevState);
-
+    const { goToState } = useGoToState();
+    const { logoutUser } = useActions();    
     const isAuth = useTypedSelector(state => state.auth.isAuth);
-    const isTerminalOpened = useTypedSelector(state => state.terminal.isOpen);
-    const { login } = useActions();
 
-    const testOnClick = () => {
-        // login();
-    };
+    // const [isSettingsOpened, setIsSettingsOpened] = useState<boolean>(false);
+    // const toggleSettingsMenu = () => setIsSettingsOpened(prevState => !prevState);
+
+    // const isTerminalOpened = useTypedSelector(state => state.terminal.isOpen);
 
     return (
         <header
@@ -32,7 +26,7 @@ const Header = () => {
         >
             <Logo
                 className={styles.logo}
-                onClick={() => navigate('/')}
+                onClick={() => goToState('/')}
             />
             <nav className={styles.links}>
                 <div className={styles['links__main']}>
@@ -53,20 +47,24 @@ const Header = () => {
                     {
                         isAuth ?
                             <>
-                                <Link to={'dashboard/wallet/main'}>
-                                    <Button
-                                        text={'Кошельки'}
-                                        buttonStyle={'thin'}
-                                        Icon={Wallet}
-                                    />
-                                </Link>
-                                <Link to={'dashboard'}>
-                                    <Button
-                                        text={'Профиль'}
-                                        buttonStyle={'thin'}
-                                        Icon={User}
-                                    />
-                                </Link>
+                                <Button
+                                    text={'Кошельки'}
+                                    buttonStyle={'thin'}
+                                    Icon={Wallet}
+                                    onClick={() => goToState('/dashboard/wallet/main')}
+                                />
+                                <Button
+                                    text={'Профиль'}
+                                    buttonStyle={'thin'}
+                                    Icon={User}
+                                    onClick={() => goToState('/dashboard')}
+                                />
+                                <Button
+                                    text={'Выйти'}
+                                    buttonStyle={'thin'}
+                                    Icon={Logout}
+                                    onClick={logoutUser}
+                                />
                             </>
                             :
                             <>
@@ -74,11 +72,11 @@ const Header = () => {
                                     text={'Войти'}
                                     buttonStyle={'thin'}
                                     Icon={Login}
-                                    onClick={() => navigate(`${AUTH}/${LOGIN}`)}
+                                    onClick={() => goToState(`${AUTH}/${LOGIN}`)}
                                 />
                                 <Button
                                     text={'Регистрация'}
-                                    onClick={() => navigate(`${AUTH}/${REGISTRATION}`)}
+                                    onClick={() => goToState(`${AUTH}/${REGISTRATION}`)}
                                 />
                             </>
                     }

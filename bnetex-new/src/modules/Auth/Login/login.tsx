@@ -1,4 +1,5 @@
 import { Eye, EyeSlash } from 'assets/images/icons';
+import { useActions } from 'lib/hooks/useActionCreators';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
@@ -22,7 +23,8 @@ const Login = () => {
 
     const { bakeToast } = useToast();
     const { isLoading, promiseWithLoading } = usePromiseWithLoading();
-    const {goToState} = useGoToState();
+    const { goToState } = useGoToState();
+    const { loginUser } = useActions();
 
     const {
         register,
@@ -38,12 +40,12 @@ const Login = () => {
     });
 
 
-    // toDo сделать нормальные запросы на сервер
-    // придумать как можно чисто делать установку стейта isAuth!!!
-
     const onSubmit = async (data: LoginFormData) => {
         promiseWithLoading(login(data.email, data.password))
-            .then(() => goToState(AppLinksEnum.DASHBOARD))
+            .then(() => {
+                loginUser();
+                goToState(AppLinksEnum.DASHBOARD);
+            })
             .catch((error) => bakeToast.error(error.response?.data.message));
     };
 

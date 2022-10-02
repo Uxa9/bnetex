@@ -15,10 +15,12 @@ import Login from 'modules/Auth/Login/login';
 import Transactions from 'modules/Dashboard/transactions/transactions';
 import Registration from 'modules/Auth/Registration/registration';
 import Deposit from 'modules/Payments/Deposit/deposit';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 
 const AppRoutes = () => {
 
     const { HOME, AUTH, REGISTRATION, LOGIN, P2P, TERMINAL, DASHBOARD, DEPOSIT } = AppLinksEnum;
+    const { isAuth } = useTypedSelector(state => state.auth);
 
     return (
         <Routes>
@@ -35,7 +37,7 @@ const AppRoutes = () => {
                 <Route path={TERMINAL} element={<TerminalLayout />}>
                     <Route path="investor" element={<InvestorView />} />
                 </Route>
-                <Route path={DASHBOARD} element={<Dashboard />}>
+                <Route path={DASHBOARD} element={isAuth ? <Dashboard /> : <Navigate to={`/${AUTH}`} />}>
                     <Route index element={<Navigate to={'tools'} />}></Route>
                     <Route path='tools' element={<Tools />} />
                     <Route path='settings' element={<Settings />} />

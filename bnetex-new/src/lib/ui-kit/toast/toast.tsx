@@ -32,38 +32,34 @@ const Toast = () => {
     };
 
     return(
-        <>
-            {
-                <div 
-                    className={classNames(styles.toast,
-                        isVisible && styles['toast--visible']
-                    )}
-                >
-                    <div className={styles['toast__title']}>
-                        {
-                            toast && toast.type === 'error' ?
-                                <CircledCross 
-                                    className={classNames(styles['toast__type'],
-                                        styles['toast__type--error']
-                                    )}
-                                />
-                                :
-                                <CircledCheck 
-                                    className={classNames(styles['toast__type'],
-                                        styles['toast__type--success']
-                                    )}
-                                />
-                        }
-                        <h5>{toast && toast.type === 'error' ? 'Ошибка' : 'Успех'}</h5>
-                    </div>
-                    <p className={classNames(styles['toast__text'], 'body-1')}>{toast && toast.text}</p>
-                    <Cross 
-                        onClick={closeToast}
-                        className={styles['toast__close']}
-                    />
-                </div>
-            }
-        </>
+        <div 
+            className={classNames(styles.toast,
+                isVisible && styles['toast--visible']
+            )}
+        >
+            <div className={styles['toast__title']}>
+                {
+                    toast && toast.type === 'error' ?
+                        <CircledCross 
+                            className={classNames(styles['toast__type'],
+                                styles['toast__type--error']
+                            )}
+                        />
+                        :
+                        <CircledCheck 
+                            className={classNames(styles['toast__type'],
+                                styles['toast__type--success']
+                            )}
+                        />
+                }
+                <h5>{toast && toast.type === 'error' ? 'Ошибка' : 'Успех'}</h5>
+            </div>
+            <p className={classNames(styles['toast__text'], 'body-1')}>{toast && toast.text}</p>
+            <Cross 
+                onClick={closeToast}
+                className={styles['toast__close']}
+            />
+        </div>
     );
 };
 

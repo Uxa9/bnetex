@@ -45,14 +45,6 @@ const Deposit = () => {
                 setWalletAddress(response.data.transaction.payAddress);
             })
             .catch((error) => bakeToast.error(error.response?.data.message));
-
-        // В фукнкции запроса используй protectedApi из useApi, чтобы достать токен
-
-        // promiseWithLoading(async функция с запросом)
-        //     .then((какой то адрес) => setWalletAddress(какой то адрес))
-        //     .catch((error) => bakeToast.error(error.response?.data.message));
-        // console.log(data);
-        // setWalletAddress('TBJGtXn5TkNazxiRrf3hpao3eSY3uMRneG');
     };
 
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,7 +1,7 @@
 
 import classNames from 'classnames';
 import styles from './button.module.scss';
-import { ButtonHTMLAttributes, FC, useEffect } from 'react';
+import { ButtonHTMLAttributes, FC } from 'react';
 import { Spinner } from 'assets/images/icons';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
