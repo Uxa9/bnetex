@@ -13,7 +13,7 @@ const genereateAndSendAuthCode = async (email: string) => {
 
     const makeLink = (length: number) => {
         var result           = '';
-        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var characters       = '0123456789';
         var charactersLength = characters.length;
         for ( var i = 0; i < length; i++ ) {
             result += characters.charAt(Math.floor(Math.random() * 
@@ -22,13 +22,13 @@ const genereateAndSendAuthCode = async (email: string) => {
        return result;
     }
 
-    const authCode = makeLink(25);
+    const authCode = makeLink(6);
     
     await transporter.sendMail({
         from: `"Bnetex bot" <${process.env.SMTP_USER}>`, // sender address
         to: email, // list of receivers
         subject: "Алё, здравствуйте ✔", // Subject line
-        html: authCode, // html body
+        html: `<p>${authCode},</p>`, // html body
     });
 
     return authCode;

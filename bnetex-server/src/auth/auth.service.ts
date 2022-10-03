@@ -39,7 +39,7 @@ export class AuthService {
             );
         }
 
-        let authCode = await genereateAndSendAuthCode(userDto.email);
+        let authCode = await this.callGenerateActivationLink(userDto.email);
 
         const hashPassword = await bcrypt.hash(userDto.password, 5);
         await this.userService.createUser({ ...userDto, password: hashPassword, activationLink: authCode });
@@ -77,7 +77,11 @@ export class AuthService {
         }
     }
 
-    async generateToken(user: User) {
+    async callGenerateActivationLink(email: string) {
+        return await genereateAndSendAuthCode(email);
+    }
+
+    private async generateToken(user: User) {
         const payload = { email: user.email, id: user.id, roles: user.roles }
 
         return {
