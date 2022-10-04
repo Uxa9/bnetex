@@ -7,6 +7,7 @@ import { User } from '../users/users.model';
 import genereateAndSendAuthCode from './genereateAndSendAuthCode';
 import { ConfirmEmail } from '../users/dto/confirm-email.dto';
 import { LoginUserDto } from '../users/dto/login-user.dto';
+import { UserNotFoundException } from '../exceptions/userNotFound.exception';
 
 @Injectable()
 export class AuthService {
@@ -94,10 +95,7 @@ export class AuthService {
 
         if (!user) {
 
-            throw new UnauthorizedException({
-                status: "ERROR",
-                message: "USER_NOT_FOUND"
-            });
+            throw new UserNotFoundException();
         }
 
         if (!user.isActivated) {

@@ -6,6 +6,8 @@ import { User } from './users.model';
 import { UsersService } from './users.service';
 import { RolesGuard } from '../auth/roles.guard';
 import { AddRoleDto } from './dto/add-role.dto';
+import { TransferMoney } from './dto/transfer-money.dto';
+import { WithdrawMoney } from './dto/withdraw-money.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -40,11 +42,27 @@ export class UsersController {
     }
 
     @ApiOperation({
-        summary : 'Add user role'
+        summary : 'Transfer money between wallets'
     })
-    @ApiResponse({
-        status : 200,
-        type : [User]
+    @Roles('admin')
+    @UseGuards(RolesGuard)
+    @Post('/transfer-money')
+    transferMoney(@Body() dto: TransferMoney) {
+        return this.userService.transferMoney(dto);
+    }
+
+    @ApiOperation({
+        summary : 'Withdraw money from main wallet'
+    })
+    @Roles('admin')
+    @UseGuards(RolesGuard)
+    @Post('/withdraw')
+    withdrawMoney(@Body() dto: WithdrawMoney) {
+        return this.userService.withdrawMoney(dto);
+    }
+
+    @ApiOperation({
+        summary : 'Add user role'
     })
     @Roles('admin')
     @UseGuards(RolesGuard)

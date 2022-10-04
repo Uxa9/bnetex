@@ -72,8 +72,19 @@ export class User extends Model<User, UserCreationAttrs> {
     })
     @Column({
         type          : DataType.DOUBLE,
+        defaultValue  : 0
     })
     mainWallet : number;
+
+    @ApiProperty({
+        example : '123.45',
+        description : 'amount of money on invest wallet'
+    })
+    @Column({
+        type          : DataType.DOUBLE,
+        defaultValue  : 0
+    })
+    investWallet : number;
 
     @BelongsToMany(() => Role, () => UserRoles)
     roles: Role[];
