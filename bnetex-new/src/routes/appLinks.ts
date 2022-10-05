@@ -7,4 +7,5 @@ export enum AppLinksEnum {
     P2P = 'p2p',
     DASHBOARD = 'dashboard',
     DEPOSIT = 'deposit',
+    WITHDRAW = 'withdraw',
 }

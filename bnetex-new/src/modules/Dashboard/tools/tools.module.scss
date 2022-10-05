@@ -4,38 +4,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    p {
-        font-weight: 700;
-        font-size: 24px;
-        line-height: 28px;
-
-        color: #4E3660;
-        margin-right: 20px;
-    }
 }
 
 .tools-header-buttons {
     display: flex;
     align-items: center;
-
-    font-size: 14px;
-
-    >button {
-        font-size: 14px;
-
-        &:nth-child(2) {
-            margin: 0 20px;
-        }
-    }
-
-    span {
-        font-style: normal;
-        font-weight: 700;
-        line-height: 17px;
-
-        color: $activeBorder;
-    }
+    column-gap: 16px;
 }
 
 .charts {

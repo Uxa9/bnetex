@@ -1,11 +1,15 @@
 import styles from './mainWallet.module.scss';
 import classNames from 'classnames';
 import { Button } from 'lib/ui-kit';
+import { useGoToState } from 'lib/hooks/useGoToState';
+import { AppLinksEnum } from 'routes/appLinks';
 
 // toDo
 // сделать нормальные кнопки
 
 const MainWallet = () => {
+    
+    const { goToState } = useGoToState();
 
     return(
         <div className={styles.wallet}>
@@ -14,13 +18,16 @@ const MainWallet = () => {
                 <div className={styles['btns']}>
                     <Button
                         text='Ввод'
+                        onClick={() => goToState(AppLinksEnum.DEPOSIT)}
                     />
                     <Button
-                        className={styles['outlined-btn']}
                         text='Вывод'
+                        onClick={() => goToState(AppLinksEnum.WITHDRAW)}
                     />
-                    <p>Перевод</p>
-                    <p>Купить криптовалюту</p>
+                    <Button
+                        text='Перевод'
+                        buttonStyle={'thin'}
+                    />
                 </div>
             </div>
 
@@ -36,23 +43,6 @@ const MainWallet = () => {
                         </p>
                     </div>
                 </div>
-
-                <div className={styles['balance-item']}>
-                    <p className={styles['balance-item__label']}>
-                            Спотовый баланс
-                    </p>
-                    <p className={styles['balance-item__value']}>
-                            0.0040543
-                    </p>
-                </div>
-                <div className={styles['balance-item']}>
-                    <p className={styles['balance-item__label']}>
-                            Фиатный баланс
-                    </p>
-                    <p className={styles['balance-item__value']}>
-                            0.0040543
-                    </p>
-                </div>
             </div>
 
             <div className={classNames(styles['assets'], 'card')}>
@@ -62,11 +52,13 @@ const MainWallet = () => {
 
                 <table>
                     <thead>
-                        <th>Криптовалюта</th>
-                        <th>Всего</th>
-                        <th>Доступно</th>
-                        <th>Стоимость в BTC</th>
-                        <th>Действия</th>
+                        <tr>
+                            <th>Криптовалюта</th>
+                            <th>Всего</th>
+                            <th>Доступно</th>
+                            <th>Стоимость в BTC</th>
+                            <th>Действия</th>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr>

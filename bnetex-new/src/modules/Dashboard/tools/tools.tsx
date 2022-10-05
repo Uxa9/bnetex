@@ -28,9 +28,9 @@ const Tools = () => {
             <div
                 className={styles['tools-header']}
             >
-                <p>
+                <h3>
                     Панель инструментов
-                </p>
+                </h3>
                 <div
                     className={styles['tools-header-buttons']}
                 >
@@ -40,10 +40,10 @@ const Tools = () => {
                         onClick={() => goToState(AppLinksEnum.DEPOSIT)}
                     />
                     <Button
-                        buttonStyle={'secondary'}
+                        buttonStyle={'primary'}
                         text={'Вывод'}
+                        onClick={() => goToState(AppLinksEnum.WITHDRAW)}
                     />
-                    <span>Купить криптовалюту</span>
                 </div>
             </div>
             <div

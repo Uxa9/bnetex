@@ -1,6 +1,7 @@
 import styles from './investorWallet.module.scss';
 import classNames from 'classnames';
 import AreaChart from 'modules/terminal/investor/chart/areaChart';
+import { Button } from 'lib/ui-kit';
 
 // toDo
 // сделать нормальные кнопки
@@ -14,8 +15,10 @@ const InvestorWallet = () => {
             <div className={styles['wallet-header']}>
                 <h3>Инвестиционный кошелек</h3>
                 <div className={styles['wallet-header__btns']}>
-                    <p>Перевод</p>
-                    <p>Купить криптовалюту</p>
+                    <Button 
+                        text={'Перевод'}
+                        buttonStyle={'thin'}                    
+                    />
                 </div>
             </div>
 
@@ -35,7 +38,7 @@ const InvestorWallet = () => {
                             Доступно для вывода
                         </p>
                         <p className={styles['balance-item__value']}>
-                            41.4231
+                            00.0000
                         </p>
                     </div>
                     <div className={styles['balance-item']}>

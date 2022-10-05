@@ -1,5 +1,8 @@
 import classNames from 'classnames';
+import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { CryptoTransactionItemType } from 'lib/types/cryptoTransactionItem';
+import { useEffect } from 'react';
+import { getTransactions } from 'services/transactions';
 import CryptoTransactionItem from './cryptoTransactionItem/cryptoTransactionItem';
 import styles from './transactions.module.scss';
 
@@ -124,6 +127,18 @@ const blankTransactions: CryptoTransactionItemType[] = [
 ];
 
 const Transactions = () => {
+
+    const { promiseWithLoading, isLoading } = usePromiseWithLoading();
+
+    useEffect(() => {
+        loadTrasactions();
+    }, []);
+
+    const loadTrasactions = async () => {
+        await promiseWithLoading(getTransactions())
+            .then((response) => console.log(response))
+            .catch((error) => console.log(error));
+    };
 
     return(
         <div className={styles.transactions}>

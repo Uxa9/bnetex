@@ -26,21 +26,6 @@
     row-gap: 32px;
 }
 
-.address {
-    &__wrapper {
-        display: flex;
-        column-gap: 8px;
-        align-items: center;
-    }
-
-    // toDo: заменить на .subtitle
-    &__code {
-        font-size: 18px;
-        line-height: 18px;
-        font-weight: 500;
-    }
-}
-
 .disclaimer {
     @include column-flex(8px);
     &__item {

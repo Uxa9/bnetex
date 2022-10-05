@@ -1,6 +1,5 @@
 import styles from './header.module.scss';
 import { Wallet, User, Logo, Login, Logout } from '../../assets/images/icons';
-import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'lib/ui-kit';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 // import SettingsMenu from './SettingsMenu';
@@ -30,18 +29,12 @@ const Header = () => {
             />
             <nav className={styles.links}>
                 <div className={styles['links__main']}>
-                    <Link to={'terminal/investor'}>
-                        <Button
-                            text={'Алготрейдинг'}
-                            buttonStyle={'thin'}
-                        />
-                    </Link>
-
-                    {/* <Button
-                        text={'P2P'}
+                    <Button
+                        text={'Алготрейдинг'}
                         buttonStyle={'thin'}
-                    /> */}
-
+                        className={styles.header__btn}
+                        onClick={() => goToState('/terminal/investor')}
+                    />
                 </div>
                 <div className={styles['links__user']}>
                     {
@@ -51,18 +44,21 @@ const Header = () => {
                                     text={'Кошельки'}
                                     buttonStyle={'thin'}
                                     Icon={Wallet}
+                                    className={styles.header__btn}
                                     onClick={() => goToState('/dashboard/wallet/main')}
                                 />
                                 <Button
                                     text={'Профиль'}
                                     buttonStyle={'thin'}
                                     Icon={User}
+                                    className={styles.header__btn}
                                     onClick={() => goToState('/dashboard')}
                                 />
                                 <Button
                                     text={'Выйти'}
                                     buttonStyle={'thin'}
                                     Icon={Logout}
+                                    className={styles.header__btn}
                                     onClick={logoutUser}
                                 />
                             </>
@@ -72,6 +68,7 @@ const Header = () => {
                                     text={'Войти'}
                                     buttonStyle={'thin'}
                                     Icon={Login}
+                                    className={styles.header__btn}
                                     onClick={() => goToState(`${AUTH}/${LOGIN}`)}
                                 />
                                 <Button

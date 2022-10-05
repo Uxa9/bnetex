@@ -1,4 +1,4 @@
-@import '../../../styles/variables.scss';
+@import 'styles/variables.scss';
 
 .wallet {
     width: 100%;
@@ -15,12 +15,8 @@
     &__btns {
         display: flex;
         column-gap: 20px;
-
-        p {
+        button {
             font-weight: 700;
-            font-size: 16px;
-            color: $activeBorder;
-            cursor: pointer;
         }
     }
 }

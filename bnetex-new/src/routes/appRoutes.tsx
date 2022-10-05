@@ -16,10 +16,11 @@ import Transactions from 'modules/Dashboard/transactions/transactions';
 import Registration from 'modules/Auth/Registration/registration';
 import Deposit from 'modules/Payments/Deposit/deposit';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
+import Withdraw from 'modules/Payments/Withdraw/withdraw';
 
 const AppRoutes = () => {
 
-    const { HOME, AUTH, REGISTRATION, LOGIN, P2P, TERMINAL, DASHBOARD, DEPOSIT } = AppLinksEnum;
+    const { HOME, AUTH, REGISTRATION, LOGIN, P2P, TERMINAL, DASHBOARD, DEPOSIT, WITHDRAW } = AppLinksEnum;
     const { isAuth } = useTypedSelector(state => state.auth);
 
     return (
@@ -53,6 +54,7 @@ const AppRoutes = () => {
                 </Route>
                 <Route path={P2P}></Route>
                 <Route path={DEPOSIT} element={<Deposit />}></Route>
+                <Route path={WITHDRAW} element={<Withdraw />}></Route>
             </Route>
         </Routes>
     );
