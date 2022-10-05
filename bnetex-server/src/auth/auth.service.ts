@@ -4,7 +4,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../users/users.model';
-import genereateAndSendAuthCode from './genereateAndSendAuthCode';
+import genereateAndSendAuthCode from '../services/genereateAndSendAuthCode';
 import { ConfirmEmail } from '../users/dto/confirm-email.dto';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { UserNotFoundException } from '../exceptions/userNotFound.exception';
@@ -53,6 +53,13 @@ export class AuthService {
 
     async confirmEmail(confirmDto: ConfirmEmail) {
         const user = await this.userService.getUserByEmail(confirmDto.email);
+
+        if ( user.isActivated ) {
+            return {
+                status: "ERROR",
+                message: "EMAIL_ALREADY_CONFIRMED"
+            }
+        }
 
         if (confirmDto.activationCode === user.activationLink) {
 

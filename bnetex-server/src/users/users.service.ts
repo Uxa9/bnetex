@@ -5,7 +5,6 @@ import { RolesService } from '../roles/roles.service';
 import { AddRoleDto } from './dto/add-role.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { TransferMoney } from './dto/transfer-money.dto';
-import { WithdrawMoney } from './dto/withdraw-money.dto';
 import { User } from './users.model';
 
 @Injectable()
@@ -113,33 +112,6 @@ export class UsersService {
         return {
             status: "SUCCESS",
             message: "TRANSFER_SUCCESS"
-        }
-    }
-
-    async withdrawMoney(dto: WithdrawMoney) {
-        const user = await this.userRepository.findByPk(dto.userId);
-
-        if ( !user ) {
-            throw new UserNotFoundException();
-        }
-
-        if ( user.mainWallet < dto.amount ) {
-            throw new HttpException(
-                {
-                    status: "ERROR",
-                    message: "WALLET_AMOUNT_IS_LOWER_THAN_REQUESTED"
-                },
-                HttpStatus.BAD_REQUEST
-            );
-        }
-
-        user.mainWallet -= dto.amount;
-
-        await user.save();
-
-        return {
-            status: "SUCCESS",
-            message: "WITHDRAW_SUCCESS"
         }
     }
 }

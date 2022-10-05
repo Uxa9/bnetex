@@ -1,6 +1,6 @@
-import { IsNumber, Min } from "class-validator";
+import { IsNumber, IsString, Min } from "class-validator";
 
-export class WithdrawMoney {
+export class CreateRequest {
 
     @IsNumber({}, {
         message : "Id must be a number"
@@ -14,4 +14,9 @@ export class WithdrawMoney {
         message : "Value must be more than 0"
     })
     readonly amount : number;
+
+    @IsString({
+        message: "type must be a string"
+    })
+    readonly type : string;
 }
