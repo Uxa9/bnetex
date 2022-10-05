@@ -9,6 +9,8 @@ import { Button } from 'lib/ui-kit';
 const InvestorWallet = () => {
 
     const values: number[] = [124.55, 431.42, 324.54, 432.43, 543.76];
+    
+    const balance = JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.investWallet || 0.00;
 
     return (
         <div className={styles.wallet}>
@@ -30,7 +32,7 @@ const InvestorWallet = () => {
                             Баланс (USDT)
                         </p>
                         <p className={styles['balance-item__value']}>
-                            41.4231
+                            {balance}
                         </p>
                     </div>
                     <div className={styles['balance-item']}>

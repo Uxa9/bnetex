@@ -11,6 +11,8 @@ const MainWallet = () => {
     
     const { goToState } = useGoToState();
 
+    const balance = JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.mainWallet || 0.00;
+
     return(
         <div className={styles.wallet}>
             <div className={styles['wallet-header']}>
@@ -39,7 +41,7 @@ const MainWallet = () => {
                     </p>
                     <div className={styles['balance-item--big__values']}>
                         <p className={styles['balance-item__value']}>
-                        41.4231 
+                        {balance}
                         </p>
                     </div>
                 </div>

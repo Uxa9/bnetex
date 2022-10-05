@@ -8,12 +8,17 @@ export class CreateRequest {
     readonly userId : number;
 
     @IsNumber({}, {
-        message : "Id must be a number"
+        message : "Amount must be a number"
     })
     @Min(0, {
         message : "Value must be more than 0"
     })
     readonly amount : number;
+
+    @IsString({
+        message: "Address must be a string"
+    })
+    readonly walletAddress : string;
 
     @IsString({
         message: "type must be a string"

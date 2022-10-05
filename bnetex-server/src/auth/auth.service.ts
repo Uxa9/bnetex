@@ -54,6 +54,10 @@ export class AuthService {
     async confirmEmail(confirmDto: ConfirmEmail) {
         const user = await this.userService.getUserByEmail(confirmDto.email);
 
+        if (!user) {
+            throw new UserNotFoundException();
+        }
+
         if ( user.isActivated ) {
             return {
                 status: "ERROR",
@@ -90,7 +94,13 @@ export class AuthService {
     }
 
     private async generateToken(user: User) {
-        const payload = { email: user.email, id: user.id, roles: user.roles }
+        const payload = { 
+            email: user.email, 
+            id: user.id, 
+            roles: user.roles, 
+            mainWallet: user.mainWallet,
+            investWallet: user.investWallet 
+        }
 
         return {
             token: this.jwtService.sign(payload)
@@ -101,7 +111,6 @@ export class AuthService {
         const user = await this.userService.getUserByEmail(userDto.email);
 
         if (!user) {
-
             throw new UserNotFoundException();
         }
 

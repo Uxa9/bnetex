@@ -37,10 +37,6 @@ export class UsersService {
             include: { all: true }
         });
 
-        if ( !user ) {
-            throw new UserNotFoundException();
-        }
-
         return user;
     }
 

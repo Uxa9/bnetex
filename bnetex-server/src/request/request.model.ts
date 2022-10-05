@@ -38,6 +38,15 @@ export class Request extends Model<Request, RequestCreationAttrs> {
     userId : number;
 
     @ApiProperty({
+        example : 'TQwckR7VpEsrMFCogvjKhiQ1YJBNi5Qbjm',
+        description : 'user outer wallet address'
+    })
+    @Column({
+        type : DataType.STRING
+    })
+    walletAddress : string;
+
+    @ApiProperty({
         example : 123.45,
         description : 'amount of money'
     })

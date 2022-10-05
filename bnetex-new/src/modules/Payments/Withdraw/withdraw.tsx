@@ -1,21 +1,28 @@
 import { Angle } from 'assets/images/icons';
 import classNames from 'classnames';
 import { useGoToState } from 'lib/hooks/useGoToState';
+import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
+import { useToast } from 'lib/hooks/useToast';
 import { Button, Input } from 'lib/ui-kit';
 import { numberValidation, requiredValidation } from 'lib/utils/hookFormValidation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { AppLinksEnum } from 'routes/appLinks';
+import withdrawRequest from 'services/withdrawRequset';
 import styles from './withdraw.module.scss';
 
 interface WithdrawFormData {
+    userId: string,
     address: string,
     amount: number,
+    type: string
 }
 
 const Withdraw = () => {
 
-    const {navigateBack} = useGoToState();
+    const { bakeToast } = useToast();
+    const { navigateBack, goToState } = useGoToState();
+    const { isLoading, promiseWithLoading } = usePromiseWithLoading();
     const BALANCE = 123.45;
 
     const {
@@ -31,8 +38,16 @@ const Withdraw = () => {
         reValidateMode: 'onChange',
     });
 
-    const onSubmit = (data: WithdrawFormData) => {
-        console.log(data);
+    const onSubmit = (data: any) => {
+        promiseWithLoading(withdrawRequest({
+            ...data,
+            userId: JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId,
+            type: "withdraw"
+        }))
+            .then(() => {
+                goToState(AppLinksEnum.DASHBOARD);
+            })
+            .catch((error) => bakeToast.error(error.response?.data.message));
     };
 
     return(
