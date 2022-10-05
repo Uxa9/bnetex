@@ -23,6 +23,11 @@ export class AuthController {
         return this.authService.registration(userDto);
     }
 
+    @Post('resend-activation-link')
+    resendActivationLink(@Body() email: string) {
+        return this.authService.callGenerateActivationLink(email);
+    }
+
     @Post('confirm-email')
     confirmEmail(@Body() confirmDto: ConfirmEmail) {
         return this.authService.confirmEmail(confirmDto);

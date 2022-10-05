@@ -7,6 +7,7 @@ import { UsersService } from '../users/users.service';
 import { TransactionStatus } from './transaction-status.model';
 import { CreateTransactionStatusDto } from './dto/create-transaction-status.dto';
 import axios from 'axios';
+import { UserNotFoundException } from '../exceptions/userNotFound.exception';
 
 @Injectable()
 export class TransactionService {
@@ -125,13 +126,7 @@ export class TransactionService {
                 'mainWallet' : user.mainWallet + transaction.amount
             });
         } else {
-            throw new HttpException(
-                {
-                    status: "ERROR",
-                    message: 'USER_NOT_FOUND'
-                },
-                HttpStatus.NOT_FOUND
-            );
+            throw new UserNotFoundException();
         }
 
         transaction.update({

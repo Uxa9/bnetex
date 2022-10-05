@@ -4,9 +4,10 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../users/users.model';
-import genereateAndSendAuthCode from './genereateAndSendAuthCode';
+import genereateAndSendAuthCode from '../services/genereateAndSendAuthCode';
 import { ConfirmEmail } from '../users/dto/confirm-email.dto';
 import { LoginUserDto } from '../users/dto/login-user.dto';
+import { UserNotFoundException } from '../exceptions/userNotFound.exception';
 
 @Injectable()
 export class AuthService {
@@ -39,7 +40,7 @@ export class AuthService {
             );
         }
 
-        let authCode = await genereateAndSendAuthCode(userDto.email);
+        let authCode = await this.callGenerateActivationLink(userDto.email);
 
         const hashPassword = await bcrypt.hash(userDto.password, 5);
         await this.userService.createUser({ ...userDto, password: hashPassword, activationLink: authCode });
@@ -52,6 +53,13 @@ export class AuthService {
 
     async confirmEmail(confirmDto: ConfirmEmail) {
         const user = await this.userService.getUserByEmail(confirmDto.email);
+
+        if ( user.isActivated ) {
+            return {
+                status: "ERROR",
+                message: "EMAIL_ALREADY_CONFIRMED"
+            }
+        }
 
         if (confirmDto.activationCode === user.activationLink) {
 
@@ -77,7 +85,11 @@ export class AuthService {
         }
     }
 
-    async generateToken(user: User) {
+    async callGenerateActivationLink(email: string) {
+        return await genereateAndSendAuthCode(email);
+    }
+
+    private async generateToken(user: User) {
         const payload = { email: user.email, id: user.id, roles: user.roles }
 
         return {
@@ -90,10 +102,7 @@ export class AuthService {
 
         if (!user) {
 
-            throw new UnauthorizedException({
-                status: "ERROR",
-                message: "USER_NOT_FOUND"
-            });
+            throw new UserNotFoundException();
         }
 
         if (!user.isActivated) {

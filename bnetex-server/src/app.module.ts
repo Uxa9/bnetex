@@ -13,6 +13,7 @@ import { RolesController } from './roles/roles.controller';
 import { UserRoles } from "./roles/user-roles.model";
 import { AuthModule } from './auth/auth.module';
 import { TransactionModule } from './transaction/transaction.module';
+import { RequestModule } from './request/request.module';
 
 
 @Module({
@@ -35,7 +36,8 @@ import { TransactionModule } from './transaction/transaction.module';
         UsersModule,
         RolesModule,
         AuthModule,
-        TransactionModule
+        TransactionModule,
+        RequestModule
     ]
 })
 export class AppModule{};
