@@ -1,0 +1,37 @@
+@import 'styles/mixins.scss';
+@import 'styles/variables.scss';
+
+.back-action {
+    display: flex;
+    align-items: center;
+    transition: margin 0.35s;
+    margin-left: 0px;
+
+    @include size-svg(30px, 30px);
+    svg {
+        transform: rotate(90deg);
+    }
+
+    &:hover {
+        margin-left: -16px;
+    }
+}
+
+.card {
+    margin-top: 16px;
+    max-width: 500px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 32px;
+}
+
+.disclaimer {
+    @include column-flex(8px);
+    &__item {
+        list-style: disc inside;
+        span {
+            font-weight: 500;
+        }
+    }
+}

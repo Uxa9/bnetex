@@ -72,6 +72,15 @@ export class UsersService {
         return user;
     }
 
+    async getWallets(id: number) {
+        const user = await this.getUserById(id);
+
+        return {
+            mainWallet: user.mainWallet,
+            investWallet: user.investWallet
+        }
+    }
+
     async transferMoney(dto: TransferMoney) {
         const user = await this.userRepository.findByPk(dto.userId);
 

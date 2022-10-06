@@ -8,4 +8,6 @@ export enum AppLinksEnum {
     DASHBOARD = 'dashboard',
     DEPOSIT = 'deposit',
     WITHDRAW = 'withdraw',
+    WITHDRAW_CONFIRM = 'withdraw/confirm',
+    TRANSFER = 'transfer'
 }

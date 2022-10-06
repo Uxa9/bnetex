@@ -1,8 +1,8 @@
 import useApi from 'lib/hooks/useApi';
 
 interface WithdrawFormData {
-    userId: string,
-    address: string,
+    userId: number,
+    walletAddress: string,
     amount: number,
     type: string
 }
@@ -15,8 +15,8 @@ const withdrawRequest = async (data: WithdrawFormData) => {
         '/request/create', 
         data
     )
-        .then((_response) => {
-            
+        .then((response) => {
+            localStorage.setItem('requestId', response.data.requestId)
         });
 };
 

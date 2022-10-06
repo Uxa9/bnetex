@@ -5,7 +5,7 @@ import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
 import { Button, Input } from 'lib/ui-kit';
 import { numberValidation, requiredValidation } from 'lib/utils/hookFormValidation';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AppLinksEnum } from 'routes/appLinks';
 import withdrawRequest from 'services/withdrawRequset';
@@ -13,7 +13,7 @@ import styles from './withdraw.module.scss';
 
 interface WithdrawFormData {
     userId: string,
-    address: string,
+    walletAddress: string,
     amount: number,
     type: string
 }
@@ -23,8 +23,12 @@ const Withdraw = () => {
     const { bakeToast } = useToast();
     const { navigateBack, goToState } = useGoToState();
     const { isLoading, promiseWithLoading } = usePromiseWithLoading();
-    const BALANCE = 123.45;
-
+    const [balance, setBalance] = useState(0);
+    
+    useEffect(() => {
+        setBalance(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.mainWallet || 0.00);
+    }, []);
+    
     const {
         register,
         handleSubmit,
@@ -45,7 +49,7 @@ const Withdraw = () => {
             type: "withdraw"
         }))
             .then(() => {
-                goToState(AppLinksEnum.DASHBOARD);
+                goToState(AppLinksEnum.WITHDRAW_CONFIRM);
             })
             .catch((error) => bakeToast.error(error.response?.data.message));
     };
@@ -66,18 +70,18 @@ const Withdraw = () => {
                 >
                     <Input
                         label={'Адрес кошелька'}
-                        inputControl={register('address', {...requiredValidation})}
-                        errorText={errors.address?.message}
-                        key={'address'} 
+                        inputControl={register('walletAddress', {...requiredValidation})}
+                        errorText={errors.walletAddress?.message}
+                        key={'walletAddress'} 
                     />
                     <Input
                         label={'Объем для вывода (USDT)'}
                         inputControl={register('amount', {
                             ...numberValidation,
-                            max: {value: BALANCE, message: 'На балансе недостаточно средств'},
+                            max: {value: balance, message: 'На балансе недостаточно средств'},
                         })}
                         errorText={errors.amount?.message}
-                        key={'address'}
+                        key={'walletAddress'}
                     />
 
                     <Button 
@@ -88,7 +92,7 @@ const Withdraw = () => {
 
                     <ul className={styles.disclaimer}>
                         <li className={styles.disclaimer__item}>
-                            Баланс основного кошелька: <span>{BALANCE}</span>
+                            Баланс основного кошелька: <span>{balance}</span>
                         </li>
                         <li className={styles.disclaimer__item}>
                             Убедитесь, что кошелек использует сеть: <span>Tron (TRC20)</span>

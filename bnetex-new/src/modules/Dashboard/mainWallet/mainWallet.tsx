@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { Button } from 'lib/ui-kit';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
+import { useEffect, useState } from 'react';
 
 // toDo
 // сделать нормальные кнопки
@@ -10,8 +11,13 @@ import { AppLinksEnum } from 'routes/appLinks';
 const MainWallet = () => {
     
     const { goToState } = useGoToState();
+    // const [balance, setBalance] = useState(0);
 
-    const balance = JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.mainWallet || 0.00;
+    // useEffect(() => {
+    //     setBalance(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.mainWallet || 0.00);
+    // }, []);
+
+    const balance = JSON.parse(localStorage.getItem('mainWallet') || '{}') || 0.00;
 
     return(
         <div className={styles.wallet}>
@@ -29,6 +35,7 @@ const MainWallet = () => {
                     <Button
                         text='Перевод'
                         buttonStyle={'thin'}
+                        onClick={() => goToState(AppLinksEnum.TRANSFER)}
                     />
                 </div>
             </div>

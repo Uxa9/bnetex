@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
+import getWallets from 'services/getWallets';
 import styles from './dashboard.module.scss';
 
 type activeSectionType = 'tools' | 'settings' | 'wallet/main' | 'wallet/futures' | 'wallet/investor' | 'transactions';
@@ -43,6 +44,8 @@ const Dashboard = () => {
 
     useEffect(() => {
         const url = window.location.href;
+
+        getWallets(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1);
 
         dashboardSections.forEach((section: dashboardSection) => {
             if(url.match(section.link)){

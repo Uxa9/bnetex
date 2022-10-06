@@ -10,7 +10,7 @@ const InvestorWallet = () => {
 
     const values: number[] = [124.55, 431.42, 324.54, 432.43, 543.76];
     
-    const balance = JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.investWallet || 0.00;
+    const balance = JSON.parse(localStorage.getItem('investWallet') || '{}') || 0.00;
 
     return (
         <div className={styles.wallet}>

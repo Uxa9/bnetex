@@ -21,16 +21,16 @@ const login = async (email: string, password: string) => {
             };
 
             const user = parseJwt(response.data.token);
-            console.log(user);
-            
 
             const userInfo = {
                 token: response.data.token,
-                userId: user.userId,
+                userId: user.id,
                 mainWallet: user.mainWallet,
                 investWallet: user.investWallet
             };
             localStorage.setItem('userInfo-BNETEX', JSON.stringify(userInfo));
+            localStorage.setItem('mainWallet', user.mainWallet);
+            localStorage.setItem('investWallet', user.investWallet);
         });
 };
 

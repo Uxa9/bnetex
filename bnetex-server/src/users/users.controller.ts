@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, UsePipes } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, UsePipes, Param } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/roles-auth.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -43,8 +43,14 @@ export class UsersController {
     @ApiOperation({
         summary : 'Transfer money between wallets'
     })
-    @Roles('admin')
-    @UseGuards(RolesGuard)
+    @Get('/getWallets/:id')
+    getWallets(@Param('id') id: number) {
+        return this.userService.getWallets(id);
+    }
+
+    @ApiOperation({
+        summary : 'Transfer money between wallets'
+    })
     @Post('/transfer-money')
     transferMoney(@Body() dto: TransferMoney) {
         return this.userService.transferMoney(dto);
