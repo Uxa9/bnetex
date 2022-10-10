@@ -16,7 +16,7 @@ export class CreateRequest {
     readonly amount : number;
 
     @IsString({
-        message: "Address must be a string"
+        message: "walletAddress must be a string"
     })
     readonly walletAddress : string;
 

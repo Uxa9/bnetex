@@ -7,6 +7,7 @@ import { UsersService } from './users.service';
 import { RolesGuard } from '../auth/roles.guard';
 import { AddRoleDto } from './dto/add-role.dto';
 import { TransferMoney } from './dto/transfer-money.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Users')
 @Controller('users')
@@ -41,7 +42,7 @@ export class UsersController {
     }
 
     @ApiOperation({
-        summary : 'Transfer money between wallets'
+        summary : 'Kakaphony, remove later'
     })
     @Get('/getWallets/:id')
     getWallets(@Param('id') id: number) {
@@ -51,6 +52,7 @@ export class UsersController {
     @ApiOperation({
         summary : 'Transfer money between wallets'
     })
+    @UseGuards(JwtAuthGuard)
     @Post('/transfer-money')
     transferMoney(@Body() dto: TransferMoney) {
         return this.userService.transferMoney(dto);

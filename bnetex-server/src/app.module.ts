@@ -14,6 +14,7 @@ import { UserRoles } from "./roles/user-roles.model";
 import { AuthModule } from './auth/auth.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { RequestModule } from './request/request.module';
+import { MailSenderModule } from './mailSender/mailer.module';
 
 
 @Module({
@@ -37,7 +38,8 @@ import { RequestModule } from './request/request.module';
         RolesModule,
         AuthModule,
         TransactionModule,
-        RequestModule
+        RequestModule,
+        MailSenderModule
     ]
 })
 export class AppModule{};

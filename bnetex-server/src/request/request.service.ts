@@ -16,6 +16,30 @@ export class RequestService {
 
     async createRequest(dto: CreateRequest) {
         const user = await this.userService.getUserById(dto.userId);
+
+        const lastUserRequest = await this.requestRepository.findAll({
+            limit: 1,
+            where: {
+                userId: dto.userId
+            },
+            order: [ ['createdAt', 'DESC']]
+        });
+
+        if (lastUserRequest.length === 1) {
+            const timeDiff = new Date().getTime() -
+            new Date(lastUserRequest[0]?.createdAt?.toString()).getTime();
+            
+            if ( timeDiff < 30000 ) {
+                throw new HttpException(
+                    {
+                        status: "ERROR",
+                        message: "TOO_MANY_REQUESTS"
+                    },
+                    HttpStatus.FORBIDDEN
+                )
+            }
+        }
+
         const authCode = await genereateAndSendAuthCode(user.email, "withdraw");
         
         const request = await this.requestRepository.create({

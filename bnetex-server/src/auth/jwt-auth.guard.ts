@@ -9,6 +9,7 @@ export class JwtAuthGuard implements CanActivate {
 
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
         
+        console.log('aboba');
         const req = context.switchToHttp().getRequest()
         
         try {
@@ -18,7 +19,8 @@ export class JwtAuthGuard implements CanActivate {
 
             if (bearer !== 'Bearer' || !token) {
                 throw new UnauthorizedException({
-                    message : 'User not authorized'
+                    status : "ERROR",
+                    message : 'USER_NOT_AUTHORIZED'
                 });
             }
 
@@ -28,7 +30,8 @@ export class JwtAuthGuard implements CanActivate {
             return true;
         } catch (e) {
             throw new UnauthorizedException({
-                message : 'User not authorized'
+                status : "ERROR",
+                message : 'USER_NOT_AUTHORIZED'
             });
         }
 

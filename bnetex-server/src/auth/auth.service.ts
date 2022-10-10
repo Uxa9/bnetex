@@ -8,6 +8,7 @@ import genereateAndSendAuthCode from '../services/genereateAndSendAuthCode';
 import { ConfirmEmail } from '../users/dto/confirm-email.dto';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { UserNotFoundException } from '../exceptions/userNotFound.exception';
+import genereateAuthCode from 'src/services/generateAuthCode';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +32,7 @@ export class AuthService {
     async registration(userDto: CreateUserDto) {
         const candidate = await this.userService.getUserByEmail(userDto.email);
 
-        if (candidate) {
+        if (candidate && false) {
             throw new HttpException({
                 status: "ERROR",
                 message: "USER_WITH_THIS_EMAIL_ALREADY_EXISTS"
@@ -89,8 +90,8 @@ export class AuthService {
         }
     }
 
-    async callGenerateActivationLink(email: string) {
-        return await genereateAndSendAuthCode(email);
+    async callGenerateActivationLink() {
+        return genereateAuthCode();
     }
 
     private async generateToken(user: User) {
