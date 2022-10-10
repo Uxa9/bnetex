@@ -1,6 +1,87 @@
-<p>
-    aboba
-</p>
-<p>
-    {{code}}
-</p>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+<style>
+    * {
+        font-family: 'Rubik', sans-serif;
+    }
+
+    body {
+        width: 100%;
+        height: 100%;
+
+        max-width: 761px;
+
+        background-color: transparent;
+    }
+
+    .mail-container {
+        align-items: center;
+        background-color: white;
+
+        padding: 32px;
+    }
+
+    .text {
+        color: black;
+        font-size: 16px;
+    }
+
+    .text-big {
+        font-size: 18px;
+    }
+
+    .text-bold {
+        font-weight: bold;
+    }
+
+    .text-small {
+        font-size: 12px;
+    }
+
+    .code {
+        font-size: 28px;
+        font-weight: bold;
+        color: #9912FF;
+    }
+
+    .logo {
+        width: 135px;
+        height: 30px;
+
+        background-image: url("https://i.imgur.com/y351ges.png");
+        background-repeat: no-repeat;
+
+        margin-bottom: 60px;
+    }
+</style>
+
+<body>
+    <div class="mail-container">
+        <table style="border: none; width: 100%; border-collapse: collapse;">
+            <tr>
+                <th align="center" style="border: none;">
+                    <div class="logo">
+                    </div>
+                </th>
+            </tr>
+        </table>
+        <h1 class="text-bold">
+            Маленький шаг для вас и огромный скачок для вашего кошелька.
+        </h1>
+        <p class="text text-big">
+            Добро пожаловать на BNETEX. Подтвердите ваш адрес электронной почты, используя код ниже.
+        </p>
+        <p class="text text-bold">
+            Код активации аккаунта:
+        </p>
+        <p class="code">
+            {{code}}
+        </p>
+        <p class="text text-small">
+            Это автоматическое сообщение. Пожалуйста, не отвечайте на него.
+        </p>
+    </div>
+</body>

@@ -1,5 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { MailSenderModule } from '../mailSender/mailer.module';
 import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -14,7 +15,8 @@ import { AuthService } from './auth.service';
             signOptions: {
                 expiresIn: '24h'
             }
-        })
+        }),
+        MailSenderModule
     ],
     exports: [
         AuthService,

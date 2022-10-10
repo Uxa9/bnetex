@@ -21,9 +21,8 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
             defaults: {
                 from: '"No Reply" <bnetex.com>'
             },
-            preview: true,
             template: {
-                dir: './mailTemplates',
+                dir: `${process.cwd()}/src/mailSender/mailTemplates`,
                 adapter: new HandlebarsAdapter(),
                 options: {
                     strict: true

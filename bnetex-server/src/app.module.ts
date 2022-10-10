@@ -4,12 +4,8 @@ import { SequelizeModule } from "@nestjs/sequelize";
 
 import { User } from "./users/users.model";
 import { UsersModule } from './users/users.module';
-import { UsersService } from "./users/users.service";
-import { UsersController } from "./users/users.controller";
 import { Role } from "./roles/roles.model";
 import { RolesModule } from './roles/roles.module';
-import { RolesService } from './roles/roles.service';
-import { RolesController } from './roles/roles.controller';
 import { UserRoles } from "./roles/user-roles.model";
 import { AuthModule } from './auth/auth.module';
 import { TransactionModule } from './transaction/transaction.module';

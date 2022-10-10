@@ -1,5 +1,5 @@
 
-const genereateAuthCode = () => {
+const generateAuthCode = () => {
 
     const makeLink = (length: number) => {
         var result           = '';
@@ -15,4 +15,4 @@ const genereateAuthCode = () => {
     return makeLink(6);
 }
 
-export default genereateAuthCode;
+export default generateAuthCode;

@@ -8,19 +8,21 @@ import genereateAndSendAuthCode from '../services/genereateAndSendAuthCode';
 import { ConfirmEmail } from '../users/dto/confirm-email.dto';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { UserNotFoundException } from '../exceptions/userNotFound.exception';
-import genereateAuthCode from 'src/services/generateAuthCode';
+import generateAuthCode from '../services/generateAuthCode';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
 
     constructor(private userService: UsersService,
-        private jwtService: JwtService) { }
+        private jwtService: JwtService,
+        private readonly mailerService: MailerService) { }
 
     async login(userDto: LoginUserDto) {
         const user = await this.validateUser(userDto);
 
         const token = await this.generateToken(user);
-            
+
         return {
             status: "SUCCESS",
             message: "EMAIL_CONFIRMED",
@@ -41,7 +43,17 @@ export class AuthService {
             );
         }
 
-        let authCode = await this.callGenerateActivationLink(userDto.email);
+        let authCode = generateAuthCode();
+
+        await this.mailerService.sendMail({
+            to: 'kirill.yu99@gmail.com',
+            from: 'infobnetex@internet.ru',
+            subject: 'Код подтверждения',
+            template: 'signup',
+            context: {
+                code: authCode
+            }
+        })
 
         const hashPassword = await bcrypt.hash(userDto.password, 5);
         await this.userService.createUser({ ...userDto, password: hashPassword, activationLink: authCode });
@@ -59,7 +71,7 @@ export class AuthService {
             throw new UserNotFoundException();
         }
 
-        if ( user.isActivated ) {
+        if (user.isActivated) {
             return {
                 status: "ERROR",
                 message: "EMAIL_ALREADY_CONFIRMED"
@@ -71,7 +83,7 @@ export class AuthService {
             const token = await this.generateToken(user);
 
             user.update({
-                isActivated : true
+                isActivated: true
             });
 
             return {
@@ -90,17 +102,17 @@ export class AuthService {
         }
     }
 
-    async callGenerateActivationLink() {
-        return genereateAuthCode();
-    }
+    // async callGenerateActivationLink() {
+    //     return genereateAuthCode();
+    // }
 
     private async generateToken(user: User) {
-        const payload = { 
-            email: user.email, 
-            id: user.id, 
-            roles: user.roles, 
+        const payload = {
+            email: user.email,
+            id: user.id,
+            roles: user.roles,
             mainWallet: user.mainWallet,
-            investWallet: user.investWallet 
+            investWallet: user.investWallet
         }
 
         return {
