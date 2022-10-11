@@ -4,6 +4,7 @@ import { LoginUserDto } from '../users/dto/login-user.dto';
 import { ConfirmEmail } from '../users/dto/confirm-email.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
+import { ResendActivationLink } from './dto/resend-activation-link.dto';
 
 // todo : add api description
 
@@ -23,10 +24,10 @@ export class AuthController {
         return this.authService.registration(userDto);
     }
 
-    // @Post('resend-activation-link')
-    // resendActivationLink(@Body() email: string) {
-    //     return this.authService.callGenerateActivationLink(email);
-    // }
+    @Post('resend-activation-link')
+    resendActivationLink(@Body() dto: ResendActivationLink) {
+        return this.authService.resendLink(dto);
+    }
 
     @Post('confirm-email')
     confirmEmail(@Body() confirmDto: ConfirmEmail) {

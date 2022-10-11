@@ -5,11 +5,10 @@ import { Injectable } from "@nestjs/common";
 export class MailService {
     constructor(private mailerService: MailerService) {}
 
-    async sendMail(email: string, code: string) {
-        console.log(email);
+    async sendMail(email: string, code: string, subject: string) {
         await this.mailerService.sendMail({
             to: email,
-            subject: 'Код авторизации',
+            subject: subject,
             template: '/signup',
             context: {
                 code: code

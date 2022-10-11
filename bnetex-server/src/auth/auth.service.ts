@@ -10,6 +10,7 @@ import { LoginUserDto } from '../users/dto/login-user.dto';
 import { UserNotFoundException } from '../exceptions/userNotFound.exception';
 import generateAuthCode from '../services/generateAuthCode';
 import { MailerService } from '@nestjs-modules/mailer';
+import { ResendActivationLink } from './dto/resend-activation-link.dto';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +35,7 @@ export class AuthService {
     async registration(userDto: CreateUserDto) {
         const candidate = await this.userService.getUserByEmail(userDto.email);
 
-        if (candidate && false) {
+        if (candidate) {
             throw new HttpException({
                 status: "ERROR",
                 message: "USER_WITH_THIS_EMAIL_ALREADY_EXISTS"
@@ -46,14 +47,14 @@ export class AuthService {
         let authCode = generateAuthCode();
 
         await this.mailerService.sendMail({
-            to: 'kirill.yu99@gmail.com',
+            to: userDto.email,
             from: 'infobnetex@internet.ru',
             subject: 'Код подтверждения',
             template: 'signup',
             context: {
                 code: authCode
             }
-        })
+        });
 
         const hashPassword = await bcrypt.hash(userDto.password, 5);
         await this.userService.createUser({ ...userDto, password: hashPassword, activationLink: authCode });
@@ -61,6 +62,40 @@ export class AuthService {
         return {
             status: "SUCCESS",
             message: "REG_SUCCESS"
+        }
+    }
+
+    async resendLink(dto: ResendActivationLink) {
+        const user = await this.userService.getUserByEmail(dto.email);
+
+        if (!user) {
+            throw new HttpException({
+                status: "ERROR",
+                message: "USER_NOT_FOUND"
+            },
+                HttpStatus.NOT_FOUND
+            );
+        }
+
+        let authCode = generateAuthCode();
+
+        await this.mailerService.sendMail({
+            to: dto.email,
+            from: 'infobnetex@internet.ru',
+            subject: 'Код подтверждения',
+            template: 'signup',
+            context: {
+                code: authCode
+            }
+        });
+
+        await user.update({
+            activationLink: authCode
+        });
+
+        return {
+            status: "SUCCESS",
+            message: "MAIL_SENT"
         }
     }
 
