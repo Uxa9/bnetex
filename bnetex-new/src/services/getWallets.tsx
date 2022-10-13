@@ -10,6 +10,10 @@ const getWallets = async (id: number) => {
         .then((response) => {
             localStorage.setItem('mainWallet', response.data.mainWallet);
             localStorage.setItem('investWallet', response.data.investWallet);
+            return {
+                mainWallet: response.data.mainWallet,
+                investWallet: response.data.investWallet
+            }
         });
 };
 

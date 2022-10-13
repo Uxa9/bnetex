@@ -10,10 +10,12 @@ import hehe__pnl from '../../../assets/images/hehe__pnl.svg';
 import hehe__verify from '../../../assets/images/hehe__verify.svg';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
+import { useUser } from '../dashboard';
 
 const Tools = () => {
 
     const { goToState } = useGoToState();
+    const { mainWallet, investWallet } = useUser();
 
     const [options, setOptions] = useState({
         dataLabels: {enabled: false},
@@ -49,7 +51,7 @@ const Tools = () => {
             <div
                 className={styles['balance-and-transactions']}
             >
-                <div
+                {/* <div
                     className={`${styles['balance']} block`}
                 >
                     <p
@@ -85,12 +87,59 @@ const Tools = () => {
                             Посмотреть все
                         </span>
                     </div>
+                </div> */}
+                <div
+                    className={`${styles['balance']} block`}
+                >
+                    <p
+                        className={styles['balance-header']}
+                    >
+                        Баланс
+                    </p>
+                    <p
+                        className={styles['user-balance']}
+                    >
+                        {`${Number(mainWallet + investWallet).toFixed(2)} USDT`}
+                    </p>
+                    <div>
+                        <Chart
+                            type='bar'
+                            series={[
+                                {
+                                    name: "Основной кошелек",
+                                    data: [mainWallet]
+                                },
+                                {
+                                    name: "Инвестиционный кошелек",
+                                    data: [investWallet]
+                                }
+                            ]}
+                            options={{
+                                plotOptions: {
+                                    bar: {
+                                        horizontal: true
+                                    }
+                                },
+                                xaxis: {
+                                  categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
+                                }
+                            }}
+                        />
+                    </div>
+                    {/* <div>
+                        <Chart
+                            options={options}
+                            series={series}
+                            type="donut"
+                            width="400"
+                        />
+                    </div> */}
                 </div>
             </div>
             <div
                 className={styles['charts']}
             >
-                <div
+                {/* <div
                     style={{
                         width: '400px',
                         height: '330px',
@@ -113,7 +162,6 @@ const Tools = () => {
                         margin: '0 -40px',
                     }}
                 >
-
                 </div>
                 <div
                     style={{
@@ -125,8 +173,7 @@ const Tools = () => {
                         margin: '0 -40px',
                     }}
                 >
-
-                </div>
+                </div> */}
             </div>
         </div>
     );

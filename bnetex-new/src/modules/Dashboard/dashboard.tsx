@@ -1,6 +1,8 @@
 import classNames from 'classnames';
+import { useActions } from 'lib/hooks/useActionCreators';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { useEffect, useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useOutletContext } from 'react-router-dom';
 import getWallets from 'services/getWallets';
 import styles from './dashboard.module.scss';
 
@@ -9,6 +11,11 @@ type activeSectionType = 'tools' | 'settings' | 'wallet/main' | 'wallet/futures'
 interface dashboardSection{
     link: activeSectionType,
     title: string
+}
+
+type ContexType = {
+    mainWallet: number,
+    investWallet: number
 }
 
 const dashboardSections: dashboardSection[] = [
@@ -40,12 +47,19 @@ const dashboardSections: dashboardSection[] = [
 
 const Dashboard = () => {
 
+    const { setMainWallet, setInvestWallet } = useActions();
     const [activeSection, setActiveSection] = useState<activeSectionType | undefined>(undefined);
+    const { mainWallet, investWallet } = useTypedSelector(state => state.user);
 
     useEffect(() => {
         const url = window.location.href;
 
-        getWallets(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1);
+        getWallets(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
+            .then(async (wallets) => {
+                await setMainWallet(wallets.mainWallet);
+                await setInvestWallet(wallets.investWallet);                
+            });
+
 
         dashboardSections.forEach((section: dashboardSection) => {
             if(url.match(section.link)){
@@ -76,12 +90,16 @@ const Dashboard = () => {
                             )
                         }
                     </aside>
-                    <Outlet />
+                    <Outlet context={{mainWallet, investWallet}}/>
                 </main>
             </div>
         </>
 
     );
 };
+
+export function useUser() {
+    return useOutletContext<ContexType>();
+}
 
 export default Dashboard;
