@@ -107,22 +107,52 @@ const Tools = () => {
                             series={[
                                 {
                                     name: "Основной кошелек",
-                                    data: [mainWallet]
+                                    data: [Number(Number(mainWallet).toFixed(2))]
                                 },
                                 {
                                     name: "Инвестиционный кошелек",
-                                    data: [investWallet]
+                                    data: [Number(Number(investWallet).toFixed(2))]
                                 }
                             ]}
+                            height={'150px'}
                             options={{
+                                chart: {
+                                    stacked: true,
+                                    zoom      : { enabled : false },
+                                    selection : { enabled : false },
+                                    toolbar   : { show : false }
+                                },
+                                grid: { 
+                                    show: false,
+                                    xaxis: {
+                                        lines: { show: false }
+                                    },   
+                                    yaxis: {
+                                        lines: { show: false }
+                                    },    
+                                },
                                 plotOptions: {
                                     bar: {
-                                        horizontal: true
+                                        horizontal: true,
+                                        barHeight: '12px',
                                     }
                                 },
                                 xaxis: {
-                                  categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
-                                }
+                                    categories: [''],
+                                    labels: {
+                                        show: false
+                                    },
+                                    axisBorder: { show : false },
+                                    axisTicks: { show : false }
+                                },
+                                yaxis: {
+                                    show: false
+                                },
+                                stroke: {
+                                    width: 0
+                                },
+                                colors : ['#9202FF', '#1A75FF'],
+                                dataLabels : { enabled : false },
                             }}
                         />
                     </div>

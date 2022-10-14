@@ -7,11 +7,11 @@ interface transferBetweenWalletsData {
     amount : number
 }
 
+const [ protectedApi ] = useApi();
+
 const transferBetweenWallets = async (data: transferBetweenWalletsData) => {
 
-    const [api] = useApi();
-
-    return await api.post(
+    return await protectedApi.post(
         '/users/transfer-money', 
         data
     );

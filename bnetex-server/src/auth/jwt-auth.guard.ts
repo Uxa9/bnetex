@@ -8,11 +8,12 @@ export class JwtAuthGuard implements CanActivate {
     constructor(private jwtService: JwtService) {}
 
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-        
-        console.log('aboba');
+
         const req = context.switchToHttp().getRequest()
         
         try {
+            console.log(req.headers);
+            
             const authHeader = req.headers.authorization;
             const bearer = authHeader.split(' ')[0];
             const token  = authHeader.split(' ')[1];
