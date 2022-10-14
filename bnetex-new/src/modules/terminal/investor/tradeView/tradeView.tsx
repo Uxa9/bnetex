@@ -1,22 +1,31 @@
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { Button, Input } from 'lib/ui-kit';
 import { blockEAndDashKey } from 'lib/utils';
-import { createRef, useState } from 'react';
+import { createRef, useEffect, useState } from 'react';
+import getWallets from 'services/getWallets';
+import { setInvestWallet, setMainWallet } from 'store/action-creators/user';
 import styles from '../investorView.module.scss';
 
 const TradeView = () => {
 
     const [inputValue, setInputValue] = useState<number | ''>('');
-
+    const { investWallet } = useTypedSelector(state => state.user);
     // Костыльное решение, лучше бы сделать через react-hook-form
     const [inputError, setInputError] = useState<string>('');
 
-    // Это должно приходить с бэка
-    const balance = 21567.34;
+    useEffect(() => {
+        getWallets(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
+            .then(async (wallets) => {
+                await setMainWallet(wallets.mainWallet);
+                await setInvestWallet(wallets.investWallet);                
+            });
+
+    }, []);
 
     const validateInputChange = (event: React.ChangeEvent<HTMLInputElement> ) => {
         const value = event.currentTarget.valueAsNumber;
 
-        setInputError(value > balance ? 'На балансе недостаточно средств' : '');
+        setInputError(value > investWallet ? 'На балансе недостаточно средств' : '');
 
         setInputValue(isNaN(value) ? '' : value);
     };
@@ -24,7 +33,7 @@ const TradeView = () => {
     const inputRef = createRef<HTMLInputElement>();
 
     const setInputValueToBalance = () => {
-        setInputValue(balance);
+        setInputValue(investWallet);
         inputRef.current?.focus();
     };
  
@@ -41,7 +50,7 @@ const TradeView = () => {
                 <p
                     className={styles['investor-balance-amount']}
                 >
-                    {balance} USDT 
+                    {investWallet} USDT 
                 </p>
             </div>
             <div
@@ -71,8 +80,8 @@ const TradeView = () => {
                 className={styles['button-wrapper']}
             >
                 <Button
-                    buttonStyle={'accept'}
-                    disabled={!inputValue || !inputError}
+                    buttonStyle={'stroke'}
+                    disabled={!(!(inputValue.toString() === '') && !inputError)}
                     text={'Начать работу'}
                 />
             </div>

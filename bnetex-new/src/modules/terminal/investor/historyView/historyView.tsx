@@ -37,7 +37,7 @@ const HistoryView = () => {
                 <p
                     className={styles['header']}
                 >
-                    Выберите срок инвестиций среди вариантов ниже
+                    Выберите срок инвестиций
                 </p>
                 <ToggleButtonGroup 
                     title={''} 
@@ -73,7 +73,7 @@ const HistoryView = () => {
                 className={styles['button-wrapper']}
             >
                 <Button
-                    buttonStyle={'secondary'}
+                    buttonStyle={'stroke'}
                     disabled={!inputValue}
                     text={'Рассчитать доход'}
                 />

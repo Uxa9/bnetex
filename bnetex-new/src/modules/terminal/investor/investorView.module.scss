@@ -9,7 +9,8 @@
 
 .header {
     font-size: 14px;
-    color: $grayText;
+    font-weight: lighter;
+    color: $grayscale9;
 
     line-height: 20px;
 }
@@ -21,9 +22,11 @@
     justify-content: space-between;
 }
 
-.investor-income-amount {
-    font-size: 16px;
-    color: $textColor;
+.investor-income-amount,
+.investor-balance-amount {
+    font-size: 20px;
+    font-weight: 500;
+    color: $grayscale11;
 }
 
 .investor-income-percent {
@@ -34,12 +37,6 @@
 .investor-balance,
 .investor-invest {
     margin-top: 20px;
-}
-
-.investor-balance-amount {
-    font-size: 20px;
-    font-weight: 500;
-    color: $textColor;
 }
 
 .button-wrapper {
