@@ -1,14 +1,15 @@
-@import 'styles/mixins.scss';
-@import 'styles/variables.scss';
+@import 'styles/colors/colors';
+@import 'styles/mixins';
 
 .password-postfix {
     padding: 0 8px;
     width: fit-content;
     cursor: pointer;
     transition: fill 0.25s;
+    fill: $grayscale-11;
 
     &:hover {
-        fill: $activeBorder;
+        fill: $accent-3;
     }
 }
 

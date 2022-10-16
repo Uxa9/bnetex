@@ -27,6 +27,7 @@ const Button: FC<ButtonProps> = props => {
                 {
                     classNames(
                         styles['button'],
+                        styles[`button_style--${buttonStyle}`],
                         styles[`button_style--${buttonStyle}-${buttonTheme}`],
                         styles[`button_align--${iconAlignment}`],
                         fillContainer && styles['button--fill-container'],

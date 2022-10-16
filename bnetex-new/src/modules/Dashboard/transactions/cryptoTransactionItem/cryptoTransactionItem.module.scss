@@ -1,13 +1,13 @@
-@import 'styles/variables.scss';
-@import 'styles/mixins.scss';
+@import 'styles/colors/colors';
+@import 'styles/mixins';
 
 .item-type {
     &--withdrawal {
-        color: $red;
+        color: $red-3;
     }
 
     &--income {
-        color: $green;
+        color: $green-3;
     }
 }
 
@@ -22,13 +22,13 @@
     place-items: center;
 
     &--processing {
-        @include with-alpha-background($orange, 0.2);
-        color: $orange;
+        @include with-alpha-background($orange-6, 0.2);
+        color: $orange-3;
     }
 
     &--confirmed {
-        @include with-alpha-background($green, 0.2);
-        color: $green;
+        @include with-alpha-background($green-6, 0.2);
+        color: $green-3;
     }
 }
 

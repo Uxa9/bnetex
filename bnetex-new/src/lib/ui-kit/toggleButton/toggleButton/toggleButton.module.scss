@@ -1,25 +1,25 @@
-@import '../../../../styles/variables.scss';
+@import 'styles/colors/colors';
 
 .button {
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    border: 1px solid $grayBorder;
+    border: 1px solid $grayscale-4;
     background-color: transparent;
     transition: 0.25s;
     padding: 8px 4px; 
     width: 100%;
-    color: $grayText;
+    color: $grayscale-6;
 
     &:hover {
-        border: 1px solid $activeBorder;
-        color: $activeBorder;
+        border: 1px solid $accent-2;
+        color: $accent-2;
     }
 }
 
 input:checked + .button {
-    border: 1px solid $activeBorder;
-    color: $activeBorder;
-    background-color: $activeBG;
+    border: 1px solid $accent-3;
+    color: $accent-3;
+    background-color: $accent-6;
 }

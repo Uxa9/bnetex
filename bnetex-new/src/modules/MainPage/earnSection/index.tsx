@@ -44,7 +44,7 @@ const Earn = () => {
                     Icon={CornerArrow}
                     className={styles['stroke-btn']}
                     iconAlignment={'right'}
-                    buttonStyle={'stroke'}
+                    buttonStyle={'outlined'}
                 />
             </div>
             <div

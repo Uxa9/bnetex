@@ -68,7 +68,7 @@ const Invest = () => {
                     Icon={CornerArrow}
                     className={styles['stroke-btn']}
                     iconAlignment={'right'}
-                    buttonStyle={'stroke'}
+                    buttonStyle={'outlined'}
                     onClick={() => navigate('/terminal/investor')}
                 />
             </div>

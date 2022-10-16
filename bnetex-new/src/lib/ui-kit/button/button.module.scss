@@ -2,12 +2,6 @@
 @import 'styles/mixins.scss';
 @import 'styles/colors/colors.scss';
 
-$button-color-themes: (
-    primary: 'accent',
-    red: 'red',
-    green: 'green',
-);
-
 .button {
     display: flex;
     align-items: center;
@@ -36,93 +30,155 @@ $button-color-themes: (
     }
 }
 
-@each $color-key, $color-name in $button-color-themes {
-    .button_style {
-        &--primary {
-            @include color-svg($constant-white);
+.button_style {
+    &--primary {
+        @include color-svg($constant-white);
 
-            &-#{$color-name} {
-                @include dynamic-background(#{$color-name}-3, #{$color-name}-2, #{$color-name}-1);
-            }
+        &-accent {
+            @include dynamic-background($accent-3, $accent-2, $accent-1);
+        }
 
-            &:disabled {
+        &-green {
+            @include dynamic-background($green-3, $green-2, $green-1);
+        }
+
+        &-red {
+            @include dynamic-background($red-3, $red-2, $red-1);
+        }
+
+        &:disabled {
+            background-color: $grayscale-3;
+            &:hover,
+            &:active {
                 background-color: $grayscale-3;
-                &:hover,
-                &:active {
-                    background-color: $grayscale-3;
-                }
             }
         }
+    }
 
-        &--secondary {
-            @include color-svg($grayscale-11);
-            @include dynamic-background($grayscale-2, $grayscale-3, $grayscale-4);
+    &--secondary {
+        @include color-svg($grayscale-11);
+        @include dynamic-background($grayscale-2, $grayscale-3, $grayscale-4);
 
-            &:disabled {
+        &:disabled {
+            background-color: $grayscale-3;
+
+            &:hover,
+            &:active {
                 background-color: $grayscale-3;
-
-                &:hover,
-                &:active {
-                    background-color: $grayscale-3;
-                }
             }
         }
+    }
 
-        &--outlined {
-            &-#{$color-name} {
-                @include color-svg(#{$color-name}-3);
-                border: 2px solid #{$color-name}-3;
-
-                &:hover {
-                    @include color-svg(#{$color-name}-2);
-                    border-color: #{$color-name}-2;
-                }
-
-                &:active {
-                    @include color-svg(#{$color-name}-1);
-                    border-color: #{$color-name}-1;
-                }
-            }
-
-            &:disabled {
-                @include color-svg($grayscale-4);
-                border-color: $grayscale-3;
-
-                &:hover,
-                &:active {
-                    border-color: $grayscale-3;
-                }
-            }
-        }
-
-        &--flat {
-            &-#{$color-name} {
-                @include color-svg(#{$color-name}-3);
-
-                &:hover {
-                    @include color-svg(#{$color-name}-2);
-                }
-
-                &:active {
-                    @include color-svg(#{$color-name}-1);
-                }
-
-                &:disabled {
-                    @include color-svg($grayscale-4);
-                }
-            }
-        }
-
-        &--thin {
-            @include color-svg($grayscale-11);
+    &--outlined {
+        &-accent {
+            @include color-svg($accent-3);
+            border: 2px solid $accent-3;
 
             &:hover {
-                @include color-svg($grayscale-10);
+                @include color-svg($accent-2);
+                border-color: $accent-2;
             }
 
             &:active {
-                @include color-svg($grayscale-9);
+                @include color-svg($accent-1);
+                border-color: $accent-1;
             }
+        }
+
+        &-green {
+            @include color-svg($green-3);
+            border: 2px solid $green-3;
+
+            &:hover {
+                @include color-svg($green-2);
+                border-color: $green-2;
+            }
+
+            &:active {
+                @include color-svg($green-1);
+                border-color: $green-1;
+            }
+        }
+
+        &-red {
+            @include color-svg($red-3);
+            border: 2px solid $red-3;
+
+            &:hover {
+                @include color-svg($red-2);
+                border-color: $red-2;
+            }
+
+            &:active {
+                @include color-svg($red-1);
+                border-color: $red-1;
+            }
+        }
+
+        &:disabled {
+            @include color-svg($grayscale-4);
+            border-color: $grayscale-3;
+
+            &:hover,
+            &:active {
+                border-color: $grayscale-3;
+            }
+        }
+    }
+
+    &--flat {
+        padding: 0 0;
+        &-accent {
+            @include color-svg($accent-3);
+
+            &:hover {
+                @include color-svg($accent-2);
+            }
+
+            &:active {
+                @include color-svg($accent-1);
+            }
+        }
+
+        &-green {
+            @include color-svg($green-3);
+
+            &:hover {
+                @include color-svg($green-2);
+            }
+
+            &:active {
+                @include color-svg($green-1);
+            }
+        }
+
+        &-red {
+            @include color-svg($red-3);
+
+            &:hover {
+                @include color-svg($red-2);
+            }
+
+            &:active {
+                @include color-svg($red-1);
+            }
+        }
+
+        &:disabled {
+            @include color-svg($grayscale-4);
+        }
+    }
+
+    &--thin {
+        padding: 0 0;
+        @include color-svg($grayscale-11);
+
+        &:hover {
+            @include color-svg($grayscale-10);
+        }
+
+        &:active {
+            @include color-svg($grayscale-9);
         }
     }
 }

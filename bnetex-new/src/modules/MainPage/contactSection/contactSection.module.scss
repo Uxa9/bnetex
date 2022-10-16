@@ -1,4 +1,4 @@
-@import '../../../styles/variables.scss';
+@import 'styles/colors/colors';
 
 .container {
     position: relative;
@@ -24,7 +24,7 @@
 }
 
 h2 > span {
-    color: $activeBorder;
+    color: $accent-3;
 }
 
 .links {

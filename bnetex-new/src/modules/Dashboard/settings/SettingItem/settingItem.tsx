@@ -49,7 +49,7 @@ const SettingItem:FC<SettingItemProps> = props => {
                 {
                     hasActiveState && 
                     <Button
-                        buttonStyle={activeStateText ? 'decline' : 'accept'}
+                        buttonTheme={activeStateText ? 'red' : 'green'}
                         className={styles.button}
                         text={activeStateText ? 'Выключить' : 'Включить'}
                     />

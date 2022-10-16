@@ -1,23 +1,28 @@
-@import 'styles/mixins.scss';
-@import 'styles/variables.scss';
+@import 'styles/mixins';
+@import 'styles/variables';
+@import 'styles/colors/colors';
 
 .title {
     display: flex;
     align-items: center;
     column-gap: 8px;
-    color: $grayText;
+    color: $grayscale-6;
     padding-top: 16px;
+    transition: $default-transition ease;
 
     .iconWrapper {
         @include size-svg(16px, 16px);
         position: relative;
 
         .infoIcon {
-            fill: #9d9d9d;
+            fill: $grayscale-6;
+            transition: $default-transition ease;
         }
     }
 
     &--active {
+        color: $grayscale-11;
+
         .tip,
         .needle {
             display: block;
@@ -28,6 +33,10 @@
         .tip {
             right: -8px;
         }
+
+        .iconWrapper .infoIcon {
+            fill: $grayscale-11;
+        }
     }
 }
 
@@ -37,25 +46,24 @@
     right: 0px;
     width: 100vw;
     max-width: 50ch;
-    background-color: #f6f6f6;
+    background-color: $grayscale-2;
     border-radius: 5px;
     padding: 10px;
-    color: black;
     visibility: hidden;
     opacity: 0;
-    transition: 0.25s ease;
+    transition: $default-transition ease;
 
     font-size: 14px;
     font-weight: 300;
 }
 
 .needle {
-    fill: #f6f6f6;
+    fill: $grayscale-2;
     position: absolute;
     bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
     visibility: hidden;
     opacity: 0;
-    transition: 0.25s ease;
+    transition: $default-transition ease;
 }
