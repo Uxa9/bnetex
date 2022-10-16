@@ -1,6 +1,6 @@
 @import 'styles/variables.scss';
+@import 'styles/colors/colors.scss';
 
-$rapidTransition: 200ms;
 $easing: cubic-bezier(0, 0, 0.2, 1);
 $font-size: 16px;
 
@@ -26,27 +26,27 @@ $font-size: 16px;
 
     &--focused {
         .fieldset-outline {
-            border-color: $activeBorder;
+            border-color: $accent-1;
         }
 
         .label {
-            color: $activeBorder;
+            color: $accent-1;
         }
     }
 
     &:hover {
         .fieldset-outline {
-            border-color: $activeBorder;
+            border-color: $accent-1;
         }
     }
 
     &--error {
         .label {
-            color: $red;
+            color: $red-3;
         }
 
         .input-inner-container .fieldset-outline {
-            border-color: $red;
+            border-color: $red-3;
         }
 
         .error-text {
@@ -61,7 +61,7 @@ $font-size: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: calc(100% - 16px);
-    color: $grayText;
+    color: $grayscale-5;
     background-color: transparent;
     text-align: left;
     left: 0px;
@@ -70,8 +70,8 @@ $font-size: 16px;
     font-size: $font-size;
     z-index: 2;
 
-    transition: top $rapidTransition $easing, font-size $rapidTransition $easing, color $rapidTransition $easing,
-        transform $rapidTransition $easing;
+    transition: top $default-transition $easing, font-size $default-transition $easing, color $default-transition $easing,
+        transform $default-transition $easing;
 }
 
 .input-inner-container {
@@ -104,9 +104,9 @@ $font-size: 16px;
     border-radius: inherit;
     inset: -6px 0px 0px;
     padding: 0px 8px;
-    border: 1px solid $grayBorder;
+    border: 1px solid $grayscale-4;
     pointer-events: none;
-    transition: border-color $rapidTransition $easing;
+    transition: border-color $default-transition $easing;
     max-width: 100%;
     width: 100%;
     min-width: 0%;
@@ -122,8 +122,8 @@ $font-size: 16px;
         max-width: 0.01px;
         opacity: 0;
         font-size: calc($font-size * 0.75);
-        color: $grayText;
-        transition: max-width $rapidTransition cubic-bezier(0, 0, 0.2, 1);
+        color: $grayscale-5;
+        transition: max-width $default-transition cubic-bezier(0, 0, 0.2, 1);
         text-align: left;
         width: auto;
         float: unset;
@@ -133,8 +133,8 @@ $font-size: 16px;
 .error-text {
     margin-top: 4px;
     margin-left: -12px;
-    transition: margin $rapidTransition;
-    color: $red;
+    transition: margin $default-transition;
+    color: $red-3;
 }
 
 @keyframes onAutoFill {

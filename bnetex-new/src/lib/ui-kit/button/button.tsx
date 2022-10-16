@@ -5,7 +5,8 @@ import { ButtonHTMLAttributes, FC } from 'react';
 import { Spinner } from 'assets/images/icons';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
-    buttonStyle?: 'primary' | 'secondary' | 'accept' | 'decline' | 'thin' | 'stroke';
+    buttonStyle?: 'primary' | 'secondary' | 'outlined' | 'flat' | 'thin';
+    buttonTheme?: 'default' | 'red' | 'green';
     Icon?: ReactSvg;
     iconAlignment?: 'left' | 'right';
     text?: string;
@@ -16,7 +17,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
 const Button: FC<ButtonProps> = props => {
 
     // Достаем пропсы и назначаем дефолтные значения, если ничего не передано
-    const {buttonStyle = 'primary', Icon, text, iconAlignment='left', 
+    const {buttonStyle = 'primary', buttonTheme, Icon, text, iconAlignment='left', 
         className, fillContainer = false, isLoading, ...rest} = props;
 
     return (
@@ -27,6 +28,7 @@ const Button: FC<ButtonProps> = props => {
                         styles['button'],
                         styles[`button_style--${buttonStyle}`],
                         styles[`button_align--${iconAlignment}`],
+                        buttonTheme && styles[`button_theme--${buttonTheme}`],
                         fillContainer && styles['button--fill-container'],
                         className)
                 }

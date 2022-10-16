@@ -1,5 +1,6 @@
-@import '../../../styles/variables.scss';
-@import '../../../styles/mixins.scss';
+@import 'styles/variables.scss';
+@import 'styles/mixins.scss';
+@import 'styles/colors/colors.scss';
 
 .button {
     display: flex;
@@ -9,13 +10,12 @@
     padding: 8px 32px;
     border-radius: 20px;
     font-size: 16px;
-    font-weight: 600;
 
     &--fill-container {
         width: 100%;
     }
 
-    transition: 0.25s;
+    transition: $default-transition;
     @include color-svg(white);
 
     svg {
