@@ -1,5 +1,6 @@
 @import 'styles/variables.scss';
 @import 'styles/mixins.scss';
+@import 'styles/colors/colors.scss';
 
 .header {
     display: flex;
@@ -8,6 +9,8 @@
     align-items: center;
     position: relative;
     background-color: white;
+    background-color: $grayscale-1;
+
     border-bottom: 1px solid $grayBorder;
     height: $header-height;
 

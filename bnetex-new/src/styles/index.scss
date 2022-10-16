@@ -1,9 +1,13 @@
 @import 'reset';
-@import 'variables';
+@import 'colors/generator.scss';
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
 
 * {
     font-family: 'Rubik', sans-serif;
+}
+
+.theme-wrapper{
+    @include create-css-themes-root()
 }
 
 .visually-hidden {
@@ -92,7 +96,6 @@ h5 {
 .label-1 {
     font-size: 12px;
     line-height: 20px;
-    color: $grayText;
 }
 
 @media screen and (max-width: 1200px) {

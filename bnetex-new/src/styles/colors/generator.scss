@@ -1,0 +1,31 @@
+@import 'themes/dark-theme.scss';
+@import 'themes/light-theme.scss';
+
+$themes: (
+    light: $light-theme,
+    dark: $dark-theme,
+);
+
+@function generate-theme-colors($theme) {
+    $theme-colors: ();
+
+    @each $color-group-name, $color-group in $theme {
+        @each $color-name, $color-value in $color-group {
+            $theme-colors: map-merge($theme-colors, ('#{$color-group-name}#{$color-name}': $color-value));
+        }
+    }
+
+    @return $theme-colors;
+};
+
+@mixin create-css-themes-root() {
+    @each $theme-name, $theme in $themes {
+        $theme-colors: generate-theme-colors($theme);
+
+        &.#{$theme-name}-theme {
+            @each $color-name, $color-value in $theme-colors {
+                --#{$color-name}: #{$color-value};
+            }
+        }
+    }
+}
