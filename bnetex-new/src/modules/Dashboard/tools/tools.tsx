@@ -3,7 +3,7 @@ import { Button } from 'lib/ui-kit';
 import styles from './tools.module.scss';
 
 import Chart from 'react-apexcharts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import hehe__roe from '../../../assets/images/hehe__roe.svg';
 import hehe__pnl from '../../../assets/images/hehe__pnl.svg';
@@ -11,11 +11,53 @@ import hehe__verify from '../../../assets/images/hehe__verify.svg';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
 import { useUser } from '../dashboard';
+import AreaChart from 'modules/terminal/investor/chart/areaChart';
+import getRoE from 'services/getroe';
+import getPnL from 'services/getpnl';
+
+interface GraphicProps {
+    dates: string[],
+    values: number[]
+}
 
 const Tools = () => {
 
     const { goToState } = useGoToState();
     const { mainWallet, investWallet } = useUser();
+
+    const [roe, setRoe] = useState<GraphicProps>({
+        dates: [],
+        values: []
+    });
+
+    const [pnl, setPnl] = useState<GraphicProps>({
+        dates: [],
+        values: []
+    });
+
+    useEffect(() => {
+        getRoE(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
+            .then(res => {
+                setRoe({
+                    dates: res.dates,
+                    values: res.values.map((item: any) => Number(Number(item).toFixed(2)))
+                });
+            });
+        getPnL(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
+            .then(res => {
+                setPnl({
+                    dates: res.dates,
+                    values: res.values.map((item: any) => Number(Number(item).toFixed(2)))
+                });
+            });
+    }, []);
+
+    useEffect(() => {
+        console.log(roe);
+        console.log(pnl);        
+    }, [roe, pnl])
+
+    const values: number[] = [124.55, 431.42, 324.54, 432.43, 543.76];
 
     const [options, setOptions] = useState({
         dataLabels: {enabled: false},
@@ -42,7 +84,7 @@ const Tools = () => {
                         onClick={() => goToState(AppLinksEnum.DEPOSIT)}
                     />
                     <Button
-                        buttonStyle={'primary'}
+                        buttonStyle={'outlined'}
                         text={'Вывод'}
                         onClick={() => goToState(AppLinksEnum.WITHDRAW)}
                     />
@@ -51,43 +93,6 @@ const Tools = () => {
             <div
                 className={styles['balance-and-transactions']}
             >
-                {/* <div
-                    className={`${styles['balance']} block`}
-                >
-                    <p
-                        className={styles['balance-header']}
-                    >
-                        Баланс
-                    </p>
-                    <p
-                        className={styles['user-balance']}
-                    >
-                        0.0040543 BTC
-                        <span>
-                            {' ≈ 4 354.31 USDT'}
-                        </span>
-                    </p>
-                    <div>
-                        <Chart
-                            options={options}
-                            series={series}
-                            type="donut"
-                            width="400"
-                        />
-                    </div>
-                </div>
-                <div
-                    className={`${styles['transactions']} block`}
-                >
-                    <div>
-                        <span>
-                            Транзакции
-                        </span>
-                        <span>
-                            Посмотреть все
-                        </span>
-                    </div>
-                </div> */}
                 <div
                     className={`${styles['balance']} block`}
                 >
@@ -165,45 +170,40 @@ const Tools = () => {
                         />
                     </div> */}
                 </div>
+                <div
+                    className={`${styles['balance']} block`}
+                >
+                    <span
+                        className={styles['balance-header']}
+                    >
+                        Транзакции
+                    </span>
+                    <span>
+                        Посмотреть все
+                    </span>
+                </div>
             </div>
             <div
                 className={styles['charts']}
             >
-                {/* <div
-                    style={{
-                        width: '400px',
-                        height: '330px',
-                        background: `url(${hehe__roe})`,
-                        backgroundPosition: 'center',
-                        backgroundSize: 'cover',
-                        margin: '0 -40px',
-                    }}
+                <div
+                    className={styles.chart}
                 >
-
-
+                    <AreaChart
+                        dates={pnl.dates}
+                        values={pnl.values}
+                        title="PnL"
+                    />
                 </div>
                 <div
-                    style={{
-                        width: '400px',
-                        height: '330px',
-                        background: `url(${hehe__pnl})`,
-                        backgroundPosition: 'center',
-                        backgroundSize: 'cover',
-                        margin: '0 -40px',
-                    }}
+                    className={styles.chart}
                 >
+                    <AreaChart                    
+                        dates={roe.dates}
+                        values={roe.values}
+                        title="RoE"
+                    />
                 </div>
-                <div
-                    style={{
-                        width: '400px',
-                        height: '330px',
-                        background: `url(${hehe__verify})`,
-                        backgroundPosition: 'center',
-                        backgroundSize: 'cover',
-                        margin: '0 -40px',
-                    }}
-                >
-                </div> */}
             </div>
         </div>
     );

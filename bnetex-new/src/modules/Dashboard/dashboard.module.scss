@@ -10,6 +10,10 @@
 .dashboard {
     display: flex;
     column-gap: 20px;
+
+    .dashboard-content {
+        flex-grow: 2;
+    }
 }
 
 .control-menu {
@@ -39,7 +43,7 @@
         }
 
         &--active {
-            background-color: $accent-1;
+            background-color: $accent-6;
         }
     }
 }

@@ -8,12 +8,17 @@
 }
 
 .tools-header-buttons {
-    @include column-flex-center(16px);
+    @include align-center-row-flex(16px);
+    margin-left: 16px;
 }
 
 .charts {
     display: flex;
     align-items: flex-start;
+
+    .chart {
+        flex-grow: 1;
+    }
 }
 
 .balance-and-transactions {
