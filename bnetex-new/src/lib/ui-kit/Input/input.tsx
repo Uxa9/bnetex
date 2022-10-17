@@ -15,7 +15,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     
-    const { hasBackground, type = 'text', errorText, postfix, inputControl, ...rest } = props;
+    const { hasBackground, type = 'text', errorText, postfix, inputControl, onFocus, ...rest } = props;
     const label = `${props.label}${props.required ? ' *' : ''}`;
     const [isActive, setIsActive] = useState<boolean>(false);
     const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -27,7 +27,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         inputControl?.onBlur && inputControl.onBlur(event);
     };
 
-    const handleFocus = () => {
+    const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+        onFocus && onFocus(event);
         setIsFocused(true);
         setIsActive(true);
     };

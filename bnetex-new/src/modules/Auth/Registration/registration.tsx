@@ -1,13 +1,13 @@
-import { Eye, EyeSlash } from 'assets/images/icons';
+import {  Eye, EyeSlash } from 'assets/images/icons';
 import { AxiosError, AxiosResponse } from 'axios';
 import useApi from 'lib/hooks/useApi';
 import { useToast } from 'lib/hooks/useToast';
 import { Button, Input } from 'lib/ui-kit';
-import { emailValidation, requiredValidation } from 'lib/utils/hookFormValidation';
-import { useState } from 'react';
+import { emailValidation, newPasswordValidation } from 'lib/utils/hookFormValidation';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import FormCard from '../FormCard/formCard';
+import PasswordValidator from '../PasswordValidator/passwordValidator';
 import styles from './registration.module.scss';
 
 interface RegistrationFormData {
@@ -17,12 +17,12 @@ interface RegistrationFormData {
 
 const Registration = () => {
 
-    const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-
+    // toDo - вынести инпут пароля с валидацией и всеми стейтами в отд. компонент
+    const [ isPasswordVisible, setIsPasswordVisible ] = useState<boolean>(false);
+    const [ passwordValue, setPasswordValue ] = useState<string>('');
+    const [ isValidatorVisible, setIsValidatorVisible ] = useState<boolean>(false);
     const { bakeToast } = useToast();
-    // const navigate = useNavigate();
-
-    const [api ] = useApi();
+    const [ api ] = useApi();
 
     const {
         register,
@@ -43,17 +43,20 @@ const Registration = () => {
     // придумать как можно чисто делать установку стейта isAuth
 
     const onSubmit = async (data: RegistrationFormData) => {
-        
         if (isValid) {
             api.post('/auth/registration', data)
                 .then((res: AxiosResponse<any>) => {
                     localStorage.setItem('token', res.data.token);
+                    reset();
                 })
                 .catch((error: AxiosError<any>) => {
                     bakeToast.error(error.response?.data.message);
                 });
         }
+    };
 
+    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPasswordValue(event.currentTarget.value);
     };
 
     return(
@@ -72,20 +75,35 @@ const Registration = () => {
                     />,
                     <Input
                         label={'Пароль'}
-                        inputControl={register('password', requiredValidation)}
+                        onFocus={() => setIsValidatorVisible(true)}
+                        inputControl={register('password',
+                            {...newPasswordValidation, 
+                                onChange: handlePasswordChange,
+                                onBlur: () => setIsValidatorVisible(false),
+                            })}
                         errorText={errors.password?.message}
                         key={'password'}
                         type={isPasswordVisible ? 'text' : 'password'}
                         autoComplete={'new-password'}
-                        postfix={isPasswordVisible ? 
-                            <EyeSlash
-                                onClick={() => setIsPasswordVisible(false)}
-                                className={styles['password-postfix']}
-                            /> : 
-                            <Eye 
-                                onClick={() => setIsPasswordVisible(true)} 
-                                className={styles['password-postfix']}
-                            />}
+                        postfix={
+                            <div>
+                                {
+                                    isPasswordVisible ? 
+                                        <EyeSlash
+                                            onClick={() => setIsPasswordVisible(false)}
+                                            className={styles['password-postfix']}
+                                        /> : 
+                                        <Eye 
+                                            onClick={() => setIsPasswordVisible(true)} 
+                                            className={styles['password-postfix']}
+                                        />
+                                }
+                                <PasswordValidator 
+                                    isVisible={isValidatorVisible}
+                                    inputValue={passwordValue}
+                                />
+                            </div>
+                        }
                     />,
                 ]} 
                 button={

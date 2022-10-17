@@ -36,6 +36,7 @@ const Header = () => {
                         buttonStyle={'thin'}
                         className={styles.header__btn}
                         onClick={() => goToState('/terminal/investor')}
+                        mini
                     />
                 </div>
                 <div className={styles['links__user']}>
@@ -48,6 +49,7 @@ const Header = () => {
                                     Icon={Wallet}
                                     className={styles.header__btn}
                                     onClick={() => goToState('/dashboard/wallet/main')}
+                                    mini
                                 />
                                 <Button
                                     text={'Профиль'}
@@ -55,6 +57,7 @@ const Header = () => {
                                     Icon={User}
                                     className={styles.header__btn}
                                     onClick={() => goToState('/dashboard')}
+                                    mini
                                 />
                                 <Button
                                     text={'Выйти'}
@@ -62,6 +65,7 @@ const Header = () => {
                                     Icon={Logout}
                                     className={styles.header__btn}
                                     onClick={logoutUser}
+                                    mini
                                 />
                             </>
                             :
@@ -72,10 +76,12 @@ const Header = () => {
                                     Icon={Login}
                                     className={styles.header__btn}
                                     onClick={() => goToState(`${AUTH}/${LOGIN}`)}
+                                    mini
                                 />
                                 <Button
                                     text={'Регистрация'}
                                     onClick={() => goToState(`${AUTH}/${REGISTRATION}`)}
+                                    mini
                                 />
                             </>
                     }

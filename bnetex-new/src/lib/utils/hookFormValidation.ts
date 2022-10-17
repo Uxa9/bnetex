@@ -7,6 +7,17 @@ export const requiredValidation: RegisterOptions = {
     },
 };
 
+export const MIN_PASSWORD_LENGTH = 8;
+
+export const newPasswordValidation: RegisterOptions = {
+    validate: {
+        atleastEightCharacters: value => value.length >= MIN_PASSWORD_LENGTH,
+        atleastOneDigit: value => /\d/.test(value),
+        atleastOneUppercase: value => /[A-ZА-Я]/.test(value),
+    },
+    ...requiredValidation,
+};
+
 export const emailValidation: RegisterOptions = {
     pattern: {
         value: /^[A-Za-z0-9+_.-]+@(.+)$/,
