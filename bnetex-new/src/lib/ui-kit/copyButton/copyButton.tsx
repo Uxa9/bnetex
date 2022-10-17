@@ -1,9 +1,6 @@
 import { Copy } from 'assets/images/icons';
 import { useToast } from 'lib/hooks/useToast';
 import Button, { ButtonProps } from '../button/button';
-import styles from './copyButton.module.scss';
-
-// При необходимости можно добавить разные стили
 
 interface CopyButtonProps extends Omit<ButtonProps, 'onClick' | 'buttonStyle' | 'className' | 'Icon'> {
     textToCopy: string,
@@ -26,7 +23,6 @@ const CopyButton = (props: CopyButtonProps) => {
             {...rest}
             onClick={handleCopyClick}
             buttonStyle={'thin'}
-            className={styles.copyButton}
             Icon={Copy}
         />
     );

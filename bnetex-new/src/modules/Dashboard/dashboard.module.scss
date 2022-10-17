@@ -1,4 +1,5 @@
-@import '../../styles/variables.scss';
+@import 'styles/colors/colors';
+@import 'styles/variables';
 
 .wrapper {
     width: 100%;
@@ -27,18 +28,18 @@
         padding: 15px 20px;
         font-weight: 300;
         font-size: 16px;
-        transition: 0.25s all;
+        transition: $default-transition all;
         border-left: 2px solid transparent;
 
         &:hover,
         &:focus,
         &--active {
-            border-left: 2px solid $activeBorder;
-            color: $activeBorder;
+            border-left: 2px solid $accent-3;
+            color: $accent-3;
         }
 
         &--active {
-            background-color: $activeBG;
+            background-color: $accent-1;
         }
     }
 }
@@ -47,5 +48,5 @@
     width: 90%;
     height: 1px;
     margin: 20px 0px;
-    background-color: $graySeparator;
+    background-color: $grayscale-2;
 }

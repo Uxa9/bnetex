@@ -1,5 +1,5 @@
 import styles from './header.module.scss';
-import { Wallet, User, Logo, Login, Logout } from '../../assets/images/icons';
+import { Wallet, User, Logo, Login, Logout, Brightness, Moon } from '../../assets/images/icons';
 import { Button } from 'lib/ui-kit';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 // import SettingsMenu from './SettingsMenu';
@@ -7,12 +7,14 @@ import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { AppLinksEnum } from 'routes/appLinks';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { useActions } from 'lib/hooks/useActionCreators';
+import { useTheme } from 'lib/hooks/useTheme';
 
 const Header = () => {
     const { AUTH, REGISTRATION, LOGIN } = AppLinksEnum;
     const { goToState } = useGoToState();
     const { logoutUser } = useActions();    
     const isAuth = useTypedSelector(state => state.auth.isAuth);
+    const { theme, toggleTheme } = useTheme();
 
     // const [isSettingsOpened, setIsSettingsOpened] = useState<boolean>(false);
     // const toggleSettingsMenu = () => setIsSettingsOpened(prevState => !prevState);
@@ -77,6 +79,12 @@ const Header = () => {
                                 />
                             </>
                     }
+
+                    <Button
+                        buttonStyle={'thin'}
+                        Icon={theme === 'dark' ? Moon : Brightness}
+                        onClick={toggleTheme}
+                    />
 
                     {/* {
                         isTerminalOpened &&

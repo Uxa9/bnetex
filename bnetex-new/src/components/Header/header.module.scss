@@ -1,5 +1,5 @@
 @import 'styles/variables.scss';
-@import 'styles/mixins.scss';
+@import 'styles/colors/colors.scss';
 
 .header {
     display: flex;
@@ -7,26 +7,18 @@
     column-gap: 50px;
     align-items: center;
     position: relative;
-    background-color: white;
-    border-bottom: 1px solid $grayBorder;
+    background-color: $grayscale-1;
+    border-bottom: 1px solid $grayscale-4;
     height: $header-height;
-
-    .header__btn {
-        @include color-svg($textColor);
-
-        &:hover {
-            @include color-svg($activeBorder);
-        }
-    }
 }
 
 .logo {
     cursor: pointer;
-    fill: $activeBorder;
-    transition: 0.25s;
+    fill: $accent-3;
+    transition: fill $default-transition ease;
 
     &:hover {
-        fill: $mainActive;
+        fill: $accent-2;
     }
 }
 

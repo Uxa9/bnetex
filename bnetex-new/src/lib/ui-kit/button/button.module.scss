@@ -1,93 +1,184 @@
-@import '../../../styles/variables.scss';
-@import '../../../styles/mixins.scss';
+@import 'styles/variables.scss';
+@import 'styles/mixins.scss';
+@import 'styles/colors/colors.scss';
 
 .button {
     display: flex;
     align-items: center;
     justify-content: center;
     column-gap: 4px;
-    padding: 8px 32px;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
+    transition: all $default-transition ease;
+    border-radius: 8px;
+    padding: 8px 20px;
 
-    &--fill-container {
-        width: 100%;
+    @include mobile {
+        border-radius: 6px;
+        padding: 6px 16px;
     }
-
-    transition: 0.25s;
-    @include color-svg(white);
 
     svg {
         transition: 0.25s;
     }
 
-    &:disabled {
-        background-color: $activeBG;
-        @include color-svg($grayBorder);
-        cursor: not-allowed;
-        border: 2px solid transparent;
+    &--fill-container {
+        width: 100%;
+    }
 
-        &:hover,
-        &:active {
-            background-color: $activeBG;
-        }
+    &:disabled {
+        @include color-svg($grayscale-4);
+        cursor: not-allowed;
     }
 }
 
 .button_style {
     &--primary {
-        @include dynamic-background($projectButton, $activeBorder, $mainActive);
+        @include color-svg($constant-white);
+
+        &-accent {
+            @include dynamic-background($accent-3, $accent-2, $accent-1);
+        }
+
+        &-green {
+            @include dynamic-background($green-3, $green-2, $green-1);
+        }
+
+        &-red {
+            @include dynamic-background($red-3, $red-2, $red-1);
+        }
+
+        &:disabled {
+            background-color: $grayscale-3;
+            &:hover,
+            &:active {
+                background-color: $grayscale-3;
+            }
+        }
     }
 
     &--secondary {
-        @include color-svg($projectButton);
-        border: 2px solid $activeBorder;
-        @include dynamic-background($activeBG, $activeBorder, $mainActive);
+        @include color-svg($grayscale-11);
+        @include dynamic-background($grayscale-2, $grayscale-3, $grayscale-4);
 
-        &:hover {
-            @include color-svg(white);
+        &:disabled {
+            background-color: $grayscale-3;
+
+            &:hover,
+            &:active {
+                background-color: $grayscale-3;
+            }
         }
     }
 
-    &--accept {
-        @include dynamic-background($green, $greenHover, $greenActive);
+    &--outlined {
+        &-accent {
+            @include color-svg($accent-3);
+            border: 2px solid $accent-3;
+
+            &:hover {
+                @include color-svg($accent-2);
+                border-color: $accent-2;
+            }
+
+            &:active {
+                @include color-svg($accent-1);
+                border-color: $accent-1;
+            }
+        }
+
+        &-green {
+            @include color-svg($green-3);
+            border: 2px solid $green-3;
+
+            &:hover {
+                @include color-svg($green-2);
+                border-color: $green-2;
+            }
+
+            &:active {
+                @include color-svg($green-1);
+                border-color: $green-1;
+            }
+        }
+
+        &-red {
+            @include color-svg($red-3);
+            border: 2px solid $red-3;
+
+            &:hover {
+                @include color-svg($red-2);
+                border-color: $red-2;
+            }
+
+            &:active {
+                @include color-svg($red-1);
+                border-color: $red-1;
+            }
+        }
+
+        &:disabled {
+            @include color-svg($grayscale-4);
+            border-color: $grayscale-3;
+
+            &:hover,
+            &:active {
+                border-color: $grayscale-3;
+            }
+        }
     }
 
-    &--decline {
-        @include dynamic-background($red, $redHover, $redActive);
+    &--flat {
+        padding: 0 0;
+        &-accent {
+            @include color-svg($accent-3);
+
+            &:hover {
+                @include color-svg($accent-2);
+            }
+
+            &:active {
+                @include color-svg($accent-1);
+            }
+        }
+
+        &-green {
+            @include color-svg($green-3);
+
+            &:hover {
+                @include color-svg($green-2);
+            }
+
+            &:active {
+                @include color-svg($green-1);
+            }
+        }
+
+        &-red {
+            @include color-svg($red-3);
+
+            &:hover {
+                @include color-svg($red-2);
+            }
+
+            &:active {
+                @include color-svg($red-1);
+            }
+        }
+
+        &:disabled {
+            @include color-svg($grayscale-4);
+        }
     }
 
     &--thin {
-        @include color-svg($projectButton);
-        padding: 0;
-        font-weight: 400;
+        padding: 0 0;
+        @include color-svg($grayscale-11);
 
         &:hover {
-            @include color-svg($activeBorder);
+            @include color-svg($grayscale-10);
         }
 
         &:active {
-            @include color-svg($mainActive);
-        }
-    }
-
-    &--stroke {
-        @include color-svg($activeBorder);
-        border: 2px solid;
-        border-color: $activeBorder;
-        border-radius: 10px;
-        font-weight: 500;
-
-        &:hover {
-            @include color-svg(white);
-            background-color: $activeBorder;
-        }
-
-        &:active {
-            @include color-svg(white);
-            background-color: $mainActive;
-            border-color: $mainActive;
+            @include color-svg($grayscale-9);
         }
     }
 }

@@ -1,3 +1,5 @@
+@import 'variables';
+
 @mixin dynamic-background($default, $hover, $active) {
   background-color: $default;
 
@@ -20,6 +22,18 @@
 
 @mixin max-width($resolution) {
   @media (max-width: #{$resolution}px) {
+    @content;
+  }
+}
+
+@mixin mobile() {
+  @include max-width($mobile-bp) {
+    @content;
+  }
+}
+
+@mixin desktop() {
+  @include min-width($mobile-bp + 1) {
     @content;
   }
 }

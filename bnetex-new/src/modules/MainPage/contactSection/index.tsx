@@ -37,13 +37,13 @@ const ContactSection = () => {
                     <p className='body-1'>Задайте ваши вопросы в Telegram или напишите нам на Email.</p>
                     <div className={styles.links__buttons}>
                         <Button 
-                            buttonStyle={'stroke'}
+                            buttonStyle={'outlined'}
                             text={'Telegram'}
                             Icon={Telegram}
                             className={styles['contact-button']}
                         />
                         <Button 
-                            buttonStyle={'stroke'}
+                            buttonStyle={'outlined'}
                             text={'Email'}
                             Icon={Mail}
                             className={styles['contact-button']}

@@ -1,11 +1,11 @@
-@import '../../styles/variables.scss';
+@import 'styles/colors/colors';
 
 .password-check-popup-row-text-green {
-    color: $green;
+    color: $green-3;
 }
 
 .password-check-popup-row-text-red {
-    color: $red;
+    color: $red-1;
 }
 
 .page-wrapper {

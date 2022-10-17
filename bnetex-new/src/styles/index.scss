@@ -1,9 +1,18 @@
 @import 'reset';
-@import 'variables';
+@import 'fontsMap';
+@import 'colors/generator';
+@import 'colors/colors';
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
 
 * {
     font-family: 'Rubik', sans-serif;
+}
+
+.theme-wrapper {
+    @include create-css-themes-root();
+    
+    background-color: $grayscale-1;
+    color: $grayscale-11;
 }
 
 .visually-hidden {
@@ -27,7 +36,7 @@
 }
 
 .card {
-    background-color: white;
+    background-color: $grayscale-card;
     border-radius: 16px;
     box-shadow: 0px 0px 60px rgba(161, 118, 193, 0.03), 0px 0px 20px rgba(161, 118, 193, 0.03);
 }
@@ -52,73 +61,4 @@
 body,
 html {
     overflow-x: hidden;
-}
-
-h1 {
-    font-weight: 600;
-    font-size: 64px;
-    line-height: 76px;
-}
-
-h2 {
-    font-weight: 600;
-    font-size: 48px;
-    line-height: 56px;
-}
-
-h3 {
-    font-weight: 600;
-    font-size: 32px;
-    line-height: 36px;
-}
-
-h4 {
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 28px;
-}
-
-h5 {
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 24px;
-}
-
-.body-1 {
-    font-size: 16px;
-    line-height: 19px;
-}
-
-.label-1 {
-    font-size: 12px;
-    line-height: 20px;
-    color: $grayText;
-}
-
-@media screen and (max-width: 1200px) {
-    h1 {
-        font-size: 48px;
-        line-height: 56px;
-    }
-
-    h2 {
-        font-size: 32px;
-        line-height: 36px;
-    }
-
-    h3 {
-        font-size: 24px;
-        line-height: 28px;
-    }
-
-    h4 {
-        font-size: 18px;
-        line-height: 24px;
-    }
-
-    h5 {
-        font-weight: 500;
-        font-size: 16px;
-        line-height: 18px;
-    }
 }

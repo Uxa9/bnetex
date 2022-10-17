@@ -1,5 +1,5 @@
-@import 'styles/mixins.scss';
-@import 'styles/variables.scss';
+@import 'styles/mixins';
+@import 'styles/colors/colors';
 
 .transactions {
     @include column-flex(20px);
@@ -11,7 +11,7 @@
     max-width: 100%;
 
     &__header-row {
-        color: $grayText;
+        color: $grayscale-6;
         padding: 0 0;
 
         th {
@@ -26,7 +26,7 @@
         column-gap: 16px;
         align-items: center;
         justify-items: start;
-        border-bottom: 1px solid $grayBorder;
+        border-bottom: 1px solid $grayscale-4;
         padding: 16px 20px;
     }
 }

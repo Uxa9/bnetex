@@ -1,4 +1,4 @@
-@import '../../../../styles/variables.scss';
+@import 'styles/colors/colors';
 
 .setting {
     display: grid;
@@ -13,24 +13,20 @@
     grid-column: 3/-1;
 }
 
-.button {
-    font-size: 12px !important;
-}
-
 .active-state {
     display: flex;
-    column-gap: 10px;
+    column-gap: 8px;
     align-items: center;
 }
 
 .icon-checkmark {
     width: 12px;
     height: 100%;
-    fill: $green;
+    fill: $green-3;
 }
 
 .icon-cross {
     width: 12px;
     height: 100%;
-    fill: $red;
+    fill: $red-3;
 }

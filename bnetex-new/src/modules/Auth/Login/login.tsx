@@ -94,19 +94,21 @@ const Login = () => {
                     <div className={styles.actions}>
                         <Button 
                             text='Забыли пароль?'
-                            buttonStyle={'thin'}
+                            buttonStyle={'flat'}
                             type={'button'}
                             key={'forgot-password'}
+                            mini
                         />
                         <div 
                             className={styles['register-action']}
                             key={'register-action'}
                         >
-                            <span className='body-1'>Нет аккаунта?</span>
+                            <span className='text'>Нет аккаунта?</span>
                             <Button 
                                 text={'Зарегистрироваться'}
-                                buttonStyle={'thin'}
+                                buttonStyle={'flat'}
                                 type={'button'}
+                                mini
                                 onClick={() => goToState(`${AppLinksEnum.AUTH}/${AppLinksEnum.REGISTRATION}`)}
                             />
                         </div>

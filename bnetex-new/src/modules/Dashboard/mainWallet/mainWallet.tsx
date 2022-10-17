@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import { Button } from 'lib/ui-kit';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
-import { useEffect, useState } from 'react';
 
 // toDo
 // сделать нормальные кнопки
@@ -41,48 +40,19 @@ const MainWallet = () => {
             </div>
 
             <div className={classNames(styles['wallet-card'], 'card')}>
-
-                <div className={classNames(styles['balance-item'], styles['balance-item--big'])}>
-                    <p className={styles['balance-item__label']}>
-                        Баланс (USD-M)
+                <div className={styles['balance-item']}>
+                    <p 
+                        className={classNames(
+                            styles['balance-item__label'],
+                            'caption',
+                        )}
+                    >
+                            Баланс
                     </p>
-                    <div className={styles['balance-item--big__values']}>
-                        <p className={styles['balance-item__value']}>
+                    <h6 className={styles['balance-item__value']}>
                         {balance}
-                        </p>
-                    </div>
+                    </h6>
                 </div>
-            </div>
-
-            <div className={classNames(styles['assets'], 'card')}>
-                <p className={styles['assets__title']}>
-                    Активы
-                </p>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Криптовалюта</th>
-                            <th>Всего</th>
-                            <th>Доступно</th>
-                            <th>Стоимость в BTC</th>
-                            <th>Действия</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>USDT</td>
-                            <td>124.54500314</td>
-                            <td>124.54500314</td>
-                            <td>0.00042314</td>
-                            <td className={styles.btns}>
-                                <p>Купить</p>
-                                <p>Ввод</p> 
-                                <p>Вывод</p> 
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
     );

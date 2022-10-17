@@ -1,10 +1,9 @@
-@import '../../../styles/variables.scss';
+@import 'styles/colors/colors';
+@import 'styles/mixins';
 
 .wallet {
+    @include column-flex(16px);
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    row-gap: 20px;
 }
 
 .wallet-header {
@@ -14,17 +13,11 @@
 }
 
 .btns {
-    display: flex;
-    column-gap: 15px;
-    align-items: center;
-
-    button {
-        font-weight: 700;
-    }
+    @include align-center-row-flex(16px);
 }
 
 .wallet-card {
-    padding: 15px 20px;
+    padding: 16px;
     display: flex;
     justify-content: space-between;
 }
@@ -37,92 +30,13 @@
 }
 
 .balance-item {
-    font-size: 16px;
-    display: flex;
-    flex-direction: column;
-    row-gap: 5px;
-
-    &--big {
-        font-size: 24px;
-        row-gap: 10px;
-
-        &__values {
-            display: flex;
-            align-items: center;
-            column-gap: 0.5ch;
-        }
-
-        .balance-item__label {
-            font-size: 16px;
-        }
-    }
+    @include column-flex(4px);
 
     &__label {
-        color: $grayText;
-        font-size: 12px;
-        font-weight: 300;
+        color: $grayscale-6;
     }
 
-    &__value {
-        font-weight: 700;
-        &::after {
-            content: ' USD';
-        }
-    }
-
-    &__RUB {
-        color: $grayText;
-        font-weight: 500;
-
-        &::before {
-            content: '≈ ';
-        }
-
-        &::after {
-            content: ' ₽';
-        }
-    }
-}
-
-.RUB {
-    color: $grayText;
-    font-weight: 500;
-
-    &::before {
-        content: '≈ ';
-    }
-
-    &::after {
-        content: ' ₽';
-    }
-}
-
-.assets {
-    padding: 15px 20px;
-
-    &__title {
-        color: $grayText;
-        font-size: 18px;
-        font-weight: 500;
-    }
-
-    table {
-        width: 100%;
-        margin-top: 20px;
-
-        th {
-            text-align: left;
-            color: $grayText;
-            font-weight: 200;
-            font-size: 14px;
-            border-bottom: 1px solid $graySeparator;
-            padding: 5px 0px;
-        }
-
-        td {
-            padding: 15px 0px;
-            border-bottom: 1px solid $graySeparator;
-            font-weight: 600;
-        }
+    &__value::after {
+        content: ' USD';
     }
 }

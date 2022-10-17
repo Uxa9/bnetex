@@ -28,30 +28,18 @@ const InvestorWallet = () => {
                 <div className={classNames(styles['wallet-card'], 'card')}>
 
                     <div className={styles['balance-item']}>
-                        <p className={styles['balance-item__label']}>
-                            Баланс (USDT)
+                        <p 
+                            className={classNames(
+                                styles['balance-item__label'],
+                                'caption',
+                            )}
+                        >
+                            Баланс
                         </p>
-                        <p className={styles['balance-item__value']}>
+                        <h6 className={styles['balance-item__value']}>
                             {balance}
-                        </p>
+                        </h6>
                     </div>
-                    <div className={styles['balance-item']}>
-                        <p className={styles['balance-item__label']}>
-                            Доступно для вывода
-                        </p>
-                        <p className={styles['balance-item__value']}>
-                            00.0000
-                        </p>
-                    </div>
-                    <div className={styles['balance-item']}>
-                        <p className={styles['balance-item__label']}>
-                            В работе
-                        </p>
-                        <p className={styles['balance-item__value']}>
-                            41.4231
-                        </p>
-                    </div>
-
                 </div>
 
                 <AreaChart

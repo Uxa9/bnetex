@@ -1,4 +1,5 @@
-@import '../../../styles/variables.scss';
+@import 'styles/colors/colors';
+@import 'styles/mixins';
 
 .tools-header {
     display: flex;
@@ -7,9 +8,7 @@
 }
 
 .tools-header-buttons {
-    display: flex;
-    align-items: center;
-    column-gap: 16px;
+    @include column-flex-center(16px);
 }
 
 .charts {
@@ -20,12 +19,12 @@
 .balance-and-transactions {
     display: flex;
 
-    margin-top: 20px;
+    margin-top: 16px;
 
     .balance,
     .transactions {
         flex-grow: 1;
-        padding: 15px 20px;
+        padding: 16px;
     }
 
     .balance {
@@ -33,8 +32,8 @@
         box-sizing: border-box;
 
         .balance-header {
-            color: $grayText;
-            margin-bottom: 10px;
+            color: $grayscale-6;
+            margin-bottom: 12px;
         }
 
         .user-balance {
@@ -44,10 +43,8 @@
             font-size: 20px;
             line-height: 24px;
 
-            color: #4E3660;
-
             span {
-                color: $grayText;
+                color: $grayscale-6;
             }
         }
     }
@@ -66,11 +63,11 @@
 
             span {
                 &:first-child {
-                    color: $grayText;
+                    color: $grayscale-6;
                 }
 
                 &:last-child {
-                    color: $activeBorder;
+                    color: $accent-3;
                 }
             }
         }

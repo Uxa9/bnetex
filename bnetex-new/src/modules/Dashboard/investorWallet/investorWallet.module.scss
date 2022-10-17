@@ -1,4 +1,4 @@
-@import 'styles/variables.scss';
+@import 'styles/colors/colors';
 
 .wallet {
     width: 100%;
@@ -15,6 +15,7 @@
     &__btns {
         display: flex;
         column-gap: 20px;
+
         button {
             font-weight: 700;
         }
@@ -38,8 +39,6 @@
 .balance-item {
     display: flex;
     flex-direction: column;
-    font-size: 24px;
-    row-gap: 10px;
 
     &__values {
         display: flex;
@@ -48,13 +47,10 @@
     }
 
     &__label {
-        color: $grayText;
-        font-size: 16px;
-        font-weight: 300;
+        color: $grayscale-6;
     }
 
     &__value {
-        font-weight: 700;
         &::after {
             content: ' USDT';
         }
