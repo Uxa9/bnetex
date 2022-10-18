@@ -1,11 +1,13 @@
 import {  Eye, EyeSlash } from 'assets/images/icons';
-import { AxiosError, AxiosResponse } from 'axios';
-import useApi from 'lib/hooks/useApi';
+import { useGoToState } from 'lib/hooks/useGoToState';
+import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
 import { Button, Input } from 'lib/ui-kit';
 import { emailValidation, newPasswordValidation } from 'lib/utils/hookFormValidation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { AppLinksEnum } from 'routes/appLinks';
+import useAuthActions from 'services/auth';
 import FormCard from '../FormCard/formCard';
 import PasswordValidator from '../PasswordValidator/passwordValidator';
 import styles from './registration.module.scss';
@@ -22,12 +24,13 @@ const Registration = () => {
     const [ passwordValue, setPasswordValue ] = useState<string>('');
     const [ isValidatorVisible, setIsValidatorVisible ] = useState<boolean>(false);
     const { bakeToast } = useToast();
-    const [ api ] = useApi();
+    const { promiseWithLoading, isLoading } = usePromiseWithLoading();
+    const { signup } = useAuthActions();
+    const { goToState } = useGoToState();
 
     const {
         register,
         handleSubmit,
-        reset,
         formState: {
             errors,
             isValid,
@@ -38,21 +41,12 @@ const Registration = () => {
         reValidateMode: 'onChange',
     });
 
-
-    // toDo сделать нормальные запросы на сервер
-    // придумать как можно чисто делать установку стейта isAuth
-
     const onSubmit = async (data: RegistrationFormData) => {
-        if (isValid) {
-            api.post('/auth/registration', data)
-                .then((res: AxiosResponse<any>) => {
-                    localStorage.setItem('token', res.data.token);
-                    reset();
-                })
-                .catch((error: AxiosError<any>) => {
-                    bakeToast.error(error.response?.data.message);
-                });
-        }
+        promiseWithLoading(signup(data.email, data.password))
+            .then(() => {
+                goToState(`${AppLinksEnum.AUTH}/${AppLinksEnum.VERIFY_EMAIL}`);
+            })
+            .catch((error) => bakeToast.error(error.response?.data.message));
     };
 
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,6 +59,7 @@ const Registration = () => {
                 title={'Аккаунт'}
                 subtitle={'Введите адрес электронной почты и выберите надежный пароль.'}
                 onSubmit={handleSubmit(onSubmit)}
+                step={'1/2'}
                 inputs={[
                     <Input
                         label={'Email'}
@@ -73,6 +68,7 @@ const Registration = () => {
                         key={'email'}
                         autoComplete={'new-email'}
                     />,
+                    // toDo: вынести эту хуйню в отдельный компонент
                     <Input
                         label={'Пароль'}
                         onFocus={() => setIsValidatorVisible(true)}
@@ -86,7 +82,7 @@ const Registration = () => {
                         type={isPasswordVisible ? 'text' : 'password'}
                         autoComplete={'new-password'}
                         postfix={
-                            <div>
+                            <>
                                 {
                                     isPasswordVisible ? 
                                         <EyeSlash
@@ -102,7 +98,7 @@ const Registration = () => {
                                     isVisible={isValidatorVisible}
                                     inputValue={passwordValue}
                                 />
-                            </div>
+                            </>
                         }
                     />,
                 ]} 
@@ -111,6 +107,7 @@ const Registration = () => {
                         text={'Далее'}
                         type={'submit'}
                         disabled={!isValid}
+                        isLoading={isLoading}
                     />
                 }
             />

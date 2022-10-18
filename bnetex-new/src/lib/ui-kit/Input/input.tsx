@@ -71,11 +71,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                         <span>{label}</span>
                     </legend>
                 </fieldset>
-
                 {postfix}
-
             </div>
-            <div className={styles['error-text']}>
+            <div className={
+                classNames(
+                    styles['error-text'],
+                    'caption',
+                )}
+            >
                 {errorText}
             </div>
         </div>

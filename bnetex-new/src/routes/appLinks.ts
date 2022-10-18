@@ -2,6 +2,8 @@ export enum AppLinksEnum {
     HOME = 'home',
     AUTH = 'auth',
     REGISTRATION = 'signup',
+    VERIFY_EMAIL = 'email-verification',
+    REGISTRATION_FINALIZE = 'registration-finalize',
     LOGIN = 'login',
     TERMINAL = 'terminal',
     P2P = 'p2p',
