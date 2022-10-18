@@ -12,14 +12,14 @@
         width: 100%;
         height: 100%;
 
-        max-width: 761px;
-
         background-color: transparent;
     }
 
     .mail-container {
         align-items: center;
         background-color: white;
+
+        max-width: 761px;
 
         padding: 32px;
     }
@@ -56,32 +56,44 @@
 
         margin-bottom: 60px;
     }
+
+    .content {
+        text-align: left;
+    }
 </style>
 
 <body>
-    <div class="mail-container">
-        <table style="border: none; width: 100%; border-collapse: collapse;">
-            <tr>
-                <th align="center" style="border: none;">
-                    <div class="logo">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center">
+                <div class="mail-container">
+                    <table style="border: none; width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <th align="center" style="border: none;">
+                                <div class="logo">
+                                </div>
+                            </th>
+                        </tr>
+                    </table>
+                    <div class="content">
+                        <h1 class="text-bold">
+                            Маленький шаг для вас и огромный скачок для вашего кошелька.
+                        </h1>
+                        <p class="text text-big">
+                            Добро пожаловать на BNETEX. Подтвердите ваш адрес электронной почты, используя код ниже.
+                        </p>
+                        <p class="text text-bold">
+                            Код активации аккаунта:
+                        </p>
+                        <p class="code">
+                            {{code}}
+                        </p>
+                        <p class="text text-small">
+                            Это автоматическое сообщение. Пожалуйста, не отвечайте на него.
+                        </p>
                     </div>
-                </th>
-            </tr>
-        </table>
-        <h1 class="text-bold">
-            Маленький шаг для вас и огромный скачок для вашего кошелька.
-        </h1>
-        <p class="text text-big">
-            Добро пожаловать на BNETEX. Подтвердите ваш адрес электронной почты, используя код ниже.
-        </p>
-        <p class="text text-bold">
-            Код активации аккаунта:
-        </p>
-        <p class="code">
-            {{code}}
-        </p>
-        <p class="text text-small">
-            Это автоматическое сообщение. Пожалуйста, не отвечайте на него.
-        </p>
-    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
 </body>

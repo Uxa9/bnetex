@@ -5,19 +5,25 @@ import styles from './tools.module.scss';
 import Chart from 'react-apexcharts';
 import { useEffect, useState } from 'react';
 
-import hehe__roe from '../../../assets/images/hehe__roe.svg';
-import hehe__pnl from '../../../assets/images/hehe__pnl.svg';
-import hehe__verify from '../../../assets/images/hehe__verify.svg';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
 import { useUser } from '../dashboard';
 import AreaChart from 'modules/terminal/investor/chart/areaChart';
 import getRoE from 'services/getroe';
 import getPnL from 'services/getpnl';
+import TransactionTable from './transactionTable';
+import getUserTransactions from 'services/getUserTransactions';
 
 interface GraphicProps {
     dates: string[],
     values: number[]
+}
+
+interface RowData {
+    currency: string,
+    date: Date | string,
+    type: string,
+    amount: number
 }
 
 const Tools = () => {
@@ -35,6 +41,8 @@ const Tools = () => {
         values: []
     });
 
+    const [rows, setRows] = useState<RowData[]>([]);
+
     useEffect(() => {
         getRoE(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
             .then(res => {
@@ -50,22 +58,20 @@ const Tools = () => {
                     values: res.values.map((item: any) => Number(Number(item).toFixed(2)))
                 });
             });
+        getUserTransactions(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
+            .then(res => {
+                let data = res.map((item: any) => {
+                    return ({
+                        currency : 'usdt',
+                        date : new Date(item.createdAt),
+                        type : item.type,
+                        amount : item.amount
+                    })
+                })
+
+                setRows(data);
+            });
     }, []);
-
-    useEffect(() => {
-        console.log(roe);
-        console.log(pnl);        
-    }, [roe, pnl])
-
-    const values: number[] = [124.55, 431.42, 324.54, 432.43, 543.76];
-
-    const [options, setOptions] = useState({
-        dataLabels: {enabled: false},
-        labels: ['Основной аккаунт', 'Фьючерсы USD-M'],
-        colors : ['#EA018D', '#5072F7'],
-    });
-
-    const [series, setSeries] = useState([80, 20]);
 
     return(
         <div>
@@ -94,7 +100,7 @@ const Tools = () => {
                 className={styles['balance-and-transactions']}
             >
                 <div
-                    className={`${styles['balance']} block`}
+                    className={classNames(styles['balance'], 'card')}
                 >
                     <p
                         className={styles['balance-header']}
@@ -161,33 +167,32 @@ const Tools = () => {
                             }}
                         />
                     </div>
-                    {/* <div>
-                        <Chart
-                            options={options}
-                            series={series}
-                            type="donut"
-                            width="400"
-                        />
-                    </div> */}
                 </div>
                 <div
-                    className={`${styles['balance']} block`}
+                    className={classNames(styles['transactions'], 'card')}
                 >
-                    <span
-                        className={styles['balance-header']}
-                    >
-                        Транзакции
-                    </span>
-                    <span>
-                        Посмотреть все
-                    </span>
+                    <p>
+                        <span
+                            className={styles['balance-header']}
+                        >
+                            Транзакции
+                        </span>
+                        <span>
+                            Посмотреть все
+                        </span>
+                    </p>
+                    <div>
+                        <TransactionTable 
+                            rows={rows}
+                        />
+                    </div>
                 </div>
             </div>
             <div
                 className={styles['charts']}
             >
                 <div
-                    className={styles.chart}
+                    className={classNames(styles['chart'], 'card')}
                 >
                     <AreaChart
                         dates={pnl.dates}
@@ -196,7 +201,7 @@ const Tools = () => {
                     />
                 </div>
                 <div
-                    className={styles.chart}
+                    className={classNames(styles['chart'], 'card')}
                 >
                     <AreaChart                    
                         dates={roe.dates}

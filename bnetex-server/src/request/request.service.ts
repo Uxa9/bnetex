@@ -2,8 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import genereateAndSendAuthCode from '../services/genereateAndSendAuthCode';
 import { UsersService } from '../users/users.service';
+import { CreateRequestTypeDto } from './dto/create-request-type.dto';
 import { CreateRequest } from './dto/create-request.dto';
 import { FulfillRequest } from './dto/fulfill-request.dto';
+import { RequestTypes } from './request-types.model';
 import { Request } from './request.model';
 
 @Injectable()
@@ -11,6 +13,7 @@ export class RequestService {
 
     constructor(
         @InjectModel(Request) private requestRepository: typeof Request,
+        @InjectModel(RequestTypes) private requestTypesRepository: typeof RequestTypes, 
         private userService: UsersService
     ) {}
 
@@ -40,10 +43,13 @@ export class RequestService {
             }
         }
 
-        const authCode = await genereateAndSendAuthCode(user.email, "withdraw");
+        const type = await this.getRequestTypeIdByName(dto.type);
+
+        const authCode = await genereateAndSendAuthCode(user.email, dto.type);
         
         const request = await this.requestRepository.create({
             ...dto,
+            type: type,
             confirmCode: authCode 
         });
 
@@ -116,5 +122,49 @@ export class RequestService {
         });
 
         return requests;
+    }
+
+    async addRequestType(dto: CreateRequestTypeDto) {
+        const requestType = await this.requestTypesRepository.create(dto);
+
+        return requestType;
+    }
+
+    async getRequestTypeIdByName(type: string) {
+        const requestType = await this.requestTypesRepository.findOne({
+            where : { type }
+        });
+
+        if (!requestType) {
+            throw new HttpException(
+                {
+                    status: "ERROR",
+                    message: "REQUEST_TYPE_WITH_THIS_NAME_NOT_FOUND"
+                },
+                HttpStatus.NOT_FOUND
+            );
+        }
+
+        return requestType.id;
+    }
+
+    async getTransactionStatusNameById(id: number) {
+        const requestType = await this.requestTypesRepository.findByPk(id);
+
+        if (!requestType) {
+            throw new HttpException(
+                {
+                    status: "ERROR",
+                    message: 'REQUEST_TYPE_WITH_THIS_ID_NOT_FOUND'
+                },
+                HttpStatus.NOT_FOUND
+            );
+        }
+
+        return requestType.type;
+    }
+
+    async getAllTransactionStatuses() {
+        return await this.requestTypesRepository.findAll();
     }
 }
