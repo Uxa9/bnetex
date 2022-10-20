@@ -1,0 +1,93 @@
+@import 'src/styles/mixins';
+@import 'src/styles/shadows';
+@import 'src/styles/colors/colors';
+@import 'src/styles/variables';
+
+.modal {
+    @include stretch-screen;
+    @include with-alpha-background(#000, 0);
+
+
+    &--visible::before {
+        animation: opacityUp $default-transition ease-in-out forwards;
+    }
+
+    &:not(&--visible)::before {
+        animation: opacityDown $default-transition ease-in-out forwards;
+    }
+
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    // backdrop-filter: blur(10px);
+    padding: 0 16px;
+
+    &__container {
+        @include card-shadow;
+        @include column-flex(32px);
+        transition: background-color $default-transition ease-in-out;
+
+        position: relative;
+        z-index: 9999;
+        background-color: $grayscale-card;
+        padding: 32px;
+        border-radius: 16px;
+        width: min(100%, 450px);
+
+        &--visible {
+            animation: showModal $default-transition ease-in-out forwards;
+        }
+
+        &:not(&--visible) {
+            animation: hideModal $default-transition ease-in-out forwards;
+        }
+    }
+
+    &__close {
+        @include color-svg($grayscale-6);
+
+        position: absolute;
+        top: 16px;
+        right: 16px;
+    }
+}
+
+@keyframes showModal {
+    from {
+        opacity: 0;
+        transform: translateY(50%) perspective(1000px) rotateX(30deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0%) perspective(1000px) rotateX(0deg);
+    }
+}
+
+@keyframes hideModal {
+    from {
+        opacity: 1;
+        transform: translateY(0%) perspective(1000px) rotateX(0deg);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(50%) perspective(1000px) rotateX(30deg);
+    }
+}
+
+@keyframes opacityUp {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 0.9;
+    }
+}
+
+@keyframes opacityDown {
+    from {
+        opacity: 0.9;
+    }
+    to {
+        opacity: 0;
+    }
+}

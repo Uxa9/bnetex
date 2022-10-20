@@ -19,10 +19,13 @@ import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import Withdraw from 'modules/Payments/Withdraw/withdraw';
 import WithdrawConfirm from 'modules/Payments/Withdraw/confirm';
 import Transfer from 'modules/Payments/Transfer/transfer';
+import EmailValidation from 'modules/Auth/EmailValidation/emailValidation';
+import RegistrationFinalize from 'modules/Auth/RegistrationFinalize/registrationFinalize';
 
 const AppRoutes = () => {
 
-    const { HOME, AUTH, REGISTRATION, LOGIN, P2P, TERMINAL, DASHBOARD, DEPOSIT, WITHDRAW, WITHDRAW_CONFIRM, TRANSFER } = AppLinksEnum;
+    const { HOME, AUTH, REGISTRATION, LOGIN, VERIFY_EMAIL, REGISTRATION_FINALIZE, P2P, TERMINAL,
+        DASHBOARD, DEPOSIT, WITHDRAW, WITHDRAW_CONFIRM, TRANSFER } = AppLinksEnum;
     const { isAuth } = useTypedSelector(state => state.auth);
 
     return (
@@ -30,13 +33,6 @@ const AppRoutes = () => {
             <Route element={<PageLayout />}>
                 <Route index element={<Navigate to={HOME} />} />
                 <Route path={HOME} element={<MainPage />}></Route>
-                {/* <Route path={AUTH}>
-                    <Route path={REGISTRATION}>
-                        <Route index element={<Registration.StepOne />} />
-                        <Route path='verification' element={<Registration.StepTwo />} />
-                        <Route path='success' element={<Registration.Success />} />
-                    </Route>
-                </Route> */}
                 <Route path={TERMINAL} element={<TerminalLayout />}>
                     <Route path="investor" element={<InvestorView />} />
                 </Route>
@@ -53,6 +49,8 @@ const AppRoutes = () => {
                     <Route index element={<Navigate to={LOGIN} />}></Route>
                     <Route path={REGISTRATION} element={<Registration />}></Route>
                     <Route path={LOGIN} element={<Login />}></Route>
+                    <Route path={VERIFY_EMAIL} element={<EmailValidation />}></Route>
+                    <Route path={REGISTRATION_FINALIZE} element={<RegistrationFinalize />}></Route>
                 </Route>
                 <Route path={P2P}></Route>
                 <Route path={DEPOSIT} element={<Deposit />}></Route>

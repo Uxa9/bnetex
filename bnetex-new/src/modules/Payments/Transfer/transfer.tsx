@@ -47,7 +47,7 @@ const Transfer = () => {
             amount: Number(data.amount),
             firstWallet,
             secondWallet,
-            userId: JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1
+            userId: JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1,
         }))
             .then(() => {
                 goToState(AppLinksEnum.DASHBOARD);
@@ -80,12 +80,12 @@ const Transfer = () => {
                         onChange={(e) => setFirstWallet(e.target.value)}
                     >
                         <option
-                            value={"mainWallet"}
+                            value={'mainWallet'}
                         >
                             Основной кошелек
                         </option>
                         <option
-                            value={"investWallet"}
+                            value={'investWallet'}
                         >
                             Инвестиционный
                         </option>
@@ -95,12 +95,12 @@ const Transfer = () => {
                         onChange={(e) => setSecondWallet(e.target.value)}
                     >
                         <option
-                            value={"mainWallet"}
+                            value={'mainWallet'}
                         >
                             Основной кошелек
                         </option>
                         <option
-                            value={"investWallet"}
+                            value={'investWallet'}
                         >
                             Инвестиционный
                         </option>
