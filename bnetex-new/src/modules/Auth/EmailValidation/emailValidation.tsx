@@ -1,4 +1,5 @@
 import { useGoToState } from 'lib/hooks/useGoToState';
+import { useModal } from 'lib/hooks/useModal';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
 import { Button, Input } from 'lib/ui-kit';
@@ -9,6 +10,7 @@ import { AppLinksEnum } from 'routes/appLinks';
 import useAuthActions from 'services/auth';
 import { loginUser } from 'store/action-creators/auth';
 import FormCard from '../FormCard/formCard';
+import NoEmailModal from '../NoEmailModal/noEmailModal';
 
 interface EmailValidationData {
     activationCode: string,
@@ -20,6 +22,7 @@ const EmailValidation = () => {
     const { isLoading, promiseWithLoading } = usePromiseWithLoading();
     const { goToState } = useGoToState();
     const { confirmEmail } = useAuthActions();
+    const { open: OpenNoEmailModal } = useModal(NoEmailModal);
 
     const [userEmail, setUserEmail] = useState<string>('');
 
@@ -81,6 +84,7 @@ const EmailValidation = () => {
                         type={'button'}
                         key={'did-not-get-code'}
                         mini
+                        onClick={() => OpenNoEmailModal({userEmail: userEmail})}
                     />
                 }
             />

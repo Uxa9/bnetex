@@ -98,13 +98,13 @@ const Login = () => {
                 }
                 actions={
                     <>
-                        <Button 
+                        {/* <Button 
                             text='Забыли пароль?'
                             buttonStyle={'flat'}
                             type={'button'}
                             key={'forgot-password'}
                             mini
-                        />
+                        /> */} 
                         <div 
                             className={styles['register-action']}
                             key={'register-action'}

@@ -1,0 +1,8 @@
+@import 'variables';
+
+:export {
+    header-height: $header-height;
+    default-transition: $default-transition;
+    laptop-bp: $laptop-bp;
+    mobile-bp: $mobile-bp;
+}
