@@ -26,7 +26,9 @@ const Tools = () => {
     const [series, setSeries] = useState([80, 20]);
 
     return(
-        <div>
+        <div 
+            className={styles['tools']}
+        >
             <div
                 className={styles['tools-header']}
             >
@@ -49,7 +51,7 @@ const Tools = () => {
                 </div>
             </div>
             <div
-                className={styles['balance-and-transactions']}
+                className={classNames(styles['balance-and-transactions'], 'card')}
             >
                 {/* <div
                     className={`${styles['balance']} block`}
@@ -106,13 +108,13 @@ const Tools = () => {
                             type='bar'
                             series={[
                                 {
-                                    name: "Основной кошелек",
-                                    data: [Number(Number(mainWallet).toFixed(2))]
+                                    name: 'Основной кошелек',
+                                    data: [Number(Number(mainWallet).toFixed(2))],
                                 },
                                 {
-                                    name: "Инвестиционный кошелек",
-                                    data: [Number(Number(investWallet).toFixed(2))]
-                                }
+                                    name: 'Инвестиционный кошелек',
+                                    data: [Number(Number(investWallet).toFixed(2))],
+                                },
                             ]}
                             height={'150px'}
                             options={{
@@ -120,36 +122,36 @@ const Tools = () => {
                                     stacked: true,
                                     zoom      : { enabled : false },
                                     selection : { enabled : false },
-                                    toolbar   : { show : false }
+                                    toolbar   : { show : false },
                                 },
                                 grid: { 
                                     show: false,
                                     xaxis: {
-                                        lines: { show: false }
+                                        lines: { show: false },
                                     },   
                                     yaxis: {
-                                        lines: { show: false }
+                                        lines: { show: false },
                                     },    
                                 },
                                 plotOptions: {
                                     bar: {
                                         horizontal: true,
                                         barHeight: '12px',
-                                    }
+                                    },
                                 },
                                 xaxis: {
                                     categories: [''],
                                     labels: {
-                                        show: false
+                                        show: false,
                                     },
                                     axisBorder: { show : false },
-                                    axisTicks: { show : false }
+                                    axisTicks: { show : false },
                                 },
                                 yaxis: {
-                                    show: false
+                                    show: false,
                                 },
                                 stroke: {
-                                    width: 0
+                                    width: 0,
                                 },
                                 colors : ['#9202FF', '#1A75FF'],
                                 dataLabels : { enabled : false },

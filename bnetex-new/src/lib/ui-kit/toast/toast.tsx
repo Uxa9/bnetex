@@ -54,7 +54,7 @@ const Toast = () => {
                 }
                 <h5>{toast && toast.type === 'error' ? 'Ошибка' : 'Успех'}</h5>
             </div>
-            <p className={classNames(styles['toast__text'], 'body-1')}>{toast && toast.text}</p>
+            <p className={classNames(styles['toast__text'], 'text')}>{toast && toast.text}</p>
             <Cross 
                 onClick={closeToast}
                 className={styles['toast__close']}

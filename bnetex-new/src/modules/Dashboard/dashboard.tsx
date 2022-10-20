@@ -81,7 +81,8 @@ const Dashboard = () => {
                                     to={section.link}
                                     className={classNames(
                                         styles.link,
-                                        { [styles['link--active']] : activeSection === section.link}
+                                        { [styles['link--active']] : activeSection === section.link},
+                                        'text',
                                     )}
                                     onClick={() => setActiveSection(section.link)}
                                 >
@@ -90,7 +91,7 @@ const Dashboard = () => {
                             )
                         }
                     </aside>
-                    <Outlet context={{mainWallet, investWallet}}/>
+                    <Outlet context={{mainWallet, investWallet}} />
                 </main>
             </div>
         </>

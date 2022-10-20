@@ -25,11 +25,10 @@
 
     .link {
         width: 100%;
-        padding: 15px 20px;
-        font-weight: 300;
-        font-size: 16px;
+        padding: 16px 20px;
         transition: $default-transition all;
         border-left: 2px solid transparent;
+        color: $grayscale-11;
 
         &:hover,
         &:focus,

@@ -36,7 +36,8 @@ const AppRoutes = () => {
                 <Route path={TERMINAL} element={<TerminalLayout />}>
                     <Route path="investor" element={<InvestorView />} />
                 </Route>
-                <Route path={DASHBOARD} element={isAuth ? <Dashboard /> : <Navigate to={`/${AUTH}`} />}>
+                {/* <Route path={DASHBOARD} element={isAuth ? <Dashboard /> : <Navigate to={`/${AUTH}`} />}> */}
+                <Route path={DASHBOARD} element={ <Dashboard />} >
                     <Route index element={<Navigate to={'tools'} />}></Route>
                     <Route path='tools' element={<Tools />} />
                     <Route path='settings' element={<Settings />} />

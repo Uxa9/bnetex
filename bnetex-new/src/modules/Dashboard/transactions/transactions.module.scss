@@ -7,7 +7,6 @@
 }
 
 .transactions-table {
-    font-size: 12px;
     max-width: 100%;
 
     &__header-row {
@@ -22,7 +21,7 @@
     &__row {
         display: grid;
         grid-template-columns: minmax(60px, 15%) minmax(60px, 8%) minmax(60px, 18%) minmax(60px, 6%) 
-        minmax(60px, 6%) minmax(60px, 1fr) minmax(60px, 8%) minmax(30px, 4%);
+        minmax(60px, 6%) minmax(60px, 1fr) minmax(50px, 8%) minmax(50px, 4%);
         column-gap: 16px;
         align-items: center;
         justify-items: start;
