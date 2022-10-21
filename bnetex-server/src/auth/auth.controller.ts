@@ -1,10 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { ConfirmEmail } from '../users/dto/confirm-email.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { ResendActivationLink } from './dto/resend-activation-link.dto';
+import { GetActivationLinkTime } from './dto/get-activation-link-time.dto';
 
 // todo : add api description
 
@@ -27,6 +28,11 @@ export class AuthController {
     @Post('resend-activation-link')
     resendActivationLink(@Body() dto: ResendActivationLink) {
         return this.authService.resendLink(dto);
+    }
+
+    @Post('activattion-link-datetime')
+    getActivationLinkDatetime(@Body() dto: GetActivationLinkTime) {
+        return this.authService.getActivationLinkDatetime(dto);
     }
 
     @Post('confirm-email')

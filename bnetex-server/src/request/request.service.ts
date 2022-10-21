@@ -43,9 +43,9 @@ export class RequestService {
             }
         }
 
-        const type = await this.getTransactionStatusNameById(dto.type);
+        const type = await this.getRequestTypeIdByName(dto.type);
 
-        const authCode = await genereateAndSendAuthCode(user.email, type);
+        const authCode = await genereateAndSendAuthCode(user.email, dto.type);
         
         const request = await this.requestRepository.create({
             ...dto,

@@ -11,6 +11,7 @@ import { UserNotFoundException } from '../exceptions/userNotFound.exception';
 import generateAuthCode from '../services/generateAuthCode';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ResendActivationLink } from './dto/resend-activation-link.dto';
+import { GetActivationLinkTime } from './dto/get-activation-link-time.dto';
 
 @Injectable()
 export class AuthService {
@@ -90,13 +91,29 @@ export class AuthService {
         });
 
         await user.update({
-            activationLink: authCode
+            activationLink: authCode,
+            linkTimestamp: new Date()
         });
 
         return {
             status: "SUCCESS",
             message: "MAIL_SENT"
         }
+    }
+
+    async getActivationLinkDatetime(dto: GetActivationLinkTime) {
+        const user = await this.userService.getUserByEmail(dto.email);
+
+        if (!user) {
+            throw new HttpException({
+                status: "ERROR",
+                message: "USER_NOT_FOUND"
+            },
+                HttpStatus.NOT_FOUND
+            );
+        }
+
+        return user.linkTimestamp;
     }
 
     async confirmEmail(confirmDto: ConfirmEmail) {

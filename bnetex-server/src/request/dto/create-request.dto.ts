@@ -23,5 +23,5 @@ export class CreateRequest {
     @IsString({
         message: "type must be a string"
     })
-    readonly type : number;
+    readonly type : string;
 }

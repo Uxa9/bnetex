@@ -17,8 +17,10 @@ export class UsersService {
         const user = await this.userRepository.create(dto);
         const role = await this.roleService.getRoleByValue('investor');
 
-        await user.$set('roles', [role.id]);
-        user.roles = [role];
+        user.$set('roles', [role.id])
+            .then(() => {
+                user.roles = [role];
+            });
 
         return {
             status: "SUCCESS",
