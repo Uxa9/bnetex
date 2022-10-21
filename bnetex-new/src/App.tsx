@@ -1,3 +1,5 @@
+import ModalSpawner from 'components/ModalSpawn/ModalSpawner/modalSpawner';
+import { ModalSpawnerProvider } from 'lib/hooks/useModal';
 import { PromiseWithLoadingProvider } from 'lib/hooks/usePromiseWithLoading';
 import { ThemeProvider } from 'lib/hooks/useTheme';
 import { ToastProvider } from 'lib/hooks/useToast';
@@ -10,7 +12,10 @@ function App() {
             <ThemeProvider>
                 <ToastProvider>
                     <PromiseWithLoadingProvider>
-                        <AppRoutes />
+                        <ModalSpawnerProvider>
+                            <AppRoutes />
+                            <ModalSpawner />
+                        </ModalSpawnerProvider>
                     </PromiseWithLoadingProvider>
                 </ToastProvider>
             </ThemeProvider>

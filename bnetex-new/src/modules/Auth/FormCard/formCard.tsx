@@ -9,11 +9,12 @@ interface FormCardProps extends HTMLAttributes<HTMLFormElement>{
     inputs?: ReactElement<typeof Input>[],
     button: ReactElement<typeof Button>,
     actions?: ReactNode,
+    step?: string,
 }
 
 const FormCard: FC<FormCardProps> = (props) => {
 
-    const {title, subtitle, inputs, button, actions, className, ...rest} = props;
+    const {title, subtitle, inputs, button, actions, className, step, ...rest} = props;
 
     return(
         <form  
@@ -25,12 +26,24 @@ const FormCard: FC<FormCardProps> = (props) => {
             {...rest}
         >
             <div className={styles['form__header']}>
+                {
+                    step && 
+                    <p className={classNames(
+                        styles['form__step'],
+                        'caption',
+                    )}
+                    >
+                        {step}
+                    </p>
+                }
                 <h3>{title}</h3>
-                <p className='body-1'>{subtitle}</p>
+                <p className='text'>{subtitle}</p>
             </div>
             {inputs}
             {button}
-            {actions}
+            <div className={styles['form__actions']}>
+                {actions}
+            </div>
         </form>
     );
 };

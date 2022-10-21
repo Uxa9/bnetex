@@ -2,14 +2,6 @@
 @import 'styles/variables';
 @import 'styles/colors/colors';
 
-.actions {
-    @include column-flex(8px);
-
-    button {
-        width: fit-content;
-    }
-}
-
 .password-postfix {
     fill: $grayscale-11;
     padding: 0 8px;

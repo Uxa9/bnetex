@@ -8,7 +8,6 @@ $font-size: 16px;
 
 .input-wrapper {
     position: relative;
-    max-height: 50px;
 
     &--activeOrFilled {
         .label {
@@ -41,6 +40,9 @@ $font-size: 16px;
     }
 
     &--error {
+        margin-bottom: 18px; // 4px margin + 14px height of err text
+        transition: margin-bottom $default-transition;
+
         .label {
             color: $red-3;
         }
@@ -50,7 +52,7 @@ $font-size: 16px;
         }
 
         .error-text {
-            margin-left: 0;
+            left: 0;
         }
     }
 }
@@ -60,7 +62,7 @@ $font-size: 16px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: calc(100% - 16px);
+    max-width: calc(100% - 12px);
     color: $grayscale-5;
     background-color: transparent;
     text-align: left;
@@ -90,15 +92,16 @@ $font-size: 16px;
     height: calc(100% - 2px);
     width: 100%;
     margin: 1px;
-    padding: 16px;
+    padding: 12px;
     border-radius: inherit;
     z-index: 1;
     color: $grayscale-11;
 
     &:-webkit-autofill {
         box-shadow: 0 0 0 30px $grayscale-input inset;
+        transition: background-color 5000s ease-in-out 0s;
         -webkit-text-fill-color: $grayscale-11;
-        animation-name: onAutoFill;
+        animation: onAutoFill 1s;
         appearance: none;
     }
 }
@@ -136,8 +139,9 @@ $font-size: 16px;
 
 .error-text {
     margin-top: 4px;
-    margin-left: -12px;
-    transition: margin $default-transition;
+    position: absolute;
+    left: -100%;
+    transition: left $default-transition;
     color: $red-3;
 }
 

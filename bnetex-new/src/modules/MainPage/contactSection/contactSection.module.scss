@@ -1,7 +1,9 @@
 @import 'styles/colors/colors';
+@import 'styles/mixins';
 
 .container {
     position: relative;
+    margin-bottom: 200px;
 }
 
 .contact-section {
@@ -9,10 +11,9 @@
     width: 100%;
     justify-content: space-between;
     align-items: center;
+    background-color: $grayscale-card;
     padding: 60px;
-    background: rgba(0, 0, 0, 0.01);
-    backdrop-filter: blur(16px);
-    border-radius: 20px;
+    border-radius: 16px;
     position: relative;
     z-index: 2;
 }
@@ -46,7 +47,6 @@ h2 > span {
     position: absolute;
     top: -70px;
     left: -30px;
-    z-index: -1;
 }
 
 .abstract-grid--M {

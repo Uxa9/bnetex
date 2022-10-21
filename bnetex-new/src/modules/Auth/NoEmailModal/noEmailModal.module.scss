@@ -1,0 +1,10 @@
+@import 'src/styles/mixins';
+
+.content {
+    @include column-flex(32px);
+}
+
+.list{
+    @include column-flex(16px);
+    list-style-position: inside;
+}

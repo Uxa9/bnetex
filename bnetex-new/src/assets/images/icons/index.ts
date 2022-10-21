@@ -5,6 +5,7 @@ export {ReactComponent as Settings } from './uil_setting.svg';
 export {ReactComponent as Angle } from './uil_angle-down.svg';
 export {ReactComponent as Info } from './uil_info-circle.svg';
 export {ReactComponent as CircledCheck } from './uil_check-circle.svg';
+export {ReactComponent as Check } from './uil_check.svg';
 export {ReactComponent as Copy } from './uil_copy.svg';
 export {ReactComponent as CircledCross } from './uil_times-circle.svg';
 export {ReactComponent as Trash } from './uil_trash.svg';

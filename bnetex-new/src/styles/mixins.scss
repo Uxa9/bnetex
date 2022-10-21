@@ -1,5 +1,13 @@
 @import 'variables';
 
+@mixin stretch-screen {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
 @mixin dynamic-background($default, $hover, $active) {
   background-color: $default;
 

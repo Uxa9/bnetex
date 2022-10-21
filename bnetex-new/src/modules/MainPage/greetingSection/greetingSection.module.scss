@@ -12,11 +12,14 @@
     }
 }
 
-.greeting-text__input-block {
-    display: flex;
-    align-items: flex-end;
-    column-gap: 30px;
-    align-items: center;
+.greeting-text {
+    z-index: 2;
+    &__input-block {
+        display: flex;
+        align-items: flex-end;
+        column-gap: 30px;
+        align-items: center;
+    }
 }
 
 h1 > span {
@@ -24,11 +27,10 @@ h1 > span {
 }
 
 @media screen and (max-width: 1000px) {
-
-    .greeting-img{
+    .greeting-img {
         position: absolute;
         z-index: -1;
-        max-height: 400px ;
+        max-height: 400px;
         width: fit-content !important;
         top: 0;
         right: -150px;

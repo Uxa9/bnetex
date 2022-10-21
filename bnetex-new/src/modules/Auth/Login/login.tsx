@@ -8,7 +8,7 @@ import { emailValidation, requiredValidation } from 'lib/utils/hookFormValidatio
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AppLinksEnum } from 'routes/appLinks';
-import login from 'services/login';
+import useAuthActions from 'services/auth';
 import FormCard from '../FormCard/formCard';
 import styles from './login.module.scss';
 
@@ -25,6 +25,8 @@ const Login = () => {
     const { isLoading, promiseWithLoading } = usePromiseWithLoading();
     const { goToState } = useGoToState();
     const { loginUser } = useActions();
+
+    const { login } = useAuthActions();
 
     const {
         register,
@@ -46,7 +48,11 @@ const Login = () => {
                 loginUser();
                 goToState(AppLinksEnum.DASHBOARD);
             })
-            .catch((error) => bakeToast.error(error.response?.data.message));
+            .catch((error) => {
+                error.response.data.message === 'USER_NOT_ACTIVATED' && 
+                    goToState(`${AppLinksEnum.AUTH}/${AppLinksEnum.VERIFY_EMAIL}`);
+                bakeToast.error(error.response?.data.message);
+            });
     };
 
 
@@ -91,14 +97,14 @@ const Login = () => {
                     />
                 }
                 actions={
-                    <div className={styles.actions}>
-                        <Button 
+                    <>
+                        {/* <Button 
                             text='Забыли пароль?'
                             buttonStyle={'flat'}
                             type={'button'}
                             key={'forgot-password'}
                             mini
-                        />
+                        /> */} 
                         <div 
                             className={styles['register-action']}
                             key={'register-action'}
@@ -112,7 +118,7 @@ const Login = () => {
                                 onClick={() => goToState(`${AppLinksEnum.AUTH}/${AppLinksEnum.REGISTRATION}`)}
                             />
                         </div>
-                    </div>
+                    </>
                 }
             />
         </>

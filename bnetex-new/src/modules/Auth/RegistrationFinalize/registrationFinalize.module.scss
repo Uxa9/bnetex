@@ -1,0 +1,15 @@
+@import 'styles/mixins';
+@import 'styles/colors/colors';
+
+.card {
+    @include column-flex(32px);
+    padding: 32px;
+    width: min(100%, 450px);
+    z-index: 2;
+}
+
+.text-icon {
+    @include align-center-row-flex(16px);
+    @include size-svg(40px, 40px);
+    @include color-svg($green-3);
+}

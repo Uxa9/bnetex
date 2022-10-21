@@ -1,13 +1,31 @@
+@import 'styles/colors/colors';
+@import 'styles/mixins';
+
 .form {
+    @include column-flex(32px);
     padding: 32px;
-    display: flex;
-    flex-direction: column;
-    row-gap: 30px;
-    max-width: 500px;
+    width: min(100%, 450px);
+    z-index: 2;
 
     &__header {
         display: flex;
         flex-direction: column;
-        row-gap: 10px;
+        row-gap: 16px;
+    }
+
+    &__step {
+        color: $accent-3;
+
+        &::before {
+            content: 'Шаг ';
+        }
+    }
+
+    &__actions {
+        @include column-flex(8px);
+    
+        button {
+            width: fit-content;
+        }
     }
 }
