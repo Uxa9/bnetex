@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import { Button } from 'lib/ui-kit';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
+import { useModal } from 'lib/hooks/useModal';
+import TransferModal from 'modules/Payments/Transfer/transferModal';
 
 // toDo
 // сделать нормальные кнопки
@@ -17,6 +19,8 @@ const MainWallet = () => {
     // }, []);
 
     const balance = JSON.parse(localStorage.getItem('mainWallet') || '{}') || 0.00;
+
+    const { open: OpenTransferModal } = useModal(TransferModal);
 
     return(
         <div className={styles.wallet}>
@@ -34,7 +38,7 @@ const MainWallet = () => {
                     <Button
                         text='Перевод'
                         buttonStyle={'thin'}
-                        onClick={() => goToState(AppLinksEnum.TRANSFER)}
+                        onClick={() => OpenTransferModal({})}
                     />
                 </div>
             </div>

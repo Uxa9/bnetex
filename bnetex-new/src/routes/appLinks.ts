@@ -11,5 +11,4 @@ export enum AppLinksEnum {
     DEPOSIT = 'deposit',
     WITHDRAW = 'withdraw',
     WITHDRAW_CONFIRM = 'withdraw/confirm',
-    TRANSFER = 'transfer'
 }

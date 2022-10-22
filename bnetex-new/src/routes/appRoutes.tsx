@@ -18,14 +18,13 @@ import Deposit from 'modules/Payments/Deposit/deposit';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import Withdraw from 'modules/Payments/Withdraw/withdraw';
 import WithdrawConfirm from 'modules/Payments/Withdraw/confirm';
-import Transfer from 'modules/Payments/Transfer/transfer';
 import EmailValidation from 'modules/Auth/EmailValidation/emailValidation';
 import RegistrationFinalize from 'modules/Auth/RegistrationFinalize/registrationFinalize';
 
 const AppRoutes = () => {
 
     const { HOME, AUTH, REGISTRATION, LOGIN, VERIFY_EMAIL, REGISTRATION_FINALIZE, P2P, TERMINAL,
-        DASHBOARD, DEPOSIT, WITHDRAW, WITHDRAW_CONFIRM, TRANSFER } = AppLinksEnum;
+        DASHBOARD, DEPOSIT, WITHDRAW, WITHDRAW_CONFIRM } = AppLinksEnum;
     const { isAuth } = useTypedSelector(state => state.auth);
 
     return (
@@ -57,7 +56,6 @@ const AppRoutes = () => {
                 <Route path={DEPOSIT} element={<Deposit />}></Route>
                 <Route path={WITHDRAW} element={<Withdraw />}></Route>
                 <Route path={WITHDRAW_CONFIRM} element={<WithdrawConfirm />} />
-                <Route path={TRANSFER} element={<Transfer />} />
             </Route>
         </Routes>
     );

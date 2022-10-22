@@ -1,0 +1,5 @@
+@import 'src/styles/mixins';
+
+.transfer-modal{
+    @include column-flex(24px);
+}
