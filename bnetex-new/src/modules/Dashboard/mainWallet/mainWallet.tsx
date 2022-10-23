@@ -37,7 +37,7 @@ const MainWallet = () => {
                     />
                     <Button
                         text='Перевод'
-                        buttonStyle={'thin'}
+                        buttonStyle={'flat'}
                         onClick={() => OpenTransferModal({})}
                     />
                 </div>

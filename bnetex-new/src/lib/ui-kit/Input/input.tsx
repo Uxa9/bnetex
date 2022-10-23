@@ -45,7 +45,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         )}
         >
             <label 
-                className={styles.label}
+                className={classNames(
+                    styles.label,
+                    'text'
+                )}
                 htmlFor={id}
             >
                 { label }
@@ -54,7 +57,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                 <input 
                     type={type}
                     id={id}
-                    className={styles.input}
+                    className={classNames(
+                        styles.input,
+                        'text'
+                    )}
                     tabIndex={1}
                     onFocus={handleFocus}
                     ref={ref}

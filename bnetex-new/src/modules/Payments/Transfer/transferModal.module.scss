@@ -1,5 +1,13 @@
 @import 'src/styles/mixins';
 
-.transfer-modal{
+.transfer-modal {
     @include column-flex(24px);
+
+    &__wallet-selectors {
+        @include column-flex(8px);
+    }
+}
+
+.exchange-button svg {
+    transform: rotate(90deg);
 }

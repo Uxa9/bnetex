@@ -1,0 +1,16 @@
+@import 'src/styles/colors/colors';
+@import 'src/styles/mixins';
+
+.container {
+    @include dynamic-background(transparent, $accent-6, $accent-5);
+
+    background-color: transparent;
+    height: auto;
+    display: flex;
+    justify-content: baseline;
+}
+
+.text-option {
+    padding: 8px 12px;
+    color: $grayscale-11;
+}
