@@ -6,19 +6,17 @@ import { v4 as uuidV4 } from 'uuid';
 import React from 'react';
 import { throwError } from 'lib/utils/errorThrower';
 import { Angle } from 'assets/images/icons';
-import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface SelectProps<T> {
     label?: string;
     value: T;
     onChange: Dispatch<SetStateAction<T>>;
     children: ReactElement<SelectOptionProps<T>>[];
-    inputControl?: UseFormRegisterReturn,
 }
 
 // toDo: Сделать возможность закрыть селект по клику по нему.
 
-function Select<T> ({label, value, onChange, children, inputControl}: SelectProps<T>) {
+function Select<T> ({label, value, onChange, children}: SelectProps<T>) {
 
     const id = useMemo(() => uuidV4(), []);
     const [ isMenuVisible, setIsMenuVisible ] = useState<boolean>(false);
@@ -37,7 +35,7 @@ function Select<T> ({label, value, onChange, children, inputControl}: SelectProp
     const memorizedOptions = useMemo(() => {
         return React.Children.map(children, (child, index) => {
             const element = child as ReactElement<SelectOptionProps<T>>;
-            return React.cloneElement(element, { onClick: (e: MouseEvent<HTMLButtonElement>) => {
+            return React.cloneElement(element, { onClick: (e: MouseEvent<HTMLDivElement>) => {
                 onChange(element.props.value);
                 setIsMenuVisible(false);
                 e.stopPropagation();
@@ -53,6 +51,7 @@ function Select<T> ({label, value, onChange, children, inputControl}: SelectProp
             )}
             onClick={() => setIsMenuVisible(isVisible => !isVisible)}
             onBlur={() => setIsMenuVisible(false)}
+            type={'button'}
         >
             <fieldset  
                 className={classNames(styles['fieldset-outline'])}
@@ -74,10 +73,6 @@ function Select<T> ({label, value, onChange, children, inputControl}: SelectProp
                 { selectedValue }
                 <Angle className={styles['select__arrow']} />
             </div>
-            <input 
-                className='visually-hidden' 
-                {...inputControl}
-            />
             <div 
                 className={classNames(
                     styles['select__menu'],

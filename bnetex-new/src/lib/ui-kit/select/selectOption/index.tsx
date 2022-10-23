@@ -1,31 +1,24 @@
 import classNames from 'classnames';
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, ReactElement } from 'react';
 import styles from './selectOption.module.scss';
 
-export interface SelectOptionProps<T> extends Pick<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
+export interface SelectOptionProps<T> extends Pick<ButtonHTMLAttributes<HTMLDivElement>, 'onClick'> {
     value: T;
-    option: JSX.Element | string;
+    option: ReactElement<any> | string;
 }
 
 function SelectOption<T> ({ option, onClick }: SelectOptionProps<T>) {
-
-    const evaluateOption = () => {
-        return typeof option === 'string' ? 
-            <p 
-                className={classNames(styles['text-option'], 'text')}
-            >
-                { option }
-            </p> :
-            { option };
-    };
-
     return(
-        <button 
+        <div 
             className={styles['container']}
             onClick={onClick}
         >
-            { evaluateOption() }
-        </button>
+            <div
+                className={classNames(styles['text-option'], 'text')}
+            >
+                { option }
+            </div>
+        </div>
     );
 };
 

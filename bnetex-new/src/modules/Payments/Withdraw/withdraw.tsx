@@ -5,10 +5,10 @@ import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
 import { Button, Input } from 'lib/ui-kit';
 import { numberValidation, requiredValidation } from 'lib/utils/hookFormValidation';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AppLinksEnum } from 'routes/appLinks';
-import withdrawRequest from 'services/withdrawRequset';
+import useWalletActions from 'services/walletActions';
 import styles from './withdraw.module.scss';
 
 interface WithdrawFormData {
@@ -24,6 +24,7 @@ const Withdraw = () => {
     const { navigateBack, goToState } = useGoToState();
     const { isLoading, promiseWithLoading } = usePromiseWithLoading();
     const [balance, setBalance] = useState(0);
+    const { withdrawRequest } = useWalletActions();
     
     useEffect(() => {
         setBalance(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.mainWallet || 0.00);
@@ -46,7 +47,7 @@ const Withdraw = () => {
         promiseWithLoading(withdrawRequest({
             ...data,
             userId: JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId,
-            type: "withdraw"
+            type: 'withdraw',
         }))
             .then(() => {
                 goToState(AppLinksEnum.WITHDRAW_CONFIRM);
@@ -88,6 +89,7 @@ const Withdraw = () => {
                         text={'Отправить'}
                         type={'submit'}
                         disabled={!isValid}
+                        isLoading={isLoading}
                     />
 
                     <ul className={styles.disclaimer}>
@@ -111,3 +113,4 @@ const Withdraw = () => {
 };
 
 export default Withdraw;
+

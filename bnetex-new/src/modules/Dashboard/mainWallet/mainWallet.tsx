@@ -5,6 +5,10 @@ import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
 import { useModal } from 'lib/hooks/useModal';
 import TransferModal from 'modules/Payments/Transfer/transferModal';
+import { useEffect, useState } from 'react';
+import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
+import useWalletActions from 'services/walletActions';
+import { WalletCategoryWithBalance } from 'lib/types/wallet';
 
 // toDo
 // сделать нормальные кнопки
@@ -12,13 +16,14 @@ import TransferModal from 'modules/Payments/Transfer/transferModal';
 const MainWallet = () => {
     
     const { goToState } = useGoToState();
-    // const [balance, setBalance] = useState(0);
+    const [balance, setBalance] = useState<number>(0);
+    const { promiseWithLoading } = usePromiseWithLoading();
+    const { getWallets } = useWalletActions();
 
-    // useEffect(() => {
-    //     setBalance(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.mainWallet || 0.00);
-    // }, []);
-
-    const balance = JSON.parse(localStorage.getItem('mainWallet') || '{}') || 0.00;
+    useEffect(() => {
+        promiseWithLoading<WalletCategoryWithBalance>(getWallets())
+            .then(res => setBalance(res.main));
+    }, []);
 
     const { open: OpenTransferModal } = useModal(TransferModal);
 
