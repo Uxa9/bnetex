@@ -47,6 +47,7 @@ const HistoryAndOrders = ({className}: {className?: string}) => {
         <div
             className={classNames( 
                 styles.tabs,
+                'card',
                 className
             )}
         >

@@ -1,35 +1,91 @@
+import classNames from 'classnames';
+import { useModal } from 'lib/hooks/useModal';
+import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
+import { WalletCategoryWithBalance } from 'lib/types/wallet';
 import { Button, Input } from 'lib/ui-kit';
 import { blockEAndDashKey } from 'lib/utils';
-import { createRef, useState } from 'react';
+import { numberValidation } from 'lib/utils/hookFormValidation';
+import StartAlgorythmModal from 'modules/terminal/modals/startAlgorythm/startAlgorythm';
+import StopAlgorythmModal from 'modules/terminal/modals/stopAlgorythm/stopAlgorythm';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import useWalletActions from 'services/walletActions';
 import styles from '../investorView.module.scss';
+
+interface TradeViewData {
+    amount: number;
+}
 
 const TradeView = () => {
 
-    const [inputValue, setInputValue] = useState<number | ''>('');
+    const { promiseWithLoading } = usePromiseWithLoading();
+    const { getWallets } = useWalletActions();
+    const { open: openStartAlgorythmModal } = useModal(StartAlgorythmModal);
+    const { open: openStopAlgorythmModal } = useModal(StopAlgorythmModal);
 
-    // Костыльное решение, лучше бы сделать через react-hook-form
-    const [inputError, setInputError] = useState<string>('');
+    const [balance, setBalance] = useState<number>(0);
+    const [ isAlgorythmActive, setIsAlgorythmActive ] = useState<boolean>(false);
 
-    // Это должно приходить с бэка
-    const balance = 21567.34;
+    useEffect(() => {
+        // promiseWithLoading<WalletCategoryWithBalance>(getWallets())
+        // .then(res => setBalance(res.investor));
+        setBalance(100);
+    }, []);
 
-    const validateInputChange = (event: React.ChangeEvent<HTMLInputElement> ) => {
-        const value = event.currentTarget.valueAsNumber;
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        setError,
+        reset,
+        formState: {
+            errors,
+            isValid,
+        },
+    } = useForm<TradeViewData>({
+        mode: 'onChange',
+        criteriaMode: 'firstError',
+        reValidateMode: 'onChange',
+    });
 
-        setInputError(value > balance ? 'На балансе недостаточно средств' : '');
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
-        setInputValue(isNaN(value) ? '' : value);
-    };
-
-    const inputRef = createRef<HTMLInputElement>();
+    const { ref: hookInputRef, ...rest } = register('amount', {
+        ...numberValidation,
+        min: {
+            value: 0.00001,
+            message: 'Минимальное значение - 0.00001 USDT',
+        },
+        validate: {
+            isNotGreaterThanBalance: value => {
+                if(value > balance) setError('amount', {message: 'На балансе недостаточно средств'});
+                return value <= balance;
+            },
+        },
+    });
 
     const setInputValueToBalance = () => {
-        setInputValue(balance);
+        setValue('amount', balance, {shouldValidate: true});
         inputRef.current?.focus();
+    };
+
+    const onSubmit = (data: TradeViewData) => {
+        isAlgorythmActive ? 
+            openStopAlgorythmModal({
+                onSubmit: setIsAlgorythmActive,
+            }) : 
+            openStartAlgorythmModal({
+                amountToSend: data.amount,
+                onSubmit: setIsAlgorythmActive,
+            });
+
+        reset();
     };
  
     return (
-        <>
+        <form
+            onSubmit={handleSubmit(onSubmit)}
+        >
             <div
                 className={styles['investor-balance']}
             >
@@ -51,18 +107,25 @@ const TradeView = () => {
                     label={'Объем инвестиций (USDT)'}
                     type={'number'}
                     required
-                    value={inputValue}
-                    onChange={validateInputChange}
-                    errorText={inputError}
+                    errorText={errors.amount?.message}
                     onKeyPress={blockEAndDashKey}
-                    ref={inputRef}
+                    {...rest}
+                    ref={e => {
+                        hookInputRef(e);
+                        inputRef.current = e;
+                    }}
                     postfix=
                         {
                             <Button 
                                 text={'Весь баланс'}
-                                buttonStyle={'thin'}
-                                className={styles['all-balance-btn']}
+                                buttonStyle={'flat'}
+                                className={classNames(
+                                    styles['all-balance-btn'],
+                                    'caption'
+                                )}
                                 onClick={setInputValueToBalance}
+                                mini
+                                type={'button'}
                             />
                         }
                 />
@@ -71,12 +134,14 @@ const TradeView = () => {
                 className={styles['button-wrapper']}
             >
                 <Button
-                    disabled={!inputValue || !inputError}
-                    text={'Начать работу'}
-                    buttonTheme={'green'}
+                    disabled={!isValid}
+                    text={isAlgorythmActive ? 'Остановить работу' : 'Начать работу'}
+                    buttonStyle={'outlined'}
+                    buttonTheme={isAlgorythmActive ? 'red' : 'green'}
+                    fillContainer
                 />
             </div>
-        </>
+        </form>
     );
 };
 

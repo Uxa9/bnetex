@@ -1,0 +1,6 @@
+@import 'src/styles/mixins';
+
+.disclaimer {
+    @include column-flex(16px);
+    margin-bottom: 24px;
+}

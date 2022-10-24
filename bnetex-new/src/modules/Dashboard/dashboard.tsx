@@ -1,18 +1,13 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { Link, Outlet, useOutletContext } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import styles from './dashboard.module.scss';
 
-type activeSectionType = 'tools' | 'settings' | 'wallet/main' | 'wallet/futures' | 'wallet/investor' | 'transactions';
+type activeSectionType = 'tools' | 'settings' | 'wallet/main' | 'wallet/investor' | 'transactions';
 
 interface dashboardSection{
     link: activeSectionType,
     title: string
-}
-
-type ContexType = {
-    mainWallet: number,
-    investWallet: number
 }
 
 const dashboardSections: dashboardSection[] = [
@@ -28,10 +23,6 @@ const dashboardSections: dashboardSection[] = [
         link: 'wallet/main',
         title: 'Основной кошелек',
     },
-    // {
-    //     link: 'wallet/futures',
-    //     title: 'Фьючерсный кошелек',
-    // }, 
     {
         link: 'wallet/investor',
         title: 'Инвестиционный кошелек',
@@ -44,17 +35,17 @@ const dashboardSections: dashboardSection[] = [
 
 const Dashboard = () => {
     const [activeSection, setActiveSection] = useState<activeSectionType | undefined>(undefined);
+    const location = useLocation();
 
     useEffect(() => {
         const url = window.location.href;
-
         dashboardSections.forEach((section: dashboardSection) => {
             if(url.match(section.link)){
                 setActiveSection(section.link);
                 return;
             }
         });
-    }, []);
+    }, [location.pathname]);
 
     return(
         <>
@@ -85,9 +76,5 @@ const Dashboard = () => {
 
     );
 };
-
-export function useUser() {
-    return useOutletContext<ContexType>();
-}
 
 export default Dashboard;

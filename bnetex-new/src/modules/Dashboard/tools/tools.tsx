@@ -1,21 +1,14 @@
 import classNames from 'classnames';
 import { Button } from 'lib/ui-kit';
 import styles from './tools.module.scss';
-
 import Chart from 'react-apexcharts';
 import { useState } from 'react';
-
-import hehe__roe from '../../../assets/images/hehe__roe.svg';
-import hehe__pnl from '../../../assets/images/hehe__pnl.svg';
-import hehe__verify from '../../../assets/images/hehe__verify.svg';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
-import { useUser } from '../dashboard';
 
 const Tools = () => {
 
     const { goToState } = useGoToState();
-    const { mainWallet, investWallet } = useUser();
 
     const [options, setOptions] = useState({
         dataLabels: {enabled: false},
@@ -101,10 +94,10 @@ const Tools = () => {
                     <p
                         className={styles['user-balance']}
                     >
-                        {`${Number(mainWallet + investWallet).toFixed(2)} USDT`}
+                        {/* {`${Number(mainWallet + investWallet).toFixed(2)} USDT`} */}
                     </p>
                     <div>
-                        <Chart
+                        {/* <Chart
                             type='bar'
                             series={[
                                 {
@@ -156,7 +149,7 @@ const Tools = () => {
                                 colors : ['#9202FF', '#1A75FF'],
                                 dataLabels : { enabled : false },
                             }}
-                        />
+                        /> */}
                     </div>
                     {/* <div>
                         <Chart

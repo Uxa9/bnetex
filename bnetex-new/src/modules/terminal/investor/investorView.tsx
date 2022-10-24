@@ -1,18 +1,15 @@
 import { useState } from 'react';
-
 import { ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
-
 import TradeView   from './tradeView/tradeView';
 import HistoryView from './historyView/historyView';
 import AreaChart from './chart/areaChart';
-
 import styles from './investorView.module.scss';
 import ToolTip from 'lib/ui-kit/toolTip';
 import classNames from 'classnames';
 
-const InvestorView = () => {
+type InvestorViewType = 'trade' | 'history';
 
-    type InvestorViewType = 'trade' | 'history';
+const InvestorView = () => {
 
     const [viewType, setViewType] = useState<InvestorViewType>('trade');
 
@@ -20,7 +17,7 @@ const InvestorView = () => {
         <>
             <div className='terminal-side-block'>
                 <div
-                    className={classNames(styles['investor-view-card'], 'block')}
+                    className={classNames(styles['investor-view-card'], 'block', 'card')}
                 >
                     <div className={styles['investor-view-wrapper__header']}>
                         <ToggleButtonGroup 
@@ -47,12 +44,17 @@ const InvestorView = () => {
                         В раздел попадают только исполненные ордера.'
                         />
                     </div>
-                
-                    {viewType === 'trade' && <TradeView />}
-                    {viewType === 'history' && <HistoryView />}
+                    {
+                        viewType === 'trade' ? 
+                            <TradeView /> :
+                            <HistoryView />
+                    }
                 </div>
                 <div
-                    className='block'
+                    className={classNames(
+                        'block',
+                        'card'
+                    )}
                 >
                     <p
                         className={styles['header']}
@@ -74,18 +76,24 @@ const InvestorView = () => {
                         </span>
                     </div>
                 </div>
-                <AreaChart 
-                    dates={[]} 
-                    values={[]} 
-                    title={
-                        <ToolTip 
-                            title={'PnL'}
-                            infoText={'PNL (Profit and Loss) – это величина, которая показывает разницу между прибылью и убытками в трейдинге.'}
-                        />
-                    }
-                />
+                <div className={'card'}>
+                    <AreaChart 
+                        dates={[]} 
+                        values={[]} 
+                        title={
+                            <ToolTip 
+                                title={'PnL'}
+                                infoText={'PNL (Profit and Loss) – это величина, которая показывает разницу между прибылью и убытками в трейдинге.'}
+                            />
+                        }
+                    />
+                </div>
             </div>
-            <div className='terminal-side-block'>
+            <div className={classNames(
+                'terminal-side-block',
+                'card',
+            )}
+            >
                 <AreaChart 
                     dates={[]} 
                     values={[]} 
