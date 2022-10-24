@@ -1,4 +1,5 @@
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, Model, Table } from "sequelize-typescript";
+import { Request } from "./request.model";
 
 interface RequestTypeCreationAttrs {
     type : string,

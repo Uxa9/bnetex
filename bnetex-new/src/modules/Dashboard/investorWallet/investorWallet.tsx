@@ -86,7 +86,7 @@ const InvestorWallet = () => {
                     <p
                         className={styles['user-balance']}
                     >
-                        {`${Number(mainWallet + investWallet).toFixed(2)} USDT`}
+                        {`${Number(investWallet).toFixed(2)} USDT`}
                     </p>
                     <div>
                         <Chart
