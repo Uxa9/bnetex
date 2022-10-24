@@ -17,6 +17,16 @@
     .currency-wrapper {
         display: flex;
         align-items: center;
+
+        .currency-logo {
+            width: 18px;
+            height: 16px;
+            margin-right: 2px;
+        }
+
+        span {
+            line-height: 15px;
+        }
     }
 
     .status {
@@ -33,5 +43,6 @@
 
     .amount {
         justify-self: flex-end;
+        padding-right: 2px;
     }
 }

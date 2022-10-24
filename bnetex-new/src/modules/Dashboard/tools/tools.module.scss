@@ -31,6 +31,7 @@
 
     .balance {
         box-sizing: border-box;
+        max-height: 210px;
 
         .balance-header {
             color: $grayscale-6;
@@ -50,8 +51,39 @@
         }
     }
 
+    .transaction-table-wrapper {
+        height: 90%;
+        overflow-y: scroll;
+
+        &::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: $grayscale-4;
+            border-radius: 2px;
+        }
+    }
+
     .transactions {
-        
+        max-height: 210px;
+
+        .transactions-header {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 16px;
+        }
+
+        .header-show-all {
+            color: $accent-3;
+
+            cursor: pointer;
+        }
     }
 
 }

@@ -61,10 +61,12 @@ const Tools = () => {
         getUserTransactions(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
             .then(res => {
                 let data = res.map((item: any) => {
+                    console.log(item.type);
+                    
                     return ({
                         currency : 'usdt',
                         date : new Date(item.createdAt),
-                        type : item.type,
+                        type : item.type == 1 ? "withdraw" : "deposit",
                         amount : item.amount
                     })
                 })
@@ -126,12 +128,15 @@ const Tools = () => {
                                 }
                             ]}
                             height={'150px'}
+                            width={'120%'}
                             options={{
                                 chart: {
                                     stacked: true,
                                     zoom      : { enabled : false },
                                     selection : { enabled : false },
-                                    toolbar   : { show : false }
+                                    toolbar   : { show : false },
+                                    offsetY   : -60,
+                                    offsetX   : -25,
                                 },
                                 grid: { 
                                     show: false,
@@ -145,8 +150,12 @@ const Tools = () => {
                                 plotOptions: {
                                     bar: {
                                         horizontal: true,
-                                        barHeight: '12px',
-                                    }
+                                        barHeight: '18px',
+                                        borderRadius: 4,
+                                        colors: {
+                                            backgroundBarRadius: 4
+                                        }
+                                    },
                                 },
                                 xaxis: {
                                     categories: [''],
@@ -162,6 +171,13 @@ const Tools = () => {
                                 stroke: {
                                     width: 0
                                 },
+                                legend: {
+                                    showForNullSeries: false,
+                                    showForSingleSeries: false,
+                                    offsetY: -10,
+                                    offsetX: -7,
+                                    horizontalAlign: 'left'
+                                },
                                 colors : ['#9202FF', '#1A75FF'],
                                 dataLabels : { enabled : false },
                             }}
@@ -171,17 +187,24 @@ const Tools = () => {
                 <div
                     className={classNames(styles['transactions'], 'card')}
                 >
-                    <p>
+                    <p
+                        className={styles['transactions-header']}
+                    >
                         <span
-                            className={styles['balance-header']}
+                            className={styles['header-balance']}
                         >
                             Транзакции
                         </span>
-                        <span>
+                        <span
+                            className={styles['header-show-all']} 
+                            onClick={() => goToState('/dashboard/transactions')}
+                        >
                             Посмотреть все
                         </span>
                     </p>
-                    <div>
+                    <div
+                        className={styles['transaction-table-wrapper']}
+                    >
                         <TransactionTable 
                             rows={rows}
                         />

@@ -63,3 +63,20 @@ body,
 html {
     overflow-x: hidden;
 }
+
+.apexcharts-legend {
+    flex-direction: column;
+}
+
+.apexcharts-legend-marker {
+    width: 4px !important;
+    height: 16px !important;
+}
+
+.apexcharts-legend-series {
+    display: block !important;
+}
+
+.apexcharts-legend-text {
+    top: -3px;
+}

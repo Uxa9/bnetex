@@ -20,27 +20,31 @@ const typesLib = {  // хз пока куда это девать
 }
 
 const TransactionTable = (props: TableData) => {
-    
+
     const rowRender = (row: RowData) => {
-        
+
         const renderCurrency = (name: string) => {
             switch (name) {
                 case 'usdt':
                     return (
                         <>
-                            <USDT />
-                            USDT
+                            <USDT 
+                                className={styles['currency-logo']}
+                            />
+                            <span>
+                                USDT
+                            </span>
                         </>
                     )
-                    default:
-                        return (
-                            <>
+                default:
+                    return (
+                        <>
                             {name}
                         </>
                     );
             }
         }
-        
+
         const renderDate = (date: Date | string) => {
             if (typeof date === 'object') {
                 return (
@@ -56,10 +60,10 @@ const TransactionTable = (props: TableData) => {
                 )
             }
         }
-        
+
         type RowKey = keyof typeof typesLib;
         const type = row.type as RowKey;
-        
+
         return (
             <div
                 className={styles['table-row']}
