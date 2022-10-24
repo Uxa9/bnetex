@@ -144,7 +144,7 @@ const Transactions = () => {
                     
                     return ({
                         date : new Date(item.createdAt),
-                        type : item.type == 1 ? "withdraw" : "deposit",
+                        type : item.type.toString() == "1" ? "withdraw" : "income",
                         wallet: "Основной кошелек",
                         coin : 'USDT',
                         amount : item.amount,
