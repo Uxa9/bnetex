@@ -60,9 +60,7 @@ const Tools = () => {
             });
         getUserTransactions(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
             .then(res => {
-                let data = res.map((item: any) => {
-                    console.log(item.type);
-                    
+                let data = res.map((item: any) => {                    
                     return ({
                         currency : 'usdt',
                         date : new Date(item.createdAt),
@@ -128,8 +126,8 @@ const Tools = () => {
                                 }
                             ]}
                             height={'150px'}
-                            width={'120%'}
-                            options={{
+                            width={'110%'}
+                            options={{ // приготовьтесь охуеть
                                 chart: {
                                     stacked: true,
                                     zoom      : { enabled : false },
@@ -152,9 +150,6 @@ const Tools = () => {
                                         horizontal: true,
                                         barHeight: '18px',
                                         borderRadius: 4,
-                                        colors: {
-                                            backgroundBarRadius: 4
-                                        }
                                     },
                                 },
                                 xaxis: {

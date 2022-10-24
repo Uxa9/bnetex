@@ -28,4 +28,4 @@ export {ReactComponent as Mail} from './uil_envelope.svg';
 export {ReactComponent as ToolTipNeedle} from './tool-tip.svg';
 export {ReactComponent as Spinner} from './uil_spinner.svg';
 export {ReactComponent as USDT} from './uil_usdt.svg';
-
+export {ReactComponent as Key} from './uil_key.svg';
