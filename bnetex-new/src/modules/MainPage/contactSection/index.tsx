@@ -22,7 +22,6 @@ const ContactSection = () => {
                 color='green'
                 rotate={160}
             />
-
             <section className={styles['contact-section']}>
                 <div className={styles['title']}>
                     <h2>Остались <span>вопросы?</span></h2>
