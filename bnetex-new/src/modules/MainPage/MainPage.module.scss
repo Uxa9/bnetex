@@ -16,8 +16,13 @@
     padding-top: 50px;
     z-index: 1;
 
+    @include max-width(1200){
+        row-gap: 120px;
+    }
+
     @include mobile {
         padding: 16px;
+        row-gap: 72px;
     }
 }
 
@@ -38,10 +43,4 @@
     backdrop-filter: blur(15px);
     border-radius: 10px;
     max-width: 219px;
-}
-
-@media screen and (max-width: 1200px) {
-    .landing-container {
-        row-gap: 150px;
-    }
 }
