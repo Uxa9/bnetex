@@ -11,8 +11,8 @@ const MainPage = () => {
             <div className={styles['landing-container']}>
                 <GreetingSection />
                 <Invest />
-                {/* <Earn /> */}
-                {/* <ContactSection /> */}
+                <Earn />
+                <ContactSection />
             </div>
         </div>
     );
