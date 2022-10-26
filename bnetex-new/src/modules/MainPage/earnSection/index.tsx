@@ -34,7 +34,7 @@ const Earn = () => {
             <div className={styles['start-earning__text']}>
                 <h2>Начните <span>зарабатывать</span> на рынке криптовалют</h2>
                 <p 
-                    className={classNames('body-1', styles['extra-text'])}
+                    className={classNames('text', styles['extra-text'])}
                 >
                     Простой и понятный интерфейс ориентированный на активную торговлю.
                     <p>Несколько вариантов торгового интерфейса для любых задач.</p>

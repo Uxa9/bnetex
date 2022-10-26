@@ -42,9 +42,7 @@ const HistoryView = () => {
                 <ToggleButtonGroup 
                     title={''} 
                     name={''} 
-                    onChange={(value) => {
-                        setPeriod(value);
-                    }}
+                    onChange={setPeriod}
                     value={period}
                 >
                     <ToggleButton 
@@ -73,9 +71,10 @@ const HistoryView = () => {
                 className={styles['button-wrapper']}
             >
                 <Button
-                    buttonStyle={'secondary'}
+                    buttonStyle={'outlined'}
                     disabled={!inputValue}
                     text={'Рассчитать доход'}
+                    fillContainer
                 />
             </div>
         </>

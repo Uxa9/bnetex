@@ -1,10 +1,14 @@
 import { CornerArrow } from 'assets/images/icons';
 import classNames from 'classnames';
 import styles from './investSection.module.scss';
-import { ReactComponent as InvestImg } from '../../../assets/images/landing__invest.svg';
+import { ReactComponent as GraphicGrid } from '../../../assets/images/landing/invest/graphic__grid.svg';
+import { ReactComponent as GraphicGradient } from '../../../assets/images/landing/invest/graphic__gradient.svg';
+import { ReactComponent as GraphicLine } from '../../../assets/images/landing/invest/graphic__line.svg';
 import { Button } from 'lib/ui-kit';
 import Blur from 'components/blurredBackgroundItem';
 import { useNavigate } from 'react-router-dom';
+import { RoeCard, roeCards } from './roeCards';
+import { AppLinksEnum } from 'routes/appLinks';
 
 const Invest = () => {
 
@@ -12,64 +16,56 @@ const Invest = () => {
 
     return (
         <section className={styles['invest']}>
-
             <Blur
                 color={'blue'}
                 top={'20%'}
                 left={'50%'}
                 type={'circle'}
             />
-
-            <InvestImg
-                className='svg-fill'
-            />
-
+            <div className={styles['invest__image']}>
+                <GraphicGrid 
+                    className={styles['grid']}
+                />
+                <GraphicGradient
+                    className={styles['gradient']}
+                />
+                <GraphicLine 
+                    className={styles['line']}
+                />
+            </div>
             <div className={styles['invest__text']}>
                 <h2>Торгуйте как <span>профессионал</span></h2>
                 <p
-                    className={classNames('body-1', styles['extra-text'])}
+                    className={classNames('text-bold', styles['extra-text'])}
                 >
                     Доверьте свои инвестиции инновационному торговому алгоритму.
                 </p>
 
                 <div className={styles['month-cards']}>
-                    <div className={styles['ROE-card']}>
-                        <p className={styles['ROE-card__month']}>1 месяц</p>
-                        <div>
-                            <p className='label-1'>ROE</p>
-                            <p className={styles['ROE-card__percent']}>25</p>
-                        </div>
-                    </div>
-                    <div className={styles['ROE-card']}>
-                        <p className={styles['ROE-card__month']}>3 месяца</p>
-                        <div>
-                            <p className='label-1'>ROE</p>
-                            <p className={styles['ROE-card__percent']}>45</p>
-                        </div>
-                    </div>
-                    <div className={styles['ROE-card']}>
-                        <p className={styles['ROE-card__month']}>6 месяцев</p>
-                        <div>
-                            <p className='label-1'>ROE</p>
-                            <p className={styles['ROE-card__percent']}>65</p>
-                        </div>
-                    </div>
-                    <div className={styles['ROE-card']}>
-                        <p className={styles['ROE-card__month']}>12 месяцев</p>
-                        <div>
-                            <p className='label-1'>ROE</p>
-                            <p className={styles['ROE-card__percent']}>125</p>
-                        </div>
-                    </div>
+                    {
+                        roeCards.map((card: RoeCard) => 
+                            <div 
+                                key={card.income}
+                                className={classNames(
+                                    styles['ROE-card'],
+                                    'caption'
+                                )}
+                            >
+                                <p className={styles['ROE-card__month']}>{card.duration}</p>
+                                <div>
+                                    <p className={'caption'}>ROE</p>
+                                    <p className={styles['ROE-card__percent']}>от {card.income}%</p>
+                                </div>
+                            </div>
+                        ) 
+                    }
                 </div>
-
                 <Button
                     text='Начать торги'
                     Icon={CornerArrow}
-                    className={styles['stroke-btn']}
                     iconAlignment={'right'}
                     buttonStyle={'outlined'}
-                    onClick={() => navigate('/terminal/investor')}
+                    onClick={() => navigate(`${AppLinksEnum.DASHBOARD}/wallet/investor`)}
                 />
             </div>
         </section>

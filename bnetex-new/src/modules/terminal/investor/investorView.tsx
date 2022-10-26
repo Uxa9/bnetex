@@ -17,7 +17,7 @@ const InvestorView = () => {
         <>
             <div className='terminal-side-block'>
                 <div
-                    className={classNames(styles['investor-view-card'], 'block', 'card')}
+                    className={classNames(styles['investor-view-card'], 'card')}
                 >
                     <div className={styles['investor-view-wrapper__header']}>
                         <ToggleButtonGroup 
@@ -52,7 +52,7 @@ const InvestorView = () => {
                 </div>
                 <div
                     className={classNames(
-                        'block',
+                        styles['investor-view-card'],
                         'card'
                     )}
                 >
@@ -76,7 +76,7 @@ const InvestorView = () => {
                         </span>
                     </div>
                 </div>
-                <div className={'card'}>
+                <div className={classNames(styles['investor-view-card'], 'card')}>
                     <AreaChart 
                         dates={[]} 
                         values={[]} 
@@ -91,6 +91,7 @@ const InvestorView = () => {
             </div>
             <div className={classNames(
                 'terminal-side-block',
+                styles['investor-view-card'],
                 'card',
             )}
             >
@@ -105,7 +106,6 @@ const InvestorView = () => {
                     }
                 />
             </div>
-
         </>
     );
 };

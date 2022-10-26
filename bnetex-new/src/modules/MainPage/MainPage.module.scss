@@ -1,4 +1,4 @@
-@import '../../styles/variables.scss';
+@import 'src/styles/mixins';
 
 .landing-wrapper {
     width: 100%;
@@ -9,12 +9,16 @@
 }
 
 .landing-container {
-    padding: 30px 30px;
+    @include column-flex(200px);
+    padding: 32px;
     max-width: 1360px;
-    display: flex;
-    flex-direction: column;
-    row-gap: 200px;
+    width: 100%;
     padding-top: 50px;
+    z-index: 1;
+
+    @include mobile {
+        padding: 16px;
+    }
 }
 
 .popular-coins {

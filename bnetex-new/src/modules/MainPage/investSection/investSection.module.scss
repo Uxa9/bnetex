@@ -1,4 +1,5 @@
 @import 'styles/colors/colors';
+@import 'styles/mixins';
 
 .invest {
     display: grid;
@@ -7,14 +8,11 @@
     align-items: center;
     position: relative;
     justify-items: end;
-    // temp fix
-    z-index: 2;
 
     &__text {
-        display: flex;
-        flex-direction: column;
-        row-gap: 20px;
-        z-index: 2;
+        @include column-flex(20px);
+        align-items: flex-start;
+        max-width: 50ch;
 
         h2 {
             max-width: 18ch;
@@ -23,16 +21,40 @@
                 color: $accent-3;
             }
         }
+    }
 
-        .extra-text {
-            max-width: 50ch;
+    &__image {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        .grid,
+        .gradient,
+        .line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        .grid {
+            stroke: $grayscale-5;
+        }
+
+        .gradient {
+            fill: $green-3;
+            mask-image: linear-gradient(rgba(0, 0, 0, 0.2), transparent);
+        }
+
+        .line {
+            bottom: 23px;
+            stroke: $green-3;
         }
     }
 }
 
 .month-cards {
-    display: flex;
-    column-gap: 20px;
+    @include align-center-row-flex(20px);
+
     padding: 20px 0px;
 }
 
@@ -41,7 +63,6 @@
     border-radius: 10px;
     padding: 12px;
     min-width: 100px;
-    box-shadow: 4px 4px 7px rgba(78, 54, 96, 0.05);
 
     &__month {
         margin-bottom: 10px;
@@ -49,14 +70,6 @@
 
     &__percent {
         color: $green-3;
-        font-size: 20px;
-
-        &::before {
-            content: 'от ';
-        }
-
-        &::after {
-            content: '%';
-        }
+        padding-top: 4px;
     }
 }

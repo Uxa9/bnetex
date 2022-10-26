@@ -29,7 +29,7 @@ const ContactSection = () => {
                     <h2>Не беспокойтесь, ответим!</h2>
                 </div>
                 <div className={styles.links}>
-                    <p className='body-1'>Задайте ваши вопросы в Telegram или напишите нам на Email.</p>
+                    <p className='text'>Задайте ваши вопросы в Telegram или напишите нам на Email.</p>
                     <div className={styles.links__buttons}>
                         <Button 
                             buttonStyle={'outlined'}
