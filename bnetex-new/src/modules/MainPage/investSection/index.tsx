@@ -1,19 +1,18 @@
 import { CornerArrow } from 'assets/images/icons';
 import classNames from 'classnames';
 import styles from './investSection.module.scss';
-import { ReactComponent as GraphicGrid } from '../../../assets/images/landing/invest/graphic__grid.svg';
-import { ReactComponent as GraphicGradient } from '../../../assets/images/landing/invest/graphic__gradient.svg';
-import { ReactComponent as GraphicLine } from '../../../assets/images/landing/invest/graphic__line.svg';
 import { Button } from 'lib/ui-kit';
 import Blur from 'components/blurredBackgroundItem';
 import { useNavigate } from 'react-router-dom';
 import { RoeCard, roeCards } from './roeCards';
 import { AppLinksEnum } from 'routes/appLinks';
 import { DynamicImg } from 'lib/utils/DynamicImg';
+import { useTheme } from 'lib/hooks/useTheme';
 
 const Invest = () => {
 
     const navigate = useNavigate();
+    const { theme } = useTheme();
 
     return (
         <section className={styles['invest']}>
@@ -23,44 +22,10 @@ const Invest = () => {
                 left={'50%'}
                 type={'circle'}
             />
-            <div className={styles['image-container']}>
-                <div className={styles['invest__image']}>
-                    <GraphicGrid 
-                        className={styles['grid']}
-                    />
-                    <GraphicGradient
-                        className={styles['gradient']}
-                    />
-                    <GraphicLine 
-                        className={styles['line']}
-                    />
-                    <div className={styles['trade-card']}>
-                        <div className={styles['trade-card__header']}>
-                            <DynamicImg 
-                                path={'logo_BTC.png'}
-                                className={styles['trade-card__image']}
-                            />
-                            <span className={'text'}>BTC</span>
-                            <span className={'caption'}>Bitcoin</span>
-                        </div>
-                        <span className={classNames(styles['trade-card__action'], 'subtitle')}>Покупка</span>
-                        <div className={styles['trade-card__dot']} />
-                    </div>
-
-                    <div className={styles['trade-card']}>
-                        <div className={styles['trade-card__header']}>
-                            <DynamicImg 
-                                path={'logo_BTC.png'}
-                                className={styles['trade-card__image']}
-                            />
-                            <span className={'text'}>BTC</span>
-                            <span className={'caption'}>Bitcoin</span>
-                        </div>
-                        <span className={classNames(styles['trade-card__action'], 'subtitle')}>Продажа</span>
-                        <div className={styles['trade-card__dot']} />
-                    </div>
-                </div>
-            </div>
+            <DynamicImg 
+                path={`landing/invest/invest__${theme}.png`}
+                className={styles['invest-image']}
+            />
             <div className={styles['invest__text']}>
                 <h2>Торгуйте как <span>профессионал</span></h2>
                 <p

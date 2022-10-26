@@ -3,21 +3,20 @@
 @import 'styles/shadows';
 
 .invest {
-    display: grid;
-    grid-template-columns: 1fr 0.75fr;
-    column-gap: 60px;
-    align-items: center;
+    @include align-center-row-flex(64px);
     position: relative;
-    justify-items: end;
+    justify-content: space-between;
 
-    @include mobile {
-        grid-template-columns: 1fr;
+    @include max-width(700) {
+        flex-direction: column;
+        row-gap: 32px;
     }
 
     &__text {
         @include column-flex(20px);
         align-items: flex-start;
-        max-width: 50ch;
+        max-width: 60ch;
+        flex-shrink: 2;
 
         h2 {
             max-width: 18ch;
@@ -28,137 +27,41 @@
         }
     }
 
-    .image-container {
+    .invest-image {
         width: 100%;
-        height: 100%;
-        position: relative;
+        min-width: 300px;
+        max-width: 600px;
+        flex-shrink: 1;
     }
 
-    &__image {
-        width: 100%;
-        height: 100%;
-        
-        position: relative;
+    .month-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 
-        @include max-width(1200) {
-            position: absolute;
-            right: 0;
-            top: 0;
-        }
+        gap: 16px;
+        padding: 20px 0px;
+        width: 100%;
+    }
+
+    .ROE-card {
+        background-color: $grayscale-1;
+        border-radius: 10px;
+        padding: 12px;
+        min-width: 100px;
 
         @include mobile {
-            display: none;
+            min-width: unset;
+            width: 100%;
+            height: 100%;
         }
 
-        .grid,
-        .gradient,
-        .line {
-            position: absolute;
-            bottom: 0;
-            right: 0;
+        &__month {
+            margin-bottom: 10px;
         }
 
-        .grid {
-            stroke: $grayscale-5;
+        &__percent {
+            color: $green-3;
+            padding-top: 4px;
         }
-
-        .gradient {
-            fill: $green-3;
-            mask-image: linear-gradient(rgba(0, 0, 0, 0.2), transparent);
-        }
-
-        .line {
-            bottom: 23px;
-            stroke: $green-3;
-        }
-
-        .trade-card {
-            @include column-flex(24px);
-            @include card-shadow;
-
-            z-index: 3;
-            width: fit-content;
-            position: absolute;
-
-            padding: 16px;
-            border-radius: 16px;
-            background-color: $grayscale-1;
-
-            &__header {
-                display: flex;
-                column-gap: 6px;
-                align-items: flex-end;
-
-                span:last-child {
-                    color: $grayscale-6;
-                }
-            }
-
-            &__image {
-                width: 20px;
-                height: 20px;
-            }
-
-            &__dot {
-                position: absolute;
-                bottom: -12px;
-                right: -12px;
-                width: 24px;
-                height: 24px;
-                border: 4px solid $green-3;
-                background-color: $grayscale-1;
-                border-radius: 50%;
-                z-index: 4;
-            }
-
-            &:first-of-type {
-                top: 80px;
-                right: 415px;
-
-                .trade-card__action {
-                    color: $green-3;
-                }
-            }
-
-            &:last-of-type {
-                top: -20px;
-                right: 75px;
-                .trade-card__action {
-                    color: $red-3;
-                }
-            }
-        }
-    }
-}
-
-.month-cards {
-
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-
-    gap: 16px;
-    padding: 20px 0px;
-    width: 100%;
-}
-
-.ROE-card {
-    background-color: $grayscale-1;
-    border-radius: 10px;
-    padding: 12px;
-    min-width: 100px;
-
-    @include mobile{
-        min-width: unset;
-        width: 100%;
-        height: 100%;
-    }
-
-    &__month {
-        margin-bottom: 10px;
-    }
-
-    &__percent {
-        color: $green-3;
-        padding-top: 4px;
     }
 }
