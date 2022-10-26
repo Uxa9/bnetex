@@ -12,34 +12,46 @@
 }
 
 .item-status {
-    font-size: 10px;
-    width: max(70px, 100%);
+    width: 90px;
     padding: 4px;
     border-radius: 10px;
-    position: relative;
-    overflow: hidden;
     display: grid;
     place-items: center;
-
+    height: fit-content;
+    
     &--processing {
-        @include with-alpha-background($orange-6, 0.2);
         color: $orange-3;
+        background-color: $orange-6;
     }
 
     &--confirmed {
-        @include with-alpha-background($green-6, 0.2);
         color: $green-3;
+        background-color: $green-6;
+    }
+
+    &--unpayed {
+        color: $red-3;
+        background-color: $red-6;
     }
 }
 
 .item-destination {
     display: flex;
     height: fit-content;
-    width: 100%;
     align-items: center;
     column-gap: 8px;
+
+    &--fill {
+        width: 100%;
+    }
+
     p {
         @include nowrap-overflow;
         max-width: 80%;
     }
+}
+
+.item-expand-modal {
+    transform: rotate(-90deg);
+    justify-self: flex-end;
 }

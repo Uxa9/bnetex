@@ -1,0 +1,26 @@
+@import 'src/styles/mixins';
+@import 'src/styles/colors/colors';
+
+.transfer-modal {
+    @include column-flex(24px);
+
+    &__wallet-selectors {
+        @include column-flex(8px);
+    }
+}
+
+.exchange-button svg {
+    transform: rotate(90deg);
+}
+
+.wallet-category span {
+    color: $grayscale-6;
+
+    &::before {
+        content: ' (';
+    }
+
+    &::after {
+        content: ' USDT)';
+    }
+}

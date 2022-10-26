@@ -10,7 +10,7 @@ const AuthLayout = () => {
         <main className={styles.layout}>
             <div className={styles.container}>
                 <Blur 
-                    color={'red'}
+                    color={'red'} 
                     top={'100%'}
                     left={'0%'} 
                     type={'ellipse'}

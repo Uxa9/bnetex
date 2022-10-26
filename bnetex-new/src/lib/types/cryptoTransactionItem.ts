@@ -5,5 +5,13 @@ export interface CryptoTransactionItemType {
     coin: string,
     amount: number,
     destination: string,
-    status: 'confirmed' | 'processing',
+    status: CryptoTransactionItemStatus,
+}
+
+export type CryptoTransactionItemStatus = 'confirmed' | 'processing' | 'unpayed';
+
+export enum CryptoTransactionItemStatusMap {
+    confirmed = 'Завершена',
+    processing = 'В обработке',
+    unpayed = 'Не оплачена',
 }

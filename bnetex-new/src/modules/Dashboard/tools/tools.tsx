@@ -1,21 +1,14 @@
 import classNames from 'classnames';
 import { Button } from 'lib/ui-kit';
 import styles from './tools.module.scss';
-
 import Chart from 'react-apexcharts';
 import { useState } from 'react';
-
-import hehe__roe from '../../../assets/images/hehe__roe.svg';
-import hehe__pnl from '../../../assets/images/hehe__pnl.svg';
-import hehe__verify from '../../../assets/images/hehe__verify.svg';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
-import { useUser } from '../dashboard';
 
 const Tools = () => {
 
     const { goToState } = useGoToState();
-    const { mainWallet, investWallet } = useUser();
 
     const [options, setOptions] = useState({
         dataLabels: {enabled: false},
@@ -26,7 +19,9 @@ const Tools = () => {
     const [series, setSeries] = useState([80, 20]);
 
     return(
-        <div>
+        <div 
+            className={styles['tools']}
+        >
             <div
                 className={styles['tools-header']}
             >
@@ -49,7 +44,7 @@ const Tools = () => {
                 </div>
             </div>
             <div
-                className={styles['balance-and-transactions']}
+                className={classNames(styles['balance-and-transactions'], 'card')}
             >
                 {/* <div
                     className={`${styles['balance']} block`}
@@ -99,20 +94,20 @@ const Tools = () => {
                     <p
                         className={styles['user-balance']}
                     >
-                        {`${Number(mainWallet + investWallet).toFixed(2)} USDT`}
+                        {/* {`${Number(mainWallet + investWallet).toFixed(2)} USDT`} */}
                     </p>
                     <div>
-                        <Chart
+                        {/* <Chart
                             type='bar'
                             series={[
                                 {
-                                    name: "Основной кошелек",
-                                    data: [Number(Number(mainWallet).toFixed(2))]
+                                    name: 'Основной кошелек',
+                                    data: [Number(Number(mainWallet).toFixed(2))],
                                 },
                                 {
-                                    name: "Инвестиционный кошелек",
-                                    data: [Number(Number(investWallet).toFixed(2))]
-                                }
+                                    name: 'Инвестиционный кошелек',
+                                    data: [Number(Number(investWallet).toFixed(2))],
+                                },
                             ]}
                             height={'150px'}
                             options={{
@@ -120,41 +115,41 @@ const Tools = () => {
                                     stacked: true,
                                     zoom      : { enabled : false },
                                     selection : { enabled : false },
-                                    toolbar   : { show : false }
+                                    toolbar   : { show : false },
                                 },
                                 grid: { 
                                     show: false,
                                     xaxis: {
-                                        lines: { show: false }
+                                        lines: { show: false },
                                     },   
                                     yaxis: {
-                                        lines: { show: false }
+                                        lines: { show: false },
                                     },    
                                 },
                                 plotOptions: {
                                     bar: {
                                         horizontal: true,
                                         barHeight: '12px',
-                                    }
+                                    },
                                 },
                                 xaxis: {
                                     categories: [''],
                                     labels: {
-                                        show: false
+                                        show: false,
                                     },
                                     axisBorder: { show : false },
-                                    axisTicks: { show : false }
+                                    axisTicks: { show : false },
                                 },
                                 yaxis: {
-                                    show: false
+                                    show: false,
                                 },
                                 stroke: {
-                                    width: 0
+                                    width: 0,
                                 },
                                 colors : ['#9202FF', '#1A75FF'],
                                 dataLabels : { enabled : false },
                             }}
-                        />
+                        /> */}
                     </div>
                     {/* <div>
                         <Chart

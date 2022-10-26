@@ -1,4 +1,4 @@
-@import '../../styles/variables.scss';
+@import 'src/styles/mixins';
 
 .landing-wrapper {
     width: 100%;
@@ -9,12 +9,21 @@
 }
 
 .landing-container {
-    padding: 30px 30px;
+    @include column-flex(200px);
+    padding: 24px;
     max-width: 1360px;
-    display: flex;
-    flex-direction: column;
-    row-gap: 200px;
+    width: 100%;
     padding-top: 50px;
+    z-index: 1;
+
+    @include max-width(1200){
+        row-gap: 120px;
+    }
+
+    @include mobile {
+        padding: 16px;
+        row-gap: 72px;
+    }
 }
 
 .popular-coins {
@@ -34,10 +43,4 @@
     backdrop-filter: blur(15px);
     border-radius: 10px;
     max-width: 219px;
-}
-
-@media screen and (max-width: 1200px) {
-    .landing-container {
-        row-gap: 150px;
-    }
 }

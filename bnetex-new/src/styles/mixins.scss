@@ -46,7 +46,7 @@
   }
 }
 
-@mixin size-svg($height, $width) {
+@mixin size-svg($height, $width: $height) {
   svg {
     height: $height;
     width: $width;

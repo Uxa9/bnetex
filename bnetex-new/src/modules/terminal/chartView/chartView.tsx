@@ -8,6 +8,7 @@ const ChartView = ({className}: {className?: string}) => {
         <div
             className={classNames(
                 styles['chart-container'],
+                'card',
                 className
             )}
         >

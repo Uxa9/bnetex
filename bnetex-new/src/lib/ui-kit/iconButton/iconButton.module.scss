@@ -1,0 +1,58 @@
+@import 'styles/variables.scss';
+@import 'styles/mixins.scss';
+@import 'styles/colors/colors.scss';
+
+.button {
+    @include color-svg($grayscale-11);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all $default-transition ease;
+    border-radius: 50%;
+    width: 32px;
+    aspect-ratio: 1;
+
+    svg {
+        transition: 0.25s;
+    }
+
+    &:disabled {
+        @include color-svg($grayscale-4);
+        cursor: not-allowed;
+    }
+
+    &--mini {
+        width: 24px;
+    }
+}
+
+.button_style {
+    &--default {
+        @include dynamic-background($grayscale-card, $grayscale-3, $grayscale-4);
+
+        border: 1px solid $grayscale-4;
+
+        &:disabled {
+            background-color: $grayscale-3;
+            &:hover,
+            &:active {
+                background-color: $grayscale-3;
+            }
+        }
+    }
+}
+
+.spinner {
+    animation: spin 0.35s ease infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

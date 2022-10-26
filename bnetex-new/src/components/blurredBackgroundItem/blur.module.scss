@@ -9,6 +9,7 @@
     opacity: 0.08;
     max-height: 700px;
     height: var(--bg-item-height);
+    z-index: -1;
 
     &_ellipse {
         width: calc(70vh * var(--ellipse-ratio));

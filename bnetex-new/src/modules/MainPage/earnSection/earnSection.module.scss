@@ -1,30 +1,126 @@
 @import 'styles/colors/colors';
+@import 'styles/mixins';
 
 .start-earning {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    column-gap: 60px;
-    align-items: center;
+    @include align-center-row-flex(32px);
+    justify-content: space-between;
     position: relative;
+
+    @include mobile {
+        flex-direction: column-reverse;
+        row-gap: 32px;
+    }
 
     &__text {
         display: flex;
         flex-direction: column;
         row-gap: 50px;
         z-index: 2;
+        max-width: 50ch;
 
         h2 > span {
             color: $accent-3;
         }
     }
-}
 
-.earn-img {
-    box-shadow: 45px 45px 45px rgba(161, 118, 193, 0.25), 7px 7px 0px rgba(161, 118, 193, 0.5);
-    backdrop-filter: blur(15px);
-    border-radius: 30px;
-    transform: matrix(0.96, 0, -0.3, 1, 0, 0);
-    width: 80%;
-    margin-left: 60px;
-    height: fit-content;
+    &__image {
+        @include column-flex(32px);
+
+        background-color: $grayscale-card;
+        border-radius: 24px;
+        padding: 32px;
+        transform: matrix(0.96, 0, -0.3, 1, 0, 0);
+        border: 2px solid $accent-6;
+        min-width: 460px;
+
+        @include max-width(900) {
+            position: absolute;
+            top: 0;
+            left: calc(100vw - 25vw);
+        }
+
+        &--light {
+            box-shadow: 7px 7px 0px #edd4ff;
+        }
+
+        &--dark {
+            box-shadow: 7px 7px 0px #261b2f;
+        }
+
+        .header {
+            @include align-center-row-flex(16px);
+
+            justify-content: space-between;
+
+            &__column {
+                @include column-flex(2px);
+            }
+
+            &__text--gray {
+                color: $grayscale-6;
+            }
+
+            &__coin {
+                @include align-center-row-flex(8px);
+            }
+
+            &__data {
+                @include align-center-row-flex(16px);
+            }
+        }
+
+        .candles {
+            width: 100%;
+        }
+
+        .buttons {
+            @include align-center-row-flex(32px);
+
+            .button-red {
+                box-shadow: 3px 4px 0px 2px $red-4;
+            }
+
+            .button-green {
+                box-shadow: 3px 4px 0px 2px $green-4;
+            }
+
+            .button-green,
+            .button-red {
+                user-select: none;
+                transition: box-shadow 350ms ease, transform 150ms ease;
+
+                &:active {
+                    box-shadow: none;
+                    transform: translateY(4px);
+                }
+            }
+        }
+
+        @include mobile {
+            position: static;
+            width: 80vw;
+            min-width: unset;
+            transform: unset;
+
+            .header {
+                // flex-direction: column;
+                align-items: flex-start;
+                row-gap: 16px;
+
+                &__coin img {
+                    width: 32px;
+                    height: auto;
+                }
+
+                &__data {
+                    display: none;
+                }
+            }
+
+            .buttons {
+                flex-direction: column;
+                row-gap: 16px;
+            }
+        }
+    }
 }

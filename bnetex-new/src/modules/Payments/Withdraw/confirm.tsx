@@ -4,12 +4,11 @@ import { useGoToState } from 'lib/hooks/useGoToState';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
 import { Button, Input } from 'lib/ui-kit';
-import { numberValidation, requiredValidation } from 'lib/utils/hookFormValidation';
+import { requiredValidation } from 'lib/utils/hookFormValidation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { AppLinksEnum } from 'routes/appLinks';
-import withdrawConfirm from 'services/withdrawConfirm';
-import withdrawRequest from 'services/withdrawRequset';
+import useWalletActions from 'services/walletActions';
 import styles from './withdraw.module.scss';
 
 interface WithdrawConfirmFormData {
@@ -22,6 +21,8 @@ const WithdrawConfirm = () => {
     const { bakeToast } = useToast();
     const { navigateBack, goToState } = useGoToState();
     const { isLoading, promiseWithLoading } = usePromiseWithLoading();
+
+    const { withdrawConfirm } = useWalletActions();
 
     const {
         register,
@@ -39,7 +40,7 @@ const WithdrawConfirm = () => {
     const onSubmit = (data: any) => {
         promiseWithLoading(withdrawConfirm({
             ...data,
-            requestId: JSON.parse(localStorage.getItem('requestId') || '{}') || ''
+            requestId: JSON.parse(localStorage.getItem('requestId') || '{}') || '',
         }))
             .then(() => {
                 goToState(AppLinksEnum.DASHBOARD);
@@ -72,6 +73,7 @@ const WithdrawConfirm = () => {
                         text={'Отправить'}
                         type={'submit'}
                         disabled={!isValid}
+                        isLoading={isLoading}
                     />
                 </form>
             </div> 

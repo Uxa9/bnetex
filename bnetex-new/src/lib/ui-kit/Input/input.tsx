@@ -3,6 +3,7 @@ import { v4 as uuidV4 } from 'uuid';
 import React, { InputHTMLAttributes, ReactNode, useMemo, useState } from 'react';
 import styles from './input.module.scss';
 import { UseFormRegisterReturn } from 'react-hook-form';
+import { Info, Warning } from 'assets/images/icons';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     label: string,
@@ -10,12 +11,13 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     postfix?: ReactNode,
     type?: 'number' | 'text' | 'search' | 'email' | 'password',
     errorText?: string,
+    helperText?: string | JSX.Element,
     inputControl?: UseFormRegisterReturn,
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     
-    const { hasBackground, type = 'text', errorText, postfix, inputControl, onFocus, ...rest } = props;
+    const { hasBackground, type = 'text', errorText, helperText, postfix, inputControl, onFocus, ...rest } = props;
     const label = `${props.label}${props.required ? ' *' : ''}`;
     const [isActive, setIsActive] = useState<boolean>(false);
     const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -38,11 +40,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
             styles['input-wrapper'],
             {[styles['input-wrapper--activeOrFilled']]: isActive},
             {[styles['input-wrapper--focused']]: isFocused},
-            {[styles['input-wrapper--error']]: errorText}
+            {[styles['input-wrapper--error']]: errorText},
+            {[styles['input-wrapper--with-helper']]: helperText},
         )}
         >
             <label 
-                className={styles.label}
+                className={classNames(
+                    styles.label,
+                    'text'
+                )}
                 htmlFor={id}
             >
                 { label }
@@ -51,7 +57,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                 <input 
                     type={type}
                     id={id}
-                    className={styles.input}
+                    className={classNames(
+                        styles.input,
+                        'text'
+                    )}
                     tabIndex={1}
                     onFocus={handleFocus}
                     ref={ref}
@@ -73,14 +82,30 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                 </fieldset>
                 {postfix}
             </div>
-            <div className={
-                classNames(
-                    styles['error-text'],
-                    'caption',
-                )}
+            <div className={classNames(
+                styles['input__helper'],
+                errorText && styles['input__helper--error'],
+                'caption',
+            )}
             >
-                {errorText}
+                {
+                    errorText ? 
+                        <>
+                            <Warning />
+                            { errorText }
+                        </> : 
+                        <>
+                            {
+                                helperText &&
+                            <>
+                                <Info />
+                                { helperText }
+                            </>
+                            }
+                        </>
+                }
             </div>
+
         </div>
     );
 });

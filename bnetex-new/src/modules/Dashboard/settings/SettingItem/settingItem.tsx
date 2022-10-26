@@ -26,7 +26,7 @@ const SettingItem:FC<SettingItemProps> = props => {
 
     return(
         <div className={styles.setting}>
-            <p className='body-1'>{title}</p>
+            <p className='text'>{title}</p>
             
             {
                 hasActiveState &&
@@ -40,7 +40,7 @@ const SettingItem:FC<SettingItemProps> = props => {
                                 className={styles['icon-cross']}
                             />
                     }   
-                    <p className='body-1'>
+                    <p className='text'>
                         {activeStateText ? activeStateText : 'Не привязано'}    
                     </p>              
                 </div>

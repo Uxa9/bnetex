@@ -50,7 +50,7 @@ const blankTransactions: CryptoTransactionItemType[] = [
         coin: 'USDT',
         amount: 30.2,
         destination: 'TJfgdhyrt7654FD65gFdt67slp654',
-        status: 'confirmed',
+        status: 'unpayed',
     },
     {
         date: new Date(),
@@ -146,7 +146,8 @@ const Transactions = () => {
             <table className={classNames(styles['transactions-table'], 'card')}>
                 <thead>
                     <tr className={classNames(styles['transactions-table__row'],
-                        styles['transactions-table__header-row']
+                        styles['transactions-table__header-row'],
+                        'caption',
                     )}
                     >
                         <th>Время</th>

@@ -7,6 +7,10 @@
     column-gap: 16px;
 }
 
+.terminal-side-block .card {
+    padding: 16px;
+}
+
 .header {
     font-size: 14px;
     color: $grayscale-6;
@@ -41,4 +45,13 @@
 
 .investor-prediction-period {
     margin-top: 30px;
+}
+
+.all-balance-btn {
+    width: 17ch;
+    padding-right: 8px;
+}
+
+.investor-view-card {
+    padding: 16px;
 }

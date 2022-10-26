@@ -1,11 +1,11 @@
 import { throwError } from 'lib/utils/errorThrower';
-import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
 
 const promiseWithLoadingContext = createContext<PromiseWithLoadingParams | null>(null);
 
 export interface PromiseWithLoadingParams {
     isLoading: boolean;
-    promiseWithLoading(action: Promise<any>): Promise<any>;
+    promiseWithLoading<T>(action: Promise<T>): Promise<T>;
 }
 
 export const usePromiseWithLoading = () => useContext(promiseWithLoadingContext)
@@ -14,7 +14,7 @@ export const usePromiseWithLoading = () => useContext(promiseWithLoadingContext)
 export function PromiseWithLoadingProvider({children}: {children: ReactNode}) {
     const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
-    const promiseWithLoading = (action: Promise<any>) => {
+    function promiseWithLoading<T> (action: Promise<T>) {
         setIsLoading(true);
         return action.finally(() => setIsLoading(false));
     };

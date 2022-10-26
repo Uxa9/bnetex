@@ -1,5 +1,5 @@
 import styles from './modal.module.scss';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { Cross } from 'assets/images/icons';
 import classNames from 'classnames';
 import { useModalSpawner } from 'lib/hooks/useModal';

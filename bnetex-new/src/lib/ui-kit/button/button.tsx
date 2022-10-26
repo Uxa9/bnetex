@@ -32,7 +32,8 @@ const Button: FC<ButtonProps> = props => {
                         styles[`button_align--${iconAlignment}`],
                         fillContainer && styles['button--fill-container'],
                         mini ? 'button-label-mini' : 'button-label',
-                        className)
+                        className
+                    )
                 }
             {...rest}
         >

@@ -41,7 +41,6 @@ const Login = () => {
         reValidateMode: 'onChange',
     });
 
-
     const onSubmit = async (data: LoginFormData) => {
         promiseWithLoading(login(data.email, data.password))
             .then(() => {

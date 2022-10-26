@@ -9,6 +9,7 @@
     color: $grayscale-6;
     padding-top: 16px;
     transition: $default-transition ease;
+    cursor: help;
 
     .iconWrapper {
         @include size-svg(16px, 16px);
