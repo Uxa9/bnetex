@@ -3,12 +3,15 @@ import classNames from 'classnames';
 import AreaChart from 'modules/terminal/investor/chart/areaChart';
 import { Button } from 'lib/ui-kit';
 import { useGoToState } from 'lib/hooks/useGoToState';
-import { useUser } from '../dashboard';
 import { useEffect, useState } from 'react';
+import { useModal } from 'lib/hooks/useModal';
+import TransferModal from 'modules/Payments/Transfer/transferModal';
 import getRoE from 'services/getroe';
 import getPnL from 'services/getpnl';
 import Chart from 'react-apexcharts';
-import { AppLinksEnum } from 'routes/appLinks';
+import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
+import useWalletActions from 'services/walletActions';
+import { WalletCategoryWithBalance } from 'lib/types/wallet';
 
 // toDo
 // сделать нормальные кнопки
@@ -16,15 +19,17 @@ import { AppLinksEnum } from 'routes/appLinks';
 interface GraphicProps {
     dates: string[],
     values: number[]
-}
+}    
+
 
 const InvestorWallet = () => {
 
-    const values: number[] = [124.55, 431.42, 324.54, 432.43, 543.76];
-
-    const balance = JSON.parse(localStorage.getItem('investWallet') || '{}') || 0.00;
     const { goToState } = useGoToState();
-    const { mainWallet, investWallet } = useUser();
+    const { open: OpenTransferModal } = useModal(TransferModal);
+    const [mainBalance, setMainBalance] = useState<number>(0);
+    const [investBalance, setInvestBalance] = useState<number>(0);
+    const { promiseWithLoading } = usePromiseWithLoading();
+    const { getWallets } = useWalletActions();
 
     const [roe, setRoe] = useState<GraphicProps>({
         dates: [],
@@ -51,6 +56,11 @@ const InvestorWallet = () => {
                     values: res.values.map((item: any) => Number(Number(item).toFixed(2)))
                 });
             });
+        promiseWithLoading<WalletCategoryWithBalance>(getWallets())
+            .then(res => {
+                setMainBalance(res.mainWallet);
+                setInvestBalance(res.investWallet);
+            });
     }, []);
 
     return (
@@ -66,7 +76,7 @@ const InvestorWallet = () => {
                 >
                     <span
                         className={styles['header-transfer']} 
-                        onClick={() => goToState(AppLinksEnum.TRANSFER)}
+                        onClick={() => OpenTransferModal({})}
                     >
                         Перевод
                     </span>
@@ -86,7 +96,7 @@ const InvestorWallet = () => {
                     <p
                         className={styles['user-balance']}
                     >
-                        {`${Number(investWallet).toFixed(2)} USDT`}
+                        {`${Number(investBalance).toFixed(2)} USDT`}
                     </p>
                     <div>
                         <Chart
@@ -94,11 +104,11 @@ const InvestorWallet = () => {
                             series={[
                                 {
                                     name: "В работе",
-                                    data: [Number(Number(mainWallet).toFixed(2))]
+                                    data: [Number(Number(mainBalance).toFixed(2))]
                                 },
                                 {
                                     name: "Доступно для вывода",
-                                    data: [Number(Number(investWallet).toFixed(2))]
+                                    data: [Number(Number(investBalance).toFixed(2))]
                                 }
                             ]}
                             height={'150px'}

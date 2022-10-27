@@ -72,9 +72,7 @@ const Dashboard = () => {
                     <div
                         className={styles['dashboard-content']}
                     >
-                        <Outlet
-                            context={{mainWallet, investWallet}}
-                        />
+                        <Outlet/>
                     </div>
                 </main>
             </div>

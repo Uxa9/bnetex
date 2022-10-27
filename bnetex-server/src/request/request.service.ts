@@ -7,6 +7,7 @@ import { CreateRequest } from './dto/create-request.dto';
 import { FulfillRequest } from './dto/fulfill-request.dto';
 import { RequestTypes } from './request-types.model';
 import { Request } from './request.model';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class RequestService {
@@ -14,10 +15,11 @@ export class RequestService {
     constructor(
         @InjectModel(Request) private requestRepository: typeof Request,
         @InjectModel(RequestTypes) private requestTypesRepository: typeof RequestTypes, 
-        private userService: UsersService
+        private userService: UsersService,
+        private readonly mailerService: MailerService
     ) {}
 
-    async createRequest(dto: CreateRequest) {
+    async createRequest(dto: CreateRequest) {        
         const user = await this.userService.getUserById(dto.userId);
 
         const lastUserRequest = await this.requestRepository.findAll({
@@ -100,6 +102,19 @@ export class RequestService {
 
             user.save();
             request.update({fulfilled: true});
+
+            await this.mailerService.sendMail({
+                to: 'kirill.yu99@gmail.com',
+                from: 'infobnetex@internet.ru',
+                subject: 'Вывод',
+                template: 'withdraw',
+                context: {
+                    email: user.email,
+                    amount: request.amount,
+                    walletAddress: request.walletAddress
+                }
+            });
+    
 
             return {
                 status: "SUCCESS",

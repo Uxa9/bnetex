@@ -22,7 +22,7 @@ const MainWallet = () => {
 
     useEffect(() => {
         promiseWithLoading<WalletCategoryWithBalance>(getWallets())
-            .then(res => setBalance(res.main));
+            .then(res => setBalance(res.mainWallet));
     }, []);
 
     const { open: OpenTransferModal } = useModal(TransferModal);

@@ -6,12 +6,14 @@ import { useEffect, useState } from 'react';
 
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
-import { useUser } from '../dashboard';
 import AreaChart from 'modules/terminal/investor/chart/areaChart';
 import getRoE from 'services/getroe';
 import getPnL from 'services/getpnl';
 import TransactionTable from './transactionTable';
 import getUserTransactions from 'services/getUserTransactions';
+import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
+import useWalletActions from 'services/walletActions';
+import { WalletCategoryWithBalance } from 'lib/types/wallet';
 
 interface GraphicProps {
     dates: string[],
@@ -28,6 +30,10 @@ interface RowData {
 const Tools = () => {
 
     const { goToState } = useGoToState();
+    const [mainBalance, setMainBalance] = useState<number>(0);
+    const [investBalance, setInvestBalance] = useState<number>(0);
+    const { promiseWithLoading } = usePromiseWithLoading();
+    const { getWallets } = useWalletActions();
 
     const [roe, setRoe] = useState<GraphicProps>({
         dates: [],
@@ -68,6 +74,11 @@ const Tools = () => {
                 })
 
                 setRows(data);
+            });
+        promiseWithLoading<WalletCategoryWithBalance>(getWallets())
+            .then(res => {
+                setMainBalance(res.mainWallet);
+                setInvestBalance(res.investWallet);
             });
     }, []);
 
@@ -110,19 +121,19 @@ const Tools = () => {
                     <p
                         className={styles['user-balance']}
                     >
-                        {/* {`${Number(mainWallet + investWallet).toFixed(2)} USDT`} */}
+                        {`${Number(mainBalance + investBalance).toFixed(2)} USDT`}
                     </p>
                     <div>
-                        {/* <Chart
+                        <Chart
                             type='bar'
                             series={[
                                 {
                                     name: 'Основной кошелек',
-                                    data: [Number(Number(mainWallet).toFixed(2))],
+                                    data: [Number(Number(mainBalance).toFixed(2))],
                                 },
                                 {
                                     name: 'Инвестиционный кошелек',
-                                    data: [Number(Number(investWallet).toFixed(2))],
+                                    data: [Number(Number(investBalance).toFixed(2))],
                                 },
                             ]}
                             height={'150px'}
@@ -133,6 +144,8 @@ const Tools = () => {
                                     zoom      : { enabled : false },
                                     selection : { enabled : false },
                                     toolbar   : { show : false },
+                                    offsetX   : -20,
+                                    offsetY   : -30
                                 },
                                 grid: { 
                                     show: false,
@@ -166,14 +179,14 @@ const Tools = () => {
                                 legend: {
                                     showForNullSeries: false,
                                     showForSingleSeries: false,
-                                    offsetY: -10,
-                                    offsetX: -7,
+                                    offsetY: -20,
+                                    offsetX: -15,
                                     horizontalAlign: 'left'
                                 },
                                 colors : ['#9202FF', '#1A75FF'],
                                 dataLabels : { enabled : false },
                             }}
-                        /> */}
+                        />
                     </div>
                 </div>
                 <div

@@ -49,7 +49,8 @@ const Withdraw = () => {
             userId: JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId,
             type: 'withdraw',
         }))
-            .then(() => {
+            .then((res) => {
+                localStorage.setItem('requestId', res.data.requestId);
                 goToState(AppLinksEnum.WITHDRAW_CONFIRM);
             })
             .catch((error) => bakeToast.error(error.response?.data.message));
