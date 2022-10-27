@@ -1,7 +1,8 @@
 import classNames from 'classnames';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { CryptoTransactionItemType } from 'lib/types/cryptoTransactionItem';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import getUserTransactions from 'services/getUserTransactions';
 import { getTransactions } from 'services/transactions';
 import CryptoTransactionItem from './cryptoTransactionItem/cryptoTransactionItem';
 import styles from './transactions.module.scss';
@@ -18,7 +19,7 @@ const blankTransactions: CryptoTransactionItemType[] = [
     },
     {
         date: new Date(),
-        type: 'withdrawal',
+        type: 'withdraw',
         wallet: 'Основной кошелек',
         coin: 'USDT',
         amount: 130.56,
@@ -129,15 +130,31 @@ const blankTransactions: CryptoTransactionItemType[] = [
 const Transactions = () => {
 
     const { promiseWithLoading, isLoading } = usePromiseWithLoading();
-
+    const [rows, setRows] = useState<CryptoTransactionItemType[]>([]); 
+    
     useEffect(() => {
         loadTrasactions();
     }, []);
 
-    const loadTrasactions = async () => {
-        await promiseWithLoading(getTransactions())
-            .then((response) => console.log(response))
-            .catch((error) => console.log(error));
+    const loadTrasactions =  () => {
+        getUserTransactions(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
+            .then(res => {
+                let data = res.map((item: any) => {
+                    console.log(item.type);
+                    
+                    return ({
+                        date : new Date(item.createdAt),
+                        type : item.type.toString() == "1" ? "withdraw" : "income",
+                        wallet: "Основной кошелек",
+                        coin : 'USDT',
+                        amount : item.amount,
+                        destination: item.walletAddress,
+                        status: item.fulfilled ? "confirmed" : "processing"
+                    })
+                })
+
+                setRows(data);
+            });
     };
 
     return(
@@ -162,7 +179,7 @@ const Transactions = () => {
                 </thead>
                 <tbody>
                     {
-                        blankTransactions.map((transaction: CryptoTransactionItemType, index: number) => {
+                        rows.map((transaction: CryptoTransactionItemType, index: number) => {
                             return(
                                 <tr
                                     className={styles['transactions-table__row']}

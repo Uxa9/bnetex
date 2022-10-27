@@ -9,7 +9,11 @@
 
 .dashboard {
     display: flex;
-    column-gap: 20px;
+    column-gap: 8px;
+
+    .dashboard-content {
+        flex-grow: 2;
+    }
 }
 
 .control-menu {

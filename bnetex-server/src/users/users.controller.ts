@@ -8,6 +8,7 @@ import { RolesGuard } from '../auth/roles.guard';
 import { AddRoleDto } from './dto/add-role.dto';
 import { TransferMoney } from './dto/transfer-money.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { UserIdDto } from './dto/user-id.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -47,6 +48,16 @@ export class UsersController {
     @Get('/getWallets/:id')
     getWallets(@Param('id') id: number) {
         return this.userService.getWallets(id);
+    }
+
+    @Post('/getpnl')
+    getPnL(@Body() dto: UserIdDto) {
+        return this.userService.getPnL(dto.userId);
+    }
+
+    @Post('/getroe')
+    getRoE(@Body() dto: UserIdDto) {
+        return this.userService.getRoE(dto.userId);
     }
 
     @ApiOperation({

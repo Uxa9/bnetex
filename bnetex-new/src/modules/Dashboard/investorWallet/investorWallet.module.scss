@@ -56,3 +56,77 @@
         }
     }
 }
+
+.header-transfer {
+    font-size: 16px;
+    font-weight: bold;
+    color: $accent-3;
+
+    cursor: pointer;
+}
+
+.charts {
+    display: flex;
+    align-items: flex-start;
+}
+
+.balance,
+.invest-info,
+.chart {
+    flex-grow: 1;
+    width: 50%;
+    padding: 16px;
+}
+
+.balance-and-info {
+    display: flex;
+
+    .balance {
+        box-sizing: border-box;
+        max-height: 210px;
+
+        .balance-header {
+            color: $grayscale-6;
+            margin-bottom: 12px;
+        }
+
+        .user-balance {
+            margin-bottom: 20px;
+
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 24px;
+
+            span {
+                color: $grayscale-6;
+            }
+        }
+    }
+
+    .invest-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+
+        p {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+
+            span {
+                &:first-child {
+                    color: $grayscale-6;
+                }
+            }
+
+            .positive {
+                color: $green-4;
+            }
+            
+            .negative {
+                color: $red-4
+            }
+        }
+    }
+}

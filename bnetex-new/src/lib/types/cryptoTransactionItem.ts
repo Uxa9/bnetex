@@ -1,6 +1,6 @@
 export interface CryptoTransactionItemType {
     date: Date,
-    type: 'withdrawal' | 'income',
+    type: 'withdraw' | 'income',
     wallet: string,
     coin: string,
     amount: number,

@@ -5,7 +5,7 @@ import { User } from '../users/users.model';
 interface RequestCreationAttrs {
     userId : number,
     amount : number,
-    type   : string,
+    type   : number,
     confirmCode : string
 }
 
@@ -57,14 +57,14 @@ export class Request extends Model<Request, RequestCreationAttrs> {
     amount : number;
 
     @ApiProperty({
-        example : "withdraw",
-        description : 'request type'
+        example : "1",
+        description : 'request type id'
     })
     @Column({
         type : DataType.STRING,
         allowNull : false
     })
-    type : string;
+    type : number;
 
     @ApiProperty({
         example : "322228",

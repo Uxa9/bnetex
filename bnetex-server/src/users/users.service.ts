@@ -17,8 +17,10 @@ export class UsersService {
         const user = await this.userRepository.create(dto);
         const role = await this.roleService.getRoleByValue('investor');
 
-        await user.$set('roles', [role.id]);
-        user.roles = [role];
+        user.$set('roles', [role.id])
+            .then(() => {
+                user.roles = [role];
+            });
 
         return {
             status: "SUCCESS",
@@ -117,6 +119,64 @@ export class UsersService {
         return {
             status: "SUCCESS",
             message: "TRANSFER_SUCCESS"
+        }
+    }
+
+    private generatenumber(max: number, min: number) {
+        return Math.random() * (max - min) + min;
+    }
+
+    async getPnL(id: number) {        
+        const user = await this.getUserById(id);
+
+        return {
+            pnl: {
+                values: [
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                ],
+                dates: [
+                    '10.02',
+                    '17.02',
+                    '24.02',
+                    '31.02',
+                    '07.03',
+                    '14.03',
+                    '21.04'
+                ]
+            }
+        }
+    }
+
+    async getRoE(id: number) {
+        const user = await this.getUserById(id);
+
+        return {
+            roe: {
+                values: [
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                ],
+                dates: [
+                    '10.02',
+                    '17.02',
+                    '24.02',
+                    '31.02',
+                    '07.03',
+                    '14.03',
+                    '21.04'
+                ]
+            }
         }
     }
 }

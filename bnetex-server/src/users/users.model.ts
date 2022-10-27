@@ -57,6 +57,16 @@ export class User extends Model<User, UserCreationAttrs> {
     activationLink : string;
 
     @ApiProperty({
+        example : '1',
+        description : 'activation link timestamp'
+    })
+    @Column({
+        type : DataType.DATE,
+        defaultValue : DataType.NOW
+    })
+    linkTimestamp : Date;
+
+    @ApiProperty({
         example : 'aboba228',
         description : 'user password'
     })

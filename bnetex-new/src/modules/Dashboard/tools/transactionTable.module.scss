@@ -1,0 +1,48 @@
+@import 'styles/colors/colors';
+
+.transaction-table-container {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+}
+
+.table-row {
+    width: 100%;
+    padding: 8px 0;
+    display: grid;
+    grid-template-columns: 20% 35% 25% 20%;
+    // justify-content: flex-start;
+
+    .currency-wrapper {
+        display: flex;
+        align-items: center;
+
+        .currency-logo {
+            width: 18px;
+            height: 16px;
+            margin-right: 2px;
+        }
+
+        span {
+            line-height: 15px;
+        }
+    }
+
+    .status {
+        
+    }
+
+    .status-withdraw {
+        color: $red-4;
+    }
+
+    .status-deposit {
+        color: $green-4;
+    }
+
+    .amount {
+        justify-self: flex-end;
+        padding-right: 2px;
+    }
+}

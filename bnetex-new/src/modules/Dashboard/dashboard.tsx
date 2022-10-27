@@ -69,7 +69,13 @@ const Dashboard = () => {
                             )
                         }
                     </aside>
-                    <Outlet />
+                    <div
+                        className={styles['dashboard-content']}
+                    >
+                        <Outlet
+                            context={{mainWallet, investWallet}}
+                        />
+                    </div>
                 </main>
             </div>
         </>
