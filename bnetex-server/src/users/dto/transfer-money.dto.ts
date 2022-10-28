@@ -10,12 +10,12 @@ export class TransferMoney {
     @IsString({
         message : "Value must be a string"
     })
-    readonly firstWallet : string;
+    readonly reciever : string;
 
     @IsString({
         message : "Value must be a string"
     })
-    readonly secondWallet : string;
+    readonly sender : string;
 
     @IsNumber({}, {
         message : "Id must be a number"

@@ -90,8 +90,8 @@ export class UsersService {
             throw new UserNotFoundException();
         }
 
-        if (!this.userRepository.getAttributes().hasOwnProperty(dto.firstWallet) ||
-            !this.userRepository.getAttributes().hasOwnProperty(dto.secondWallet)) {
+        if (!this.userRepository.getAttributes().hasOwnProperty(dto.reciever) ||
+            !this.userRepository.getAttributes().hasOwnProperty(dto.sender)) {
             throw new HttpException(
                 {
                     status: "ERROR",
@@ -101,7 +101,7 @@ export class UsersService {
             );
         }
 
-        if ( user[dto.firstWallet] < dto.amount ) {
+        if ( user[dto.reciever] < dto.amount ) {
             throw new HttpException(
                 {
                     status: "ERROR",
@@ -111,8 +111,8 @@ export class UsersService {
             );
         }
 
-        user[dto.firstWallet] -= dto.amount;
-        user[dto.secondWallet] += dto.amount;
+        user[dto.sender] -= dto.amount;
+        user[dto.reciever] += dto.amount;
 
         await user.save();
 

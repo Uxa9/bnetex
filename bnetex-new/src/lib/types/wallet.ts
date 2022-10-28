@@ -1,11 +1,11 @@
-export type WalletCategoryType = 'main' | 'investor';
+export type WalletCategoryType = 'mainWallet' | 'investWallet';
 
 export enum WalletCategoryEnum {
-    main = 'main',
-    investor = 'investor',
+    main = 'mainWallet',
+    investor = 'investWallet',
 }
 
 export interface WalletCategoryWithBalance {
-    main: number;
-    investor: number;
+    mainWallet: number;
+    investWallet: number;
 }

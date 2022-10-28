@@ -13,6 +13,11 @@ interface WithdrawConfirmFormData {
     confirmCode: string
 }
 
+const getToken = () => {
+    const userInfo = localStorage.getItem('userInfo-BNETEX');
+    return userInfo ? JSON.parse(userInfo).token : '';
+};
+
 const useWalletActions = () => {
 
     const [ protectedApi, api ] = useApi();
@@ -20,14 +25,20 @@ const useWalletActions = () => {
     const transferBetweenWallets = async (data: transferBetweenWalletsData) => {
         return await protectedApi.post(
             '/users/transfer-money', 
-            {data, userId: getUserId()}
+            {...data, userId: getUserId()},
+            {headers: {
+                'Authorization': `Bearer ${getToken()}`,
+            }}
         );
     };
     
     const withdrawConfirm = async (data: WithdrawConfirmFormData) => {
         return await protectedApi.post(
             '/request/fulfill', 
-            data
+            {...data, requestId: Number(localStorage.getItem('requestId'))},
+            {headers: {
+                'Authorization': `Bearer ${getToken()}`,
+            }}
         );
     };
 
@@ -41,7 +52,10 @@ const useWalletActions = () => {
     const withdrawRequest = async (data: WithdrawFormData) => {
         return await protectedApi.post(
             '/request/create', 
-            data
+            data,
+            {headers: {
+                'Authorization': `Bearer ${getToken()}`,
+            }}
         );
     };
 
@@ -49,8 +63,8 @@ const useWalletActions = () => {
         return await api.get(`/users/getWallets/${getUserId()}`)
             .then((response) => {
                 return {
-                    main: response.data.mainWallet,
-                    investor: response.data.investWallet,
+                    mainWallet: response.data.mainWallet,
+                    investWallet: response.data.investWallet,
                 };
             });
     };
