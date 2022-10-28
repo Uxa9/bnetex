@@ -64,7 +64,22 @@ const useAuthActions = () => {
             });
     };
 
-    return { login, signup, confirmEmail };
+    const resendActivationCode = async (email: string) => {
+        return await api.post(
+            '/auth/resend-activation-link', {
+                email: email,
+            });
+    };
+
+    
+    const checkActivationCodeTime = async (email: string) => {
+        return await api.post(
+            '/auth/activattion-link-datetime', {
+                email: email,
+            });
+    };
+
+    return { login, signup, confirmEmail, resendActivationCode, checkActivationCodeTime };
 };
 
 export default useAuthActions;

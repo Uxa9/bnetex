@@ -7,7 +7,7 @@ export default function Burger(props: any) {
 
     useEffect(() => {
         setActive(props.active);
-    }, [props.active])
+    }, [props.active]);
 
     return (
         <div
@@ -23,5 +23,5 @@ export default function Burger(props: any) {
                 className={styles['burger-stripe']}
             />
         </div>
-    )
+    );
 }

@@ -1,0 +1,34 @@
+@import 'src/styles/colors/colors';
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    $grayscale-2,
+    $grayscale-3,
+    $grayscale-4,
+    $grayscale-3,
+    $grayscale-2,
+  );
+  border-radius: 16px;
+
+  background-size: 400% 400%;
+  animation: gradient 2.5s ease infinite;
+
+  &--circle {
+    border-radius: 50%;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0 0;
+  }
+
+  50% {
+    background-position: 100% 100%;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}

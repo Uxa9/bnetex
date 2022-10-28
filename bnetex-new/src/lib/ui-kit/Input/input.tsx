@@ -98,7 +98,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                             {
                                 helperText &&
                             <>
-                                <Info />
+                                { typeof helperText === 'string' && <Info /> }
                                 { helperText }
                             </>
                             }

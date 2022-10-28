@@ -4,13 +4,14 @@ import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
 import { Button, Input } from 'lib/ui-kit';
 import { requiredValidation } from 'lib/utils/hookFormValidation';
+import NoEmailModal from 'modules/Auth/components/NoEmailModal/noEmailModal';
+import ResendCodeAction from 'modules/Auth/components/ResendCodeAction/resendCodeAction';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AppLinksEnum } from 'routes/appLinks';
 import useAuthActions from 'services/auth';
 import { loginUser } from 'store/action-creators/auth';
-import FormCard from '../FormCard/formCard';
-import NoEmailModal from '../NoEmailModal/noEmailModal';
+import FormCard from '../../components/FormCard/formCard';
 
 interface EmailValidationData {
     activationCode: string,
@@ -29,6 +30,10 @@ const EmailValidation = () => {
     useEffect(() => {
         const email = localStorage.getItem('userEmail');
         email ? setUserEmail(email) : goToState(`${AppLinksEnum.AUTH}/${AppLinksEnum.LOGIN}`);;
+    }, []);
+
+    useEffect(() => {
+        
     }, []);
 
     const {
@@ -67,6 +72,9 @@ const EmailValidation = () => {
                         errorText={errors.activationCode?.message}
                         key={'activationCode'} //Тут костыль, надо бы сделать React.Children.map, но у меня возникли с ним трудности
                         autoComplete={'one-time-code'}
+                        helperText={
+                            <ResendCodeAction userEmail={userEmail} />
+                        }
                     />,
                 ]} 
                 button={

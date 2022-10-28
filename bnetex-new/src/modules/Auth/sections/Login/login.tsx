@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AppLinksEnum } from 'routes/appLinks';
 import useAuthActions from 'services/auth';
-import FormCard from '../FormCard/formCard';
+import FormCard from '../../components/FormCard/formCard';
 import styles from './login.module.scss';
 
 interface LoginFormData{

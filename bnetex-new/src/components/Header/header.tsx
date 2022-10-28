@@ -62,8 +62,8 @@ const Header = () => {
                     onClick={() => goToState(`${AUTH}/${REGISTRATION}`)}
                     mini
                 />
-            </>
-    }
+            </>;
+    };
 
     return (
         <header
@@ -100,15 +100,15 @@ const Header = () => {
                     />
                 </div>
             </nav>
-                <div
-                    className={styles['burger-menu-container']}
+            <div
+                className={styles['burger-menu-container']}
+            >
+                <BurgerMenu
+                    open={activeBurger}
                 >
-                    <BurgerMenu
-                        open={activeBurger}
-                    >
-                        {renderLinks()}
-                    </BurgerMenu>
-                </div>
+                    {renderLinks()}
+                </BurgerMenu>
+            </div>
         </header>
     );
 };

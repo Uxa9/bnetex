@@ -11,15 +11,15 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
 import InvestorWallet from 'modules/Dashboard/investorWallet/investorWallet';
 import AuthLayout from 'modules/Auth/authLayout';
-import Login from 'modules/Auth/Login/login';
+import Login from 'modules/Auth/sections/Login/login';
 import Transactions from 'modules/Dashboard/transactions/transactions';
-import Registration from 'modules/Auth/Registration/registration';
+import Registration from 'modules/Auth/sections/Registration/registration';
 import Deposit from 'modules/Payments/Deposit/deposit';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import Withdraw from 'modules/Payments/Withdraw/withdraw';
 import WithdrawConfirm from 'modules/Payments/Withdraw/confirm';
-import EmailValidation from 'modules/Auth/EmailValidation/emailValidation';
-import RegistrationFinalize from 'modules/Auth/RegistrationFinalize/registrationFinalize';
+import EmailValidation from 'modules/Auth/sections/EmailValidation/emailValidation';
+import RegistrationFinalize from 'modules/Auth/sections/RegistrationFinalize/registrationFinalize';
 
 const AppRoutes = () => {
 
