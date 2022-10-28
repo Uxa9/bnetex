@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styles from './dashboard.module.scss';
 
 type activeSectionType = 'tools' | 'settings' | 'wallet/main' | 'wallet/investor' | 'transactions';
@@ -72,9 +72,6 @@ const Dashboard = () => {
                     <div
                         className={styles['dashboard-content']}
                     >
-                        <Outlet
-                            context={{mainWallet, investWallet}}
-                        />
                     </div>
                 </main>
             </div>

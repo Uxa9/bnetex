@@ -99,7 +99,6 @@ $easing: cubic-bezier(0, 0, 0.2, 1);
     color: $grayscale-11;
 
     &:-webkit-autofill {
-        box-shadow: 0 0 0 30px $grayscale-input inset;
         transition: background-color 5000s ease-in-out 0s;
         -webkit-text-fill-color: $grayscale-11;
         animation: onAutoFill 1s;

@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import AreaChart from 'modules/terminal/investor/chart/areaChart';
 import { Button } from 'lib/ui-kit';
 import { useGoToState } from 'lib/hooks/useGoToState';
-import { useUser } from '../dashboard';
 import { useEffect, useState } from 'react';
 import getRoE from 'services/getroe';
 import getPnL from 'services/getpnl';
@@ -24,7 +23,8 @@ const InvestorWallet = () => {
 
     const balance = JSON.parse(localStorage.getItem('investWallet') || '{}') || 0.00;
     const { goToState } = useGoToState();
-    const { mainWallet, investWallet } = useUser();
+    const mainWallet = 0;
+    const investWallet = 0;
 
     const [roe, setRoe] = useState<GraphicProps>({
         dates: [],
@@ -66,7 +66,6 @@ const InvestorWallet = () => {
                 >
                     <span
                         className={styles['header-transfer']} 
-                        onClick={() => goToState(AppLinksEnum.TRANSFER)}
                     >
                         Перевод
                     </span>

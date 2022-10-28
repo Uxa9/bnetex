@@ -41,9 +41,12 @@ const FormCard: FC<FormCardProps> = (props) => {
             </div>
             {inputs}
             {button}
-            <div className={styles['form__actions']}>
-                {actions}
-            </div>
+            {
+                actions &&
+                <div className={styles['form__actions']}>
+                    {actions}
+                </div>
+            }
         </form>
     );
 };

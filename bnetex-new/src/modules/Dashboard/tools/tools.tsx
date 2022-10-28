@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
-import { useUser } from '../dashboard';
 import AreaChart from 'modules/terminal/investor/chart/areaChart';
 import getRoE from 'services/getroe';
 import getPnL from 'services/getpnl';

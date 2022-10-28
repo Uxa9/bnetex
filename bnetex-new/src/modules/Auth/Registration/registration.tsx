@@ -66,7 +66,7 @@ const Registration = () => {
                         inputControl={register('email', emailValidation)}
                         errorText={errors.email?.message}
                         key={'email'}
-                        autoComplete={'new-email'}
+                        autoComplete={'email'}
                     />,
                     // toDo: вынести эту хуйню в отдельный компонент
                     <Input

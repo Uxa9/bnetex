@@ -20,8 +20,9 @@
     padding: 0 16px;
     position: relative;
 
-    @include max-width(900) {
+    @include max-width(1200) {
         justify-content: center;
+        z-index: 10;
     }
 }
 
@@ -29,6 +30,19 @@
     @include column-flex;
 
     z-index: 2;
+
+    @include max-width(1200) {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: -1;
+        opacity: 0.25;
+    }
+
+    @include mobile {
+        display: none;
+    }
 
     &__row {
         display: flex;
@@ -84,7 +98,7 @@
                 background-color: $red-4 !important;
             }
 
-            &:last-of-type{
+            &:last-of-type {
                 width: 100px;
             }
         }

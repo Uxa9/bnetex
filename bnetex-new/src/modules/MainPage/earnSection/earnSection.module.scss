@@ -9,6 +9,7 @@
     @include mobile {
         flex-direction: column-reverse;
         row-gap: 32px;
+        padding-top: 500px ;
     }
 
     &__text {
@@ -97,13 +98,10 @@
         }
 
         @include mobile {
-            position: static;
-            width: 80vw;
-            min-width: unset;
-            transform: unset;
+            left: 20vw;
+            min-width: none;
 
             .header {
-                // flex-direction: column;
                 align-items: flex-start;
                 row-gap: 16px;
 
@@ -112,9 +110,6 @@
                     height: auto;
                 }
 
-                &__data {
-                    display: none;
-                }
             }
 
             .buttons {
