@@ -8,9 +8,14 @@ import { RoeCard, roeCards } from './roeCards';
 import { AppLinksEnum } from 'routes/appLinks';
 import { DynamicImg } from 'lib/utils/DynamicImg';
 import { useTheme } from 'lib/hooks/useTheme';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
+import { useGoToState } from 'lib/hooks/useGoToState';
 
 const Invest = () => {
-
+    
+    const { AUTH, LOGIN } = AppLinksEnum;
+    const { goToState } = useGoToState();
+    const isAuth = useTypedSelector(state => state.auth.isAuth);
     const navigate = useNavigate();
     const { theme } = useTheme();
 
@@ -58,7 +63,7 @@ const Invest = () => {
                     Icon={CornerArrow}
                     iconAlignment={'right'}
                     buttonStyle={'outlined'}
-                    onClick={() => navigate(`${AppLinksEnum.DASHBOARD}/wallet/investor`)}
+                    onClick={() => isAuth ? goToState(`${AppLinksEnum.DASHBOARD}/wallet/investor`) : goToState(`${AUTH}/${LOGIN}`)}
                 />
             </div>
         </section>

@@ -108,7 +108,7 @@ const Tools = () => {
                 </div>
             </div>
             <div
-                className={classNames(styles['balance-and-transactions'], 'card')}
+                className={styles['balance-and-transactions']}
             >
                 <div
                     className={classNames(styles['balance'], 'card')}
@@ -123,7 +123,9 @@ const Tools = () => {
                     >
                         {`${Number(mainBalance + investBalance).toFixed(2)} USDT`}
                     </p>
-                    <div>
+                    <div
+                        className={styles['chart-wrapper']}
+                    >
                         <Chart
                             type='bar'
                             series={[
