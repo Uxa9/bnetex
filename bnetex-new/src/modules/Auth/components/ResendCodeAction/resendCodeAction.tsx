@@ -21,7 +21,6 @@ const ResendCodeAction = ({ userEmail }: {userEmail: string}) => {
     const timer = useRef<NodeJS.Timeout | null>(null);
 
     const runTimer = () => {
-        console.log('timer');
         setTimeToNextCodeSending(prevState => {
             if (prevState !== 0) {
                 return prevState - 1;
