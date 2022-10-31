@@ -3,12 +3,13 @@ import classNames from 'classnames';
 import { FC, useState } from 'react';
 import styles from './toolTip.module.scss';
 
-interface ToolTipProps{
-    title: string,
-    infoText: string
+interface ToolTipProps {
+    title: string;
+    infoText: string; 
+    className?: string;
 }
 
-const ToolTip:FC<ToolTipProps> = ({title, infoText}) => {
+const ToolTip = ({title, infoText, className}: ToolTipProps) => {
 
     const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
     
@@ -16,7 +17,8 @@ const ToolTip:FC<ToolTipProps> = ({title, infoText}) => {
         <div 
             className={classNames(
                 styles.title,
-                {[styles['title--active']]: isToolTipVisible}
+                {[styles['title--active']]: isToolTipVisible},
+                className,
             )}
             onMouseEnter={() => setIsToolTipVisible(true)}
             onMouseLeave={() => setIsToolTipVisible(false)}

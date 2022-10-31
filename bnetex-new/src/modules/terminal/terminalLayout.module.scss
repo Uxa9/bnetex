@@ -1,17 +1,42 @@
+@import 'styles/mixins';
+
 .content-wrapper {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr minmax(360px, 420px);
   grid-template-rows: repeat(4, auto);
   column-gap: 16px;
   row-gap: 16px;
   padding: 16px;
+  width: 100%;
+
+  @include max-width(800) {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, auto);
+  }
 }
 
 .chart {
   grid-row: 1/4;
-  flex-shrink: 2;
+  min-height: 400px; // Костыль?? надо тестить с trading-view
+
+  @include max-width(1200) {
+    grid-column: 1/-1;
+    grid-row: 1;
+  }
+
+  @include max-width(800) {
+    grid-column: 1;
+  }
 }
 
 .history {
   grid-row: 4;
+
+  @include max-width(1200) {
+    grid-column: 1/-1;
+  }
+
+  @include max-width(800) {
+    grid-row: 6;
+  }
 }

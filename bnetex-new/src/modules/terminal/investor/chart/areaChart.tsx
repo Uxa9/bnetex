@@ -51,7 +51,7 @@ const AreaChart:FC<ChartProps> = props => {
 
     return (
         <div
-            className={classNames('block', styles['chart-container'])}
+            className={styles['chart-container']}
         >
             {
                 title
@@ -59,6 +59,7 @@ const AreaChart:FC<ChartProps> = props => {
             <Chart
                 type='area'
                 height='90%'
+                width={'100%'}
                 options={options}
                 series={[series]}
             />

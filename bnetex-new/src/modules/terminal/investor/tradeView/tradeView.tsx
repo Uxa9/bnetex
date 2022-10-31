@@ -104,7 +104,7 @@ const TradeView = () => {
                 </p>
             </div>
             <Input
-                label={'Объем инвестиций (USDT)'}
+                label={'Объем (USDT)'}
                 type={'number'}
                 required
                 errorText={errors.amount?.message}
