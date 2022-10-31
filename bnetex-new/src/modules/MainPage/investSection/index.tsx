@@ -3,15 +3,15 @@ import classNames from 'classnames';
 import styles from './investSection.module.scss';
 import { Button } from 'lib/ui-kit';
 import Blur from 'components/blurredBackgroundItem';
-import { useNavigate } from 'react-router-dom';
 import { RoeCard, roeCards } from './roeCards';
 import { AppLinksEnum } from 'routes/appLinks';
 import { DynamicImg } from 'lib/utils/DynamicImg';
 import { useTheme } from 'lib/hooks/useTheme';
+import { useGoToState } from 'lib/hooks/useGoToState';
 
 const Invest = () => {
 
-    const navigate = useNavigate();
+    const { goToState } = useGoToState();
     const { theme } = useTheme();
 
     return (
@@ -58,7 +58,7 @@ const Invest = () => {
                     Icon={CornerArrow}
                     iconAlignment={'right'}
                     buttonStyle={'outlined'}
-                    onClick={() => navigate(`${AppLinksEnum.DASHBOARD}/wallet/investor`)}
+                    onClick={() => goToState(`${AppLinksEnum.DASHBOARD}/wallet/investor`)}
                 />
             </div>
         </section>

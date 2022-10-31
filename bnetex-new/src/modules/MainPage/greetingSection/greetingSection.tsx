@@ -5,8 +5,13 @@ import { ReactComponent as GraphicLine } from '../../../assets/images/landing/gr
 import { ReactComponent as GraphicGradient } from '../../../assets/images/landing/graphic__gradient.svg';
 import Blur from 'components/blurredBackgroundItem';
 import { DynamicImg } from 'lib/utils/DynamicImg';
+import { useGoToState } from 'lib/hooks/useGoToState';
+import { AppLinksEnum } from 'routes/appLinks';
 
 const GreetingSection = () => {
+
+    const { goToState } = useGoToState();
+
     return(
         <section className={styles['greeting-block']}>
             <Blur 
@@ -39,6 +44,7 @@ const GreetingSection = () => {
                 <Button 
                     text={'Начать работу'}
                     buttonStyle={'outlined'}
+                    onClick={() => goToState(`${AppLinksEnum.DASHBOARD}/wallet/investor`)}
                 />
             </div>
             <div 

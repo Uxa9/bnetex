@@ -6,10 +6,13 @@ import Blur from 'components/blurredBackgroundItem';
 import { DynamicImg } from 'lib/utils/DynamicImg';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import { useTheme } from 'lib/hooks/useTheme';
+import { useGoToState } from 'lib/hooks/useGoToState';
+import { AppLinksEnum } from 'routes/appLinks';
 
 const Earn = () => {
 
     const { theme } = useTheme();
+    const { goToState } = useGoToState();
 
     return (
         <section className={styles['start-earning']}>
@@ -44,6 +47,7 @@ const Earn = () => {
                     Icon={CornerArrow}
                     iconAlignment={'right'}
                     buttonStyle={'outlined'}
+                    onClick={() => goToState(`${AppLinksEnum.DASHBOARD}/wallet/investor`)}
                 />
             </div>
             <div
