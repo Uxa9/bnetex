@@ -20,49 +20,6 @@ const Header = () => {
     const [activeBurger, setActiveBurger] = useState(false);
 
     const renderLinks = () => {
-        // return isAuth ?
-        //     <>
-        //         <Button
-        //             text={'Кошельки'}
-        //             buttonStyle={'thin'}
-        //             Icon={Wallet}
-        //             className={styles.header__btn}
-        //             onClick={() => goToState('/dashboard/wallet/main')}
-        //             mini
-        //         />
-        //         <Button
-        //             text={'Профиль'}
-        //             buttonStyle={'thin'}
-        //             Icon={User}
-        //             className={styles.header__btn}
-        //             onClick={() => goToState('/dashboard')}
-        //             mini
-        //         />
-        //         <Button
-        //             text={'Выйти'}
-        //             buttonStyle={'thin'}
-        //             Icon={Logout}
-        //             className={styles.header__btn}
-        //             onClick={logoutUser}
-        //             mini
-        //         />
-        //     </>
-        //     :
-        //     <>
-        //         <Button
-        //             text={'Войти'}
-        //             buttonStyle={'thin'}
-        //             Icon={Login}
-        //             className={styles.header__btn}
-        //             onClick={() => goToState(`${AUTH}/${LOGIN}`)}
-        //             mini
-        //         />
-        //         <Button
-        //             text={'Регистрация'}
-        //             onClick={() => goToState(`${AUTH}/${REGISTRATION}`)}
-        //             mini
-        //         />
-        //     </>;
         return isAuth ? [
             <Button
                 text={'Кошельки'}
@@ -80,14 +37,18 @@ const Header = () => {
                 onClick={() => goToState('/dashboard')}
                 mini
             />,
-            <Button
-                text={'Выйти'}
-                buttonStyle={'thin'}
-                Icon={Logout}
-                className={styles.header__btn}
-                onClick={logoutUser}
-                mini
-            />
+            <div
+                className={styles.exit__btn}
+            >
+                <Button
+                    text={'Выйти'}
+                    buttonStyle={'thin'}
+                    Icon={Logout}
+                    className={styles.header__btn}
+                    onClick={logoutUser}
+                    mini
+                />
+            </div>
         ] : [
             <Button
                 text={'Войти'}
@@ -97,11 +58,15 @@ const Header = () => {
                 onClick={() => goToState(`${AUTH}/${LOGIN}`)}
                 mini
             />,
-            <Button
-                text={'Регистрация'}
-                onClick={() => goToState(`${AUTH}/${REGISTRATION}`)}
-                mini
-            />
+            <div
+                className={styles.wide__btn}
+            >
+                <Button
+                    text={'Регистрация'}
+                    onClick={() => goToState(`${AUTH}/${REGISTRATION}`)}
+                    mini
+                />
+            </div>
         ]
     };
 
