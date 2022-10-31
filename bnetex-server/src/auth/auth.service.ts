@@ -12,6 +12,7 @@ import generateAuthCode from '../services/generateAuthCode';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ResendActivationLink } from './dto/resend-activation-link.dto';
 import { GetActivationLinkTime } from './dto/get-activation-link-time.dto';
+import { TokenVerify } from './dto/token-verify.dto';
 
 @Injectable()
 export class AuthService {
@@ -157,6 +158,28 @@ export class AuthService {
     // async callGenerateActivationLink() {
     //     return genereateAuthCode();
     // }
+
+    async verifyToken(dto: TokenVerify) {
+
+        try {
+            const valid = await this.jwtService.verify(dto.token);
+              
+            if (valid) {
+                return {
+                    valid: true
+                }
+            } else {
+                return {
+                    valid: false
+                }
+            }
+        } catch (error) {
+            return {
+                valid: false
+            }            
+        }
+        
+    }
 
     private async generateToken(user: User) {
         const payload = {
