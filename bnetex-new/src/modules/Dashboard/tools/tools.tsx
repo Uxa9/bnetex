@@ -139,7 +139,7 @@ const Tools = () => {
                                 },
                             ]}
                             height={'150px'}
-                            width={'110%'}
+                            width={'100%'}
                             options={{ // приготовьтесь охуеть
                                 chart: {
                                     stacked: true,
@@ -147,7 +147,8 @@ const Tools = () => {
                                     selection : { enabled : false },
                                     toolbar   : { show : false },
                                     offsetX   : -20,
-                                    offsetY   : -30
+                                    offsetY   : -30,
+                                    width     : '250%'
                                 },
                                 grid: { 
                                     show: false,

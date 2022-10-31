@@ -43,7 +43,7 @@ const Deposit = () => {
                             Средства будут зачислены на ваш основной кошелек
                         </li>
                         <li className={styles.disclaimer__item}>
-                            Минимальная сумма ввода: 0.01 USDT
+                            Минимальная сумма ввода: 100 USDT
                         </li>
                     </ul>
                 </div> 

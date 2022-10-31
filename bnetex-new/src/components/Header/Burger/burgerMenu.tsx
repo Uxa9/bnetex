@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import styles from './burgerMenu.module.scss';
 
@@ -5,6 +6,7 @@ import styles from './burgerMenu.module.scss';
 export default function BurgerMenu(props: any) {
 
     const [isOpen, setIsOpen] = useState(false);
+    const links = props.links();
 
     useEffect(() => {
         setIsOpen(props.open);
@@ -18,6 +20,7 @@ export default function BurgerMenu(props: any) {
                         styles['menu-background-active'] : 
                         styles['menu-background-hidden']}`
                 }
+                onClick={props.onClose}
             >
 
             </div>
@@ -28,8 +31,16 @@ export default function BurgerMenu(props: any) {
                         styles['burger-menu-active'] : 
                         styles['burger-menu-hidden']}`
                 }
+                onClick={props.onClose}
             >
-                {props.children}
+                {links.map((item: any) => {
+                    return (
+                        <div
+                            className={styles['burger-menu-link']}
+                        >
+                            {item}
+                        </div>)
+                })}
             </div>
         </>
     )

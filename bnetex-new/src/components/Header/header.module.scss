@@ -43,6 +43,7 @@
 
 @media screen and (max-width: 800px) {
     .links {
+        margin-left: 0px;
         justify-content: flex-end;
 
         &__main,

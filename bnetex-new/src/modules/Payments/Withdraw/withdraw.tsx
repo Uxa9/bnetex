@@ -104,7 +104,7 @@ const Withdraw = () => {
                             Комиссия сети <span>0.29 - 3.2 USDT</span>
                         </li>
                         <li className={styles.disclaimer__item}>
-                            Минимальная сумма вывода: <span>10 USDT</span>
+                            Минимальная сумма вывода: <span>100 USDT</span>
                         </li>
                     </ul>
                 </form>

@@ -8,7 +8,7 @@ import { useActions } from 'lib/hooks/useActionCreators';
 import { useTheme } from 'lib/hooks/useTheme';
 import Burger from './Burger/burger';
 import { useState } from 'react';
-import BurgerMenu from './Burger/burgerManu';
+import BurgerMenu from './Burger/burgerMenu';
 
 const Header = () => {
     const { AUTH, REGISTRATION, LOGIN } = AppLinksEnum;
@@ -20,49 +20,89 @@ const Header = () => {
     const [activeBurger, setActiveBurger] = useState(false);
 
     const renderLinks = () => {
-        return isAuth ?
-            <>
-                <Button
-                    text={'Кошельки'}
-                    buttonStyle={'thin'}
-                    Icon={Wallet}
-                    className={styles.header__btn}
-                    onClick={() => goToState('/dashboard/wallet/main')}
-                    mini
-                />
-                <Button
-                    text={'Профиль'}
-                    buttonStyle={'thin'}
-                    Icon={User}
-                    className={styles.header__btn}
-                    onClick={() => goToState('/dashboard')}
-                    mini
-                />
-                <Button
-                    text={'Выйти'}
-                    buttonStyle={'thin'}
-                    Icon={Logout}
-                    className={styles.header__btn}
-                    onClick={logoutUser}
-                    mini
-                />
-            </>
-            :
-            <>
-                <Button
-                    text={'Войти'}
-                    buttonStyle={'thin'}
-                    Icon={Login}
-                    className={styles.header__btn}
-                    onClick={() => goToState(`${AUTH}/${LOGIN}`)}
-                    mini
-                />
-                <Button
-                    text={'Регистрация'}
-                    onClick={() => goToState(`${AUTH}/${REGISTRATION}`)}
-                    mini
-                />
-            </>;
+        // return isAuth ?
+        //     <>
+        //         <Button
+        //             text={'Кошельки'}
+        //             buttonStyle={'thin'}
+        //             Icon={Wallet}
+        //             className={styles.header__btn}
+        //             onClick={() => goToState('/dashboard/wallet/main')}
+        //             mini
+        //         />
+        //         <Button
+        //             text={'Профиль'}
+        //             buttonStyle={'thin'}
+        //             Icon={User}
+        //             className={styles.header__btn}
+        //             onClick={() => goToState('/dashboard')}
+        //             mini
+        //         />
+        //         <Button
+        //             text={'Выйти'}
+        //             buttonStyle={'thin'}
+        //             Icon={Logout}
+        //             className={styles.header__btn}
+        //             onClick={logoutUser}
+        //             mini
+        //         />
+        //     </>
+        //     :
+        //     <>
+        //         <Button
+        //             text={'Войти'}
+        //             buttonStyle={'thin'}
+        //             Icon={Login}
+        //             className={styles.header__btn}
+        //             onClick={() => goToState(`${AUTH}/${LOGIN}`)}
+        //             mini
+        //         />
+        //         <Button
+        //             text={'Регистрация'}
+        //             onClick={() => goToState(`${AUTH}/${REGISTRATION}`)}
+        //             mini
+        //         />
+        //     </>;
+        return isAuth ? [
+            <Button
+                text={'Кошельки'}
+                buttonStyle={'thin'}
+                Icon={Wallet}
+                className={styles.header__btn}
+                onClick={() => goToState('/dashboard/wallet/main')}
+                mini
+            />,
+            <Button
+                text={'Профиль'}
+                buttonStyle={'thin'}
+                Icon={User}
+                className={styles.header__btn}
+                onClick={() => goToState('/dashboard')}
+                mini
+            />,
+            <Button
+                text={'Выйти'}
+                buttonStyle={'thin'}
+                Icon={Logout}
+                className={styles.header__btn}
+                onClick={logoutUser}
+                mini
+            />
+        ] : [
+            <Button
+                text={'Войти'}
+                buttonStyle={'thin'}
+                Icon={Login}
+                className={styles.header__btn}
+                onClick={() => goToState(`${AUTH}/${LOGIN}`)}
+                mini
+            />,
+            <Button
+                text={'Регистрация'}
+                onClick={() => goToState(`${AUTH}/${REGISTRATION}`)}
+                mini
+            />
+        ]
     };
 
     return (
@@ -71,7 +111,10 @@ const Header = () => {
         >
             <Logo
                 className={styles.logo}
-                onClick={() => goToState('/')}
+                onClick={() => {
+                    setActiveBurger(false);
+                    goToState('/');
+                }}
             />
             <nav className={styles.links}>
                 <div className={styles['links__main']}>
@@ -84,7 +127,9 @@ const Header = () => {
                     />
                 </div>
                 <div className={styles['links__user']}>
-                    {renderLinks()}
+                    {renderLinks().map(item => {
+                        return item;
+                    })}
                     <Button
                         buttonStyle={'thin'}
                         Icon={theme === 'dark' ? Moon : Brightness}
@@ -105,9 +150,10 @@ const Header = () => {
             >
                 <BurgerMenu
                     open={activeBurger}
-                >
-                    {renderLinks()}
-                </BurgerMenu>
+                    onClose={() => setActiveBurger(false)}
+                    links={renderLinks}
+                    auth={isAuth}
+                />
             </div>
         </header>
     );
