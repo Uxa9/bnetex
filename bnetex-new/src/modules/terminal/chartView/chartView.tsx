@@ -12,6 +12,7 @@ const ChartView = ({className}: {className?: string}) => {
                 className
             )}
         >
+            Тут будет терминал
             {/* <TradingViewWidget 
                 symbol="BINANCE:BTCUSDT"
                 autosize={true}

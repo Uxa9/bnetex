@@ -1,0 +1,19 @@
+@import 'styles/mixins';
+@import 'styles/colors/colors';
+
+.trade-view {
+  @include column-flex(24px);
+
+  &__balance {
+    @include column-flex(4px);
+
+    .balance-label {
+      color: $grayscale-9;
+    }
+  }
+}
+
+.all-balance-btn {
+  width: 17ch;
+  padding-right: 8px;
+}

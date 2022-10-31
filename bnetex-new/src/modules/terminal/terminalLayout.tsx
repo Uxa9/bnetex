@@ -19,19 +19,15 @@ const TerminalLayout = () => {
 
     return (
         <div
-            className="page-wrapper"
+            className={styles['content-wrapper']}
         >
-            <div
-                className={styles['content-wrapper']}
-            >
-                <ChartView 
-                    className={styles.chart}
-                />
-                <HistoryAndOrders 
-                    className={styles.history}
-                />
-                <Outlet />
-            </div>
+            <ChartView 
+                className={styles.chart}
+            />
+            <HistoryAndOrders 
+                className={styles.history}
+            />
+            <Outlet />
         </div>
     );
 };

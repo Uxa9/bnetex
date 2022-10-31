@@ -23,9 +23,13 @@ const ToolTip:FC<ToolTipProps> = ({title, infoText}) => {
             onClick={() => setIsToolTipVisible(true)}
             onBlur={() => setIsToolTipVisible(false)}
         >
-            <span>{title}</span>
+            <span className={'caption'}>{title}</span>
             <div className={styles.iconWrapper}>
-                <div className={styles.tip}>
+                <div className={classNames(
+                    styles.tip,
+                    'caption'
+                )}
+                >
                     {infoText}
                 </div>
                 <ToolTipNeedle 

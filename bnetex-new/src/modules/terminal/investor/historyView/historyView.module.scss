@@ -1,0 +1,10 @@
+@import 'styles/mixins';
+@import 'styles/colors/colors';
+
+.prediction-period {
+  @include column-flex(4px);
+
+  &__label {
+    color: $grayscale-9;
+  }
+}

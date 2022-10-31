@@ -12,10 +12,24 @@ const SignedNumber = ({value, postfix = 'USDT', withSign = true, className}: Sig
 
     const isPositive = value > 0;
 
+    const evaluateNumberStyle = () => {
+        switch (true) {
+            case value > 0: {
+                return 'positive';
+            }
+            case value < 0: {
+                return 'negative';
+            }
+            default: {
+                return 'zero';
+            }
+        }
+    };
+
     return(
         <span
             className={classNames(
-                styles[isPositive ? 'positive' : 'negative'],
+                styles[evaluateNumberStyle()],
                 className,  
             )}
         >

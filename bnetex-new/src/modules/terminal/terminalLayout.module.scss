@@ -1,18 +1,17 @@
 .content-wrapper {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: auto auto;
-    column-gap: 20px;
-    row-gap: 20px;
-    padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: repeat(4, auto);
+  column-gap: 16px;
+  row-gap: 16px;
+  padding: 16px;
 }
 
-.chart{
-    grid-column: 1/10;
-    grid-row: 1;
+.chart {
+  grid-row: 1/4;
+  flex-shrink: 2;
 }
 
-.history{
-    grid-column: 1/10;
-    grid-row: 2;
+.history {
+  grid-row: 4;
 }

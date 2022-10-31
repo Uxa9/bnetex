@@ -6,6 +6,7 @@ import AreaChart from './chart/areaChart';
 import styles from './investorView.module.scss';
 import ToolTip from 'lib/ui-kit/toolTip';
 import classNames from 'classnames';
+import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 
 type InvestorViewType = 'trade' | 'history';
 
@@ -15,83 +16,87 @@ const InvestorView = () => {
 
     return (
         <>
-            <div className='terminal-side-block'>
-                <div
-                    className={classNames(styles['investor-view-card'], 'card')}
-                >
-                    <div className={styles['investor-view-wrapper__header']}>
-                        <ToggleButtonGroup 
-                            title={''} 
-                            name={'investor_terminal'} 
-                            onChange={(value: InvestorViewType) => {
-                                setViewType(value);
-                            }}
-                            value={viewType}
-                        >
-                            <ToggleButton 
-                                text={'Торговля'} 
-                                value={'trade'} 
-                            />
-                            <ToggleButton 
-                                text={'История'} 
-                                value={'history'} 
-                            />
-                        </ToggleButtonGroup>
-
-                        <ToolTip 
-                            title='Что такое история?'
-                            infoText='История или история сделок - это исторические записи фактических транзакций по позициям. 
-                        В раздел попадают только исполненные ордера.'
+            <div
+                className={classNames(
+                    styles['investor-view-card'],
+                    styles['actions-card'],
+                    'card'
+                )}
+            >
+                <div className={styles['toggle-group-container']}>
+                    <ToggleButtonGroup 
+                        title={''} 
+                        name={'investor_terminal'} 
+                        onChange={(value: InvestorViewType) => {
+                            setViewType(value);
+                        }}
+                        value={viewType}
+                    >
+                        <ToggleButton 
+                            text={'Торговля'} 
+                            value={'trade'} 
                         />
-                    </div>
-                    {
-                        viewType === 'trade' ? 
-                            <TradeView /> :
-                            <HistoryView />
-                    }
+                        <ToggleButton 
+                            text={'История'} 
+                            value={'history'} 
+                        />
+                    </ToggleButtonGroup>
+                    <ToolTip 
+                        title='Что такое история?'
+                        infoText='История или история сделок - это исторические записи фактических транзакций по позициям. 
+                        В раздел попадают только исполненные ордера.'
+                    />
                 </div>
+                {
+                    viewType === 'trade' ? 
+                        <TradeView /> :
+                        <HistoryView />
+                }
+            </div>
+            <div
+                className={classNames(
+                    styles['investor-view-card'],
+                    styles['data-card'],
+                    'card'
+                )}
+            >
+                <ToolTip 
+                    title='Доход инвестора'
+                    infoText=''
+                />
                 <div
-                    className={classNames(
-                        styles['investor-view-card'],
-                        'card'
-                    )}
+                    className={styles['data-card__row']}
                 >
-                    <p
-                        className={styles['header']}
-                    >
-                    Доход инвестора
-                    </p>
-                    <div
-                        className={styles['investor-income']}
-                    >
-                        <span
-                            className={styles['investor-income-amount']}
-                        >
+                    <span className={'subtitle'}>
                         21 643.35 USDT
-                        </span>
-                        <span
-                            className={styles['investor-income-percent']}
-                        >
-                        +103.45%
-                        </span>
-                    </div>
-                </div>
-                <div className={classNames(styles['investor-view-card'], 'card')}>
-                    <AreaChart 
-                        dates={[]} 
-                        values={[]} 
-                        title={
-                            <ToolTip 
-                                title={'PnL'}
-                                infoText={'PNL (Profit and Loss) – это величина, которая показывает разницу между прибылью и убытками в трейдинге.'}
-                            />
-                        }
+                    </span>
+                    <SignedNumber 
+                        value={0}
+                        postfix={'%'}
+                        className={'text'}
                     />
                 </div>
             </div>
             <div className={classNames(
-                'terminal-side-block',
                 styles['investor-view-card'],
+                styles['PNL-card'],
+                'card'
+            )}
+            >
+                <AreaChart 
+                    dates={[]} 
+                    values={[]} 
+                    title={
+                        <ToolTip 
+                            title={'PnL'}
+                            infoText={'PNL (Profit and Loss) – это величина, которая показывает разницу между прибылью и убытками в трейдинге.'}
+                        />
+                    }
+                />
+            </div>
+            <div className={classNames(
+                styles['investor-view-card'],
+                styles['ROE-card'],
                 'card',
             )}
             >

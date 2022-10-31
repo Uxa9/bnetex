@@ -10,7 +10,7 @@ import StopAlgorythmModal from 'modules/terminal/modals/stopAlgorythm/stopAlgory
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useWalletActions from 'services/walletActions';
-import styles from '../investorView.module.scss';
+import styles from './tradeView.module.scss';
 
 interface TradeViewData {
     amount: number;
@@ -58,7 +58,7 @@ const TradeView = () => {
         },
         validate: {
             isNotGreaterThanBalance: value => {
-                if(value > balance) setError('amount', {message: 'На балансе недостаточно средств'});
+                if (value > balance) setError('amount', {message: 'На балансе недостаточно средств'});
                 return value <= balance;
             },
         },
@@ -85,62 +85,57 @@ const TradeView = () => {
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
+            className={styles['trade-view']}
         >
             <div
-                className={styles['investor-balance']}
+                className={styles['trade-view__balance']}
             >
-                <p
-                    className={styles['header']}
+                <p className={classNames(
+                    styles['balance-label'],
+                    'caption-mini'
+                )}
                 >
                     Баланс
                 </p>
                 <p
-                    className={styles['investor-balance-amount']}
+                    className={'subtitle'}
                 >
-                    {balance} USDT 
+                    { balance } USDT 
                 </p>
             </div>
-            <div
-                className={styles['investor-invest']}
-            >
-                <Input
-                    label={'Объем инвестиций (USDT)'}
-                    type={'number'}
-                    required
-                    errorText={errors.amount?.message}
-                    onKeyPress={blockEAndDashKey}
-                    {...rest}
-                    ref={e => {
-                        hookInputRef(e);
-                        inputRef.current = e;
-                    }}
-                    postfix=
-                        {
-                            <Button 
-                                text={'Весь баланс'}
-                                buttonStyle={'flat'}
-                                className={classNames(
-                                    styles['all-balance-btn'],
-                                    'caption'
-                                )}
-                                onClick={setInputValueToBalance}
-                                mini
-                                type={'button'}
-                            />
-                        }
-                />
-            </div>
-            <div
-                className={styles['button-wrapper']}
-            >
-                <Button
-                    disabled={!isValid}
-                    text={isAlgorythmActive ? 'Остановить работу' : 'Начать работу'}
-                    buttonStyle={'outlined'}
-                    buttonTheme={isAlgorythmActive ? 'red' : 'green'}
-                    fillContainer
-                />
-            </div>
+            <Input
+                label={'Объем инвестиций (USDT)'}
+                type={'number'}
+                required
+                errorText={errors.amount?.message}
+                onKeyPress={blockEAndDashKey}
+                {...rest}
+                ref={e => {
+                    hookInputRef(e);
+                    inputRef.current = e;
+                }}
+                postfix=
+                    {
+                        <Button 
+                            text={'Весь баланс'}
+                            buttonStyle={'flat'}
+                            className={classNames(
+                                styles['all-balance-btn'],
+                                'caption'
+                            )}
+                            onClick={setInputValueToBalance}
+                            mini
+                            type={'button'}
+                        />
+                    }
+            />
+            <Button
+                disabled={!isValid}
+                text={isAlgorythmActive ? 'Остановить работу' : 'Начать работу'}
+                buttonStyle={'outlined'}
+                buttonTheme={isAlgorythmActive ? 'red' : 'green'}
+                fillContainer
+            />
         </form>
     );
 };

@@ -1,8 +1,6 @@
 import { useEffect, FC, ReactElement } from 'react';
 import classNames from 'classnames';
-
 import Chart from 'react-apexcharts';
-
 import styles from './areaChart.module.scss';
 import { ToolTip } from 'lib/ui-kit';
 
@@ -20,7 +18,7 @@ const AreaChart:FC<ChartProps> = props => {
         chart : {
             zoom      : { enabled : false },
             selection : { enabled : false },
-            toolbar   : { show : false }
+            toolbar   : { show : false },
         },
         dataLabels : { enabled : false },
         // title : { text: 'Chart' },
@@ -58,7 +56,6 @@ const AreaChart:FC<ChartProps> = props => {
             {
                 title
             }
-
             <Chart
                 type='area'
                 height='90%'

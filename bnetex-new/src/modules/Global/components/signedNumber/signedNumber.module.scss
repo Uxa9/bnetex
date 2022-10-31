@@ -1,9 +1,13 @@
 @import 'src/styles/colors/colors';
 
 .positive {
-    color: $green-3;
+  color: $green-3;
 }
 
 .negative {
-    color: $red-3;
+  color: $red-3;
+}
+
+.zero {
+  color: $grayscale-6;
 }

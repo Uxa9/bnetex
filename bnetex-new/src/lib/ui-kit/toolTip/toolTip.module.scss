@@ -7,7 +7,6 @@
     align-items: center;
     column-gap: 8px;
     color: $grayscale-6;
-    padding-top: 16px;
     transition: $default-transition ease;
     cursor: help;
 
@@ -48,14 +47,11 @@
     width: 100vw;
     max-width: 50ch;
     background-color: $grayscale-2;
-    border-radius: 5px;
-    padding: 10px;
+    border-radius: 8px;
+    padding: 12px;
     visibility: hidden;
     opacity: 0;
     transition: $default-transition ease;
-
-    font-size: 14px;
-    font-weight: 300;
 }
 
 .needle {

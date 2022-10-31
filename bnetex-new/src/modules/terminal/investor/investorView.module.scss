@@ -1,57 +1,36 @@
 @import 'styles/colors/colors';
+@import 'styles/mixins';
 
-.investor-view-wrapper__header {
+.actions-card {
+  @include column-flex(24px);
+
+  .toggle-group-container {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    column-gap: 16px;
+    column-gap: 12px;
+  }
 }
 
-.terminal-side-block .card {
-    padding: 16px;
-}
+.data-card {
+  @include column-flex(16px);
 
-.header {
-    font-size: 14px;
-    color: $grayscale-6;
-    line-height: 20px;
-}
+  &__row {
+    @include align-center-row-flex(16px);
 
-.investor-income {
-    margin-top: 20px;
-    display: flex;
     justify-content: space-between;
-}
-
-.investor-income-percent {
-    color: $green-3;
-}
-
-.investor-balance,
-.investor-invest {
-    margin-top: 20px;
-}
-
-.investor-balance-amount {
-    font-size: 20px;
-    font-weight: 500;
-}
-
-.button-wrapper {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-.investor-prediction-period {
-    margin-top: 30px;
-}
-
-.all-balance-btn {
-    width: 17ch;
-    padding-right: 8px;
+  }
 }
 
 .investor-view-card {
-    padding: 16px;
+  padding: 16px;
+}
+
+.PNL-card {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.ROE-card {
+  grid-row: 4;
 }
