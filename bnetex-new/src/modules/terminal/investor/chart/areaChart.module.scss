@@ -1,9 +1,7 @@
-.chart-container {
-  width: 100%;
-}
-
 .chart-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
   overflow: hidden;
   min-height: 250px;
-  width: 100%;
+  max-width: 100%;
 }

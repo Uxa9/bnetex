@@ -43,8 +43,7 @@
 .tip {
   position: absolute;
   bottom: calc(100% + 16px);
-  right: 0px;
-  width: 90vw;
+  width: 80vw;
   max-width: 50ch;
   background-color: $grayscale-2;
   border-radius: 8px;
@@ -52,6 +51,14 @@
   visibility: hidden;
   opacity: 0;
   transition: $default-transition ease;
+
+  &--right {
+    left: -16px;
+  }
+
+  &--left {
+    right: 0px;
+  }
 }
 
 .needle {

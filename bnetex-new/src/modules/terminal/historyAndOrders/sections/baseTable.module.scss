@@ -4,6 +4,7 @@
 
 %base-terminal-table {
   width: 100%;
+  border-collapse: collapse;
 
   @include max-width(700) {
     tbody {

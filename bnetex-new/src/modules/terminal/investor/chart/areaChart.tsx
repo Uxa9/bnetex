@@ -49,9 +49,7 @@ const AreaChart:FC<ChartProps> = props => {
     }, [values]);
 
     return (
-        <div
-            className={styles['chart-container']}
-        >
+        <>
             {
                 title
             }
@@ -66,7 +64,7 @@ const AreaChart:FC<ChartProps> = props => {
                     series={[series]}
                 />
             </div>
-        </div>
+        </>
     );
 };
 
