@@ -1,0 +1,11 @@
+@import 'styles/colors/colors';
+
+.action {
+  &--purchase {
+    color: $green-4;
+  }
+
+  &--sale {
+    color: $red-4;
+  }
+}

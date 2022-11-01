@@ -4,6 +4,7 @@ import styles from './historyAndOrders.module.scss';
 import { ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
 import OpenedPositions from './sections/openedPositions/openedPositions';
 import OpenedOrders from './sections/openedOrders/openedOrders';
+import OrderHistory from './sections/orderHistory/orderHistory';
 
 type SectionType = 'openedPositions' | 'openedOrders' | 'tradeHistory';
 
@@ -40,7 +41,7 @@ const HistoryAndOrders = ({className}: {className: string}) => {
                 return <OpenedOrders />;
             }
             default: {
-                return <></>;
+                return <OrderHistory />;
             }
         }
     }, [ activeSection ]);
