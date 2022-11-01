@@ -7,7 +7,7 @@ import { blockEAndDashKey } from 'lib/utils';
 import { numberValidation } from 'lib/utils/hookFormValidation';
 import StartAlgorythmModal from 'modules/terminal/modals/startAlgorythm/startAlgorythm';
 import StopAlgorythmModal from 'modules/terminal/modals/stopAlgorythm/stopAlgorythm';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useWalletActions from 'services/walletActions';
 import styles from './tradeView.module.scss';
@@ -24,6 +24,7 @@ const TradeView = () => {
     const { open: openStopAlgorythmModal } = useModal(StopAlgorythmModal);
 
     const [balance, setBalance] = useState<number>(0);
+    const [operationalBalance, setOperationalBalance] = useState<number>(0);
     const [ isAlgorythmActive, setIsAlgorythmActive ] = useState<boolean>(false);
 
     useEffect(() => {
@@ -70,16 +71,17 @@ const TradeView = () => {
     };
 
     const onSubmit = (data: TradeViewData) => {
-        isAlgorythmActive ? 
-            openStopAlgorythmModal({
-                onSubmit: setIsAlgorythmActive,
-            }) : 
-            openStartAlgorythmModal({
-                amountToSend: data.amount,
-                onSubmit: setIsAlgorythmActive,
-            });
-
+        openStartAlgorythmModal({
+            amountToSend: data.amount,
+            onSubmit: setIsAlgorythmActive,
+        });
         reset();
+    };
+
+    const onStop = () => {
+        openStopAlgorythmModal({
+            onSubmit: setIsAlgorythmActive,
+        }); 
     };
  
     return (
@@ -90,52 +92,86 @@ const TradeView = () => {
             <div
                 className={styles['trade-view__balance']}
             >
-                <p className={classNames(
-                    styles['balance-label'],
-                    'caption-mini'
-                )}
-                >
+                <div  className={styles['balance-item']}>
+                    <p className={classNames(
+                        styles['balance-label'],
+                        'caption-mini'
+                    )}
+                    >
                     Баланс
-                </p>
-                <p
-                    className={'subtitle'}
-                >
-                    { balance } USDT 
-                </p>
+                    </p>
+                    <p
+                        className={'subtitle'}
+                    >
+                        { balance } USDT 
+                    </p>
+                </div>
+                {
+                    operationalBalance !== 0 &&
+                    <div  className={styles['balance-item']}>
+                        <p className={classNames(
+                            styles['balance-label'],
+                            'caption-mini'
+                        )}
+                        >
+                        В работе
+                        </p>
+                        <p
+                            className={'subtitle'}
+                        >
+                            { operationalBalance } USDT 
+                        </p>
+                    </div>
+                }
             </div>
-            <Input
-                label={'Объем (USDT)'}
-                type={'number'}
-                required
-                errorText={errors.amount?.message}
-                onKeyPress={blockEAndDashKey}
-                {...rest}
-                ref={e => {
-                    hookInputRef(e);
-                    inputRef.current = e;
-                }}
-                postfix=
-                    {
-                        <Button 
-                            text={'Весь баланс'}
-                            buttonStyle={'flat'}
-                            className={classNames(
-                                styles['all-balance-btn'],
-                                'caption'
-                            )}
-                            onClick={setInputValueToBalance}
-                            mini
-                            type={'button'}
-                        />
-                    }
-            />
-            <Button
-                disabled={!isValid}
-                text={isAlgorythmActive ? 'Остановить работу' : 'Начать работу'}
-                buttonStyle={'outlined'}
-                buttonTheme={isAlgorythmActive ? 'red' : 'green'}
-                fillContainer
-            />
+            {
+                !isAlgorythmActive &&
+                <Input
+                    label={'Объем (USDT)'}
+                    type={'number'}
+                    errorText={errors.amount?.message}
+                    onKeyPress={blockEAndDashKey}
+                    {...rest}
+                    ref={e => {
+                        hookInputRef(e);
+                        inputRef.current = e;
+                    }}
+                    postfix=
+                        {
+                            <Button 
+                                text={'Весь баланс'}
+                                buttonStyle={'flat'}
+                                className={classNames(
+                                    styles['all-balance-btn'],
+                                    'caption'
+                                )}
+                                onClick={setInputValueToBalance}
+                                mini
+                                type={'button'}
+                            />
+                        }
+                />
+            }
+            {
+                isAlgorythmActive ? 
+                    <Button
+                        disabled={!isValid && !isAlgorythmActive}
+                        text={'Остановить работу'}
+                        buttonStyle={'outlined'}
+                        buttonTheme={'red'}
+                        type={'button'}
+                        onClick={onStop}
+                        fillContainer
+                    />
+                    :
+                    <Button
+                        disabled={!isValid}
+                        text={'Начать работу'}
+                        buttonStyle={'outlined'}
+                        buttonTheme={'green'}
+                        fillContainer
+                    />
+            }
         </form>
     );
 };
