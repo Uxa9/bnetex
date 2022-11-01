@@ -1,21 +1,31 @@
 import { FC, useEffect, useState } from "react";
+import styles from './toggleSwitch.module.scss';
 
 export interface ToggleButtonProps {
-    active: boolean
+    active: boolean,
+    handleChange(): void
 }
 
 const ToggleSwitchButton: FC<ToggleButtonProps> = props => {
 
-    const [active, setActive] = useState();
+    const [active, setActive] = useState(false);
     
     useEffect(() => {
         setActive(props.active);
     }, [props.active]);
 
+    const handleChange = (checked: boolean | ((prevState: boolean) => boolean)) => {
+        setActive(checked);
+        props.handleChange();
+    }
+
     return (
-        <div class="container">
-  <label for="toggle-button" class="text">Toggle Button</label>
-</div>
+        <input 
+            type="checkbox"
+            className={styles['toggle-button']}
+            onChange={(e) => handleChange(e.target.checked)}
+            checked={active}
+        />
     );
 };
 

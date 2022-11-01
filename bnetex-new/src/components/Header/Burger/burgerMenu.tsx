@@ -1,4 +1,6 @@
 import classNames from 'classnames';
+import { useTheme } from 'lib/hooks/useTheme';
+import { ToggleSwitchButton } from 'lib/ui-kit';
 import { useEffect, useState } from 'react';
 import styles from './burgerMenu.module.scss';
 
@@ -7,6 +9,8 @@ export default function BurgerMenu(props: any) {
 
     const [isOpen, setIsOpen] = useState(false);
     const links = props.links();
+
+    const { theme, toggleTheme } = useTheme();
 
     useEffect(() => {
         setIsOpen(props.open);
@@ -21,9 +25,7 @@ export default function BurgerMenu(props: any) {
                         styles['menu-background-hidden']}`
                 }
                 onClick={props.onClose}
-            >
-
-            </div>
+            />
             <div
                 className={
                     `${styles['burger-menu']} 
@@ -31,16 +33,24 @@ export default function BurgerMenu(props: any) {
                         styles['burger-menu-active'] : 
                         styles['burger-menu-hidden']}`
                 }
-                onClick={props.onClose}
             >
                 {links.map((item: any) => {
                     return (
                         <div
                             className={styles['burger-menu-link']}
+                            onClick={props.onClose}
                         >
                             {item}
                         </div>)
                 })}
+                <div
+                    className={styles['theme-button-switcher']}
+                >
+                    <ToggleSwitchButton 
+                        active={(theme === "dark")}
+                        handleChange={toggleTheme}
+                    />
+                </div>
             </div>
         </>
     )
