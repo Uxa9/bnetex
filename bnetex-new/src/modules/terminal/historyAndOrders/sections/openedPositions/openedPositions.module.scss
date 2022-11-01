@@ -1,0 +1,106 @@
+@import 'styles/colors/colors';
+@import 'styles/mixins';
+@import 'styles/shadows';
+
+.opened-positions {
+  width: 100%;
+
+  @include max-width(700) {
+    tbody {
+      @include column-flex(8px);
+    }
+  }
+
+  .header-row {
+    color: $grayscale-6;
+
+    th {
+      padding: 12px 4px;
+      text-align: left;
+      font-weight: inherit;
+    }
+
+    @include max-width(700) {
+      display: none;
+    }
+  }
+
+  .row {
+    width: 100%;
+    border-bottom: 1px solid $grayscale-4;
+    background-color: $grayscale-card;
+  }
+
+  .body-row {
+    td {
+      padding: 12px 4px;
+      height: 100%;
+    }
+
+    @include max-width(700) {
+      @include card-shadow;
+
+      display: grid;
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+      row-gap: 12px;
+      padding: 8px;
+      border: none;
+      border-radius: 8px;
+
+      td {
+        @include column-flex(4px);
+
+        padding: 8px;
+        width: fit-content;
+      }
+    }
+  }
+
+  .margin {
+    @include column-flex;
+  }
+
+  .mobile-price-label {
+    @include min-width(801) {
+      display: none;
+    }
+  }
+
+  .joined-price {
+    @include min-width(801) {
+      display: none;
+    }
+
+    @include max-width(700) {
+      grid-column: 1/-1;
+    }
+  }
+
+  .desktop-price-label {
+    @include max-width(800) {
+      display: none;
+    }
+  }
+
+  .entry-price,
+  .marked-price,
+  .liquidation-price {
+    @include max-width(800) {
+      display: none !important;
+    }
+  }
+
+  .body-label {
+    color: $grayscale-6;
+
+    @include min-width(701) {
+      display: none;
+    }
+  }
+
+  .amount,
+  .PNL {
+    justify-self: flex-end;
+  }
+}

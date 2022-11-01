@@ -4,16 +4,17 @@ import { v4 as uuidV4 } from 'uuid';
 import classNames from 'classnames';
 
 export interface ToggleButtonProps extends InputHTMLAttributes<HTMLInputElement> {
-    text: string,
-    value: string | number,
-    exclusive?: boolean,
-    location?: 'left' | 'right' | 'center'
+    text: string | JSX.Element;
+    value: string | number;
+    exclusive?: boolean;
+    location?: 'left' | 'right' | 'center';
+    buttonStyle?: 'outlined' | 'underlined';
+    className?: string;
 }
 
 const ToggleButton: FC<ToggleButtonProps> = props => {
 
-    const { text, exclusive, location = 'center', ...rest } = props;
-
+    const { text, exclusive, location = 'center', buttonStyle = 'outlined', className,  ...rest } = props;
     const inputID = useMemo(() => uuidV4(), []);
 
     return (
@@ -25,9 +26,13 @@ const ToggleButton: FC<ToggleButtonProps> = props => {
                 className='visually-hidden'
                 {...rest}
             />
-
             <label
-                className={classNames(styles.button, styles[`button--${location}`])}
+                className={classNames(
+                    styles.button, 
+                    styles[`button--${buttonStyle}`],
+                    styles[`button--${location}`],
+                    className,
+                )}
                 htmlFor={inputID}
             >
                 {text}

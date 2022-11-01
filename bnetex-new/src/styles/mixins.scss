@@ -34,6 +34,12 @@
   }
 }
 
+@mixin min-width($resolution) {
+  @media (min-width: #{$resolution}px) {
+    @content;
+  }
+}
+
 @mixin mobile() {
   @include max-width($mobile-bp) {
     @content;

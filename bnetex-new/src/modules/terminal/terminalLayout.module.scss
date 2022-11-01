@@ -13,6 +13,12 @@
     grid-template-columns: 1fr;
     grid-template-rows: repeat(6, auto);
   }
+
+  @include mobile{
+    padding: 8px;
+    row-gap: 8px;
+    column-gap: 8px;
+  }
 }
 
 .chart {

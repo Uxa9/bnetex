@@ -1,126 +1,74 @@
-import { useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import classNames from 'classnames';
-
-import _l from 'locales';
-
 import styles from './historyAndOrders.module.scss';
+import { ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
+import OpenedPositions from './sections/openedPositions/openedPositions';
 
-type activeSectionType = 
-    'positions'      | 
-    'open_orders'    | 
-    'orders_history' | 
-    'trade_history';
+type SectionType = 'openedPositions' | 'openedOrders' | 'tradeHistory';
 
-interface historyAndOrdersSection{
-    section: activeSectionType,
+interface HistoryAndOrdersSection {
+    section: SectionType,
     title: string
 }
 
-const historyAndOrdersSection: historyAndOrdersSection[] = [
+const historyAndOrdersSections: HistoryAndOrdersSection[] = [
     {
-        section: 'positions',
+        section: 'openedPositions',
         title: 'Позиции',
     },
     {
-        section: 'open_orders',
+        section: 'openedOrders',
         title: 'Открытые ордера',
     },
     {
-        section: 'orders_history',
-        title: 'История оредеров',
-    },
-    {
-        section: 'trade_history',
+        section: 'tradeHistory',
         title: 'История сделок',
     },
 ];
 
-const HistoryAndOrders = ({className}: {className?: string}) => {
+const HistoryAndOrders = ({className}: {className: string}) => {
 
-    const [activeSection, setActiveSection] = useState<activeSectionType | undefined>(undefined);
+    const [activeSection, setActiveSection] = useState<SectionType>('openedPositions');
 
-    useEffect(() => {
-        setActiveSection(historyAndOrdersSection[0].section);
-    }, []);
+    const sectionComponent = useMemo(() => {
+        switch(activeSection) {
+            case 'openedPositions': {
+                return <OpenedPositions />;
+            }
+            default: {
+                return <></>;
+            }
+        }
+    }, [ activeSection ]);
 
     return (
-        <div
-            className={classNames( 
-                styles.tabs,
-                'card',
-                className
-            )}
+        <div className={classNames(
+            styles['history-and-orders'],
+            className
+        )}
         >
-            <div
-                className="block history-and-orders"
-            >
-                <div
-                    className="tabs"
+            <div className={styles['toggle-section-group']}>
+                <ToggleButtonGroup
+                    name={'terminalDataSection'}
+                    onChange={setActiveSection}
+                    value={activeSection}
+                    buttonStyle={'underlined'}
+                    buttonClassname={classNames(
+                        styles['toggle-section-button'],
+                        'text',
+                    )}
                 >
-                    <div
-                        className="tab tab-active"
-                    >
-                        {_l.positions}
-                        <div
-                            className="tab-counter"
-                        >
-                                1
-                        </div>
-                    </div>
-                    <div
-                        className="tab"
-                    >
-                        {_l.open_orders}
-                        <div
-                            className="tab-counter"
-                        >
-                                2
-                        </div>
-                    </div>
-                    <div
-                        className="tab"
-                    >
-                        {_l.orders_history}
-                    </div>
-                    <div
-                        className="tab"
-                    >
-                        {_l.deals_history}
-                    </div>
-                </div>
-                <div
-                    className="positions-table"
-                >
-                    <div
-                        className="position-header"
-                    >
-                        <span>
-                                Символ
-                        </span>
-                        <span>
-                                Размер
-                        </span>
-                        <span>
-                                Цена входа
-                        </span>
-                        <span>
-                                Цена маркировки
-                        </span>
-                        <span>
-                                Цена ликвидации
-                        </span>
-                        <span>
-                                Маржа
-                        </span>
-                        <span>
-                                PnL
-                        </span>
-                        <span>
-                                Закрыть все позиции
-                        </span>
-                    </div>
-                </div>
+                    {
+                        historyAndOrdersSections.map((section: HistoryAndOrdersSection) => 
+                            <ToggleButton 
+                                text={section.title}
+                                value={section.section}
+                            />
+                        )
+                    }
+                </ToggleButtonGroup>
             </div>
+            { sectionComponent }
         </div>
     );
 };

@@ -75,12 +75,14 @@ const Earn = () => {
                             <span className={classNames(styles['header__text--gray'], 'caption')}>YTD</span>
                             <SignedNumber 
                                 value={52.44}
+                                postfix={'USDT'}
                             />
                         </div>
                         <div className={styles['header__column']}>
                             <span className={classNames(styles['header__text--gray'], 'caption')}>24 ч.</span>
                             <SignedNumber 
                                 value={1.37}
+                                postfix={'USDT'}
                             />
                         </div>
                     </div>
