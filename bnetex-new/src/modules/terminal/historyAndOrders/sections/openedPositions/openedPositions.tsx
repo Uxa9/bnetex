@@ -27,12 +27,7 @@ const OpenedPositions = () => {
     return(
         <table className={styles['opened-positions']}>
             <thead>
-                <tr className={classNames(
-                    styles['header-row'],
-                    styles['row'],
-                    'caption'
-                )}
-                >
+                <tr className={'caption'}>
                     <th>Символ</th>
                     <th>Размер</th>
                     <th className={styles['desktop-price-label']}>Цена входа</th>
@@ -49,11 +44,7 @@ const OpenedPositions = () => {
                 {
                     mockedOpenePositions.map((position: OpenedPosition, index: number) => 
                         <tr 
-                            className={classNames(
-                                styles['row'],
-                                styles['body-row'],
-                                'text',
-                            )}
+                            className={'text'}
                             key={index}
                         >
                             <td className={styles['coin-symbol']}>

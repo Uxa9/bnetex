@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import styles from './historyAndOrders.module.scss';
 import { ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
 import OpenedPositions from './sections/openedPositions/openedPositions';
+import OpenedOrders from './sections/openedOrders/openedOrders';
 
 type SectionType = 'openedPositions' | 'openedOrders' | 'tradeHistory';
 
@@ -34,6 +35,9 @@ const HistoryAndOrders = ({className}: {className: string}) => {
         switch(activeSection) {
             case 'openedPositions': {
                 return <OpenedPositions />;
+            }
+            case 'openedOrders': {
+                return <OpenedOrders />;
             }
             default: {
                 return <></>;

@@ -1,5 +1,4 @@
 import { useEffect, FC, ReactElement } from 'react';
-import classNames from 'classnames';
 import Chart from 'react-apexcharts';
 import styles from './areaChart.module.scss';
 import { ToolTip } from 'lib/ui-kit';
@@ -56,13 +55,17 @@ const AreaChart:FC<ChartProps> = props => {
             {
                 title
             }
-            <Chart
-                type='area'
-                height='90%'
-                width={'100%'}
-                options={options}
-                series={[series]}
-            />
+            <div
+                className={styles['chart-wrapper']}
+            >
+                <Chart
+                    type='area'
+                    height='90%'
+                    width={'100%'}
+                    options={options}
+                    series={[series]}
+                />
+            </div>
         </div>
     );
 };
