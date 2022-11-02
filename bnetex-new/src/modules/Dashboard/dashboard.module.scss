@@ -33,6 +33,7 @@
         transition: $default-transition all;
         border-left: 2px solid transparent;
         color: $grayscale-11;
+        box-sizing: border-box;
 
         &:hover,
         &:focus,
@@ -52,4 +53,52 @@
     height: 1px;
     margin: 20px 0px;
     background-color: $grayscale-2;
+}
+
+@media screen and (max-width: 1200px) {
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .control-menu {
+        margin-bottom: 16px;
+        flex-direction: row;
+        width: auto;
+
+        box-shadow: none !important;
+        background: transparent !important;
+        overflow-x: auto;
+
+        .link {
+            white-space: nowrap;
+            text-align: center;
+            border-radius: 16px;
+            border: 2px solid transparent;
+            margin: 0 8px;
+            padding: 12px;
+
+            &:hover,
+            &:focus,
+            &--active {
+                border-color: $accent-3;
+                color: $accent-3;
+            }
+
+            &--active {
+                background-color: $accent-6;
+            }
+        }
+
+        &::after {
+            display: block;
+            content: "";
+
+            position: absolute;
+            right: 0;
+
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(90deg, #00000000 0%, $grayscale-1 100%);
+        }
+    }
 }

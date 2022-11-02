@@ -29,3 +29,74 @@
         padding: 16px 20px;
     }
 }
+
+.mobile-table {
+    display: none;
+}
+
+@media screen and (max-width: 900px) {
+    .transactions-table {
+        display: none;
+    }
+
+    .item-type {
+        &--withdraw {
+            color: $red-3;
+        }
+    
+        &--income {
+            color: $green-3;
+        }
+    }
+
+    .item-status {
+        width: 90px;
+        padding: 2px;
+        border-radius: 10px;
+        text-align: center;
+        
+        &--processing {
+            color: $orange-3;
+            background-color: $orange-6;
+        }
+    
+        &--confirmed {
+            color: $green-3;
+            background-color: $green-6;
+        }
+    
+        &--unpayed {
+            color: $red-3;
+            background-color: $red-6;
+        }
+    }
+
+    .mobile-table {
+        display: flex;
+        flex-direction: column;
+        padding: 12px;
+
+        .transaction-item {
+            display: flex;
+            flex-direction: column;
+            border-bottom: solid 1px $grayscale-2;
+            padding: 12px 0;
+
+            .item-first-row,
+            .item-second-row {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .item-first-row {
+                margin-bottom: 8px;
+            }
+
+            .item-type-amount-coin {
+                display: flex;
+                column-gap: 4px;
+                
+            }
+        }
+    }
+}

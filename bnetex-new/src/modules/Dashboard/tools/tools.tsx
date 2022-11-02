@@ -211,7 +211,7 @@ const Tools = () => {
                         </span>
                     </p>
                     <div
-                        className={styles['transaction-table-wrapper']}
+                        className={classNames(styles['transaction-table-wrapper'], 'scroll')}
                     >
                         <TransactionTable 
                             rows={rows}

@@ -13,14 +13,18 @@
     transform: rotate(90deg);
 }
 
-.wallet-category span {
-    color: $grayscale-6;
+.wallet-category {
+    white-space: nowrap;
 
-    &::before {
-        content: ' (';
-    }
-
-    &::after {
-        content: ' USDT)';
-    }
+    span {
+        color: $grayscale-6;
+        
+        &::before {
+            content: ' (';
+        }
+    
+        &::after {
+            content: ' USDT)';
+        }
+    } 
 }

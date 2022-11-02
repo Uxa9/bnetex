@@ -81,3 +81,19 @@ html {
 .apexcharts-legend-text {
     top: -3px;
 }
+
+.scroll {
+    &::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $grayscale-4;
+        border-radius: 2px;
+    }
+}
