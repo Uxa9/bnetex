@@ -1,6 +1,7 @@
 
 export interface AuthState {
     isAuth: boolean,
+    loading: boolean,
 }
 
 export enum AuthActionTypes {
