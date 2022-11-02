@@ -1,0 +1,46 @@
+@import 'styles/colors/colors';
+@import 'styles/mixins';
+
+.token-card {
+  @include align-center-row-flex(16px);
+
+  padding: 16px;
+  background-color: $grayscale-card;
+  border-radius: 16px;
+  height: fit-content;
+
+  &__skeletons {
+    @include column-flex(12px);
+  }
+
+  .skeleton-row {
+    @include align-center-row-flex(16px);
+
+    .skeleton:first-child {
+      background-color: $grayscale-5;
+      width: 65%;
+      height: 10px;
+    }
+
+    .skeleton:last-child {
+      background-color: $green-4;
+      width: 35%;
+      height: 10px;
+    }
+  }
+
+  .skeleton {
+    border-radius: 20px;
+    height: 5px;
+    width: 150px;
+    background-color: $grayscale-4;
+
+    &--red {
+      background-color: $red-4 !important;
+    }
+
+    &:last-of-type {
+      width: 100px;
+    }
+  }
+}

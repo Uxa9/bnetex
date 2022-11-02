@@ -53,7 +53,7 @@ const EmailValidation = () => {
         promiseWithLoading(confirmEmail(userEmail, data.activationCode))
             .then(() => {
                 loginUser();
-                goToState(`${AppLinksEnum.AUTH}/${AppLinksEnum.REGISTRATION_FINALIZE}`);
+                goToState(`/${AppLinksEnum.REGISTRATION_FINALIZE}`);
             })
             .catch((error) => bakeToast.error(error.response?.data.message));
     };

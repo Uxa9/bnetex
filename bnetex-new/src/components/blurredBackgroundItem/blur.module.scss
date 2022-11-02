@@ -1,41 +1,41 @@
 @import 'styles/colors/colors';
 
 .blur {
-    position: absolute;
-    filter: blur(170px);
-    border-radius: 50%;
-    --ellipse-ratio: 1.56;
-    --bg-item-height: 70vh;
-    opacity: 0.08;
-    max-height: 700px;
-    height: var(--bg-item-height);
-    z-index: -1;
+  position: absolute;
+  filter: blur(170px);
+  border-radius: 50%;
+  --ellipse-ratio: 1.56;
+  --bg-item-height: 70vh;
+  opacity: 0.08;
+  max-height: 700px;
+  height: var(--bg-item-height);
+  z-index: -1;
 
-    &_ellipse {
-        width: calc(70vh * var(--ellipse-ratio));
-        max-width: calc(700px * var(--ellipse-ratio));
+  &_ellipse {
+    width: calc(70vh * var(--ellipse-ratio));
+    max-width: calc(700px * var(--ellipse-ratio));
+  }
+
+  &_circle {
+    width: var(--bg-item-height);
+    max-width: 700px;
+  }
+
+  &_color {
+    &--purple {
+      background-color: $accent-3;
     }
 
-    &_circle {
-        width: var(--bg-item-height);
-        max-width: 700px;
+    &--red {
+      background-color: $red-3;
     }
 
-    &_color {
-        &--purple {
-            background-color: $accent-3;
-        }
-
-        &--red {
-            background-color: $red-3;
-        }
-
-        &--green {
-            background-color: $green-3;
-        }
-
-        &--blue {
-            background-color: $blue-3;
-        }
+    &--green {
+      background-color: $green-3;
     }
+
+    &--blue {
+      background-color: $blue-3;
+    }
+  }
 }

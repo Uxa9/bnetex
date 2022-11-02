@@ -4,8 +4,7 @@ import Earn from './earnSection';
 import Invest from './investSection';
 import ContactSection from './contactSection';
 
-export const MainPage = () => {
-
+const MainPage = () => {
     return(
         <div className={styles['landing-wrapper']}>
             <div className={styles['landing-container']}>
@@ -17,3 +16,5 @@ export const MainPage = () => {
         </div>
     );
 };
+
+export default MainPage;
