@@ -2,9 +2,9 @@ import { Outlet, useLocation } from 'react-router-dom';
 import styles from './authLayout.module.scss';
 import Blur, { BlurProps } from 'components/blurredBackgroundItem';
 import { lazy, Suspense, useCallback } from 'react';
-import Skeleton from 'lib/ui-kit/skeleton/skeleton';
 import { authBlurItems } from './blurItems';
 import AuthAbstractImagery from './components/authAbstractImagery';
+import FormCardSkeleton from './components/FormCard/formCardSkeleton';
 
 const Login = lazy(() => import('modules/Auth/sections/login'));
 const Registration = lazy(() => import('modules/Auth/sections/registration'));
@@ -37,15 +37,15 @@ const AuthLayout = () => {
         <main className={styles.layout}>
             <div className={styles.container}>
                 {
-                    authBlurItems.map((item: BlurProps, index: number) => {
+                    authBlurItems.map((item: BlurProps, index: number) => 
                         <Blur 
                             key={index}
                             {...item} 
-                        />;
-                    })
+                        />
+                    )
                 }
                 <Outlet />
-                <Suspense  fallback={<Skeleton height='10px' />}>
+                <Suspense  fallback={<FormCardSkeleton />}>
                     { loadSection() }
                 </Suspense>
                 <AuthAbstractImagery />
