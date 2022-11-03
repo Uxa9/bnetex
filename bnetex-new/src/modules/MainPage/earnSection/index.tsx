@@ -16,8 +16,7 @@ const Earn = () => {
     const { goToState } = useGoToState();
     const isAuth = useTypedSelector(state => state.auth.isAuth);
     const { theme } = useTheme();
-    const { goToState } = useGoToState();
-
+    
     return (
         <section className={styles['start-earning']}>
             <Blur 

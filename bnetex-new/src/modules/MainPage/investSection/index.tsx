@@ -15,7 +15,6 @@ const Invest = () => {
     const { AUTH, LOGIN } = AppLinksEnum;
     const { goToState } = useGoToState();
     const isAuth = useTypedSelector(state => state.auth.isAuth);
-    const navigate = useNavigate();
     const { theme } = useTheme();
 
     return (

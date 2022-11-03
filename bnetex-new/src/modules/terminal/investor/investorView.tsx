@@ -121,18 +121,6 @@ const InvestorView = () => {
                         </span>
                     </div>
                 </div>
-                <div className={classNames(styles['investor-view-card'], 'card')}>
-                    <AreaChart
-                        dates={graphicData.dates}
-                        values={graphicData.pnlValues}
-                        title={
-                            <ToolTip
-                                title={'PnL'}
-                                infoText={'PNL (Profit and Loss) – это величина, которая показывает разницу между прибылью и убытками в трейдинге.'}
-                            />
-                        }
-                    />
-                </div>
             </div>
             <div className={classNames(
                 styles['investor-view-card'],
@@ -140,11 +128,11 @@ const InvestorView = () => {
                 'card'
             )}
             >
-                <AreaChart 
-                    dates={[]} 
-                    values={[]} 
+                <AreaChart
+                    dates={graphicData.dates}
+                    values={graphicData.pnlValues}
                     title={
-                        <ToolTip 
+                        <ToolTip
                             title={'PnL'}
                             infoText={'PNL (Profit and Loss) – это величина, которая показывает разницу между прибылью и убытками в трейдинге.'}
                         />
