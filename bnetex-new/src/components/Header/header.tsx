@@ -11,7 +11,7 @@ import { useState } from 'react';
 import BurgerMenu from './Burger/burgerMenu';
 
 const Header = () => {
-    const { AUTH, REGISTRATION, LOGIN } = AppLinksEnum;
+    const { AUTH, REGISTRATION, LOGIN, DASHBOARD, MAIN_WALLET, HOME, TERMINAL } = AppLinksEnum;
     const { goToState } = useGoToState();
     const { logoutUser } = useActions();
     const isAuth = useTypedSelector(state => state.auth.isAuth);
@@ -26,7 +26,7 @@ const Header = () => {
                 buttonStyle={'thin'}
                 Icon={Wallet}
                 className={styles.header__btn}
-                onClick={() => goToState('/dashboard/wallet/main')}
+                onClick={() => goToState(`${DASHBOARD}/${MAIN_WALLET}`)}
                 mini
             />,
             <Button
@@ -34,7 +34,7 @@ const Header = () => {
                 buttonStyle={'thin'}
                 Icon={User}
                 className={styles.header__btn}
-                onClick={() => goToState('/dashboard')}
+                onClick={() => goToState(DASHBOARD)}
                 mini
             />,
             <div
@@ -48,7 +48,7 @@ const Header = () => {
                     onClick={logoutUser}
                     mini
                 />
-            </div>
+            </div>,
         ] : [
             <Button
                 text={'Войти'}
@@ -66,8 +66,8 @@ const Header = () => {
                     onClick={() => goToState(`${AUTH}/${REGISTRATION}`)}
                     mini
                 />
-            </div>
-        ]
+            </div>,
+        ];
     };
 
     return (
@@ -78,7 +78,7 @@ const Header = () => {
                 className={styles.logo}
                 onClick={() => {
                     setActiveBurger(false);
-                    goToState('/');
+                    goToState(HOME);
                 }}
             />
             <nav className={styles.links}>
@@ -87,7 +87,7 @@ const Header = () => {
                         text={'Алготрейдинг'}
                         buttonStyle={'thin'}
                         className={styles.header__btn}
-                        onClick={() => goToState('/terminal/investor')}
+                        onClick={() => goToState(`${TERMINAL}/investor`)}
                         mini
                     />
                 </div>

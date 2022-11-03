@@ -1,104 +1,104 @@
 @import 'styles/colors/colors';
 @import 'styles/variables';
 
+$control-menu-width: 285px;
+
 .wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .dashboard {
-    display: flex;
-    column-gap: 8px;
-
-    .dashboard-content {
-        flex-grow: 2;
-    }
+  display: grid;
+  grid-template-columns: $control-menu-width 1fr;
+  column-gap: 16px;
+  row-gap: 16px;
 }
 
 .control-menu {
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
-    min-width: 285px;
-    flex-grow: 1;
-    padding: 20px 0px;
-    align-items: center;
-    height: fit-content;
-    row-gap: 10px;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  flex-grow: 1;
+  padding: 16px 0px;
+  align-items: center;
+  height: fit-content;
+  row-gap: 8px;
+  width: 100%;
 
-    .link {
-        width: 100%;
-        padding: 16px 20px;
-        transition: $default-transition all;
-        border-left: 2px solid transparent;
-        color: $grayscale-11;
-        box-sizing: border-box;
+  .link {
+    width: 100%;
+    padding: 16px 20px;
+    transition: $default-transition all;
+    border-left: 2px solid transparent;
+    color: $grayscale-11;
+    box-sizing: border-box;
 
-        &:hover,
-        &:focus,
-        &--active {
-            border-left: 2px solid $accent-3;
-            color: $accent-3;
-        }
-
-        &--active {
-            background-color: $accent-6;
-        }
+    &:hover,
+    &:focus,
+    &--active {
+      border-left: 2px solid $accent-3;
+      color: $accent-3;
     }
+
+    &--active {
+      background-color: $accent-6;
+    }
+  }
 }
 
 .separator {
-    width: 90%;
-    height: 1px;
-    margin: 20px 0px;
-    background-color: $grayscale-2;
+  width: 90%;
+  height: 1px;
+  margin: 20px 0px;
+  background-color: $grayscale-2;
 }
 
 @media screen and (max-width: 1200px) {
-    .dashboard {
-        flex-direction: column;
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .control-menu {
+    margin-bottom: 16px;
+    flex-direction: row;
+    width: auto;
+
+    box-shadow: none !important;
+    background: transparent !important;
+    overflow-x: auto;
+
+    .link {
+      white-space: nowrap;
+      text-align: center;
+      border-radius: 16px;
+      border: 2px solid transparent;
+      margin: 0 8px;
+      padding: 12px;
+
+      &:hover,
+      &:focus,
+      &--active {
+        border-color: $accent-3;
+        color: $accent-3;
+      }
+
+      &--active {
+        background-color: $accent-6;
+      }
     }
 
-    .control-menu {
-        margin-bottom: 16px;
-        flex-direction: row;
-        width: auto;
+    &::after {
+      display: block;
+      content: '';
 
-        box-shadow: none !important;
-        background: transparent !important;
-        overflow-x: auto;
+      position: absolute;
+      right: 0;
 
-        .link {
-            white-space: nowrap;
-            text-align: center;
-            border-radius: 16px;
-            border: 2px solid transparent;
-            margin: 0 8px;
-            padding: 12px;
-
-            &:hover,
-            &:focus,
-            &--active {
-                border-color: $accent-3;
-                color: $accent-3;
-            }
-
-            &--active {
-                background-color: $accent-6;
-            }
-        }
-
-        &::after {
-            display: block;
-            content: "";
-
-            position: absolute;
-            right: 0;
-
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(90deg, #00000000 0%, $grayscale-1 100%);
-        }
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(90deg, #00000000 0%, $grayscale-1 100%);
     }
+  }
 }

@@ -8,10 +8,11 @@ import styles from './registrationFinalize.module.scss';
 
 const RegistrationFinalize = () => {
     const { goToState } = useGoToState();
+    const { HOME, DASHBOARD, MAIN_WALLET }  = AppLinksEnum;
 
     useEffect(() => {
         const isJustRegistered = localStorage.getItem('justRegistered');
-        isJustRegistered ? localStorage.removeItem('justRegistered') : goToState(AppLinksEnum.HOME);
+        isJustRegistered ? localStorage.removeItem('justRegistered') : goToState(HOME);
     }, []);
 
     return(
@@ -31,7 +32,7 @@ const RegistrationFinalize = () => {
             </p>
             <Button 
                 text={'Перейти в кошелек'}
-                onClick={() => goToState(`${AppLinksEnum.DASHBOARD}/wallet/main`)}
+                onClick={() => goToState(`${DASHBOARD}/${MAIN_WALLET}`)}
             />
         </div>
     );

@@ -34,15 +34,16 @@ const Tools = () => {
     const [investBalance, setInvestBalance] = useState<number>(0);
     const { promiseWithLoading } = usePromiseWithLoading();
     const { getWallets } = useWalletActions();
+    const { DEPOSIT, WITHDRAW, DASHBOARD, TRANSACTIONS } = AppLinksEnum;
 
     const [roe, setRoe] = useState<GraphicProps>({
         dates: [],
-        values: []
+        values: [],
     });
 
     const [pnl, setPnl] = useState<GraphicProps>({
         dates: [],
-        values: []
+        values: [],
     });
 
     const [rows, setRows] = useState<RowData[]>([]);
@@ -52,14 +53,14 @@ const Tools = () => {
             .then(res => {
                 setRoe({
                     dates: res.dates,
-                    values: res.values.map((item: any) => Number(Number(item).toFixed(2)))
+                    values: res.values.map((item: any) => Number(Number(item).toFixed(2))),
                 });
             });
         getPnL(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
             .then(res => {
                 setPnl({
                     dates: res.dates,
-                    values: res.values.map((item: any) => Number(Number(item).toFixed(2)))
+                    values: res.values.map((item: any) => Number(Number(item).toFixed(2))),
                 });
             });
         getUserTransactions(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
@@ -68,10 +69,10 @@ const Tools = () => {
                     return ({
                         currency : 'usdt',
                         date : new Date(item.createdAt),
-                        type : item.type == 1 ? "withdraw" : "deposit",
-                        amount : item.amount
-                    })
-                })
+                        type : item.type == 1 ? 'withdraw' : 'deposit',
+                        amount : item.amount,
+                    });
+                });
 
                 setRows(data);
             });
@@ -98,12 +99,12 @@ const Tools = () => {
                     <Button
                         buttonStyle={'primary'}
                         text={'Ввод'}
-                        onClick={() => goToState(AppLinksEnum.DEPOSIT)}
+                        onClick={() => goToState(DEPOSIT)}
                     />
                     <Button
                         buttonStyle={'outlined'}
                         text={'Вывод'}
-                        onClick={() => goToState(AppLinksEnum.WITHDRAW)}
+                        onClick={() => goToState(WITHDRAW)}
                     />
                 </div>
             </div>
@@ -148,7 +149,7 @@ const Tools = () => {
                                     toolbar   : { show : false },
                                     offsetX   : -20,
                                     offsetY   : -30,
-                                    width     : '250%'
+                                    width     : '250%',
                                 },
                                 grid: { 
                                     show: false,
@@ -184,7 +185,7 @@ const Tools = () => {
                                     showForSingleSeries: false,
                                     offsetY: -20,
                                     offsetX: -15,
-                                    horizontalAlign: 'left'
+                                    horizontalAlign: 'left',
                                 },
                                 colors : ['#9202FF', '#1A75FF'],
                                 dataLabels : { enabled : false },
@@ -205,7 +206,7 @@ const Tools = () => {
                         </span>
                         <span
                             className={styles['header-show-all']} 
-                            onClick={() => goToState('/dashboard/transactions')}
+                            onClick={() => goToState(`${DASHBOARD}/${TRANSACTIONS}`)}
                         >
                             Посмотреть все
                         </span>

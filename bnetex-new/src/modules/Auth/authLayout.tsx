@@ -1,10 +1,11 @@
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import styles from './authLayout.module.scss';
 import Blur, { BlurProps } from 'components/blurredBackgroundItem';
 import { lazy, Suspense, useCallback } from 'react';
 import { authBlurItems } from './blurItems';
 import AuthAbstractImagery from './components/authAbstractImagery';
 import FormCardSkeleton from './components/FormCard/formCardSkeleton';
+import { AppLinksEnum } from 'routes/appLinks';
 
 const Login = lazy(() => import('modules/Auth/sections/login'));
 const Registration = lazy(() => import('modules/Auth/sections/registration'));
@@ -14,21 +15,26 @@ const EmailValidation = lazy(() => import('modules/Auth/sections/emailValidation
 const AuthLayout = () => {
     const { pathname } = useLocation();
 
+    const { REGISTRATION, LOGIN, AUTH, REGISTRATION_FINALIZE, VERIFY_EMAIL } = AppLinksEnum;
+
     const loadSection = useCallback(() => {
-        const authSectionPath = pathname.split('/')[2];
+        const authSectionPath = pathname.split('/').at(-1);
         switch (authSectionPath) {
-            case 'signup': {
+            case REGISTRATION: {
                 return <Registration />;
             }
-            case 'registration-finalize':{
+            case REGISTRATION_FINALIZE:{
                 return <RegistrationFinalize />;
             }
-            case 'email-verification': {
+            case VERIFY_EMAIL: {
                 return <EmailValidation />;
             }
-            case 'login':
-            default: {
+            case LOGIN:
+            case AUTH: {
                 return <Login />;
+            }
+            default: {
+                return <Navigate to={'/'} />; //toDo: 404
             }
         }
     }, [ pathname ]);
