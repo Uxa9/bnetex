@@ -34,6 +34,54 @@ export default function BurgerMenu(props: any) {
                         styles['burger-menu-hidden']}`
                 }
             >
+                {/* {links.map((item: any) => {
+                    return (
+                        <div
+                            className={styles['burger-menu-link']}
+                            onClick={props.onClose}
+                        >
+                            {item}
+                        </div>)
+                })}
+                <div 
+                    className={styles['theme-button-wrapper']}
+                >
+                    <span>
+                        Темная тема
+                    </span>
+                    <div
+                        className={styles['theme-button-switcher']}
+                    >
+                        <ToggleSwitchButton 
+                            active={(theme === "dark")}
+                            handleChange={toggleTheme}
+                        />
+                    </div>
+                </div> */}
+                {props.auth ? 
+                    <>
+                        <div
+                            className={styles['burger-menu-top']}
+                        >
+                            {links.map((item: any, index: number) => {
+                                if (index === links[links.length - 1]) 
+                                    return (<></>);
+                                return (
+                                    <div
+                                        className={styles['burger-menu-link']}
+                                        onClick={props.onClose}
+                                    >
+                                        {item}
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </> :
+                    <>
+
+                    </>
+                }
+
                 {links.map((item: any) => {
                     return (
                         <div
@@ -43,13 +91,20 @@ export default function BurgerMenu(props: any) {
                             {item}
                         </div>)
                 })}
-                <div
-                    className={styles['theme-button-switcher']}
+                <div 
+                    className={styles['theme-button-wrapper']}
                 >
-                    <ToggleSwitchButton 
-                        active={(theme === "dark")}
-                        handleChange={toggleTheme}
-                    />
+                    <span>
+                        Темная тема
+                    </span>
+                    <div
+                        className={styles['theme-button-switcher']}
+                    >
+                        <ToggleSwitchButton 
+                            active={(theme === "dark")}
+                            handleChange={toggleTheme}
+                        />
+                    </div>
                 </div>
             </div>
         </>

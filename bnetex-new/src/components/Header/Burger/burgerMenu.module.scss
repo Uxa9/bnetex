@@ -92,7 +92,16 @@
     bottom: 16px;
 }
 
+.theme-button-wrapper {
+    display: flex;
+    align-items: center;
+
+    span {
+        margin-right: 8px;
+    }
+}
+
 .theme-button-switcher {
     width: 48px;
-    height: 54px;
+    height: 24px;
 }
