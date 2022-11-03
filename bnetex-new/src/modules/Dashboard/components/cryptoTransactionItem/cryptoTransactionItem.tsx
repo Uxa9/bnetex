@@ -5,7 +5,7 @@ import { CryptoTransactionItemStatusMap, CryptoTransactionItemType } from 'lib/t
 import { IconButton } from 'lib/ui-kit';
 import CopyButton from 'lib/ui-kit/copyButton/copyButton';
 import { formatDate } from 'lib/utils/formatDate';
-import CryptoTransactionItemModal from 'modules/Dashboard/cryptoTransactionItemModal/cryptoTransactionItemModal';
+import CryptoTransactionItemModal from 'modules/Dashboard/components/cryptoTransactionItemModal/cryptoTransactionItemModal';
 import styles from './cryptoTransactionItem.module.scss';
 
 interface CryptoTransactionItemProps{

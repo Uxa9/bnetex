@@ -2,50 +2,20 @@ import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import styles from './dashboard.module.scss';
-
-type activeSectionType = 'tools' | 'settings' | 'wallet/main' | 'wallet/investor' | 'transactions';
-
-interface dashboardSection{
-    link: activeSectionType,
-    title: string
-}
-
-const dashboardSections: dashboardSection[] = [
-    {
-        link: 'tools',
-        title: 'Панель инструментов',
-    },
-    {
-        link: 'settings',
-        title: 'Настройки',
-    },
-    {
-        link: 'wallet/main',
-        title: 'Основной кошелек',
-    },
-    {
-        link: 'wallet/investor',
-        title: 'Инвестиционный кошелек',
-    },
-    {
-        link: 'transactions',
-        title: 'История транзакций',
-    },
-];
+import { ActiveSectionType, dashboardSections, DashboardSection } from './dashboardSections';
 
 const Dashboard = () => {
-    const [activeSection, setActiveSection] = useState<activeSectionType | undefined>(undefined);
-    const location = useLocation();
+    const [activeSection, setActiveSection] = useState<ActiveSectionType | undefined>(undefined);
+    const { pathname } = useLocation();
 
     useEffect(() => {
-        const url = window.location.href;
-        dashboardSections.forEach((section: dashboardSection) => {
-            if(url.match(section.link)){
+        dashboardSections.forEach((section: DashboardSection) => {
+            if(pathname.match(section.link)) {
                 setActiveSection(section.link);
                 return;
             }
         });
-    }, [location.pathname]);
+    }, [ pathname ]);
 
     return(
         <>
@@ -53,7 +23,7 @@ const Dashboard = () => {
                 <main className={classNames('container', styles.dashboard)}>
                     <aside className={classNames(styles['control-menu'], 'card', 'scroll')}>
                         {
-                            dashboardSections.map((section: dashboardSection) => 
+                            dashboardSections.map((section: DashboardSection) => 
                                 <Link 
                                     key={section.link}
                                     to={section.link}
@@ -77,7 +47,6 @@ const Dashboard = () => {
                 </main>
             </div>
         </>
-
     );
 };
 

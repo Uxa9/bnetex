@@ -6,7 +6,7 @@ import { formatDate } from 'lib/utils/formatDate';
 import { useEffect, useState } from 'react';
 import getUserTransactions from 'services/getUserTransactions';
 import { getTransactions } from 'services/transactions';
-import CryptoTransactionItem from './cryptoTransactionItem/cryptoTransactionItem';
+import CryptoTransactionItem from '../../components/cryptoTransactionItem/cryptoTransactionItem';
 import styles from './transactions.module.scss';
 
 const blankTransactions: CryptoTransactionItemType[] = [

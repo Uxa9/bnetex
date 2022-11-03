@@ -1,6 +1,6 @@
 import styles from './settings.module.scss';
 import classNames from 'classnames';
-import SettingItem, { SettingItemProps } from './SettingItem/settingItem';
+import SettingItem, { SettingItemProps } from '../../components/SettingItem/settingItem';
 import { Button } from 'lib/ui-kit';
 import { Key } from 'assets/images/icons';
 
