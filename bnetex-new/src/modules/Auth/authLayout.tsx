@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import styles from './authLayout.module.scss';
 import Blur, { BlurProps } from 'components/blurredBackgroundItem';
 import { lazy, Suspense, useCallback } from 'react';
@@ -44,7 +44,6 @@ const AuthLayout = () => {
                         />
                     )
                 }
-                <Outlet />
                 <Suspense  fallback={<FormCardSkeleton />}>
                     { loadSection() }
                 </Suspense>

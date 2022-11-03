@@ -1,14 +1,8 @@
 import PageLayout from 'components/pageLayout';
 import TerminalLayout from 'modules/terminal/terminalLayout';
 import InvestorView from 'modules/terminal/investor/investorView';
-import Dashboard from 'modules/Dashboard/dashboard';
-import MainWallet from 'modules/Dashboard/mainWallet/mainWallet';
-import Settings from 'modules/Dashboard/settings/settings';
-import Tools from 'modules/Dashboard/tools/tools';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
-import InvestorWallet from 'modules/Dashboard/investorWallet/investorWallet';
-import Transactions from 'modules/Dashboard/transactions/transactions';
 import Deposit from 'modules/Payments/Deposit/deposit';
 import Withdraw from 'modules/Payments/Withdraw/withdraw';
 import WithdrawConfirm from 'modules/Payments/Withdraw/confirm';
@@ -20,6 +14,7 @@ import { ProtectedRoute } from './protectedRoute';
 
 const MainPage = lazy(() => import('modules/MainPage/MainPage'));
 const AuthLayout = lazy(() => import('modules/Auth/authLayout'));
+const Dashboard = lazy(() => import('modules/Dashboard/dashboard'));
 
 const AppRoutes = () => {
 
@@ -47,19 +42,13 @@ const AppRoutes = () => {
                         <Route path="investor" element={<InvestorView />} />
                     </Route>
                     <Route 
-                        path={DASHBOARD} 
+                        path={`${DASHBOARD}/*`} 
                         element={
                             <ProtectedRoute>
                                 <Dashboard />
                             </ProtectedRoute>
                         }
                     >
-                        <Route index element={<Navigate to={'tools'} />}></Route>
-                        <Route path='tools' element={<Tools />} />
-                        <Route path='settings' element={<Settings />} />
-                        <Route path='wallet/main' element={<MainWallet />} />
-                        <Route path='wallet/investor' element={<InvestorWallet />} />
-                        <Route path='transactions' element={<Transactions />} />
                     </Route>
                     <Route path={`${AUTH}/*`} element={<AuthLayout />} />
                     <Route path={DEPOSIT} element={<Deposit />}></Route>

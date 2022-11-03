@@ -3,7 +3,7 @@ import { Modal } from 'components/ModalSpawn/Modal/modal';
 import { BaseModalProps } from 'lib/hooks/useModal';
 import { CryptoTransactionItemStatusMap, CryptoTransactionItemType } from 'lib/types/cryptoTransactionItem';
 import styles from './cryptoTransactionItemModal.module.scss';
-import itemStyles from '../transactions/cryptoTransactionItem/cryptoTransactionItem.module.scss';
+import itemStyles from '../cryptoTransactionItem/cryptoTransactionItem.module.scss';
 import CopyButton from 'lib/ui-kit/copyButton/copyButton';
 import { formatDate } from 'lib/utils/formatDate';
 
