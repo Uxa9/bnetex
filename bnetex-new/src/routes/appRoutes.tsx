@@ -1,11 +1,6 @@
 import PageLayout from 'components/pageLayout';
-import TerminalLayout from 'modules/terminal/terminalLayout';
-import InvestorView from 'modules/terminal/investor/investorView';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
-import Deposit from 'modules/Payments/Deposit/deposit';
-import Withdraw from 'modules/Payments/Withdraw/withdraw';
-import WithdrawConfirm from 'modules/Payments/Withdraw/confirm';
 import { lazy, Suspense, useEffect } from 'react';
 import useAuthActions from 'services/auth';
 import { useActions } from 'lib/hooks/useActionCreators';
@@ -15,6 +10,11 @@ import { ProtectedRoute } from './protectedRoute';
 const MainPage = lazy(() => import('modules/MainPage/MainPage'));
 const AuthLayout = lazy(() => import('modules/Auth/authLayout'));
 const Dashboard = lazy(() => import('modules/Dashboard/dashboard'));
+const Deposit = lazy(() => import('modules/Payments/Deposit/deposit'));
+const Withdraw = lazy(() => import('modules/Payments/Withdraw/withdraw'));
+const WithdrawConfirm = lazy(() => import('modules/Payments/Withdraw/confirm'));
+const TerminalLayout = lazy(() => import('modules/terminal/terminalLayout'));
+const InvestorView = lazy(() => import('modules/terminal/investor/investorView'));
 
 const AppRoutes = () => {
 

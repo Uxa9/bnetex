@@ -18,7 +18,7 @@ const Dashboard = () => {
     const { TOOLS, SETTINGS, MAIN_WALLET, INVESTOR_WALLET, TRANSACTIONS, DASHBOARD } = AppLinksEnum;
 
     useEffect(() => {
-        setActiveSection('tools'); // костыль, передалать
+        setActiveSection('tools'); //toDo костыль, передалать
         dashboardSections.forEach((section: DashboardSection) => {
             if (pathname.match(section.link)) {
                 setActiveSection(section.link);

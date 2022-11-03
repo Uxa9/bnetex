@@ -5,7 +5,6 @@ import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
 import { Button, Input } from 'lib/ui-kit';
 import { requiredValidation } from 'lib/utils/hookFormValidation';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { AppLinksEnum } from 'routes/appLinks';
 import useWalletActions from 'services/walletActions';
@@ -68,7 +67,6 @@ const WithdrawConfirm = () => {
                         errorText={errors.confirmCode?.message}
                         key={'confirmCode'} 
                     />
-
                     <Button 
                         text={'Отправить'}
                         type={'submit'}

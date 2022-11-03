@@ -19,6 +19,7 @@ const Header = () => {
 
     const [activeBurger, setActiveBurger] = useState(false);
 
+    // toDo: тут хуйня какая-то, массив точно не нужен, можно через <></>
     const renderLinks = () => {
         return isAuth ? [
             <Button
