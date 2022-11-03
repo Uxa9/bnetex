@@ -6,6 +6,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { ResendActivationLink } from './dto/resend-activation-link.dto';
 import { GetActivationLinkTime } from './dto/get-activation-link-time.dto';
+import { TokenVerify } from './dto/token-verify.dto';
 
 // todo : add api description
 
@@ -38,6 +39,11 @@ export class AuthController {
     @Post('confirm-email')
     confirmEmail(@Body() confirmDto: ConfirmEmail) {
         return this.authService.confirmEmail(confirmDto);
+    }
+
+    @Post('token/verify/')
+    verifyToken(@Body() dto: TokenVerify) {
+        return this.authService.verifyToken(dto);
     }
 
 }
