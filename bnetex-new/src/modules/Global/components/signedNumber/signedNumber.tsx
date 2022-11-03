@@ -8,7 +8,7 @@ interface SignedNumberProps {
     className?: string;
 }
 
-const SignedNumber = ({value, postfix = 'USDT', withSign = true, className}: SignedNumberProps) => {
+const SignedNumber = ({value, postfix, withSign = true, className}: SignedNumberProps) => {
 
     const isPositive = value > 0;
 

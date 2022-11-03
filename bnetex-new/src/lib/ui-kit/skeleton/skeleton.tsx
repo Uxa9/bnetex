@@ -4,12 +4,23 @@ import styles from './skeleton.module.scss';
 interface SkeletonProps {
     height: string;
     width?: string;
-    type?: 'line' | 'square' | 'circle';
+    type?: 'line' | 'square' | 'circle' | 'input' | 'button';
+}
+
+interface InlineStyle {
+    width?: string;
+    height?: string;
 }
 
 const Skeleton = ({height, width = '100%', type = 'line'}: SkeletonProps) => {
 
-    if(type !== 'line') width = height;
+    if (type === 'square' || type === 'circle') width = height;
+
+    const inlineStyle: InlineStyle = {
+        width: width,
+    };
+
+    if(type !== 'input' && type !== 'button') inlineStyle.height = height;
 
     return(
         <div 
@@ -17,10 +28,7 @@ const Skeleton = ({height, width = '100%', type = 'line'}: SkeletonProps) => {
                 styles['skeleton'],
                 styles[`skeleton--${type}`]
             )} 
-            style={{
-                height: height,
-                width: width,
-            }}
+            style={inlineStyle}
         />
     );
 };

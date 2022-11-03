@@ -1,15 +1,16 @@
 import { Info, ToolTipNeedle } from 'assets/images/icons';
 import classNames from 'classnames';
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import styles from './toolTip.module.scss';
 
 interface ToolTipProps {
     title: string;
     infoText: string; 
     className?: string;
+    alignment?: 'left' | 'right';
 }
 
-const ToolTip = ({title, infoText, className}: ToolTipProps) => {
+const ToolTip = ({title, infoText, className, alignment = 'left'}: ToolTipProps) => {
 
     const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
     
@@ -29,6 +30,7 @@ const ToolTip = ({title, infoText, className}: ToolTipProps) => {
             <div className={styles.iconWrapper}>
                 <div className={classNames(
                     styles.tip,
+                    styles[`tip--${alignment}`],
                     'caption'
                 )}
                 >

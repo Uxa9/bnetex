@@ -1,0 +1,35 @@
+@import 'styles/mixins';
+@import 'styles/colors/colors';
+
+.abstract-img {
+  @include column-flex;
+
+  @include max-width(1100) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    opacity: 0.25;
+  }
+
+  @include mobile {
+    display: none;
+  }
+
+  &__row {
+    display: flex;
+  }
+
+  &__link {
+    margin-top: 38px;
+    margin-right: 100px;
+    fill: $grayscale-4;
+
+    &:first-child {
+      transform: scaleX(-1);
+      margin-right: 0;
+      margin-left: 100px;
+    }
+  }
+}

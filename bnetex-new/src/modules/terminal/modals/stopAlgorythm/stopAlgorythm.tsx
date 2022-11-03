@@ -44,7 +44,10 @@ const StopAlgorythmModal = (props: StopAlgorythmModalProps & BaseModalProps) => 
                     </p>
                     <p>
                         <span>Расчетный PNL: </span>
-                        <SignedNumber value={closingPNL} />
+                        <SignedNumber 
+                            value={closingPNL} 
+                            postfix={'USDT'}
+                        />
                     </p>
                 </div>
                 <p>
@@ -53,11 +56,17 @@ const StopAlgorythmModal = (props: StopAlgorythmModalProps & BaseModalProps) => 
                 <div className={styles['disclaimer__data']}>
                     <p>
                         <span>PNL: </span>
-                        <SignedNumber value={totalPNL} />
+                        <SignedNumber
+                            value={totalPNL}  
+                            postfix={'USDT'}
+                        />
                     </p>
                     <p>
                         <span>ROE: </span>
-                        <SignedNumber value={totalROE} postfix={'%'} />
+                        <SignedNumber 
+                            value={totalROE} 
+                            postfix={'%'}
+                        />
                     </p>
                 </div>
             </div>

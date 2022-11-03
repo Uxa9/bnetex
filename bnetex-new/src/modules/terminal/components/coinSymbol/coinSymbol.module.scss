@@ -1,0 +1,18 @@
+@import 'styles/colors/colors';
+@import 'styles/mixins';
+
+.coin-symbol {
+  @include column-flex;
+
+  &__main {
+    @include align-center-row-flex(4px);
+  }
+
+  &__lever {
+    color: $green-4;
+  }
+
+  &__type {
+    color: $grayscale-6;
+  }
+}

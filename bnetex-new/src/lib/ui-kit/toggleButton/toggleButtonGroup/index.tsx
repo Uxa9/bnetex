@@ -10,21 +10,26 @@ interface ToggleButtonGroupProps {
     onChange: (value: any, name?: string) => void
     children: ReactElement<typeof ToggleButton>[]
     exclusive?: boolean,
-    asNumber?: boolean
+    asNumber?: boolean,
+    buttonStyle?: 'outlined' | 'underlined',
+    buttonClassname?: string,
 }
 
 const ToggleButtonGroup: FC<ToggleButtonGroupProps> = props => {
 
-    const { title, value, exclusive, name, children, onChange, asNumber } = props;
+    const { title, value, exclusive, name, children,
+        onChange, asNumber, buttonStyle, buttonClassname } = props;
 
     const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         onChange(asNumber ? event.currentTarget.valueAsNumber : event.currentTarget.value, event.currentTarget.name);
     };
 
-    const propsToToggleButtons = {
+    const propsToToggleButtons: Omit<ToggleButtonProps, 'text' | 'value'> = {
         name: name,
         onChange: handleValueChange,
         exclusive: exclusive,
+        buttonStyle: buttonStyle,
+        className: buttonClassname,
     };
 
     function renderChildrenWithProps(children: ReactNode, elementProps: any): ReactNode {

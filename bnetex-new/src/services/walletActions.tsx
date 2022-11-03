@@ -1,6 +1,7 @@
 import useApi from 'lib/hooks/useApi';
 import { WalletCategoryWithBalance } from 'lib/types/wallet';
 import { getUserId } from 'lib/utils/getUserId';
+import { getToken } from './utils/getToken';
 
 interface transferBetweenWalletsData {
     sender: string,
@@ -12,11 +13,6 @@ interface WithdrawConfirmFormData {
     requestId: number,
     confirmCode: string
 }
-
-const getToken = () => {
-    const userInfo = localStorage.getItem('userInfo-BNETEX');
-    return userInfo ? JSON.parse(userInfo).token : '';
-};
 
 const useWalletActions = () => {
 

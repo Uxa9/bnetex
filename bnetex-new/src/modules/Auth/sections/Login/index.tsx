@@ -49,7 +49,7 @@ const Login = () => {
             })
             .catch((error) => {
                 error.response.data.message === 'USER_NOT_ACTIVATED' && 
-                    goToState(`${AppLinksEnum.AUTH}/${AppLinksEnum.VERIFY_EMAIL}`);
+                    goToState(`/${AppLinksEnum.VERIFY_EMAIL}`);
                 bakeToast.error(error.response?.data.message);
             });
     };
@@ -114,7 +114,7 @@ const Login = () => {
                                 buttonStyle={'flat'}
                                 type={'button'}
                                 mini
-                                onClick={() => goToState(`${AppLinksEnum.AUTH}/${AppLinksEnum.REGISTRATION}`)}
+                                onClick={() => goToState(`/${AppLinksEnum.REGISTRATION}`)}
                             />
                         </div>
                     </>

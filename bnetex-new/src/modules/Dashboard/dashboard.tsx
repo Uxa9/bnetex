@@ -72,7 +72,7 @@ const Dashboard = () => {
                     <div
                         className={styles['dashboard-content']}
                     >
-                        <Outlet/>
+                        <Outlet />
                     </div>
                 </main>
             </div>

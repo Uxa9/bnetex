@@ -1,0 +1,56 @@
+@import 'styles/colors/colors';
+
+.loader-wrapper {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  background-color: $grayscale-1;
+
+  .loader-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(100px, 7vw));
+    grid-template-rows: repeat(2, minmax(100px, 7vw));
+    gap: max(20px, 1.4vw);
+    transform: rotate(45deg);
+
+    .loader-section {
+      width: 100%;
+      height: 100%;
+      background-color: $accent-3;
+
+      $min-radius: 30%;
+      $max-radius: 50%;
+      $animation-time: 600ms;
+
+      &:first-child {
+        border-radius: $min-radius 0 $max-radius 0;
+        animation: opacity $animation-time ease-in-out calc($animation-time * 0.25) infinite;
+      }
+      &:nth-child(2) {
+        border-radius: 0 $min-radius 0 $max-radius;
+        animation: opacity $animation-time ease-in-out calc($animation-time * 0.5) infinite;
+      }
+      &:nth-child(3) {
+        border-radius: 0 $max-radius 0 $min-radius;
+        animation: opacity $animation-time ease-in-out calc($animation-time * 1) infinite;
+      }
+      &:last-child {
+        border-radius: $max-radius 0 $min-radius 0;
+        animation: opacity $animation-time ease-in-out calc($animation-time * 0.75) infinite;
+      }
+    }
+  }
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}

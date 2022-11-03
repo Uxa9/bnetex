@@ -2,8 +2,7 @@ import styles from './blur.module.scss';
 import classNames from 'classnames';
 import { FC } from 'react';
 
-
-interface BlurProps{
+export interface BlurProps {
     type: 'circle' | 'ellipse',
     color: 'purple' | 'blue' | 'red' | 'green',
     top: string,

@@ -6,69 +6,74 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
 
 * {
-    font-family: 'Rubik', sans-serif;
+  font-family: 'Rubik', sans-serif;
 }
 
 .theme-wrapper {
-    @include create-css-themes-root();
-    
-    background-color: $grayscale-1;
-    color: $grayscale-11;
-    min-height: 100vh;
+  @include create-css-themes-root();
+
+  background-color: $grayscale-1;
+  color: $grayscale-11;
+  min-height: 100vh;
 }
 
 .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    border: 0;
-    padding: 0;
-    white-space: nowrap;
-    clip-path: inset(100%);
-    clip: rect(0 0 0 0);
-    overflow: hidden;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
 }
 
 .card {
-    @include card-shadow;
-    background-color: $grayscale-card;
-    border-radius: 16px;
+  @include card-shadow;
+
+  background-color: $grayscale-card;
+  border-radius: 16px;
+
+  @include max-width(700) {
+    border-radius: 8px;
+  }
 }
 
 .svg-fill {
-    width: 100%;
-    height: fit-content;
+  width: 100%;
+  height: fit-content;
 }
 
 .wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .container {
-    max-width: 1200px;
-    padding: 20px;
-    width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  width: 100%;
 }
 
 body,
 html {
-    overflow-x: hidden;
+  overflow-x: hidden;
 }
 
 .apexcharts-legend {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .apexcharts-legend-marker {
-    width: 4px !important;
-    height: 16px !important;
+  width: 4px !important;
+  height: 16px !important;
 }
 
 .apexcharts-legend-series {
-    display: block !important;
+  display: block !important;
 }
 
 .apexcharts-legend-text {

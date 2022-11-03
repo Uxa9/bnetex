@@ -1,4 +1,5 @@
 import useApi from 'lib/hooks/useApi';
+import { getToken } from './utils/getToken';
 
 const useAuthActions = () => {
 
@@ -71,7 +72,6 @@ const useAuthActions = () => {
             });
     };
 
-    
     const checkActivationCodeTime = async (email: string) => {
         return await api.post(
             '/auth/activattion-link-datetime', {
@@ -79,7 +79,14 @@ const useAuthActions = () => {
             });
     };
 
-    return { login, signup, confirmEmail, resendActivationCode, checkActivationCodeTime };
+    const verifyToken = async () => {
+        return await api.post(
+            '/auth/token/verify', {
+                token: getToken(),
+            });
+    };
+
+    return { login, signup, confirmEmail, resendActivationCode, checkActivationCodeTime, verifyToken };
 };
 
 export default useAuthActions;

@@ -3,64 +3,71 @@
 @import 'styles/colors/colors';
 
 .title {
-    display: flex;
-    align-items: center;
-    column-gap: 8px;
-    color: $grayscale-6;
-    transition: $default-transition ease;
-    cursor: help;
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  color: $grayscale-6;
+  transition: $default-transition ease;
+  cursor: help;
 
-    .iconWrapper {
-        @include size-svg(16px, 16px);
-        position: relative;
+  .iconWrapper {
+    @include size-svg(16px, 16px);
+    position: relative;
 
-        .infoIcon {
-            fill: $grayscale-6;
-            transition: $default-transition ease;
-        }
+    .infoIcon {
+      fill: $grayscale-6;
+      transition: $default-transition ease;
+    }
+  }
+
+  &--active {
+    color: $grayscale-11;
+
+    .tip,
+    .needle {
+      display: block;
+      opacity: 1;
+      visibility: visible;
     }
 
-    &--active {
-        color: $grayscale-11;
-
-        .tip,
-        .needle {
-            display: block;
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .tip {
-            right: -8px;
-        }
-
-        .iconWrapper .infoIcon {
-            fill: $grayscale-11;
-        }
+    .tip {
+      right: -8px;
     }
+
+    .iconWrapper .infoIcon {
+      fill: $grayscale-11;
+    }
+  }
 }
 
 .tip {
-    position: absolute;
-    bottom: calc(100% + 16px);
+  position: absolute;
+  bottom: calc(100% + 16px);
+  width: 80vw;
+  max-width: 50ch;
+  background-color: $grayscale-2;
+  border-radius: 8px;
+  padding: 12px;
+  visibility: hidden;
+  opacity: 0;
+  transition: $default-transition ease;
+
+  &--right {
+    left: -16px;
+  }
+
+  &--left {
     right: 0px;
-    width: 90vw;
-    max-width: 50ch;
-    background-color: $grayscale-2;
-    border-radius: 8px;
-    padding: 12px;
-    visibility: hidden;
-    opacity: 0;
-    transition: $default-transition ease;
+  }
 }
 
 .needle {
-    fill: $grayscale-2;
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    visibility: hidden;
-    opacity: 0;
-    transition: $default-transition ease;
+  fill: $grayscale-2;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  visibility: hidden;
+  opacity: 0;
+  transition: $default-transition ease;
 }

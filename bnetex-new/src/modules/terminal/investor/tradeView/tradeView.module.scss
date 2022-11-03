@@ -5,7 +5,13 @@
   @include column-flex(24px);
 
   &__balance {
-    @include column-flex(4px);
+    @include align-center-row-flex(12px);
+
+    justify-content: space-between;
+
+    .balance-item {
+      @include column-flex(4px);
+    }
 
     .balance-label {
       color: $grayscale-9;

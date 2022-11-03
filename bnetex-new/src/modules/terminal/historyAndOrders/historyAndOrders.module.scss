@@ -1,0 +1,35 @@
+@import 'styles/mixins';
+@import 'styles/colors/colors';
+@import 'styles/shadows';
+
+.history-and-orders {
+  @include column-flex;
+
+  @include min-width(701) {
+    @include card-shadow;
+
+    border-radius: 16px;
+    padding: 16px;
+    background-color: $grayscale-card;
+  }
+}
+
+.toggle-section-group {
+  @include max-width(700) {
+    @include card-shadow;
+
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background-color: $grayscale-card;
+  }
+}
+
+.toggle-section-button {
+  width: fit-content;
+  padding: 0 12px 8px 12px;
+  text-align: center;
+
+  @include max-width(700) {
+    padding: 12px;
+  }
+}

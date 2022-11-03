@@ -1,0 +1,44 @@
+@import '../baseTable.module.scss';
+
+.opened-positions {
+  @extend %base-terminal-table;
+
+  .margin {
+    @include column-flex;
+  }
+
+  .mobile-price-label {
+    @include min-width(801) {
+      display: none;
+    }
+  }
+
+  .joined-price {
+    @include min-width(801) {
+      display: none;
+    }
+
+    @include max-width(700) {
+      grid-column: 1/-1;
+    }
+  }
+
+  .desktop-price-label {
+    @include max-width(800) {
+      display: none;
+    }
+  }
+
+  .entry-price,
+  .marked-price,
+  .liquidation-price {
+    @include max-width(800) {
+      display: none !important;
+    }
+  }
+
+  .amount,
+  .PNL {
+    justify-self: flex-end;
+  }
+}

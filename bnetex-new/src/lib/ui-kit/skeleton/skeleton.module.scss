@@ -1,21 +1,53 @@
 @import 'src/styles/colors/colors';
+@import 'src/styles/mixins';
 
-.skeleton {
+@mixin skeleton-gradient($color1, $color2, $color3) {
   background: linear-gradient(
     90deg,
-    $grayscale-2,
-    $grayscale-3,
-    $grayscale-4,
-    $grayscale-3,
-    $grayscale-2,
+    $color1,
+    $color2,
+    $color3,
+    $color2,
+    $color1
   );
-  border-radius: 16px;
+}
 
+.skeleton {
+  @include skeleton-gradient($grayscale-2, $grayscale-3, $grayscale-4);
+
+  border-radius: 16px;
   background-size: 400% 400%;
   animation: gradient 2.5s ease infinite;
 
   &--circle {
     border-radius: 50%;
+  }
+
+  &--input {
+    @include skeleton-gradient($grayscale-2, $grayscale-3, $grayscale-4);
+
+    border: 1px solid $grayscale-4;
+    border-radius: 8px;
+    height: 40px;
+    background-size: 400% 400%;
+
+    @include mobile {
+      border-radius: 6px;
+      height: 36px;
+    }
+  }
+
+  &--button {
+    @include skeleton-gradient($accent-6, $accent-5, $accent-4);
+
+    border-radius: 8px;
+    height: 40px;
+    background-size: 400% 400%;
+
+    @include mobile {
+      border-radius: 6px;
+      height: 36px;
+    }
   }
 }
 

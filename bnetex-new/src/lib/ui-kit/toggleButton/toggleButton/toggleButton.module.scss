@@ -1,25 +1,38 @@
 @import 'styles/colors/colors';
+@import 'styles/variables';
 
 .button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border: 1px solid $grayscale-4;
-    background-color: transparent;
-    transition: 0.25s;
-    padding: 8px 4px; 
-    width: 100%;
-    color: $grayscale-6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: transparent;
+  transition: border-color $default-transition ease,
+    color $default-transition ease, background-color $default-transition ease;
+  padding: 8px 4px;
+  width: 100%;
+  color: $grayscale-6;
 
-    &:hover {
-        border: 1px solid $accent-2;
-        color: $accent-2;
-    }
+  &--outlined {
+    border: 1px solid $grayscale-4;
+  }
+
+  //   toDo: сделать без !important
+  &--underlined {
+    border-bottom: 2px solid transparent;
+    border-left: none !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+  }
+
+  &:hover {
+    border-color: $accent-2;
+    color: $accent-2;
+  }
 }
 
 input:checked + .button {
-    border: 1px solid $accent-3;
-    color: $accent-3;
-    background-color: $accent-6;
+  border-color: $accent-3;
+  color: $accent-3;
+  background-color: $accent-6;
 }

@@ -71,7 +71,6 @@
   grid-column: 2;
   grid-row: 3;
   width: 100%;
-  overflow: hidden;
 
   @include max-width(1200) {
     grid-column: 1;
@@ -86,7 +85,6 @@
 .ROE-card {
   grid-row: 4;
   width: 100%;
-  overflow: hidden;
 
   @include max-width(1200) {
     grid-column: 1;

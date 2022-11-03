@@ -1,7 +1,7 @@
 @import 'variables';
 
 @mixin stretch-screen {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
@@ -30,6 +30,12 @@
 
 @mixin max-width($resolution) {
   @media (max-width: #{$resolution}px) {
+    @content;
+  }
+}
+
+@mixin min-width($resolution) {
+  @media (min-width: #{$resolution}px) {
     @content;
   }
 }

@@ -5,7 +5,6 @@ import Invest from './investSection';
 import ContactSection from './contactSection';
 
 const MainPage = () => {
-
     return(
         <div className={styles['landing-wrapper']}>
             <div className={styles['landing-container']}>

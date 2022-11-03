@@ -3,102 +3,27 @@
 @import 'styles/colors/colors';
 
 .layout {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: calc(100vh - $header-height);
-    overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - $header-height);
+  overflow: hidden;
 }
 
 .container {
-    display: flex;
-    align-items: center;
-    column-gap: 48px;
-    width: 100%;
-    max-width: 1280px;
-    justify-content: space-between;
-    padding: 0 16px;
-    position: relative;
-    z-index: 1;
+  display: flex;
+  align-items: center;
+  column-gap: 48px;
+  width: 100%;
+  max-width: 1280px;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: relative;
+  z-index: 2;
 
-    @include max-width(1100) {
-        justify-content: center;
-    }
+  @include max-width(1100) {
+    justify-content: center;
+  }
 }
 
-.abstract-img {
-    @include column-flex;
 
-    @include max-width(1100) {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: -1;
-        opacity: 0.25;
-    }
-
-    @include mobile {
-        display: none;
-    }
-
-    &__row {
-        display: flex;
-    }
-
-    &__link {
-        margin-top: 38px;
-        margin-right: 100px;
-        fill: $grayscale-1;
-
-        &:first-child {
-            transform: scaleX(-1);
-            margin-right: 0;
-            margin-left: 100px;
-        }
-    }
-
-    .token-card {
-        @include align-center-row-flex(16px);
-
-        padding: 16px;
-        background-color: $grayscale-card;
-        border-radius: 16px;
-        height: fit-content;
-
-        &__skeletons {
-            @include column-flex(12px);
-        }
-
-        .skeleton-row {
-            @include align-center-row-flex(16px);
-
-            .skeleton:first-child {
-                background-color: $grayscale-5;
-                width: 65%;
-                height: 10px;
-            }
-
-            .skeleton:last-child {
-                background-color: $green-4;
-                width: 35%;
-                height: 10px;
-            }
-        }
-
-        .skeleton {
-            border-radius: 20px;
-            height: 5px;
-            width: 150px;
-            background-color: $grayscale-4;
-
-            &--red {
-                background-color: $red-4 !important;
-            }
-
-            &:last-of-type {
-                width: 100px;
-            }
-        }
-    }
-}
