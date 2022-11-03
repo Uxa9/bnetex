@@ -81,11 +81,6 @@ const InvestorView = () => {
                             />
                     }
                 </div>
-                {
-                    viewType === 'trade' ? 
-                        <TradeView /> :
-                        <HistoryView handleClick={getData} />
-                }
             </div>
             <div
                 className={classNames(
