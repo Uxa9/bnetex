@@ -20,8 +20,8 @@ export default function BurgerMenu(props: any) {
         <>
             <div
                 className={`${styles['menu-background']}
-                    ${isOpen ? 
-                        styles['menu-background-active'] : 
+                    ${isOpen ?
+                        styles['menu-background-active'] :
                         styles['menu-background-hidden']}`
                 }
                 onClick={props.onClose}
@@ -29,12 +29,12 @@ export default function BurgerMenu(props: any) {
             <div
                 className={
                     `${styles['burger-menu']} 
-                    ${isOpen ? 
-                        styles['burger-menu-active'] : 
+                    ${isOpen ?
+                        styles['burger-menu-active'] :
                         styles['burger-menu-hidden']}`
                 }
             >
-                {links.map((item: any) => {
+                {/* {links.map((item: any) => {
                     return (
                         <div
                             className={styles['burger-menu-link']}
@@ -43,14 +43,101 @@ export default function BurgerMenu(props: any) {
                             {item}
                         </div>)
                 })}
-                <div
-                    className={styles['theme-button-switcher']}
+                <div 
+                    className={styles['theme-button-wrapper']}
                 >
-                    <ToggleSwitchButton 
-                        active={(theme === "dark")}
-                        handleChange={toggleTheme}
-                    />
-                </div>
+                    <span>
+                        Темная тема
+                    </span>
+                    <div
+                        className={styles['theme-button-switcher']}
+                    >
+                        <ToggleSwitchButton 
+                            active={(theme === "dark")}
+                            handleChange={toggleTheme}
+                        />
+                    </div>
+                </div> */}
+                {props.auth ?
+                    <>
+                        <div
+                            className={styles['burger-menu-top']}
+                        >
+                            {links.map((item: any, index: number) => {
+                                if (index === links.length - 1)
+                                    return (<></>);
+                                return (
+                                    <div
+                                        className={styles['burger-menu-link']}
+                                        onClick={props.onClose}
+                                    >
+                                        {item}
+                                    </div>
+                                )
+                            })}
+                        </div>
+                        <div
+                            className={styles['burger-menu-bottom']}
+                        >
+                            <div
+                                className={styles['theme-button-wrapper']}
+                            >
+                                <span>
+                                    Темная тема
+                                </span>
+                                <div
+                                    className={styles['theme-button-switcher']}
+                                >
+                                    <ToggleSwitchButton
+                                        active={(theme === "dark")}
+                                        handleChange={toggleTheme}
+                                    />
+                                </div>
+                            </div>
+                            <div
+                                className={styles['burger-menu-link']}
+                                onClick={props.onClose}
+                            >
+                                {links[links.length - 1]}
+                            </div>
+                        </div>
+                    </> :
+                    <>
+                        <div
+                            className={styles['burger-menu-top']}
+                        >
+                            {links.map((item: any) => {
+                                return (
+                                    <div
+                                        className={styles['burger-menu-link']}
+                                        onClick={props.onClose}
+                                    >
+                                        {item}
+                                    </div>
+                                )
+                            })}
+                        </div>
+                        <div
+                            className={styles['burger-menu-bottom']}
+                        >
+                            <div
+                                className={styles['theme-button-wrapper']}
+                            >
+                                <span>
+                                    Темная тема
+                                </span>
+                                <div
+                                    className={styles['theme-button-switcher']}
+                                >
+                                    <ToggleSwitchButton
+                                        active={(theme === "dark")}
+                                        handleChange={toggleTheme}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                }
             </div>
         </>
     )
