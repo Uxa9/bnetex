@@ -1,13 +1,17 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 
 import { Button, Input, ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
 
 import styles from '../investorView.module.scss';
 import { blockEAndDashKey } from 'lib/utils';
 
-const HistoryView = () => {
+interface HistoryViewProps {
+    handleClick(period: number, amount: number): void
+}
 
-    const [period, setPeriod] = useState('1');
+const HistoryView: FC<HistoryViewProps> = props => {
+
+    const [period, setPeriod] = useState(1);
 
     const [inputValue, setInputValue] = useState<number | ''>('');
 
@@ -47,23 +51,23 @@ const HistoryView = () => {
                 >
                     <ToggleButton 
                         text={'1 мес.'} 
-                        value={'1'} 
+                        value={1} 
                     />
                     <ToggleButton 
                         text={'3 мес.'} 
-                        value={'3'} 
+                        value={3} 
                     />
                     <ToggleButton 
                         text={'6 мес.'} 
-                        value={'6'} 
+                        value={6} 
                     />
                     <ToggleButton 
                         text={'9 мес.'} 
-                        value={'9'} 
+                        value={9} 
                     />
                     <ToggleButton 
                         text={'12 мес.'} 
-                        value={'12'} 
+                        value={12} 
                     />
                 </ToggleButtonGroup>
             </div>
@@ -75,6 +79,7 @@ const HistoryView = () => {
                     disabled={!inputValue}
                     text={'Рассчитать доход'}
                     fillContainer
+                    onClick={() => {props.handleClick(Number(period), Number(inputValue))}}
                 />
             </div>
         </>

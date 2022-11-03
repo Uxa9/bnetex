@@ -11,6 +11,8 @@ import { AuthModule } from './auth/auth.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { RequestModule } from './request/request.module';
 import { MailSenderModule } from './mailSender/mailer.module';
+import { MongooseModule } from "@nestjs/mongoose";
+import { PositionsModule } from './positions/positions.module';
 
 
 @Module({
@@ -30,12 +32,14 @@ import { MailSenderModule } from './mailSender/mailer.module';
             models: [User, Role, UserRoles],
             autoLoadModels: true
         }),
+        MongooseModule.forRoot('mongodb://localhost:27017/exchange'),
         UsersModule,
         RolesModule,
         AuthModule,
         TransactionModule,
         RequestModule,
-        MailSenderModule
+        MailSenderModule,
+        PositionsModule
     ]
 })
 export class AppModule{};

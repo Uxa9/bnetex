@@ -25,6 +25,14 @@
 
 .investor-income-percent {
     color: $green-3;
+
+    &::before {
+        content: '+';
+    }
+
+    &::after {
+        content: ' %';
+    }
 }
 
 .investor-balance,
