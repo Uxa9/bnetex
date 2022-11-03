@@ -24,10 +24,43 @@
 
     justify-content: space-between;
   }
+}
 
-  @include max-width(800) {
-    grid-row: 3;
-  }
+.investor-income-percent {
+    color: $green-3;
+
+    &::before {
+        content: '+';
+    }
+
+    &::after {
+        content: ' %';
+    }
+}
+
+.investor-balance,
+.investor-invest {
+    margin-top: 20px;
+}
+
+.investor-balance-amount {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.button-wrapper {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.investor-prediction-period {
+    margin-top: 30px;
+}
+
+.all-balance-btn {
+    width: 17ch;
+    padding-right: 8px;
 }
 
 .investor-view-card {

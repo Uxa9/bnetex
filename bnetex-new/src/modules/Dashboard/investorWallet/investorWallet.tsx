@@ -112,7 +112,7 @@ const InvestorWallet = () => {
                                 }
                             ]}
                             height={'150px'}
-                            width={'110%'}
+                            width={'100%'}
                             options={{ // приготовьтесь охуеть
                                 chart: {
                                     stacked: true,

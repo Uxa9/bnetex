@@ -78,4 +78,9 @@ export class UsersController {
     addRole(@Body() dto: AddRoleDto) {
         return this.userService.addRole(dto);
     }
+
+    @Get('histData')
+    histData() {
+        return this.userService.getHistoricalData();
+    }
 }

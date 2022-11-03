@@ -1,15 +1,18 @@
 @import 'styles/mixins.scss';
 @import 'styles/variables.scss';
+@import 'styles/colors/colors.scss';
 
 .back-action {
     display: flex;
     align-items: center;
     transition: margin 0.35s;
     margin-left: 0px;
+    color: $grayscale-11;
 
     @include size-svg(30px, 30px);
     svg {
         transform: rotate(90deg);
+        fill: $grayscale-11;
     }
 
     &:hover {
@@ -38,6 +41,20 @@
         font-size: 18px;
         line-height: 18px;
         font-weight: 500;
+
+        white-space: nowrap;
+        display: inline-block;
+        max-width: 90%;
+
+        >span {
+            display: inline-block;
+            vertical-align: bottom;
+            white-space: nowrap;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     }
 }
 

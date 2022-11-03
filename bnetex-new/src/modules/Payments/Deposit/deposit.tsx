@@ -25,7 +25,11 @@ const Deposit = () => {
                     <div className={styles.address}>
                         <span className='label-1'>Адрес</span>
                         <div className={styles['address__wrapper']}>
-                            <p className={styles['address__code']}>{WALLET_ADDRESS}</p>
+                            <p className={styles['address__code']}>
+                                <span>
+                                    {WALLET_ADDRESS}
+                                </span>
+                            </p>
                             <CopyButton 
                                 textToCopy={WALLET_ADDRESS}
                                 successText={'Адрес кошелька успешно скопирован!'}
@@ -43,7 +47,7 @@ const Deposit = () => {
                             Средства будут зачислены на ваш основной кошелек
                         </li>
                         <li className={styles.disclaimer__item}>
-                            Минимальная сумма ввода: 0.01 USDT
+                            Минимальная сумма ввода: 100 USDT
                         </li>
                     </ul>
                 </div> 

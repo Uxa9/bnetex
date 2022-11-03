@@ -1,6 +1,8 @@
+import { USDT } from 'assets/images/icons';
 import classNames from 'classnames';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
-import { CryptoTransactionItemType } from 'lib/types/cryptoTransactionItem';
+import { CryptoTransactionItemStatusMap, CryptoTransactionItemType } from 'lib/types/cryptoTransactionItem';
+import { formatDate } from 'lib/utils/formatDate';
 import { useEffect, useState } from 'react';
 import getUserTransactions from 'services/getUserTransactions';
 import { getTransactions } from 'services/transactions';
@@ -130,24 +132,24 @@ const blankTransactions: CryptoTransactionItemType[] = [
 const Transactions = () => {
 
     const { promiseWithLoading, isLoading } = usePromiseWithLoading();
-    const [rows, setRows] = useState<CryptoTransactionItemType[]>([]); 
-    
+    const [rows, setRows] = useState<CryptoTransactionItemType[]>([]);
+
     useEffect(() => {
         loadTrasactions();
     }, []);
 
-    const loadTrasactions =  () => {
+    const loadTrasactions = () => {
         getUserTransactions(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
             .then(res => {
                 let data = res.map((item: any) => {
                     console.log(item.type);
-                    
+
                     return ({
-                        date : new Date(item.createdAt),
-                        type : item.type.toString() == "1" ? "withdraw" : "income",
+                        date: new Date(item.createdAt),
+                        type: item.type.toString() == "1" ? "withdraw" : "income",
                         wallet: "Основной кошелек",
-                        coin : 'USDT',
-                        amount : item.amount,
+                        coin: 'USDT',
+                        amount: item.amount,
                         destination: item.walletAddress,
                         status: item.fulfilled ? "confirmed" : "processing"
                     })
@@ -157,7 +159,7 @@ const Transactions = () => {
             });
     };
 
-    return(
+    return (
         <div className={styles.transactions}>
             <h3>Транзакции</h3>
             <table className={classNames(styles['transactions-table'], 'card')}>
@@ -180,12 +182,12 @@ const Transactions = () => {
                 <tbody>
                     {
                         rows.map((transaction: CryptoTransactionItemType, index: number) => {
-                            return(
+                            return (
                                 <tr
                                     className={styles['transactions-table__row']}
                                     key={index}
                                 >
-                                    <CryptoTransactionItem 
+                                    <CryptoTransactionItem
                                         item={transaction}
                                     />
                                 </tr>
@@ -194,6 +196,66 @@ const Transactions = () => {
                     }
                 </tbody>
             </table>
+            <div
+                className={classNames(styles["mobile-table"], 'card')}
+            >
+                {
+                    rows.map((transaction: CryptoTransactionItemType) => {
+                        return (
+                            <div
+                                className={styles['transaction-item']}
+                            >
+                                <div
+                                    className={styles['item-first-row']}
+                                >
+                                    <div
+                                        className={styles['item-type-amount-coin']}
+                                    >
+                                        <span
+                                            className={classNames(styles['item-type'],
+                                                styles[`item-type--${transaction.type}`],
+                                                'caption',
+                                            )}
+                                        >
+                                            {transaction.type === 'income' ? 'Ввод' : 'Вывод'}
+                                        </span>
+                                        <span>
+                                            {transaction.amount} USDT
+                                        </span>
+                                        <div>
+                                            <USDT />
+                                        </div>
+                                    </div>
+                                    <div
+                                        className={classNames(styles['item-status'],
+                                            styles[`item-status--${transaction.status}`],
+                                            'caption-mini',
+                                        )}
+                                    >
+                                        {CryptoTransactionItemStatusMap[transaction.status]}
+                                    </div>
+                                </div>
+                                <div
+                                    className={styles['item-second-row']}
+                                >
+                                    <div
+                                        className={styles['item-date']}
+                                    >
+                                        <span>
+                                            {formatDate(transaction.date, true)}
+                                        </span>
+                                    </div>
+                                    <div
+                                        className={styles['item-wallet']}
+                                    >
+                                        {transaction.wallet}
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })
+                }
+            </div>
         </div>
     );
 };
