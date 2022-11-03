@@ -108,7 +108,7 @@ const Tools = () => {
                 </div>
             </div>
             <div
-                className={classNames(styles['balance-and-transactions'], 'card')}
+                className={styles['balance-and-transactions']}
             >
                 <div
                     className={classNames(styles['balance'], 'card')}
@@ -123,7 +123,9 @@ const Tools = () => {
                     >
                         {`${Number(mainBalance + investBalance).toFixed(2)} USDT`}
                     </p>
-                    <div>
+                    <div
+                        className={styles['chart-wrapper']}
+                    >
                         <Chart
                             type='bar'
                             series={[
@@ -137,7 +139,7 @@ const Tools = () => {
                                 },
                             ]}
                             height={'150px'}
-                            width={'110%'}
+                            width={'100%'}
                             options={{ // приготовьтесь охуеть
                                 chart: {
                                     stacked: true,
@@ -145,7 +147,8 @@ const Tools = () => {
                                     selection : { enabled : false },
                                     toolbar   : { show : false },
                                     offsetX   : -20,
-                                    offsetY   : -30
+                                    offsetY   : -30,
+                                    width     : '250%'
                                 },
                                 grid: { 
                                     show: false,
@@ -208,7 +211,7 @@ const Tools = () => {
                         </span>
                     </p>
                     <div
-                        className={styles['transaction-table-wrapper']}
+                        className={classNames(styles['transaction-table-wrapper'], 'scroll')}
                     >
                         <TransactionTable 
                             rows={rows}

@@ -51,7 +51,7 @@ const Dashboard = () => {
         <>
             <div className={'wrapper'}>
                 <main className={classNames('container', styles.dashboard)}>
-                    <aside className={classNames(styles['control-menu'], 'card')}>
+                    <aside className={classNames(styles['control-menu'], 'card', 'scroll')}>
                         {
                             dashboardSections.map((section: dashboardSection) => 
                                 <Link 

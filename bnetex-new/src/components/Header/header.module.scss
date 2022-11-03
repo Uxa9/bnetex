@@ -43,6 +43,7 @@
 
 @media screen and (max-width: 800px) {
     .links {
+        margin-left: 0px;
         justify-content: flex-end;
 
         &__main,
@@ -53,5 +54,18 @@
         .burger-button-wrapper {
             display: block;
         }
+    }
+
+    .wide__btn {
+        width: 100%;
+
+        button {
+            width: 100%;
+        }
+    }
+
+    .exit__btn {
+        position: absolute;
+        bottom: 16px;
     }
 }
