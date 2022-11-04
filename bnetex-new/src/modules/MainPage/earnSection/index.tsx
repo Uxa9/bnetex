@@ -2,12 +2,12 @@ import { CornerArrow } from 'assets/images/icons';
 import classNames from 'classnames';
 import styles from './earnSection.module.scss';
 import { Button } from 'lib/ui-kit';
-import Blur from 'components/blurredBackgroundItem';
 import { DynamicImg } from 'lib/utils/DynamicImg';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import { useTheme } from 'lib/hooks/useTheme';
 import { AppLinksEnum } from 'routes/appLinks';
 import { useGoToState } from 'lib/hooks/useGoToState';
+import Blur from 'modules/Global/components/blurredBackgroundItem';
 
 const Earn = () => {
     

@@ -1,9 +1,9 @@
 import styles from './stopAlgorythm.module.scss';
 import classNames from 'classnames';
-import { Modal } from 'components/ModalSpawn/Modal/modal';
 import { BaseModalProps } from 'lib/hooks/useModal';
 import { Button } from 'lib/ui-kit';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
+import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
 
 interface StopAlgorythmModalProps { 
     onSubmit: (value: boolean) => void; //Костыль, нужно отправлять запрос на бек, получать статус и изменять его в useEffect

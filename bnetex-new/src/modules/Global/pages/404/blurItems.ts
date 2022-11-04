@@ -1,4 +1,4 @@
-import { BlurProps } from 'components/blurredBackgroundItem';
+import { BlurProps } from 'modules/Global/components/blurredBackgroundItem';
 
 export const blurItems404: BlurProps[] = [
     {

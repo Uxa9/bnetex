@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import Blur, { BlurProps } from 'components/blurredBackgroundItem';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { Button } from 'lib/ui-kit';
 import { AppLinksEnum } from 'routes/appLinks';
@@ -7,6 +6,7 @@ import { blurItems404 } from './blurItems';
 import styles from './page404.module.scss';
 import {ReactComponent as AbstractGridL} from 'assets/images/abstract-grid--L.svg';
 import {ReactComponent as AbstractGridM} from 'assets/images/abstract-grid--M.svg';
+import Blur, { BlurProps } from 'modules/Global/components/blurredBackgroundItem';
 
 const Page404 = () => {
 
