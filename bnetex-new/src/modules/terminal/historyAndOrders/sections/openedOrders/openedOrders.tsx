@@ -32,7 +32,7 @@ const OpenedOrders = () => {
                 </tr>
             </thead>
             <tbody>
-                {
+                {/* {
                     mockedOpenedOrders.map((position: OpenedOrder, index: number) => 
                         <tr 
                             className={'text'}
@@ -109,7 +109,7 @@ const OpenedOrders = () => {
                             </td>
                         </tr>
                     )
-                }
+                } */}
             </tbody>
         </table>
     );

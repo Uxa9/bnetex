@@ -24,7 +24,7 @@ const EmailValidation = () => {
     const { goToState } = useGoToState();
     const { confirmEmail } = useAuthActions();
     const { open: OpenNoEmailModal } = useModal(NoEmailModal);
-    const { AUTH, LOGIN, REGISTRATION_FINALIZE } = AppLinksEnum;
+    const { AUTH, LOGIN, REGISTRATION_FINALIZE, DASHBOARD } = AppLinksEnum;
 
     const [userEmail, setUserEmail] = useState<string>('');
 
@@ -54,7 +54,7 @@ const EmailValidation = () => {
         promiseWithLoading(confirmEmail(userEmail, data.activationCode))
             .then(() => {
                 loginUser();
-                goToState('REGISTRATION_FINALIZE');
+                goToState(`auth/${REGISTRATION_FINALIZE}`);
             })
             .catch((error) => bakeToast.error(error.response?.data.message));
     };
