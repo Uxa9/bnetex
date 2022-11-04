@@ -1,10 +1,9 @@
 import Toast from 'lib/ui-kit/toast/toast';
 import { Outlet } from 'react-router-dom';
-import Header from './Header/header';
-
+import Header from '../Header/header';
 // Сюда если что воткнем футер или еще что-то глобальное
 
-const PageLayout = () => {
+const AppLayout = () => {
 
     return (
         <>
@@ -15,4 +14,4 @@ const PageLayout = () => {
     );
 };
 
-export default PageLayout;
+export default AppLayout;

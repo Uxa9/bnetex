@@ -1,46 +1,49 @@
-@import 'src/styles/mixins';
+@import 'styles/mixins';
+@import 'styles/variables';
 
 .landing-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
+  padding-top: $header-height;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .landing-container {
-    @include column-flex(200px);
-    padding: 24px;
-    max-width: 1360px;
-    width: 100%;
-    padding-top: 50px;
-    z-index: 1;
+  @include column-flex(200px);
+  padding: 24px;
+  max-width: 1360px;
+  width: 100%;
+  padding-top: 50px;
+  z-index: 1;
 
-    @include max-width(1200){
-        row-gap: 120px;
-    }
+  @include max-width(1200) {
+    row-gap: 120px;
+  }
 
-    @include mobile {
-        padding: 16px;
-        row-gap: 72px;
-    }
+  @include mobile {
+    padding: 16px;
+    row-gap: 72px;
+  }
 }
 
 .popular-coins {
-    display: flex;
-    flex-direction: column;
-    row-gap: 20px;
-    max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  max-width: 100%;
 }
 
 .coins {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .coin {
-    box-shadow: 6.12064px 6.12064px 6.12064px rgba(161, 118, 193, 0.25), 0px 0px 15.3016px rgba(161, 118, 193, 0.1);
-    backdrop-filter: blur(15px);
-    border-radius: 10px;
-    max-width: 219px;
+  box-shadow: 6.12064px 6.12064px 6.12064px rgba(161, 118, 193, 0.25),
+    0px 0px 15.3016px rgba(161, 118, 193, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 10px;
+  max-width: 219px;
 }

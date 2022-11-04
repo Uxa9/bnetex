@@ -2,12 +2,12 @@ import { CornerArrow } from 'assets/images/icons';
 import classNames from 'classnames';
 import styles from './investSection.module.scss';
 import { Button } from 'lib/ui-kit';
-import Blur from 'components/blurredBackgroundItem';
 import { RoeCard, roeCards } from './roeCards';
 import { AppLinksEnum } from 'routes/appLinks';
 import { DynamicImg } from 'lib/utils/DynamicImg';
 import { useTheme } from 'lib/hooks/useTheme';
 import { useGoToState } from 'lib/hooks/useGoToState';
+import Blur from 'modules/Global/components/blurredBackgroundItem';
 
 const Invest = () => {
     

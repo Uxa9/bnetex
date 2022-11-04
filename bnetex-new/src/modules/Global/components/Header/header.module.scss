@@ -1,0 +1,69 @@
+@import 'styles/variables';
+@import 'styles/mixins';
+@import 'styles/colors/colors';
+
+.header {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%);
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: $header-height;
+  width: 100%;
+  padding: 0 16px;
+  z-index: 10;
+  transition: background-color $default-transition ease;
+
+  &--menu-opened {
+    background-color: $grayscale-1;
+    position: fixed;
+    border: 1px solid $grayscale-4;
+  }
+
+  .logo {
+    cursor: pointer;
+    transition: fill $default-transition ease;
+    fill: $accent-3;
+
+    &:hover {
+      fill: $accent-2;
+    }
+  }
+
+  .links {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1360px;
+
+    &__main {
+      @include align-center-row-flex(24px);
+    }
+
+    &__user {
+      @include align-center-row-flex(24px);
+      @include max-width($early-mobile-bp) {
+        display: none;
+      }
+    }
+  }
+
+  .trading-link {
+    @include max-width($early-mobile-bp) {
+      display: none;
+    }
+  }
+
+  &__burger {
+    height: 100%;
+    display: grid;
+    align-items: center;
+
+    @include min-width(calc($early-mobile-bp + 1)) {
+      display: none;
+    }
+  }
+}

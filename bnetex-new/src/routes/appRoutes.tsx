@@ -1,4 +1,4 @@
-import PageLayout from 'components/pageLayout';
+import PageLayout from 'modules/Global/components/appLayout/appLayout';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
 import { lazy, Suspense, useEffect } from 'react';

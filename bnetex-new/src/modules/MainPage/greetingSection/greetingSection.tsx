@@ -3,10 +3,10 @@ import { Button } from 'lib/ui-kit';
 import styles from './greetingSection.module.scss';
 import { ReactComponent as GraphicLine } from '../../../assets/images/landing/graphic__line.svg';
 import { ReactComponent as GraphicGradient } from '../../../assets/images/landing/graphic__gradient.svg';
-import Blur from 'components/blurredBackgroundItem';
 import { DynamicImg } from 'lib/utils/DynamicImg';
 import { AppLinksEnum } from 'routes/appLinks';
 import { useGoToState } from 'lib/hooks/useGoToState';
+import Blur from 'modules/Global/components/blurredBackgroundItem';
 
 const GreetingSection = () => {
     

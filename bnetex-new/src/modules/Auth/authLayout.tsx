@@ -1,11 +1,11 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import styles from './authLayout.module.scss';
-import Blur, { BlurProps } from 'components/blurredBackgroundItem';
 import { lazy, Suspense, useCallback } from 'react';
 import { authBlurItems } from './blurItems';
 import AuthAbstractImagery from './components/authAbstractImagery';
 import FormCardSkeleton from './components/FormCard/formCardSkeleton';
 import { AppLinksEnum } from 'routes/appLinks';
+import Blur, { BlurProps } from 'modules/Global/components/blurredBackgroundItem';
 
 const Login = lazy(() => import('modules/Auth/sections/login'));
 const Registration = lazy(() => import('modules/Auth/sections/registration'));

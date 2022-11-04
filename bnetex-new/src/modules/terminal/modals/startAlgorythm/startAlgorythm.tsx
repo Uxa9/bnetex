@@ -1,8 +1,8 @@
 import styles from './startAlgorythm.module.scss';
 import classNames from 'classnames';
-import { Modal } from 'components/ModalSpawn/Modal/modal';
 import { BaseModalProps } from 'lib/hooks/useModal';
 import { Button } from 'lib/ui-kit';
+import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
 
 interface StartAlgorythmModalProps{ 
     amountToSend: number;

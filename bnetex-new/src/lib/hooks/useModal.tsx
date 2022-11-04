@@ -1,6 +1,6 @@
 import { throwError } from 'lib/utils/errorThrower';
 import { createContext, JSXElementConstructor, ReactNode, useContext, useMemo, useState } from 'react';
-import scssVariables from '../../../src/styles/exportedVariables.module.scss';
+import variablesMap from 'styles/exportedVariables.module.scss';
 
 const modalSpawnerContext = createContext<ModalSpawnerContext | null>(null);
 
@@ -27,7 +27,7 @@ type ModalControl<E> = {
     close(): void;
 }
 
-const default_transition = Number(scssVariables['default-transition'].replace(/ms/, ''));
+const default_transition = Number(variablesMap['defaultTransition'].replace(/ms/, ''));
 
 export function ModalSpawnerProvider({ children }: {children: ReactNode}) {
     const [ activeModal, setActiveModal ] = useState<JSX.Element | null>(null);
