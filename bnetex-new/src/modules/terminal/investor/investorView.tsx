@@ -7,6 +7,7 @@ import styles from './investorView.module.scss';
 import ToolTip from 'lib/ui-kit/toolTip';
 import classNames from 'classnames';
 import { getHistoricalData } from 'services/getHistoricalData';
+import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 
 type InvestorViewType = 'trade' | 'history';
 
@@ -22,7 +23,7 @@ const InvestorView = () => {
     const [graphicData, setGraphicData] = useState<InvestProfitInterface>({
         dates: [],
         pnlValues: [],
-        roeValues: []
+        roeValues: [],
     });
     const [investProfit, setInvestProfit] = useState(0);
     const [investPercentProfit, setInvestPercentProfit] = useState(0);
@@ -33,14 +34,12 @@ const InvestorView = () => {
         setGraphicData({
             dates: res.dates,
             pnlValues: res.pnlValues.map((item: any) => Number(Number(item).toFixed(2))),
-            roeValues: res.roeValues.map((item: any) => Number(Number(item).toFixed(2)))
+            roeValues: res.roeValues.map((item: any) => Number(Number(item).toFixed(2))),
         });      
         
         setInvestPercentProfit(res.roeValues[res.roeValues.length - 1]);
         setInvestProfit(investPercentProfit * amount / 100);
-
-        return;
-    }
+    };
 
     return (
         <>
@@ -66,7 +65,6 @@ const InvestorView = () => {
                                 value={'history'}
                             />
                         </ToggleButtonGroup>
-
                         <ToolTip
                             title='Что такое история?'
                             infoText='История или история сделок - это исторические записи фактических транзакций по позициям. 
@@ -96,24 +94,20 @@ const InvestorView = () => {
                 <div
                     className={styles['data-card__row']}
                 >
-                    <p
-                        className={styles['header']}
-                    >
-                        Доход инвестора
-                    </p>
                     <div
                         className={styles['investor-income']}
                     >
                         <span
-                            className={styles['investor-income-amount']}
+                            className={classNames(
+                                styles['investor-income__amount'],
+                                'subtitle'
+                            )}
                         >
                             {Number(Number(investProfit).toFixed(2))}
                         </span>
-                        <span
-                            className={styles['investor-income-percent']}
-                        >
-                            {Number(Number(investPercentProfit).toFixed(2))}
-                        </span>
+                        <SignedNumber 
+                            value={Number(Number(investPercentProfit).toFixed(2))}
+                        />
                     </div>
                 </div>
             </div>

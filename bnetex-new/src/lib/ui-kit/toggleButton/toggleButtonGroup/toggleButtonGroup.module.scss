@@ -1,29 +1,29 @@
 legend {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .toggle-buttons {
-    display: flex;
-    width: 100%;
-}
-
-label {
-    &:first-of-type {
-        border-radius: 5px 0 0 5px;
-    }
-
-    &:not(label:first-of-type) {
-        border-left: 1px solid transparent;
-        margin-left: -1px;
-    }
-
-    &:last-of-type {
-        border-radius: 0 5px 5px 0;
-    }
+  display: flex;
+  width: 100%;
 }
 
 .container {
-    height: fit-content;
-    // Возможно костыль
-    flex-grow: 1;
+  height: fit-content;
+  // Возможно костыль
+  flex-grow: 1;
+
+  label {
+    &:first-of-type {
+      border-radius: 5px 0 0 5px;
+    }
+
+    &:not(label:first-of-type) {
+      border-left: 1px solid transparent;
+      margin-left: -1px;
+    }
+
+    &:last-of-type {
+      border-radius: 0 5px 5px 0;
+    }
+  }
 }
