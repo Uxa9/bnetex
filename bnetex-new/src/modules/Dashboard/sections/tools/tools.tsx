@@ -145,12 +145,12 @@ const Tools = () => {
                             options={{ // приготовьтесь охуеть
                                 chart: {
                                     stacked: true,
-                                    zoom: { enabled: false },
-                                    selection: { enabled: false },
-                                    toolbar: { show: false },
-                                    offsetY: -60,
-                                    offsetX: -25,
-                                    background: 'transparent'
+                                    zoom      : { enabled : false },
+                                    selection : { enabled : false },
+                                    toolbar   : { show : false },
+                                    offsetX   : -20,
+                                    offsetY   : -30,
+                                    width     : '250%',
                                 },
                                 theme: {
                                     mode: theme,
@@ -191,8 +191,8 @@ const Tools = () => {
                                 legend: {
                                     showForNullSeries: false,
                                     showForSingleSeries: false,
-                                    offsetY: -10,
-                                    offsetX: -7,
+                                    offsetY: -20,
+                                    offsetX: -15,
                                     horizontalAlign: 'left',
                                 },
                                 colors: ['#9202FF', '#1A75FF'],

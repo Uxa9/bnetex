@@ -72,6 +72,10 @@ export class UsersService {
             include: { all: true }
         });
 
+        if ( !user ) {
+            throw new UserNotFoundException();
+        }
+
         return user;
     }
 
@@ -181,22 +185,22 @@ export class UsersService {
         return {
             pnl: {
                 values: [
-                    // this.generatenumber(200, -50),
-                    // this.generatenumber(200, -50),
-                    // this.generatenumber(200, -50),
-                    // this.generatenumber(200, -50),
-                    // this.generatenumber(200, -50),
-                    // this.generatenumber(200, -50),
-                    // this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
                 ],
                 dates: [
-                    // '10.02',
-                    // '17.02',
-                    // '24.02',
-                    // '31.02',
-                    // '07.03',
-                    // '14.03',
-                    // '21.04'
+                    '10.02',
+                    '17.02',
+                    '24.02',
+                    '31.02',
+                    '07.03',
+                    '14.03',
+                    '21.04'
                 ]
             }
         }
@@ -208,22 +212,22 @@ export class UsersService {
         return {
             roe: {
                 values: [
-                    // this.generatenumber(100, -10),
-                    // this.generatenumber(100, -10),
-                    // this.generatenumber(100, -10),
-                    // this.generatenumber(100, -10),
-                    // this.generatenumber(100, -10),
-                    // this.generatenumber(100, -10),
-                    // this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
                 ],
                 dates: [
-                    // '10.02',
-                    // '17.02',
-                    // '24.02',
-                    // '31.02',
-                    // '07.03',
-                    // '14.03',
-                    // '21.04'
+                    '10.02',
+                    '17.02',
+                    '24.02',
+                    '31.02',
+                    '07.03',
+                    '14.03',
+                    '21.04'
                 ]
             }
         }

@@ -28,7 +28,6 @@ const InvestorChart = ({dates, values, type}: InvestorChartProps) => {
             zoom: { enabled : true },
             selection: { enabled : false },
             toolbar: { show : true },
-            background: 'transparent'
         },
         dataLabels: { enabled : false },
         theme: {

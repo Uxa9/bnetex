@@ -32,7 +32,7 @@ const RegistrationFinalize = () => {
             </p>
             <Button 
                 text={'Перейти в кошелек'}
-                onClick={() => goToState(`${DASHBOARD}`)}
+                onClick={() => goToState(`${DASHBOARD}/${MAIN_WALLET}`)}
             />
         </div>
     );
