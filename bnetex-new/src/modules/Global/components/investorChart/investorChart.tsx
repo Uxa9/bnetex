@@ -1,3 +1,4 @@
+import { useTheme } from 'lib/hooks/useTheme';
 import { Switch, ToolTip } from 'lib/ui-kit';
 import { useMemo, useState } from 'react';
 import Chart from 'react-apexcharts';
@@ -12,6 +13,8 @@ interface InvestorChartProps {
 const ALGORYTHM_COMISSION = 0.5;
 
 const InvestorChart = ({dates, values, type}: InvestorChartProps) => {
+    
+    const { theme } = useTheme();
 
     const [withComission, setWithCommision] = useState<boolean>(false);
     const toggleComission = () => setWithCommision(prevState => !prevState);
@@ -27,6 +30,12 @@ const InvestorChart = ({dates, values, type}: InvestorChartProps) => {
             toolbar: { show : true },
         },
         dataLabels: { enabled : false },
+        theme: {
+            mode: theme, 
+            monochrome: {
+                enabled: false,
+            },
+        },
         stroke: { 
             width: 1,
             colors: ['#9043CA'], 

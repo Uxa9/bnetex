@@ -6,7 +6,7 @@ import { Button } from 'lib/ui-kit';
 
 interface StartAlgorythmModalProps{ 
     amountToSend: number;
-    onSubmit: (value: boolean) => void; //Костыль, нужно отправлять запрос на бек, получать статус и изменять его в useEffect
+    onSubmit: (value: any) => void; //Костыль, нужно отправлять запрос на бек, получать статус и изменять его в useEffect
 }
 
 const StartAlgorythmModal = (props: StartAlgorythmModalProps & BaseModalProps) => {
@@ -14,7 +14,7 @@ const StartAlgorythmModal = (props: StartAlgorythmModalProps & BaseModalProps) =
     const { amountToSend, onSubmit, onClose } = props;
 
     const handleSubmit = () => {
-        onSubmit(true);
+        onSubmit(amountToSend);
         onClose();
     };
 

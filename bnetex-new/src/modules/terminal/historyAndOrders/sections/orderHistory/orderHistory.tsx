@@ -7,19 +7,31 @@ import { formatDate } from 'lib/utils/formatDate';
 import PositionAction from 'modules/terminal/components/positionAction/positionAction';
 import { PositionActionType } from 'modules/terminal/types/positionAction';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
+import React, { useEffect, useState } from 'react';
+import { getHistoricalDataOrders } from '../../../../../services/getHistoricalData';
 
 export interface OrderHistoryItem  {
     coinSymbol: CoinSymbolProps;
     date: Date;
     action: PositionActionType;
-    type: string;
+    // type: string;
     amount: number;
     price: number;
-    fee: number;
+    // fee: number;
     PNL: number;
 }
 
 const OrderHistory = () => {
+
+    const [orderHistory, setOrdersHistory] = useState<OrderHistoryItem[]>([]);
+
+    useEffect(() => {
+        getHistoricalDataOrders(6)
+            .then(res => {
+                setOrdersHistory(res.data);
+            });
+    }, []);
+
     return(
         <table className={styles['order-history']}>
             <thead>
@@ -27,16 +39,16 @@ const OrderHistory = () => {
                     <th>Символ</th>
                     <th>Время сделки</th>
                     <th>Действие</th>
-                    <th>Тип</th>
+                    {/* <th>Тип</th> */}
                     <th>Объем</th>
                     <th>Цена</th>
-                    <th>Комиссия</th>
+                    {/* <th>Комиссия</th> */}
                     <th>PNL</th>
                 </tr>
             </thead>
             <tbody>
                 {
-                    mockedOrderHistory.map((position: OrderHistoryItem, index: number) => 
+                    orderHistory.map((position: OrderHistoryItem, index: number) => 
                         <tr 
                             className={'text'}
                             key={index}
@@ -51,7 +63,12 @@ const OrderHistory = () => {
                                     Символ
                                 </span>
                                 <CoinSymbol 
-                                    {...position.coinSymbol}
+                                    {...{
+                                        firstCoin: 'BTC',
+                                        secondCoin: 'USDT',
+                                        lever: 1,
+                                        type: 'Бессрочные',
+                                    }}
                                 />
                             </td>
                             <td className={styles['time']}>
@@ -78,7 +95,7 @@ const OrderHistory = () => {
                                     action={position.action}
                                 />
                             </td>
-                            <td className={styles['type']}> 
+                            {/* <td className={styles['type']}> 
                                 <span className={classNames(
                                     styles['body-label'],
                                     'caption',
@@ -87,7 +104,7 @@ const OrderHistory = () => {
                                     Тип
                                 </span>
                                 {position.type} 
-                            </td>
+                            </td> */}
                             <td className={styles['amount']}>
                                 <span 
                                     className={classNames(
@@ -110,7 +127,7 @@ const OrderHistory = () => {
                                 </span>
                                 {position.price}
                             </td>
-                            <td className={styles['fee']}> 
+                            {/* <td className={styles['fee']}> 
                                 <span 
                                     className={classNames(
                                         styles['body-label'],
@@ -120,7 +137,7 @@ const OrderHistory = () => {
                                     Комиссия
                                 </span>
                                 {position.fee}
-                            </td>
+                            </td> */}
                             <td className={styles['PNL']}> 
                                 <span 
                                     className={classNames(
@@ -131,7 +148,7 @@ const OrderHistory = () => {
                                     PNL
                                 </span>
                                 <SignedNumber 
-                                    value={position.PNL}
+                                    value={Number(Number(position.PNL).toFixed(6))}
                                 />
                             </td>
                         </tr>

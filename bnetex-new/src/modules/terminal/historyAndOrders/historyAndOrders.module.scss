@@ -12,6 +12,9 @@
     padding: 16px;
     background-color: $grayscale-card;
   }
+
+  max-height: 300px;
+  overflow-y: scroll;
 }
 
 .toggle-section-group {

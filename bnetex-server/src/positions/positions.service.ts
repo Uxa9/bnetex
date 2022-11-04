@@ -26,13 +26,11 @@ export class PositionsService {
     async getHistoricalData(data: any, amount: number) {
         
         let dates  = [];
-        let positionVolume = 0;
         let pnlValues = [];
         let roeValues = [];
         let acc = amount;
 
         data.map((position, index) => {
-            const { positionEnters } = position;
     
             dates.push(new Date(position.closeTime).toLocaleDateString());
             const x = position.volumeUSDT / position.deposit * acc;
@@ -51,5 +49,42 @@ export class PositionsService {
             pnlValues,
             roeValues
         }
+    }
+
+    async getHistoricalDataOrders(period: number) {
+        const date = new Date().setMonth(new Date().getMonth() - period);
+
+        const positions = await this.PositionModel.find({
+            enterTime: { $gte: date }
+        });
+
+        let res = [];
+
+        positions.map(position => {
+
+            const { positionEnters } = position;
+
+            const enters = positionEnters.map(enter => {
+                return {
+                    date: enter.time,
+                    action: "purchase",
+                    amount: enter.volumeUSDT,
+                    price: enter.buyPrice,
+                    PNL: 0
+                }
+            });
+
+            res = [...res, ...enters];
+
+            res.push({
+                date: position.closeTime,
+                action: position.positionType === "LONG" ? "sale" : "purchase",
+                amount: position.volumeUSDT,
+                price: position.closePrice,
+                PNL: position.sumProfit
+            });
+        });
+        
+        return res;
     }
 }

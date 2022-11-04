@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { GetDataDto } from './dto/get-data.dto';
 import { PositionsService } from './positions.service';
 
@@ -10,5 +10,10 @@ export class PositionsController
     @Post('/getHistData')
     getData(@Body() dto: GetDataDto) {
         return this.PositionService.getPnlAndRoe(dto);
+    }
+
+    @Get('/:period')
+    getHistoricalDataOrders(@Param('period') period: number) {
+        return this.PositionService.getHistoricalDataOrders(period);
     }
 }
