@@ -6,7 +6,10 @@ import { AddRoleDto } from './dto/add-role.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { TransferMoney } from './dto/transfer-money.dto';
 import { User } from './users.model';
-import fs from "fs";
+import * as bcrypt from 'bcryptjs';
+import { StartInvestDto } from './dto/start-invest.dto';
+import { Op } from 'sequelize';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -34,11 +37,44 @@ export class UsersService {
         return users;
     }
 
+    async changePassword(dto: ChangePasswordDto) {
+
+        const user = await this.getUserById(dto.userId);
+
+        const passwordEq = await bcrypt.compare(dto.prevPassword, user.password);
+
+        if ( passwordEq ) {
+            const hashPassword = await bcrypt.hash(dto.newPassword, 5);
+
+            await user.update({
+                password: hashPassword
+            });
+
+            return {
+                status: "SUCCESS",
+                message: "PASSWORD_CHANGED"
+            }
+        } else {
+            throw new HttpException(
+                {
+                    status: "ERROR",
+                    message: "PREVIOUS_PASSWORD_WRONG"
+                },
+                HttpStatus.BAD_REQUEST
+            );
+        }
+
+    }
+
     async getUserByEmail(email: string) {
         const user = await this.userRepository.findOne({
             where: { email },
             include: { all: true }
         });
+
+        if ( !user ) {
+            throw new UserNotFoundException();
+        }
 
         return user;
     }
@@ -102,7 +138,7 @@ export class UsersService {
             );
         }
 
-        if ( user[dto.reciever] < dto.amount ) {
+        if ( user[dto.sender] < dto.amount ) {
             throw new HttpException(
                 {
                     status: "ERROR",
@@ -181,52 +217,17 @@ export class UsersService {
         }
     }
 
-    async getHistoricalData() {
-        const data = {
-            "_id": {
-                "$oid": "635b7abfbea3729dd1ce42f3"
-            },
-            "deposit": 1000,
-            "enterTime": 1655312220000,
-            "enterPrice": 20762.11,
-            "avegarePrice": 20682.62089986757,
-            "positionType": "LONG",
-            "status": false,
-            "volume": 0.003384484023514071,
-            "volumeUSDT": 70,
-            "enterStep": 3,
-            "patternEnter": 23,
-            "lastEnterPrice": 21256.75,
-            "minPrice": 20545.85,
-            "positionEnters": [
+    async startInvest(dto: StartInvestDto) {
+        const user = await this.getUserById(dto.userId);
+
+        if (user.investWallet < dto.amount) {
+            throw new HttpException(
                 {
-                    "buyPrice": 20762.11,
-                    "avegarePrice": 20762.11,
-                    "volume": 0.0009632932298306868,
-                    "volumeUSDT": 20,
-                    "time": 1655312220000
+                    status: "ERROR",
+                    message: "INVEST_WALLET_LOWER_THAN_AMOUNT"
                 },
-                {
-                    "buyPrice": 20690.64,
-                    "avegarePrice": 20726.313388153983,
-                    "volumeUSDT": 20,
-                    "volume": 0.0009666206555234638,
-                    "time": 1655312580000
-                },
-                {
-                    "buyPrice": 20624.65,
-                    "avegarePrice": 20682.62089986757,
-                    "volumeUSDT": 30,
-                    "volume": 0.0014545701381599202,
-                    "time": 1655312940000
-                }
-            ],
-            "__v": 0,
-            "closePrice": 21256.75,
-            "closeTime": 1655315580000,
-            "minPricePercent": 0.6612841792620543,
-            "percentProfit": 2.7759010954753194,
-            "sumProfit": 1.9431307668327236
+                HttpStatus.BAD_REQUEST
+            );
         }
 
         const { positionEnters } = data;

@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import SettingItem, { SettingItemProps } from '../../components/SettingItem/settingItem';
 import { Button } from 'lib/ui-kit';
 import { Key } from 'assets/images/icons';
+import { useModal } from 'lib/hooks/useModal';
+import ChangePasswordModal from './modals/changePasswordModal';
 
 // const SettingItems: SettingItemProps[] = [
 //     {
@@ -19,6 +21,7 @@ import { Key } from 'assets/images/icons';
 // ];
 
 const Settings = () => {
+    const { open: openStartAlgorythmModal } = useModal(ChangePasswordModal);
 
     return(
         <div className={styles.settings}>
@@ -52,6 +55,7 @@ const Settings = () => {
                     <Button
                         buttonStyle='primary'
                         text='Изменить'
+                        onClick={openStartAlgorythmModal}
                     />
                 </div>
             </div>

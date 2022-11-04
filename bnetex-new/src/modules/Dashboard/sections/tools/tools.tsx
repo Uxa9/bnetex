@@ -14,6 +14,7 @@ import getUserTransactions from 'services/getUserTransactions';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import useWalletActions from 'services/walletActions';
 import { WalletCategoryWithBalance } from 'lib/types/wallet';
+import { useTheme } from 'lib/hooks/useTheme';
 
 interface GraphicProps {
     dates: string[],
@@ -34,6 +35,8 @@ const Tools = () => {
     const [investBalance, setInvestBalance] = useState<number>(0);
     const { promiseWithLoading } = usePromiseWithLoading();
     const { getWallets } = useWalletActions();
+    const { DEPOSIT, WITHDRAW, DASHBOARD, TRANSACTIONS } = AppLinksEnum;
+    const { theme } = useTheme();
 
     const [roe, setRoe] = useState<GraphicProps>({
         dates: [],
@@ -64,26 +67,26 @@ const Tools = () => {
             });
         getUserTransactions(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
             .then(res => {
-                let data = res.map((item: any) => {                    
+                let data = res.map((item: any) => {
                     return ({
-                        currency : 'usdt',
-                        date : new Date(item.createdAt),
-                        type : item.type == 1 ? "withdraw" : "deposit",
-                        amount : item.amount
-                    })
-                })
+                        currency: 'usdt',
+                        date: new Date(item.createdAt),
+                        type: item.type == 1 ? 'withdraw' : 'deposit',
+                        amount: item.amount,
+                    });
+                });
 
                 setRows(data);
             });
         promiseWithLoading<WalletCategoryWithBalance>(getWallets())
             .then(res => {
-                setMainBalance(res.mainWallet);
-                setInvestBalance(res.investWallet);
+                setMainBalance(res.main);
+                setInvestBalance(res.investor);
             });
     }, []);
 
-    return(
-        <div 
+    return (
+        <div
             className={styles['tools']}
         >
             <div
@@ -143,26 +146,33 @@ const Tools = () => {
                             options={{ // приготовьтесь охуеть
                                 chart: {
                                     stacked: true,
-                                    zoom      : { enabled : false },
-                                    selection : { enabled : false },
-                                    toolbar   : { show : false },
-                                    offsetX   : -20,
-                                    offsetY   : -30,
-                                    width     : '250%'
+                                    zoom: { enabled: false },
+                                    selection: { enabled: false },
+                                    toolbar: { show: false },
+                                    offsetY: -60,
+                                    offsetX: -25,
+                                    background: 'transparent'
                                 },
-                                grid: { 
+                                theme: {
+                                    mode: theme,
+                                    monochrome: {
+                                        enabled: false
+                                    }
+                                },
+                                grid: {
                                     show: false,
                                     xaxis: {
                                         lines: { show: false },
-                                    },   
+                                    },
                                     yaxis: {
                                         lines: { show: false },
-                                    },    
+                                    },
                                 },
                                 plotOptions: {
                                     bar: {
                                         horizontal: true,
-                                        barHeight: '12px',
+                                        barHeight: '18px',
+                                        borderRadius: 4,
                                     },
                                 },
                                 xaxis: {
@@ -170,8 +180,8 @@ const Tools = () => {
                                     labels: {
                                         show: false,
                                     },
-                                    axisBorder: { show : false },
-                                    axisTicks: { show : false },
+                                    axisBorder: { show: false },
+                                    axisTicks: { show: false },
                                 },
                                 yaxis: {
                                     show: false,
@@ -182,12 +192,12 @@ const Tools = () => {
                                 legend: {
                                     showForNullSeries: false,
                                     showForSingleSeries: false,
-                                    offsetY: -20,
-                                    offsetX: -15,
-                                    horizontalAlign: 'left'
+                                    offsetY: -10,
+                                    offsetX: -7,
+                                    horizontalAlign: 'left',
                                 },
-                                colors : ['#9202FF', '#1A75FF'],
-                                dataLabels : { enabled : false },
+                                colors: ['#9202FF', '#1A75FF'],
+                                dataLabels: { enabled: false },
                             }}
                         />
                     </div>
@@ -204,8 +214,8 @@ const Tools = () => {
                             Транзакции
                         </span>
                         <span
-                            className={styles['header-show-all']} 
-                            onClick={() => goToState('/dashboard/transactions')}
+                            className={styles['header-show-all']}
+                            onClick={() => goToState(`${DASHBOARD}/${TRANSACTIONS}`)}
                         >
                             Посмотреть все
                         </span>
@@ -213,7 +223,7 @@ const Tools = () => {
                     <div
                         className={classNames(styles['transaction-table-wrapper'], 'scroll')}
                     >
-                        <TransactionTable 
+                        <TransactionTable
                             rows={rows}
                         />
                     </div>
@@ -234,7 +244,7 @@ const Tools = () => {
                 <div
                     className={classNames(styles['chart'], 'card')}
                 >
-                    <AreaChart                    
+                    <AreaChart
                         dates={roe.dates}
                         values={roe.values}
                         title="RoE"

@@ -17,7 +17,8 @@ const AreaChart:FC<ChartProps> = props => {
         chart : {
             zoom      : { enabled : true },
             selection : { enabled : false },
-            toolbar   : { show : true }
+            toolbar   : { show : true },
+            background: 'transparent'
         },
         dataLabels : { enabled : false },
         // title : { text: 'Chart' },

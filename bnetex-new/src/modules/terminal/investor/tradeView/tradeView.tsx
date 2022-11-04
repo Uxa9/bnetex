@@ -28,10 +28,32 @@ const TradeView = () => {
     const [ isAlgorythmActive, setIsAlgorythmActive ] = useState<boolean>(false);
 
     useEffect(() => {
-        // promiseWithLoading<WalletCategoryWithBalance>(getWallets())
-        // .then(res => setBalance(res.investor));
-        setBalance(100);
+        promiseWithLoading<WalletCategoryWithBalance>(getWallets())
+            .then(res => {
+                setBalance(res.investor);
+            });
+        getUser()
+            .then(res => {
+                setIsAlgorythmActive(res.data.openTrade);
+            });
     }, []);
+
+    useEffect(() => {
+        promiseWithLoading<WalletCategoryWithBalance>(getWallets())
+            .then(res => {
+                setBalance(res.investor);
+            });
+    }, [isAlgorythmActive]);
+
+    const startInvestAlgorythm = (amount: number) => {
+        setIsAlgorythmActive(true);
+        startInvestTrading(amount);
+    }
+
+    const stopInvestAlgorythm = () => {
+        setIsAlgorythmActive(false);
+        stopInvestTrading();
+    }
 
     const {
         register,
