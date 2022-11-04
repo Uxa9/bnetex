@@ -12,6 +12,15 @@
 
   &__wrapper {
     height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    overflow: hidden;
+    min-height: 250px;
+    max-width: 100%;
+
+    svg {
+      background-color: transparent !important;
+    }
   }
 
   .comission-block {

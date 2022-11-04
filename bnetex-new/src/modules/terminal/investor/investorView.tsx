@@ -34,14 +34,14 @@ const InvestorView = () => {
         setGraphicData({
             dates: res.dates,
             pnlValues: res.pnlValues.map((item: any) => Number(Number(item).toFixed(2))),
-            roeValues: res.roeValues.map((item: any) => Number(Number(item).toFixed(2)))
+            roeValues: res.roeValues.map((item: any) => Number(Number(item).toFixed(2))),
         });
 
         await setInvestPercentProfit(res.roeValues[res.roeValues.length - 1]);
         await setInvestProfit(res.roeValues[res.roeValues.length - 1] * amount / 100);
 
         return;
-    }
+    };
 
     return (
         <>
@@ -97,15 +97,14 @@ const InvestorView = () => {
                     className={styles['data-card__row']}
                 >
                     <span
-                        className={styles['investor-income-amount']}
+                        className={'subtitle'}
                     >
                         {Number(Number(investProfit).toFixed(2))}
                     </span>
-                    <span
-                        className={styles['investor-income-percent']}
-                    >
-                        {Number(Number(investPercentProfit).toFixed(2))}
-                    </span>
+                    <SignedNumber 
+                        value={Number(Number(investPercentProfit).toFixed(2))}
+                        postfix={'%'}
+                    />
                 </div>
             </div>
             <div className={classNames(
