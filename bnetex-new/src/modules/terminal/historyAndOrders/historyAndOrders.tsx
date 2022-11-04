@@ -49,7 +49,8 @@ const HistoryAndOrders = ({className}: {className: string}) => {
     return (
         <div className={classNames(
             styles['history-and-orders'],
-            className
+            className,
+            'scroll'
         )}
         >
             <div className={styles['toggle-section-group']}>

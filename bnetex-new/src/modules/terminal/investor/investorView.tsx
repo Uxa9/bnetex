@@ -34,10 +34,10 @@ const InvestorView = () => {
             dates: res.dates,
             pnlValues: res.pnlValues.map((item: any) => Number(Number(item).toFixed(2))),
             roeValues: res.roeValues.map((item: any) => Number(Number(item).toFixed(2)))
-        });      
-        
-        setInvestPercentProfit(res.roeValues[res.roeValues.length - 1]);
-        setInvestProfit(investPercentProfit * amount / 100);
+        });
+
+        await setInvestPercentProfit(res.roeValues[res.roeValues.length - 1]);
+        await setInvestProfit(res.roeValues[res.roeValues.length - 1] * amount / 100);
 
         return;
     }
@@ -76,7 +76,7 @@ const InvestorView = () => {
                     {
                         viewType === 'trade' ?
                             <TradeView /> :
-                            <HistoryView 
+                            <HistoryView
                                 handleClick={getData}
                             />
                     }
@@ -89,32 +89,23 @@ const InvestorView = () => {
                     'card'
                 )}
             >
-                <ToolTip 
+                <ToolTip
                     title='Доход инвестора'
                     infoText=''
                 />
                 <div
                     className={styles['data-card__row']}
                 >
-                    <p
-                        className={styles['header']}
+                    <span
+                        className={styles['investor-income-amount']}
                     >
-                        Доход инвестора
-                    </p>
-                    <div
-                        className={styles['investor-income']}
+                        {Number(Number(investProfit).toFixed(2))}
+                    </span>
+                    <span
+                        className={styles['investor-income-percent']}
                     >
-                        <span
-                            className={styles['investor-income-amount']}
-                        >
-                            {Number(Number(investProfit).toFixed(2))}
-                        </span>
-                        <span
-                            className={styles['investor-income-percent']}
-                        >
-                            {Number(Number(investPercentProfit).toFixed(2))}
-                        </span>
-                    </div>
+                        {Number(Number(investPercentProfit).toFixed(2))}
+                    </span>
                 </div>
             </div>
             <div className={classNames(

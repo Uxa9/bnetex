@@ -103,3 +103,12 @@
     }
   }
 }
+
+.investor-view-wrapper__header {
+    display: flex;
+    margin-bottom: 36px;
+    
+    >div {
+        margin-left: 8px;
+    }
+}
