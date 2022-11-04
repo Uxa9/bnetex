@@ -1,0 +1,50 @@
+@import 'styles/mixins';
+@import 'styles/colors/colors';
+@import 'styles/variables';
+
+$circle-size: 16px;
+$switch-padding: 2px;
+
+.switch-container {
+  display: flex;
+  align-items: center;
+
+  &--space-between {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  &--gap {
+    column-gap: 4px;
+  }
+}
+
+.custom-switch-checkbox {
+  border-radius: calc($circle-size);
+  background-color: $grayscale-3;
+  width: calc(2 * ($circle-size + $switch-padding));
+  height: calc($circle-size + 2 * $switch-padding);
+  position: relative;
+  display: flex;
+  transition: background-color $default-transition;
+  cursor: pointer;
+
+  div {
+    border-radius: 50%;
+    width: $circle-size;
+    height: $circle-size;
+    background-color: $constant-white;
+    position: absolute;
+    left: $switch-padding;
+    top: $switch-padding;
+    transition: left $default-transition;
+  }
+}
+
+input:checked + .custom-switch-checkbox {
+  background-color: $accent-3;
+
+  div {
+    left: calc(100% - $circle-size - $switch-padding);
+  }
+}

@@ -56,8 +56,8 @@ export class Position{
     @Prop()
     minPricePercent: number
     
-    @Prop([Object])
-    positionEnters: object[]
+    @Prop({type: [Object]})
+    positionEnters: any
 }
 
 export const PositionSchema = SchemaFactory.createForClass(Position);

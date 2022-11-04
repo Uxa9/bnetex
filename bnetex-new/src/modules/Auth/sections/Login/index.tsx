@@ -25,6 +25,7 @@ const Login = () => {
     const { isLoading, promiseWithLoading } = usePromiseWithLoading();
     const { goToState } = useGoToState();
     const { loginUser } = useActions();
+    const { DASHBOARD, VERIFY_EMAIL, REGISTRATION } = AppLinksEnum;
 
     const { login } = useAuthActions();
 
@@ -45,11 +46,11 @@ const Login = () => {
         promiseWithLoading(login(data.email, data.password))
             .then(() => {
                 loginUser();
-                goToState(AppLinksEnum.DASHBOARD);
+                goToState(DASHBOARD);
             })
             .catch((error) => {
                 error.response.data.message === 'USER_NOT_ACTIVATED' && 
-                    goToState(`/${AppLinksEnum.VERIFY_EMAIL}`);
+                    goToState(VERIFY_EMAIL);
                 bakeToast.error(error.response?.data.message);
             });
     };
@@ -114,7 +115,7 @@ const Login = () => {
                                 buttonStyle={'flat'}
                                 type={'button'}
                                 mini
-                                onClick={() => goToState(`/${AppLinksEnum.REGISTRATION}`)}
+                                onClick={() => goToState(REGISTRATION, null, true)}
                             />
                         </div>
                     </>

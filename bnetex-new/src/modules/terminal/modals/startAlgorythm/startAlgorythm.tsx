@@ -1,12 +1,12 @@
 import styles from './startAlgorythm.module.scss';
 import classNames from 'classnames';
-import { Modal } from 'components/ModalSpawn/Modal/modal';
 import { BaseModalProps } from 'lib/hooks/useModal';
 import { Button } from 'lib/ui-kit';
+import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
 
 interface StartAlgorythmModalProps{ 
     amountToSend: number;
-    onSubmit: (value: boolean) => void; //Костыль, нужно отправлять запрос на бек, получать статус и изменять его в useEffect
+    onSubmit: (value: any) => void; //Костыль, нужно отправлять запрос на бек, получать статус и изменять его в useEffect
 }
 
 const StartAlgorythmModal = (props: StartAlgorythmModalProps & BaseModalProps) => {
@@ -14,7 +14,7 @@ const StartAlgorythmModal = (props: StartAlgorythmModalProps & BaseModalProps) =
     const { amountToSend, onSubmit, onClose } = props;
 
     const handleSubmit = () => {
-        onSubmit(true);
+        onSubmit(amountToSend);
         onClose();
     };
 

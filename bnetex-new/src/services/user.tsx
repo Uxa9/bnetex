@@ -2,7 +2,7 @@ import useApi from 'lib/hooks/useApi';
 import { getUserId } from 'lib/utils/getUserId';
 import { getToken } from './utils/getToken';
 
-const [protectedApi] = useApi();
+const [ protectedApi ] = useApi();
 
 
 export const getUser = async () => {

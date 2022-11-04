@@ -1,0 +1,46 @@
+@import 'styles/colors/colors';
+@import 'styles/variables';
+@import 'styles/mixins';
+
+$menu-width: min(60vw, 100%);
+
+.burger-menu {
+  @include column-flex;
+
+  justify-content: space-between;
+  position: fixed;
+  top: calc(100% + 1px);
+  left: 100%;
+  height: calc(100vh - $header-height);
+  width: $menu-width;
+  background-color: $grayscale-1;
+  z-index: 101;
+  padding: 16px;
+  transform: translateX(0);
+  transition: transform $default-transition ease;
+
+  &__main,
+  &__secondary {
+    @include column-flex(16px);
+  }
+
+  &--opened {
+    transform: translateX(calc(-1 * $menu-width));
+  }
+}
+
+.overlay {
+  position: fixed;
+  left: 0;
+  top: 100%;
+  width: 100vw;
+  height: calc(100vh - $header-height);
+  z-index: 100;
+  background-color: $constant-black;
+  opacity: 0;
+  transition: opacity $default-transition ease;
+
+  &--visible {
+    opacity: 0.5;
+  }
+}

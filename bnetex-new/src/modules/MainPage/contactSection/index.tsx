@@ -3,7 +3,7 @@ import { Button } from 'lib/ui-kit';
 import styles from './contactSection.module.scss';
 import {ReactComponent as AbstractGridL} from '../../../assets/images/abstract-grid--L.svg';
 import {ReactComponent as AbstractGridM} from '../../../assets/images/abstract-grid--M.svg';
-import Blur from 'components/blurredBackgroundItem';
+import Blur from 'modules/Global/components/blurredBackgroundItem';
 
 const ContactSection = () => {
 

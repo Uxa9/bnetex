@@ -93,8 +93,20 @@ export class UsersController {
         return this.userService.addRole(dto);
     }
 
-    @Get('histData')
-    histData() {
-        return this.userService.getHistoricalData();
+    @UseGuards(JwtAuthGuard)
+    @Post('/startInvest')
+    startInvest(@Body() dto: StartInvestDto) {
+        return this.userService.startInvest(dto);
+    }
+    
+    @UseGuards(JwtAuthGuard)
+    @Get('/stopInvest/:id')
+    stopInvest(@Param('id') id: number) {
+        return this.userService.stopInvest(id);
+    }
+    
+    @Get('/getTotalInvestAmount')
+    getTotalInvestAmount() {
+        return this.userService.getTotalInvestAmount();
     }
 }

@@ -1,7 +1,8 @@
 import classNames from 'classnames';
 import Skeleton from 'lib/ui-kit/skeleton/skeleton';
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
+import { AppLinksEnum } from 'routes/appLinks';
 import styles from './dashboard.module.scss';
 import { ActiveSectionType, dashboardSections, DashboardSection } from './dashboardSections';
 
@@ -14,9 +15,10 @@ const MainWallet = lazy(() => import('modules/Dashboard/sections/mainWallet/main
 const Dashboard = () => {
     const [activeSection, setActiveSection] = useState<ActiveSectionType | undefined>(undefined);
     const { pathname } = useLocation();
+    const { TOOLS, SETTINGS, MAIN_WALLET, INVESTOR_WALLET, TRANSACTIONS, DASHBOARD } = AppLinksEnum;
 
     useEffect(() => {
-        setActiveSection('tools'); // костыль, передалать
+        setActiveSection('tools'); //toDo костыль, передалать
         dashboardSections.forEach((section: DashboardSection) => {
             if (pathname.match(section.link)) {
                 setActiveSection(section.link);
@@ -26,23 +28,26 @@ const Dashboard = () => {
     }, [ pathname ]);
 
     const loadSection = useCallback(() => {
-        const authSectionPath = pathname.split('/')[2];
+        const authSectionPath = pathname.split('/').at(-1);
         switch (authSectionPath) {
-            case 'transactions': {
+            case TRANSACTIONS: {
                 return <Transactions />;
             }
-            case 'settings':{
+            case SETTINGS: {
                 return <Settings />;
             }
-            case 'investor-wallet': {
+            case INVESTOR_WALLET.split('/').at(-1): {
                 return <InvestorWallet />;
             }
-            case 'main-wallet': {
+            case MAIN_WALLET.split('/').at(-1): {
                 return <MainWallet />;
             }
-            case 'tools':
-            default: {
+            case TOOLS:
+            case DASHBOARD: {
                 return <Tools />;
+            }
+            default: {
+                return <Navigate to={`/${AppLinksEnum.NOT_FOUND_404}`} />;
             }
         }
     }, [ pathname ]);

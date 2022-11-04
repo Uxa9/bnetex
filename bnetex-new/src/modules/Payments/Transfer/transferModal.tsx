@@ -1,5 +1,4 @@
 import { Exchange } from 'assets/images/icons';
-import { Modal } from 'components/ModalSpawn/Modal/modal';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { BaseModalProps } from 'lib/hooks/useModal';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
@@ -8,6 +7,7 @@ import { WalletCategoryEnum, WalletCategoryType, WalletCategoryWithBalance } fro
 import { Button, Input, Select, SelectOption } from 'lib/ui-kit';
 import { blockEAndDashKey } from 'lib/utils';
 import { numberValidation } from 'lib/utils/hookFormValidation';
+import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AppLinksEnum } from 'routes/appLinks';

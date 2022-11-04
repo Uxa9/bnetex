@@ -111,6 +111,22 @@ export class UsersService {
         return user;
     }
 
+    async getUser(id: number) {
+        const user = await this.userRepository.findByPk(id);
+
+        if ( !user ) {
+            throw new UserNotFoundException();
+        }
+
+        return {
+            email: user.email,
+            mainWallet: user.mainWallet,
+            investWallet: user.investWallet,
+            openTrade: user.openTrade,
+            tradeBalance: user.tradeBalance
+        };
+    }
+
     async getWallets(id: number) {
         const user = await this.getUserById(id);
 
@@ -230,42 +246,44 @@ export class UsersService {
             );
         }
 
-        const { positionEnters } = data;
-
-        // const data = JSON.parse(a);
-
-        let dates  = [];
-        let positionVolume = 0;
-        let pnlValues = [];
-        let roeValues = [];
-
-        if (data.positionType === "LONG") {
-            positionEnters.map((position, index) => {
-                if (index === 0) {
-                    dates.push(new Date(position.time).toLocaleDateString());
-                    pnlValues.push(0);
-                    roeValues.push(0);
-                    positionVolume+=position.volumeUSDT;                    
-                    return;
-                }
-
-                const prevPosition = positionEnters[index - 1];
-                dates.push(new Date(position.time).toLocaleDateString());
-                pnlValues.push(position.avegarePrice / prevPosition.avegarePrice - 1);
-                positionVolume+=position.volumeUSDT;
-                roeValues.push(positionVolume*pnlValues[index]);
-
-            });
-
-            dates.push(new Date(data.closeTime).toLocaleDateString());
-            pnlValues.push(data.percentProfit);
-            roeValues.push(data.sumProfit);
-        }
+        await user.update({
+            openTrade: true,
+            startInvestTime: new Date,
+            tradeBalance: dto.amount,
+            investWallet: user.investWallet - dto.amount
+        });
 
         return {
-            dates,
-            pnlValues,
-            roeValues
+            status: "SUCCESS",
+            message: "TRADING_STARTED"
         }
+    }
+
+    async stopInvest(id: number) {
+        const user = await this.getUserById(id);
+
+        await user.update({
+            openTrade: false,
+            stopInvestTime: new Date,
+            investWallet: user.investWallet + user.tradeBalance
+        });
+
+        return {
+            status: "SUCCESS",
+            message: "TRADING_FINISHED"
+        }
+    }
+
+    async getTotalInvestAmount() {
+        const res = await this.userRepository.findAll({
+            where: {
+                tradeBalance: {
+                    [Op.gt]: 0
+                }
+            },
+            attributes: ['tradeBalance']
+        });
+
+        return res.reduce((acc, user) => acc + user.tradeBalance, 0);
     }
 }

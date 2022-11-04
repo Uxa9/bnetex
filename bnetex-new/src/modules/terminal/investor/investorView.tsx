@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
 import TradeView from './tradeView/tradeView';
 import HistoryView from './historyView/historyView';
-import AreaChart from './chart/areaChart';
 import styles from './investorView.module.scss';
 import ToolTip from 'lib/ui-kit/toolTip';
 import classNames from 'classnames';
 import { getHistoricalData } from 'services/getHistoricalData';
+import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
+import InvestorChart from 'modules/Global/components/investorChart/investorChart';
 
 type InvestorViewType = 'trade' | 'history';
 
@@ -22,7 +23,7 @@ const InvestorView = () => {
     const [graphicData, setGraphicData] = useState<InvestProfitInterface>({
         dates: [],
         pnlValues: [],
-        roeValues: []
+        roeValues: [],
     });
     const [investProfit, setInvestProfit] = useState(0);
     const [investPercentProfit, setInvestPercentProfit] = useState(0);
@@ -33,14 +34,14 @@ const InvestorView = () => {
         setGraphicData({
             dates: res.dates,
             pnlValues: res.pnlValues.map((item: any) => Number(Number(item).toFixed(2))),
-            roeValues: res.roeValues.map((item: any) => Number(Number(item).toFixed(2)))
-        });      
-        
-        setInvestPercentProfit(res.roeValues[res.roeValues.length - 1]);
-        setInvestProfit(investPercentProfit * amount / 100);
+            roeValues: res.roeValues.map((item: any) => Number(Number(item).toFixed(2))),
+        });
+
+        await setInvestPercentProfit(res.roeValues[res.roeValues.length - 1]);
+        await setInvestProfit(res.roeValues[res.roeValues.length - 1] * amount / 100);
 
         return;
-    }
+    };
 
     return (
         <>
@@ -66,7 +67,6 @@ const InvestorView = () => {
                                 value={'history'}
                             />
                         </ToggleButtonGroup>
-
                         <ToolTip
                             title='Что такое история?'
                             infoText='История или история сделок - это исторические записи фактических транзакций по позициям. 
@@ -76,16 +76,11 @@ const InvestorView = () => {
                     {
                         viewType === 'trade' ?
                             <TradeView /> :
-                            <HistoryView 
+                            <HistoryView
                                 handleClick={getData}
                             />
                     }
                 </div>
-                {
-                    viewType === 'trade' ? 
-                        <TradeView /> :
-                        <HistoryView handleClick={getData} />
-                }
             </div>
             <div
                 className={classNames(
@@ -94,32 +89,22 @@ const InvestorView = () => {
                     'card'
                 )}
             >
-                <ToolTip 
+                <ToolTip
                     title='Доход инвестора'
                     infoText=''
                 />
                 <div
                     className={styles['data-card__row']}
                 >
-                    <p
-                        className={styles['header']}
+                    <span
+                        className={'subtitle'}
                     >
-                        Доход инвестора
-                    </p>
-                    <div
-                        className={styles['investor-income']}
-                    >
-                        <span
-                            className={styles['investor-income-amount']}
-                        >
-                            {Number(Number(investProfit).toFixed(2))}
-                        </span>
-                        <span
-                            className={styles['investor-income-percent']}
-                        >
-                            {Number(Number(investPercentProfit).toFixed(2))}
-                        </span>
-                    </div>
+                        {Number(Number(investProfit).toFixed(2))}
+                    </span>
+                    <SignedNumber 
+                        value={Number(Number(investPercentProfit).toFixed(2))}
+                        postfix={'%'}
+                    />
                 </div>
             </div>
             <div className={classNames(
@@ -128,16 +113,10 @@ const InvestorView = () => {
                 'card'
             )}
             >
-                <AreaChart
+                <InvestorChart 
                     dates={graphicData.dates}
                     values={graphicData.pnlValues}
-                    title={
-                        <ToolTip
-                            title={'PnL'}
-                            infoText={'PNL (Profit and Loss) – это величина, которая показывает разницу между прибылью и убытками в трейдинге.'}
-                            alignment={'right'}
-                        />
-                    }
+                    type={'PNL'}
                 />
             </div>
             <div className={classNames(
@@ -146,16 +125,10 @@ const InvestorView = () => {
                 'card',
             )}
             >
-                <AreaChart
+                <InvestorChart 
                     dates={graphicData.dates}
                     values={graphicData.roeValues}
-                    title={
-                        <ToolTip
-                            title={'ROE'}
-                            infoText={'ROE — это та процентная ставка, под которую в компании работают средства акционеров. Этот показатель является ключевым для определения эффективности деятельности компании. Например, показатель ROE = 20% говорит о том, что каждый рубль, вложенный в компанию, ежегодно приносит 20 копеек прибыли.'}
-                            alignment={'right'}
-                        />
-                    }
+                    type={'ROE'}
                 />
             </div>
         </>

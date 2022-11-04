@@ -3,10 +3,8 @@ import { Button } from 'lib/ui-kit';
 import styles from './tools.module.scss';
 import Chart from 'react-apexcharts';
 import { useEffect, useState } from 'react';
-
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
-import AreaChart from 'modules/terminal/investor/chart/areaChart';
 import getRoE from 'services/getroe';
 import getPnL from 'services/getpnl';
 import TransactionTable from './transactionTable';
@@ -15,6 +13,7 @@ import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import useWalletActions from 'services/walletActions';
 import { WalletCategoryWithBalance } from 'lib/types/wallet';
 import { useTheme } from 'lib/hooks/useTheme';
+import InvestorChart from 'modules/Global/components/investorChart/investorChart';
 
 interface GraphicProps {
     dates: string[],
@@ -40,12 +39,12 @@ const Tools = () => {
 
     const [roe, setRoe] = useState<GraphicProps>({
         dates: [],
-        values: []
+        values: [],
     });
 
     const [pnl, setPnl] = useState<GraphicProps>({
         dates: [],
-        values: []
+        values: [],
     });
 
     const [rows, setRows] = useState<RowData[]>([]);
@@ -55,24 +54,24 @@ const Tools = () => {
             .then(res => {
                 setRoe({
                     dates: res.dates,
-                    values: res.values.map((item: any) => Number(Number(item).toFixed(2)))
+                    values: res.values.map((item: any) => Number(Number(item).toFixed(2))),
                 });
             });
         getPnL(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
             .then(res => {
                 setPnl({
                     dates: res.dates,
-                    values: res.values.map((item: any) => Number(Number(item).toFixed(2)))
+                    values: res.values.map((item: any) => Number(Number(item).toFixed(2))),
                 });
             });
         getUserTransactions(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
             .then(res => {
                 let data = res.map((item: any) => {
                     return ({
-                        currency: 'usdt',
-                        date: new Date(item.createdAt),
-                        type: item.type == 1 ? 'withdraw' : 'deposit',
-                        amount: item.amount,
+                        currency : 'usdt',
+                        date : new Date(item.createdAt),
+                        type : item.type == 1 ? 'withdraw' : 'deposit',
+                        amount : item.amount,
                     });
                 });
 
@@ -101,12 +100,12 @@ const Tools = () => {
                     <Button
                         buttonStyle={'primary'}
                         text={'Ввод'}
-                        onClick={() => goToState(AppLinksEnum.DEPOSIT)}
+                        onClick={() => goToState(DEPOSIT)}
                     />
                     <Button
                         buttonStyle={'outlined'}
                         text={'Вывод'}
-                        onClick={() => goToState(AppLinksEnum.WITHDRAW)}
+                        onClick={() => goToState(WITHDRAW)}
                     />
                 </div>
             </div>
@@ -146,12 +145,12 @@ const Tools = () => {
                             options={{ // приготовьтесь охуеть
                                 chart: {
                                     stacked: true,
-                                    zoom: { enabled: false },
-                                    selection: { enabled: false },
-                                    toolbar: { show: false },
-                                    offsetY: -60,
-                                    offsetX: -25,
-                                    background: 'transparent'
+                                    zoom      : { enabled : false },
+                                    selection : { enabled : false },
+                                    toolbar   : { show : false },
+                                    offsetX   : -20,
+                                    offsetY   : -30,
+                                    width     : '250%',
                                 },
                                 theme: {
                                     mode: theme,
@@ -192,8 +191,8 @@ const Tools = () => {
                                 legend: {
                                     showForNullSeries: false,
                                     showForSingleSeries: false,
-                                    offsetY: -10,
-                                    offsetX: -7,
+                                    offsetY: -20,
+                                    offsetX: -15,
                                     horizontalAlign: 'left',
                                 },
                                 colors: ['#9202FF', '#1A75FF'],
@@ -214,7 +213,7 @@ const Tools = () => {
                             Транзакции
                         </span>
                         <span
-                            className={styles['header-show-all']}
+                            className={styles['header-show-all']} 
                             onClick={() => goToState(`${DASHBOARD}/${TRANSACTIONS}`)}
                         >
                             Посмотреть все
@@ -235,19 +234,19 @@ const Tools = () => {
                 <div
                     className={classNames(styles['chart'], 'card')}
                 >
-                    <AreaChart
+                    <InvestorChart 
                         dates={pnl.dates}
                         values={pnl.values}
-                        title="PnL"
+                        type={'PNL'}
                     />
                 </div>
                 <div
                     className={classNames(styles['chart'], 'card')}
                 >
-                    <AreaChart
+                    <InvestorChart 
                         dates={roe.dates}
                         values={roe.values}
-                        title="RoE"
+                        type={'ROE'}
                     />
                 </div>
             </div>

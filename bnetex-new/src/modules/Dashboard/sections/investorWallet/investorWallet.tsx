@@ -1,6 +1,5 @@
 import styles from './investorWallet.module.scss';
 import classNames from 'classnames';
-import AreaChart from 'modules/terminal/investor/chart/areaChart';
 import { Button } from 'lib/ui-kit';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { useEffect, useState } from 'react';
@@ -13,6 +12,8 @@ import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import useWalletActions from 'services/walletActions';
 import { WalletCategoryWithBalance } from 'lib/types/wallet';
 import { useTheme } from 'lib/hooks/useTheme';
+import { AppLinksEnum } from 'routes/appLinks';
+import InvestorChart from 'modules/Global/components/investorChart/investorChart';
 
 // toDo
 // сделать нормальные кнопки
@@ -35,12 +36,12 @@ const InvestorWallet = () => {
 
     const [roe, setRoe] = useState<GraphicProps>({
         dates: [],
-        values: []
+        values: [],
     });
 
     const [pnl, setPnl] = useState<GraphicProps>({
         dates: [],
-        values: []
+        values: [],
     });
 
     useEffect(() => {
@@ -48,14 +49,14 @@ const InvestorWallet = () => {
             .then(res => {
                 setRoe({
                     dates: res.dates,
-                    values: res.values.map((item: any) => Number(Number(item).toFixed(2)))
+                    values: res.values.map((item: any) => Number(Number(item).toFixed(2))),
                 });
             });
         getPnL(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
             .then(res => {
                 setPnl({
                     dates: res.dates,
-                    values: res.values.map((item: any) => Number(Number(item).toFixed(2)))
+                    values: res.values.map((item: any) => Number(Number(item).toFixed(2))),
                 });
             });
         promiseWithLoading<WalletCategoryWithBalance>(getWallets())
@@ -101,17 +102,18 @@ const InvestorWallet = () => {
                         {`${Number(investBalance).toFixed(2)} USDT`}
                     </p>
                     <div>
+                        {/* toDo: убрать нахуй это говно */}
                         <Chart
                             type='bar'
                             series={[
                                 {
-                                    name: "В работе",
-                                    data: [Number(Number(mainBalance).toFixed(2))]
+                                    name: 'В работе',
+                                    data: [Number(Number(mainBalance).toFixed(2))],
                                 },
                                 {
-                                    name: "Доступно для вывода",
-                                    data: [Number(Number(investBalance).toFixed(2))]
-                                }
+                                    name: 'Доступно для вывода',
+                                    data: [Number(Number(investBalance).toFixed(2))],
+                                },
                             ]}
                             height={'150px'}
                             width={'100%'}
@@ -134,10 +136,10 @@ const InvestorWallet = () => {
                                 grid: {
                                     show: false,
                                     xaxis: {
-                                        lines: { show: false }
+                                        lines: { show: false },
                                     },
                                     yaxis: {
-                                        lines: { show: false }
+                                        lines: { show: false },
                                     },
                                 },
                                 plotOptions: {
@@ -150,23 +152,23 @@ const InvestorWallet = () => {
                                 xaxis: {
                                     categories: [''],
                                     labels: {
-                                        show: false
+                                        show: false,
                                     },
                                     axisBorder: { show: false },
-                                    axisTicks: { show: false }
+                                    axisTicks: { show: false },
                                 },
                                 yaxis: {
-                                    show: false
+                                    show: false,
                                 },
                                 stroke: {
-                                    width: 0
+                                    width: 0,
                                 },
                                 legend: {
                                     showForNullSeries: false,
                                     showForSingleSeries: false,
                                     offsetY: -10,
                                     offsetX: -7,
-                                    horizontalAlign: 'left'
+                                    horizontalAlign: 'left',
                                 },
                                 colors: ['#9202FF', '#1A75FF'],
                                 dataLabels: { enabled: false },
@@ -212,7 +214,7 @@ const InvestorWallet = () => {
                     <Button
                         buttonStyle='primary'
                         text='Перейти в терминал'
-                        onClick={() => goToState('/terminal/investor')}
+                        onClick={() => goToState(`${AppLinksEnum.TERMINAL}/investor`)}
                     />
                 </div>
             </div>
@@ -222,19 +224,19 @@ const InvestorWallet = () => {
                 <div
                     className={classNames(styles['chart'], 'card')}
                 >
-                    <AreaChart
+                    <InvestorChart 
                         dates={pnl.dates}
                         values={pnl.values}
-                        title="PnL"
+                        type={'PNL'}
                     />
                 </div>
                 <div
                     className={classNames(styles['chart'], 'card')}
                 >
-                    <AreaChart
+                    <InvestorChart 
                         dates={roe.dates}
                         values={roe.values}
-                        title="RoE"
+                        type={'ROE'}
                     />
                 </div>
             </div>

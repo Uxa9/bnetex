@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 const Deposit = () => {
 
-    const {navigateBack} = useGoToState();
+    const { navigateBack } = useGoToState();
 
     const WALLET_ADDRESS = 'TQwckR7VpEsrMFCogvjKhiQ1YJBNi5Qbjm';
 

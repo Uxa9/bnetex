@@ -9,6 +9,8 @@ import StartAlgorythmModal from 'modules/terminal/modals/startAlgorythm/startAlg
 import StopAlgorythmModal from 'modules/terminal/modals/stopAlgorythm/stopAlgorythm';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { startInvestTrading, stopInvestTrading } from 'services/investTrading';
+import { getUser } from 'services/user';
 import useWalletActions from 'services/walletActions';
 import styles from './tradeView.module.scss';
 
@@ -95,14 +97,14 @@ const TradeView = () => {
     const onSubmit = (data: TradeViewData) => {
         openStartAlgorythmModal({
             amountToSend: data.amount,
-            onSubmit: setIsAlgorythmActive,
+            onSubmit: startInvestAlgorythm,
         });
         reset();
     };
 
     const onStop = () => {
         openStopAlgorythmModal({
-            onSubmit: setIsAlgorythmActive,
+            onSubmit: stopInvestAlgorythm,
         }); 
     };
  
@@ -114,7 +116,7 @@ const TradeView = () => {
             <div
                 className={styles['trade-view__balance']}
             >
-                <div  className={styles['balance-item']}>
+                <div className={styles['balance-item']}>
                     <p className={classNames(
                         styles['balance-label'],
                         'caption-mini'

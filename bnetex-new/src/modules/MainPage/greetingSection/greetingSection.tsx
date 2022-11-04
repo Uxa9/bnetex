@@ -3,17 +3,15 @@ import { Button } from 'lib/ui-kit';
 import styles from './greetingSection.module.scss';
 import { ReactComponent as GraphicLine } from '../../../assets/images/landing/graphic__line.svg';
 import { ReactComponent as GraphicGradient } from '../../../assets/images/landing/graphic__gradient.svg';
-import Blur from 'components/blurredBackgroundItem';
 import { DynamicImg } from 'lib/utils/DynamicImg';
-import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { AppLinksEnum } from 'routes/appLinks';
 import { useGoToState } from 'lib/hooks/useGoToState';
+import Blur from 'modules/Global/components/blurredBackgroundItem';
 
 const GreetingSection = () => {
     
-    const { AUTH, LOGIN } = AppLinksEnum;
+    const { DASHBOARD, INVESTOR_WALLET } = AppLinksEnum;
     const { goToState } = useGoToState();
-    const isAuth = useTypedSelector(state => state.auth.isAuth);
 
     return(
         <section className={styles['greeting-block']}>
@@ -47,7 +45,7 @@ const GreetingSection = () => {
                 <Button 
                     text={'Начать работу'}
                     buttonStyle={'outlined'}
-                    onClick={() => isAuth ? goToState(`${AppLinksEnum.DASHBOARD}/wallet/investor`) : goToState(`${AUTH}/${LOGIN}`)}
+                    onClick={() =>  goToState(`${DASHBOARD}/${INVESTOR_WALLET}`)}
                 />
             </div>
             <div 

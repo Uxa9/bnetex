@@ -16,6 +16,12 @@
   }
 }
 
+.investor-view-wrapper__header {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 16px;
+}
+
 .data-card {
   @include column-flex(16px);
 
@@ -26,41 +32,26 @@
   }
 }
 
-.investor-income-percent {
-    color: $green-3;
-
-    &::before {
-        content: '+';
-    }
-
-    &::after {
-        content: ' %';
-    }
-}
-
-.investor-balance,
-.investor-invest {
-    margin-top: 20px;
-}
-
-.investor-balance-amount {
-    font-size: 20px;
-    font-weight: 500;
+.investor-income {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .button-wrapper {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .investor-prediction-period {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 
 .all-balance-btn {
-    width: 17ch;
-    padding-right: 8px;
+  width: 17ch;
+  padding-right: 8px;
 }
 
 .investor-view-card {
@@ -102,4 +93,13 @@
       display: none;
     }
   }
+}
+
+.investor-view-wrapper__header {
+    display: flex;
+    margin-bottom: 36px;
+    
+    >div {
+        margin-left: 8px;
+    }
 }
