@@ -1,9 +1,8 @@
 import classNames from 'classnames';
 import { useTheme } from 'lib/hooks/useTheme';
-import { ToggleSwitchButton } from 'lib/ui-kit';
+import { Switch } from 'lib/ui-kit';
 import { useEffect, useState } from 'react';
 import styles from './burgerMenu.module.scss';
-
 
 export default function BurgerMenu(props: any) {
 
@@ -19,19 +18,18 @@ export default function BurgerMenu(props: any) {
     return (
         <>
             <div
-                className={`${styles['menu-background']}
-                    ${isOpen ? 
-                        styles['menu-background-active'] : 
-                        styles['menu-background-hidden']}`
-                }
+                className={classNames(
+                    styles['menu-background'],
+                    styles[`menu-background--${isOpen ? 'active' : 'hidden'}`]
+                )}
                 onClick={props.onClose}
             />
             <div
                 className={
                     `${styles['burger-menu']} 
                     ${isOpen ? 
-                        styles['burger-menu-active'] : 
-                        styles['burger-menu-hidden']}`
+            styles['burger-menu-active'] : 
+            styles['burger-menu-hidden']}`
                 }
             >
                 {links.map((item: any) => {
@@ -41,17 +39,14 @@ export default function BurgerMenu(props: any) {
                             onClick={props.onClose}
                         >
                             {item}
-                        </div>)
+                        </div>);
                 })}
-                <div
-                    className={styles['theme-button-switcher']}
-                >
-                    <ToggleSwitchButton 
-                        active={(theme === "dark")}
-                        handleChange={toggleTheme}
-                    />
-                </div>
+                <Switch
+                    checked={theme === 'dark'} 
+                    onChange={toggleTheme}
+                    label={'Темная тема'}
+                />
             </div>
         </>
-    )
+    );
 }

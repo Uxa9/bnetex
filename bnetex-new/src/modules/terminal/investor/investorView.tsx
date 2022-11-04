@@ -81,7 +81,7 @@ const InvestorView = () => {
                             />
                     }
                 </div>
-            </div>
+             </div>
             <div
                 className={classNames(
                     styles['investor-view-card'],
