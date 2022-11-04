@@ -5,6 +5,7 @@ import { getToken } from './utils/getToken';
 const [ protectedApi ] = useApi();
 
 export const startInvestTrading = async (amount: number) => {
+
     return await protectedApi.post(
         '/users/startInvest', {
             amount: amount,

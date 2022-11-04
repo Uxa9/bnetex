@@ -47,7 +47,7 @@ const Dashboard = () => {
                 return <Tools />;
             }
             default: {
-                return <Navigate to={'/'} />; //toDo: to 404
+                return <Navigate to={`/${AppLinksEnum.NOT_FOUND_404}`} />;
             }
         }
     }, [ pathname ]);

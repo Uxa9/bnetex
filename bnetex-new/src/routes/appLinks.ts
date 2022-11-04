@@ -15,4 +15,5 @@ export enum AppLinksEnum {
     TOOLS = 'tools',
     TRANSACTIONS = 'transactions',
     SETTINGS = 'settings',
+    NOT_FOUND_404 = '404'
 }

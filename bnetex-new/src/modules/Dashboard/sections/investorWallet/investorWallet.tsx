@@ -1,6 +1,5 @@
 import styles from './investorWallet.module.scss';
 import classNames from 'classnames';
-import AreaChart from 'modules/terminal/investor/chart/areaChart';
 import { Button } from 'lib/ui-kit';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { useEffect, useState } from 'react';
@@ -13,6 +12,7 @@ import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import useWalletActions from 'services/walletActions';
 import { WalletCategoryWithBalance } from 'lib/types/wallet';
 import { AppLinksEnum } from 'routes/appLinks';
+import InvestorChart from 'modules/Global/components/investorChart/investorChart';
 
 // toDo
 // сделать нормальные кнопки
@@ -100,6 +100,7 @@ const InvestorWallet = () => {
                         {`${Number(investBalance).toFixed(2)} USDT`}
                     </p>
                     <div>
+                        {/* toDo: убрать нахуй это говно */}
                         <Chart
                             type='bar'
                             series={[
@@ -214,19 +215,19 @@ const InvestorWallet = () => {
                 <div
                     className={classNames(styles['chart'], 'card')}
                 >
-                    <AreaChart
+                    <InvestorChart 
                         dates={pnl.dates}
                         values={pnl.values}
-                        title="PnL"
+                        type={'PNL'}
                     />
                 </div>
                 <div
                     className={classNames(styles['chart'], 'card')}
                 >
-                    <AreaChart
+                    <InvestorChart 
                         dates={roe.dates}
                         values={roe.values}
-                        title="RoE"
+                        type={'ROE'}
                     />
                 </div>
             </div>

@@ -27,6 +27,7 @@ $switch-padding: 2px;
   position: relative;
   display: flex;
   transition: background-color $default-transition;
+  cursor: pointer;
 
   div {
     border-radius: 50%;

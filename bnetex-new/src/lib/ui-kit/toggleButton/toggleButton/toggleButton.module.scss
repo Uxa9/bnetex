@@ -17,7 +17,7 @@
     border: 1px solid $grayscale-4;
   }
 
-  //   toDo: сделать без !important
+  // toDo: сделать без !important
   &--underlined {
     border-bottom: 2px solid transparent;
     border-left: none !important;
@@ -35,4 +35,8 @@ input:checked + .button {
   border-color: $accent-3;
   color: $accent-3;
   background-color: $accent-6;
+}
+
+input:checked + .button:not(.button--underlined) {
+  border-left: 1px solid !important;
 }

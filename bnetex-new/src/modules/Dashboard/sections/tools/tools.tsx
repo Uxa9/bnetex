@@ -3,10 +3,8 @@ import { Button } from 'lib/ui-kit';
 import styles from './tools.module.scss';
 import Chart from 'react-apexcharts';
 import { useEffect, useState } from 'react';
-
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
-import AreaChart from 'modules/terminal/investor/chart/areaChart';
 import getRoE from 'services/getroe';
 import getPnL from 'services/getpnl';
 import TransactionTable from './transactionTable';
@@ -14,6 +12,7 @@ import getUserTransactions from 'services/getUserTransactions';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import useWalletActions from 'services/walletActions';
 import { WalletCategoryWithBalance } from 'lib/types/wallet';
+import InvestorChart from 'modules/Global/components/investorChart/investorChart';
 
 interface GraphicProps {
     dates: string[],
@@ -226,19 +225,19 @@ const Tools = () => {
                 <div
                     className={classNames(styles['chart'], 'card')}
                 >
-                    <AreaChart
+                    <InvestorChart 
                         dates={pnl.dates}
                         values={pnl.values}
-                        title="PnL"
+                        type={'PNL'}
                     />
                 </div>
                 <div
                     className={classNames(styles['chart'], 'card')}
                 >
-                    <AreaChart                    
+                    <InvestorChart 
                         dates={roe.dates}
                         values={roe.values}
-                        title="RoE"
+                        type={'ROE'}
                     />
                 </div>
             </div>
