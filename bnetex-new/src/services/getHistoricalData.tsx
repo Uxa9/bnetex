@@ -21,3 +21,7 @@ export const getHistoricalData = async (period: number, amount: number): Promise
         roeValues: result.data.roeValues
     };
 }
+
+export const getHistoricalDataOrders = async (period: number) => {
+    return await api.get(`/positions/${period}`);
+};

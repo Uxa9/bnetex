@@ -96,6 +96,30 @@ export class User extends Model<User, UserCreationAttrs> {
     })
     investWallet : number;
 
+    @Column({
+        type : DataType.DATE,
+        defaultValue : DataType.NOW
+    })
+    startInvestTime : Date;
+
+    @Column({
+        type : DataType.DATE,
+        defaultValue : DataType.NOW
+    })
+    stopInvestTime : Date;
+
+    @Column({
+        type : DataType.BOOLEAN,
+        defaultValue : false
+    })
+    openTrade : boolean;
+
+    @Column({
+        type          : DataType.DOUBLE,
+        defaultValue  : 0
+    })
+    tradeBalance : number;
+
     @BelongsToMany(() => Role, () => UserRoles)
     roles: Role[];
 

@@ -9,6 +9,7 @@ import { AddRoleDto } from './dto/add-role.dto';
 import { TransferMoney } from './dto/transfer-money.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UserIdDto } from './dto/user-id.dto';
+import { StartInvestDto } from './dto/start-invest.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -40,6 +41,12 @@ export class UsersController {
     @Get()
     getAll() {
         return this.userService.getAllUsers();
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/:id')
+    getUser(@Param('id') id: number) {
+        return this.userService.getUser(id);
     }
 
     @ApiOperation({
@@ -79,8 +86,20 @@ export class UsersController {
         return this.userService.addRole(dto);
     }
 
-    @Get('histData')
-    histData() {
-        return this.userService.getHistoricalData();
+    @UseGuards(JwtAuthGuard)
+    @Post('/startInvest')
+    startInvest(@Body() dto: StartInvestDto) {
+        return this.userService.startInvest(dto);
+    }
+    
+    @UseGuards(JwtAuthGuard)
+    @Get('/stopInvest/:id')
+    stopInvest(@Param('id') id: number) {
+        return this.userService.stopInvest(id);
+    }
+    
+    @Get('/getTotalInvestAmount')
+    getTotalInvestAmount() {
+        return this.userService.getTotalInvestAmount();
     }
 }

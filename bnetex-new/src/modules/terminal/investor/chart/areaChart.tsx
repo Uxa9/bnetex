@@ -2,6 +2,7 @@ import { useEffect, FC, ReactElement } from 'react';
 import Chart from 'react-apexcharts';
 import styles from './areaChart.module.scss';
 import { ToolTip } from 'lib/ui-kit';
+import { useTheme } from 'lib/hooks/useTheme';
 
 interface ChartProps {
     dates  : string[],
@@ -11,6 +12,7 @@ interface ChartProps {
 
 const AreaChart:FC<ChartProps> = props => {
 
+    const { theme } = useTheme();
     const {dates, values, title} = props;
 
     const options : any = {
@@ -21,6 +23,12 @@ const AreaChart:FC<ChartProps> = props => {
         },
         dataLabels : { enabled : false },
         // title : { text: 'Chart' },
+        theme: {
+            mode: theme, 
+            monochrome: {
+                enabled: false
+            }
+        },
         stroke : { 
             width : 1,
             colors : ['#9043CA'], 
