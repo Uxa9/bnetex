@@ -8,6 +8,9 @@ import HeaderUserLinks from '../headerUserLinks';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { Logout } from 'assets/images/icons';
 import { logoutUser } from 'store/action-creators/auth';
+import { useGoToState } from 'lib/hooks/useGoToState';
+import { useActions } from 'lib/hooks/useActionCreators';
+import { AppLinksEnum } from 'routes/appLinks';
 
 interface BurgerMenuProps {
     isOpened: boolean;
@@ -19,6 +22,9 @@ export default function BurgerMenu({isOpened, onClose}: BurgerMenuProps) {
     const { theme, toggleTheme } = useTheme();
     const [ isOverlayVisible, setIsOverlayVisible ] = useState<boolean>(false);
     const isAuth = useTypedSelector(state => state.auth.isAuth);
+    const { goToState } = useGoToState();
+    const { logoutUser } = useActions();
+    const { HOME } = AppLinksEnum;
 
     useEffect(() => {
         // Таймаут вызывает сокрытие overlay через visibility: hidden только после завершения 
@@ -27,6 +33,11 @@ export default function BurgerMenu({isOpened, onClose}: BurgerMenuProps) {
             setIsOverlayVisible(true) :
             setTimeout(() => setIsOverlayVisible(false), Number(variablesMap.defaultTransition.replace('ms', '')));
     }, [ isOpened ]);
+
+        const logout = () => {
+        logoutUser();
+        goToState(HOME);
+    }
 
     return (
         <>
@@ -55,7 +66,7 @@ export default function BurgerMenu({isOpened, onClose}: BurgerMenuProps) {
                                 text={'Выйти'}
                                 buttonStyle={'thin'}
                                 Icon={Logout}
-                                onClick={logoutUser}
+                                onClick={logout}
                                 mini
                             />
                     }

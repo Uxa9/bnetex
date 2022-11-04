@@ -1,15 +1,21 @@
 import { Wallet, User, Logout, Login } from 'assets/images/icons';
+import { useActions } from 'lib/hooks/useActionCreators';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { Button } from 'lib/ui-kit';
 import { AppLinksEnum } from 'routes/appLinks';
-import { logoutUser } from 'store/action-creators/auth';
 
 const HeaderUserLinks = ({withLogoutButton}: {withLogoutButton?: boolean}) => {
 
     const isAuth = useTypedSelector(state => state.auth.isAuth);
     const { goToState } = useGoToState();
-    const { DASHBOARD, MAIN_WALLET, AUTH, LOGIN, REGISTRATION } = AppLinksEnum;
+    const { logoutUser } = useActions();
+    const { DASHBOARD, MAIN_WALLET, AUTH, LOGIN, REGISTRATION, HOME } = AppLinksEnum;
+
+    const logout = () => {
+        logoutUser();
+        goToState(HOME);
+    }
 
     return(
         isAuth ? 
@@ -34,7 +40,7 @@ const HeaderUserLinks = ({withLogoutButton}: {withLogoutButton?: boolean}) => {
                             text={'Выйти'}
                             buttonStyle={'thin'}
                             Icon={Logout}
-                            onClick={logoutUser}
+                            onClick={logout}
                             mini
                         />
                 }

@@ -1,3 +1,4 @@
+import { useActions } from 'lib/hooks/useActionCreators';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { useModal } from 'lib/hooks/useModal';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
@@ -10,7 +11,6 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AppLinksEnum } from 'routes/appLinks';
 import useAuthActions from 'services/auth';
-import { loginUser } from 'store/action-creators/auth';
 import FormCard from '../../components/FormCard/formCard';
 
 interface EmailValidationData {
@@ -24,7 +24,8 @@ const EmailValidation = () => {
     const { goToState } = useGoToState();
     const { confirmEmail } = useAuthActions();
     const { open: OpenNoEmailModal } = useModal(NoEmailModal);
-    const { AUTH, LOGIN, REGISTRATION_FINALIZE } = AppLinksEnum;
+    const { AUTH, LOGIN, REGISTRATION_FINALIZE, DASHBOARD } = AppLinksEnum;
+    const { loginUser } = useActions();
 
     const [userEmail, setUserEmail] = useState<string>('');
 

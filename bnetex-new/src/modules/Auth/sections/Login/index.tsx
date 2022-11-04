@@ -50,7 +50,7 @@ const Login = () => {
             })
             .catch((error) => {
                 error.response.data.message === 'USER_NOT_ACTIVATED' && 
-                    goToState(VERIFY_EMAIL);
+                    goToState(`auth/${VERIFY_EMAIL}`);
                 bakeToast.error(error.response?.data.message);
             });
     };
