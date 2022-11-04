@@ -34,7 +34,7 @@ const AuthLayout = () => {
                 return <Login />;
             }
             default: {
-                return <Navigate to={'/'} />; //toDo: 404
+                return <Navigate to={`/${AppLinksEnum.NOT_FOUND_404}`} />;
             }
         }
     }, [ pathname ]);
