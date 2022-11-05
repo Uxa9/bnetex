@@ -20,7 +20,7 @@
   &--menu-opened {
     background-color: $grayscale-1;
     position: fixed;
-    border: 1px solid $grayscale-4;
+    border-bottom: 1px solid $grayscale-4;
   }
 
   .logo {
