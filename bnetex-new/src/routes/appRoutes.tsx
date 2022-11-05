@@ -7,6 +7,8 @@ import { useActions } from 'lib/hooks/useActionCreators';
 import AppLoader from 'modules/Global/components/appLoader/appLoader';
 import { ProtectedRoute } from './protectedRoute';
 import Page404 from 'modules/Global/pages/404/page404';
+import EmailValidation from 'modules/Auth/sections/emailValidation';
+import RegistrationFinalize from 'modules/Auth/sections/registrationFinalize';
 
 const MainPage = lazy(() => import('modules/MainPage/MainPage'));
 const AuthLayout = lazy(() => import('modules/Auth/authLayout'));
@@ -19,7 +21,7 @@ const InvestorView = lazy(() => import('modules/terminal/investor/investorView')
 
 const AppRoutes = () => {
 
-    const { HOME, AUTH, TERMINAL, DASHBOARD, DEPOSIT, WITHDRAW, WITHDRAW_CONFIRM, NOT_FOUND_404 } = AppLinksEnum;
+    const { HOME, AUTH, TERMINAL, DASHBOARD, DEPOSIT, WITHDRAW, WITHDRAW_CONFIRM, NOT_FOUND_404, VERIFY_EMAIL, REGISTRATION_FINALIZE } = AppLinksEnum;
     const { loginUser, logoutUser } = useActions();
     const { verifyToken } = useAuthActions();
 
@@ -51,7 +53,10 @@ const AppRoutes = () => {
                         }
                     >
                     </Route>
-                    <Route path={`${AUTH}/*`} element={<AuthLayout />} />
+                    <Route path={`${AUTH}/*`} element={<AuthLayout />}>
+                        <Route path={VERIFY_EMAIL} element={<EmailValidation />} />
+                        <Route path={REGISTRATION_FINALIZE} element={<RegistrationFinalize />} />
+                    </Route>
                     <Route path={DEPOSIT} element={<Deposit />}></Route>
                     <Route path={WITHDRAW} element={<Withdraw />}></Route>
                     <Route path={WITHDRAW_CONFIRM} element={<WithdrawConfirm />} />
