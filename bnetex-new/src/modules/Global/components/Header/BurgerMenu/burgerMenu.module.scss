@@ -9,7 +9,7 @@ $menu-width: min(60vw, 100%);
 
   justify-content: space-between;
   position: fixed;
-  top: calc(100% + 1px);
+  top: calc($header-height + 1px);
   left: 100%;
   height: calc(100vh - $header-height);
   width: $menu-width;

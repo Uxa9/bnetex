@@ -7,7 +7,6 @@ import variablesMap from 'styles/exportedVariables.module.scss';
 import HeaderUserLinks from '../headerUserLinks';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { Logout } from 'assets/images/icons';
-import { logoutUser } from 'store/action-creators/auth';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { useActions } from 'lib/hooks/useActionCreators';
 import { AppLinksEnum } from 'routes/appLinks';
@@ -34,10 +33,10 @@ export default function BurgerMenu({isOpened, onClose}: BurgerMenuProps) {
             setTimeout(() => setIsOverlayVisible(false), Number(variablesMap.defaultTransition.replace('ms', '')));
     }, [ isOpened ]);
 
-        const logout = () => {
+    const logout = () => {
         logoutUser();
         goToState(HOME);
-    }
+    };
 
     return (
         <>
@@ -47,14 +46,13 @@ export default function BurgerMenu({isOpened, onClose}: BurgerMenuProps) {
                     isOpened && styles['overlay--visible']
                 )}
                 onClick={onClose}
-                style={{display: isOverlayVisible ? 'block' : 'none'}}
+                style={{visibility: isOverlayVisible ? 'visible' : 'hidden'}}
             />
             <aside
                 className={classNames(
                     styles['burger-menu'],
                     isOpened && styles['burger-menu--opened']
                 )}
-                style={{display: isOverlayVisible ? 'flex' : 'none'}}
             >
                 <div className={styles['burger-menu__main']}>
                     <HeaderUserLinks />
