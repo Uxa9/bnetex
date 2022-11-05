@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import styles from './changePasswordModal.module.scss';
-import { Modal } from 'components/ModalSpawn/Modal/modal';
+import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
 import { BaseModalProps } from 'lib/hooks/useModal';
 import { Button, Input } from 'lib/ui-kit';
 import FormCard from 'modules/Auth/components/FormCard/formCard';
