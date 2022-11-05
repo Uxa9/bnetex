@@ -71,8 +71,8 @@ const useWalletActions = () => {
         return await api.get(`/users/getWallets/${getUserId()}`)
             .then((response) => {
                 return {
-                    main: response.data.main,
-                    investor: response.data.investor,
+                    main: response.data.mainWallet,
+                    investor: response.data.investWallet,
                 };
             });
     };
