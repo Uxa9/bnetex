@@ -22,9 +22,9 @@ interface TransferFormData {
 
 const TransferModal = (props: BaseModalProps) => {
 
-    const [ senderWalletValue, setSenderWalletValue ] = useState<WalletCategoryType>('mainWallet'); 
-    const [ recieverWalletValue, setRecieverWalletValue ] = useState<WalletCategoryType>('investWallet'); 
-    const [ walletBalances, setWalletBalances ] = useState<WalletCategoryWithBalance>({mainWallet: 0, investWallet: 0}); 
+    const [ senderWalletValue, setSenderWalletValue ] = useState<WalletCategoryType>('main'); 
+    const [ recieverWalletValue, setRecieverWalletValue ] = useState<WalletCategoryType>('investor'); 
+    const [ walletBalances, setWalletBalances ] = useState<WalletCategoryWithBalance>({main: 0, investor: 0}); 
     const isWalletSelectionValid = useMemo(() => senderWalletValue !== recieverWalletValue, 
         [ senderWalletValue, recieverWalletValue ]);
 
@@ -98,7 +98,7 @@ const TransferModal = (props: BaseModalProps) => {
                             option={
                                 <p className={styles['wallet-category']}>
                                     Основной кошелек
-                                    <span>{walletBalances.mainWallet}</span>
+                                    <span>{walletBalances.main}</span>
                                 </p>
                             }
                         />
@@ -107,7 +107,7 @@ const TransferModal = (props: BaseModalProps) => {
                             option={
                                 <p className={styles['wallet-category']}>
                                     Инвестиционный кошелек
-                                    <span>{walletBalances.investWallet}</span>
+                                    <span>{walletBalances.investor}</span>
                                 </p>
                             }
                         />
@@ -129,7 +129,7 @@ const TransferModal = (props: BaseModalProps) => {
                             option={
                                 <p className={styles['wallet-category']}>
                                     Основной кошелек
-                                    <span>{walletBalances.mainWallet}</span>
+                                    <span>{walletBalances.main}</span>
                                 </p>
                             }
                         />
@@ -138,7 +138,7 @@ const TransferModal = (props: BaseModalProps) => {
                             option={
                                 <p className={styles['wallet-category']}>
                                     Инвестиционный кошелек
-                                    <span>{walletBalances.investWallet}</span>
+                                    <span>{walletBalances.investor}</span>
                                 </p>
                             }
                         />

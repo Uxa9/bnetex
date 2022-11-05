@@ -17,6 +17,6 @@ export const ProtectedRoute = memo((props: ProtectedRouteProps) => {
     }
 
     return (
-        isAuth ? props.children : <Navigate to={`${AUTH}/${LOGIN}`} />
+        isAuth ? props.children : <Navigate to={`/${AUTH}/${LOGIN}`} />
     );
 });

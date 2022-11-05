@@ -3,17 +3,12 @@
 
 $control-menu-width: 285px;
 
-.wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
 .dashboard {
   display: grid;
   grid-template-columns: $control-menu-width 1fr;
   column-gap: 16px;
   row-gap: 16px;
+  padding-top: $header-height;
 }
 
 .control-menu {

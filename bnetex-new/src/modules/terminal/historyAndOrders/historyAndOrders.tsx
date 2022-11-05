@@ -69,6 +69,7 @@ const HistoryAndOrders = ({className}: {className: string}) => {
                             <ToggleButton 
                                 text={section.title}
                                 value={section.section}
+                                key={section.title}
                             />
                         )
                     }

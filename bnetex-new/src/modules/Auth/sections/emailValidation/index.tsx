@@ -24,14 +24,14 @@ const EmailValidation = () => {
     const { goToState } = useGoToState();
     const { confirmEmail } = useAuthActions();
     const { open: OpenNoEmailModal } = useModal(NoEmailModal);
-    const { AUTH, LOGIN, REGISTRATION_FINALIZE, DASHBOARD } = AppLinksEnum;
+    const { AUTH, LOGIN, REGISTRATION_FINALIZE } = AppLinksEnum;
     const { loginUser } = useActions();
 
     const [userEmail, setUserEmail] = useState<string>('');
 
     useEffect(() => {
         const email = localStorage.getItem('userEmail');
-        email ? setUserEmail(email) : goToState(`${AUTH}/${LOGIN}`);;
+        email ? setUserEmail(email) : goToState(`${AUTH}/${LOGIN}`);
     }, []);
 
     useEffect(() => {
@@ -55,7 +55,7 @@ const EmailValidation = () => {
         promiseWithLoading(confirmEmail(userEmail, data.activationCode))
             .then(() => {
                 loginUser();
-                goToState('REGISTRATION_FINALIZE');
+                goToState(`${AUTH}/${REGISTRATION_FINALIZE}`);
             })
             .catch((error) => bakeToast.error(error.response?.data.message));
     };

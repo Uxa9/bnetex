@@ -56,6 +56,13 @@ export default function BurgerMenu({isOpened, onClose}: BurgerMenuProps) {
             >
                 <div className={styles['burger-menu__main']}>
                     <HeaderUserLinks />
+                    <Button
+                        className={styles['trading-link']}
+                        text={'Алготрейдинг'}
+                        buttonStyle={'thin'}
+                        onClick={() => goToState(`${AppLinksEnum.TERMINAL}/investor`)}
+                        mini
+                    />
                 </div>
                 <div className={styles['burger-menu__secondary']}>
                     {
