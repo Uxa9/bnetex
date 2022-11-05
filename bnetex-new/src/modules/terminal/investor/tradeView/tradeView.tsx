@@ -32,7 +32,7 @@ const TradeView = () => {
     useEffect(() => {
         promiseWithLoading<WalletCategoryWithBalance>(getWallets())
             .then(res => {
-                setBalance(res.investWallet);
+                setBalance(res.investor);
             });
         getUser()
             .then(res => {
@@ -43,19 +43,19 @@ const TradeView = () => {
     useEffect(() => {
         promiseWithLoading<WalletCategoryWithBalance>(getWallets())
             .then(res => {
-                setBalance(res.investWallet);
+                setBalance(res.investor);
             });
     }, [isAlgorythmActive]);
 
     const startInvestAlgorythm = (amount: number) => {
         setIsAlgorythmActive(true);
         startInvestTrading(amount);
-    }
+    };
 
     const stopInvestAlgorythm = () => {
         setIsAlgorythmActive(false);
         stopInvestTrading();
-    }
+    };
 
     const {
         register,

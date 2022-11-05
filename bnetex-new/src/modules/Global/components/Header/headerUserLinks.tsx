@@ -15,7 +15,7 @@ const HeaderUserLinks = ({withLogoutButton}: {withLogoutButton?: boolean}) => {
     const logout = () => {
         logoutUser();
         goToState(HOME);
-    }
+    };
 
     return(
         isAuth ? 

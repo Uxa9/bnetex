@@ -2,17 +2,17 @@
 @import 'styles/variables';
 @import 'styles/mixins';
 
-$menu-width: min(60vw, 100%);
-
 .burger-menu {
   @include column-flex;
+  @include mobile-100vh;
+
+  --menu-width: 60vw;
 
   justify-content: space-between;
   position: fixed;
-  top: calc(100% + 1px);
+  top: $header-height;
   left: 100%;
-  height: calc(100vh - $header-height);
-  width: $menu-width;
+  width: var(--menu-width);
   background-color: $grayscale-1;
   z-index: 101;
   padding: 16px;
@@ -25,22 +25,28 @@ $menu-width: min(60vw, 100%);
   }
 
   &--opened {
-    transform: translateX(calc(-1 * $menu-width));
+    transform: translateX(calc(-1 * var(--menu-width)));
+  }
+
+  @include mobile {
+    --menu-width: 100vw;
+    max-height: 80vh;
   }
 }
 
 .overlay {
   position: fixed;
   left: 0;
-  top: 100%;
+  top: $header-height;
   width: 100vw;
   height: calc(100vh - $header-height);
   z-index: 100;
   background-color: $constant-black;
   opacity: 0;
   transition: opacity $default-transition ease;
+  backdrop-filter: blur(10px);
 
   &--visible {
-    opacity: 0.5;
+    opacity: 0.75;
   }
 }

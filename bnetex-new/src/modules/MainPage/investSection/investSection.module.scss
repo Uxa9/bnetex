@@ -3,65 +3,69 @@
 @import 'styles/shadows';
 
 .invest {
-    @include align-center-row-flex(64px);
-    position: relative;
-    justify-content: space-between;
+  @include align-center-row-flex(64px);
+  position: relative;
+  justify-content: space-between;
 
-    @include max-width(700) {
-        flex-direction: column;
-        row-gap: 32px;
+  @include max-width(700) {
+    flex-direction: column;
+    row-gap: 32px;
+  }
+
+  &__text {
+    @include column-flex(20px);
+    align-items: flex-start;
+    max-width: 60ch;
+    flex-shrink: 2;
+
+    h2 {
+      max-width: 18ch;
+
+      span {
+        color: $accent-3;
+      }
+    }
+  }
+
+  .invest-image {
+    width: 100%;
+    min-width: 300px;
+    max-width: 600px;
+    flex-shrink: 1;
+  }
+
+  .month-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 16px;
+    padding: 20px 0px;
+    width: 100%;
+
+    @include max-width(1000) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .ROE-card {
+    background-color: $grayscale-1;
+    border-radius: 10px;
+    padding: 12px;
+    min-width: 100px;
+
+    @include mobile {
+      min-width: unset;
+      width: 100%;
+      height: 100%;
     }
 
-    &__text {
-        @include column-flex(20px);
-        align-items: flex-start;
-        max-width: 60ch;
-        flex-shrink: 2;
-
-        h2 {
-            max-width: 18ch;
-
-            span {
-                color: $accent-3;
-            }
-        }
+    &__month {
+      margin-bottom: 10px;
     }
 
-    .invest-image {
-        width: 100%;
-        min-width: 300px;
-        max-width: 600px;
-        flex-shrink: 1;
+    &__percent {
+      color: $green-3;
+      padding-top: 4px;
     }
-
-    .month-cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-
-        gap: 16px;
-        padding: 20px 0px;
-        width: 100%;
-    }
-
-    .ROE-card {
-        background-color: $grayscale-1;
-        border-radius: 10px;
-        padding: 12px;
-        min-width: 100px;
-
-        @include mobile {
-            min-width: unset;
-            width: 100%;
-            height: 100%;
-        }
-
-        &__month {
-            margin-bottom: 10px;
-        }
-
-        &__percent {
-            color: $green-3;
-            padding-top: 4px;
-        }
-    }
+  }
 }

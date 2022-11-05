@@ -33,54 +33,55 @@ const Header = () => {
     }, []);
 
     return (
-        <header
-            className={classNames(
-                styles.header,
-                isMenuOpened && styles['header--menu-opened']
-            )}
-        >
-            <nav className={styles.links}>
-                <div className={styles['links__main']}>
-                    <Logo
-                        className={styles.logo}
-                        onClick={() => {
-                            setIsMenuOpened(false);
-                            goToState(HOME);
-                        }}
-                    />
-                    <Button
-                        className={styles['trading-link']}
-                        text={'Алготрейдинг'}
-                        buttonStyle={'thin'}
-                        onClick={() => goToState(`${TERMINAL}/investor`)}
-                        mini
-                    />
-                </div>
-                <div className={styles['links__user']}>
-                    <HeaderUserLinks 
-                        withLogoutButton
-                    />
-                    <Button
-                        buttonStyle={'thin'}
-                        Icon={theme === 'dark' ? Moon : Brightness}
-                        onClick={toggleTheme}
-                    />
-                </div>
-
-            </nav>
-            <div                     
-                className={styles['header__burger']}
+        <>
+            <header
+                className={classNames(
+                    styles.header,
+                    isMenuOpened && styles['header--menu-opened']
+                )}
             >
-                <Burger 
-                    isOpened={isMenuOpened}
-                    onClick={toggleIsMenuOpenedMenu}
-                />
-            </div>
+                <nav className={styles.links}>
+                    <div className={styles['links__main']}>
+                        <Logo
+                            className={styles.logo}
+                            onClick={() => {
+                                setIsMenuOpened(false);
+                                goToState(HOME);
+                            }}
+                        />
+                        <Button
+                            className={styles['trading-link']}
+                            text={'Алготрейдинг'}
+                            buttonStyle={'thin'}
+                            onClick={() => goToState(`${TERMINAL}/investor`)}
+                            mini
+                        />
+                    </div>
+                    <div className={styles['links__user']}>
+                        <HeaderUserLinks 
+                            withLogoutButton
+                        />
+                        <Button
+                            buttonStyle={'thin'}
+                            Icon={theme === 'dark' ? Moon : Brightness}
+                            onClick={toggleTheme}
+                        />
+                    </div>
+                </nav>
+                <div                     
+                    className={styles['header__burger']}
+                >
+                    <Burger 
+                        isOpened={isMenuOpened}
+                        onClick={toggleIsMenuOpenedMenu}
+                    />
+                </div>
+            </header>
             <BurgerMenu 
                 isOpened={isMenuOpened}
                 onClose={() => setIsMenuOpened(false)}
             />
-        </header>
+        </>
     );
 };
 

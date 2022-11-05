@@ -25,7 +25,7 @@ const Login = () => {
     const { isLoading, promiseWithLoading } = usePromiseWithLoading();
     const { goToState } = useGoToState();
     const { loginUser } = useActions();
-    const { DASHBOARD, VERIFY_EMAIL, REGISTRATION } = AppLinksEnum;
+    const { AUTH, DASHBOARD, VERIFY_EMAIL, REGISTRATION } = AppLinksEnum;
 
     const { login } = useAuthActions();
 
@@ -50,7 +50,7 @@ const Login = () => {
             })
             .catch((error) => {
                 error.response.data.message === 'USER_NOT_ACTIVATED' && 
-                    goToState(`auth/${VERIFY_EMAIL}`);
+                    goToState(`${AUTH}/${VERIFY_EMAIL}`);
                 bakeToast.error(error.response?.data.message);
             });
     };

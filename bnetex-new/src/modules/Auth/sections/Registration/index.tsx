@@ -27,7 +27,7 @@ const Registration = () => {
     const { promiseWithLoading, isLoading } = usePromiseWithLoading();
     const { signup } = useAuthActions();
     const { goToState } = useGoToState();
-
+    const { AUTH, VERIFY_EMAIL } = AppLinksEnum;
     const {
         register,
         handleSubmit,
@@ -44,7 +44,7 @@ const Registration = () => {
     const onSubmit = async (data: RegistrationFormData) => {
         promiseWithLoading(signup(data.email, data.password))
             .then(() => {
-                goToState(AppLinksEnum.VERIFY_EMAIL);
+                goToState(`${AUTH}/${VERIFY_EMAIL}`);
             })
             .catch((error) => bakeToast.error(error.response?.data.message));
     };

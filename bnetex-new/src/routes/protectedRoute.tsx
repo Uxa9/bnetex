@@ -10,12 +10,13 @@ export interface ProtectedRouteProps {
 
 export const ProtectedRoute = memo((props: ProtectedRouteProps) => {
     const { isAuth, loading } = useTypedSelector(state => state.auth);
+    const { AUTH, LOGIN } = AppLinksEnum;
     
     if (loading) {
         return <AppLoader />;
     }
 
     return (
-        isAuth ? props.children : <Navigate to={`/${AppLinksEnum.LOGIN}`} />
+        isAuth ? props.children : <Navigate to={`/${AUTH}/${LOGIN}`} />
     );
 });

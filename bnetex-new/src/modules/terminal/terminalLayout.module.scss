@@ -2,14 +2,16 @@
 @import 'styles/variables';
 
 .content-wrapper {
+  --pad-and-gap: 16px;
+
   display: grid;
   grid-template-columns: 1fr minmax(360px, 420px);
   grid-template-rows: repeat(4, auto);
-  column-gap: 16px;
-  row-gap: 16px;
-  padding: 16px;
+  column-gap: var(--pad-and-gap);
+  row-gap: var(--pad-and-gap);
+  padding: var(--pad-and-gap);
   width: 100%;
-  padding-top: calc($header-height + 16px);
+  padding-top: calc($header-height + var(--pad-and-gap));
 
   @include max-width(800) {
     grid-template-columns: 1fr;
@@ -17,15 +19,14 @@
   }
 
   @include mobile {
-    padding: 8px;
-    row-gap: 8px;
-    column-gap: 8px;
+    --pad-and-gap: 8px;
   }
 }
 
 .chart {
   grid-row: 1/4;
-  min-height: 400px; // Костыль?? надо тестить с trading-view
+  width: 100%; 
+  min-height: 400px;
 
   @include max-width(1200) {
     grid-column: 1/-1;

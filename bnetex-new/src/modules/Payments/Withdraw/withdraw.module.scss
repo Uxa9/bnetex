@@ -8,6 +8,7 @@
     transition: margin 0.35s;
     margin-left: 0px;
     color: $grayscale-11;
+    margin-top: $header-height;
 
     @include size-svg(30px, 30px);
     svg {

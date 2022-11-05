@@ -59,8 +59,8 @@ const InvestorWallet = () => {
             });
         promiseWithLoading<WalletCategoryWithBalance>(getWallets())
             .then(res => {
-                setMainBalance(res.mainWallet);
-                setInvestBalance(res.investWallet);
+                setMainBalance(res.main);
+                setInvestBalance(res.investor);
             });
     }, []);
 

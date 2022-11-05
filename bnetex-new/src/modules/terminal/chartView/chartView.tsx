@@ -16,8 +16,8 @@ const ChartView = ({className}: {className?: string}) => {
         >
             <TradingViewWidget 
                 symbol="BINANCE:BTCUSDT"
-                autosize={true}
-                theme={theme === "dark" ? Themes.DARK : Themes.LIGHT}
+                autosize
+                theme={Themes[theme.toUpperCase()]}
             />
         </div>
     );
