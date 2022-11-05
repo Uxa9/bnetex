@@ -12,6 +12,7 @@ import getUserTransactions from 'services/getUserTransactions';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import useWalletActions from 'services/walletActions';
 import { WalletCategoryWithBalance } from 'lib/types/wallet';
+import { useTheme } from 'lib/hooks/useTheme';
 import InvestorChart from 'modules/Global/components/investorChart/investorChart';
 
 interface GraphicProps {
@@ -34,6 +35,7 @@ const Tools = () => {
     const { promiseWithLoading } = usePromiseWithLoading();
     const { getWallets } = useWalletActions();
     const { DEPOSIT, WITHDRAW, DASHBOARD, TRANSACTIONS } = AppLinksEnum;
+    const { theme } = useTheme();
 
     const [roe, setRoe] = useState<GraphicProps>({
         dates: [],
@@ -64,7 +66,7 @@ const Tools = () => {
             });
         getUserTransactions(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
             .then(res => {
-                let data = res.map((item: any) => {                    
+                let data = res.map((item: any) => {
                     return ({
                         currency : 'usdt',
                         date : new Date(item.createdAt),
@@ -82,8 +84,8 @@ const Tools = () => {
             });
     }, []);
 
-    return(
-        <div 
+    return (
+        <div
             className={styles['tools']}
         >
             <div
@@ -150,19 +152,26 @@ const Tools = () => {
                                     offsetY   : -30,
                                     width     : '250%',
                                 },
-                                grid: { 
+                                theme: {
+                                    mode: theme,
+                                    monochrome: {
+                                        enabled: false
+                                    }
+                                },
+                                grid: {
                                     show: false,
                                     xaxis: {
                                         lines: { show: false },
-                                    },   
+                                    },
                                     yaxis: {
                                         lines: { show: false },
-                                    },    
+                                    },
                                 },
                                 plotOptions: {
                                     bar: {
                                         horizontal: true,
-                                        barHeight: '12px',
+                                        barHeight: '18px',
+                                        borderRadius: 4,
                                     },
                                 },
                                 xaxis: {
@@ -170,8 +179,8 @@ const Tools = () => {
                                     labels: {
                                         show: false,
                                     },
-                                    axisBorder: { show : false },
-                                    axisTicks: { show : false },
+                                    axisBorder: { show: false },
+                                    axisTicks: { show: false },
                                 },
                                 yaxis: {
                                     show: false,
@@ -186,8 +195,8 @@ const Tools = () => {
                                     offsetX: -15,
                                     horizontalAlign: 'left',
                                 },
-                                colors : ['#9202FF', '#1A75FF'],
-                                dataLabels : { enabled : false },
+                                colors: ['#9202FF', '#1A75FF'],
+                                dataLabels: { enabled: false },
                             }}
                         />
                     </div>
@@ -213,7 +222,7 @@ const Tools = () => {
                     <div
                         className={classNames(styles['transaction-table-wrapper'], 'scroll')}
                     >
-                        <TransactionTable 
+                        <TransactionTable
                             rows={rows}
                         />
                     </div>

@@ -8,7 +8,23 @@ const [ protectedApi ] = useApi();
 export const getUser = async () => {
     return await protectedApi.get(
         `/users/${getUserId()}`,
-        {headers: {
-            'Authorization': `Bearer ${getToken()}`,
-        }});
+        {
+            headers: {
+                'Authorization': `Bearer ${getToken()}`,
+            }
+        });
 };
+
+export const changeUserPassword = async (prevPassword: string, newPassword: string) => {
+    return await protectedApi.post(
+        '/users/changePassword', {
+        userId: getUserId(),
+        prevPassword: prevPassword,
+        newPassword: newPassword
+    },
+        {
+            headers: {
+                'Authorization': `Bearer ${getToken()}`,
+            }
+        });
+}

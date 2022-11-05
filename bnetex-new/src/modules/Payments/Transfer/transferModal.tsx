@@ -70,6 +70,7 @@ const TransferModal = (props: BaseModalProps) => {
         promiseWithLoading(transferBetweenWallets(sendData))
             .then(() => {
                 goToState(`${AppLinksEnum.DASHBOARD}/wallet/${recieverWalletValue}`);
+                props.onClose();
                 bakeToast.success(`Успешно переводено ${data.amount}.`);
             })
             .catch((error) => {

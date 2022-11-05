@@ -14,14 +14,26 @@ interface WithdrawConfirmFormData {
     confirmCode: string
 }
 
+const WalletCategoryEnum: {[key: string]: string} = {
+    main: 'mainWallet',
+    investor: 'investWallet',
+}
+
 const useWalletActions = () => {
 
     const [ protectedApi, api ] = useApi();
     
     const transferBetweenWallets = async (data: transferBetweenWalletsData) => {
+
+        const sendData = {
+            sender: WalletCategoryEnum[data.sender],
+            reciever: WalletCategoryEnum[data.reciever],
+            amount: data.amount
+        }
+
         return await protectedApi.post(
             '/users/transfer-money', 
-            {...data, userId: getUserId()},
+            {...sendData, userId: getUserId()},
             {headers: {
                 'Authorization': `Bearer ${getToken()}`,
             }}

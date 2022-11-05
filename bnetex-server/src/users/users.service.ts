@@ -6,9 +6,10 @@ import { AddRoleDto } from './dto/add-role.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { TransferMoney } from './dto/transfer-money.dto';
 import { User } from './users.model';
-import fs from "fs";
+import * as bcrypt from 'bcryptjs';
 import { StartInvestDto } from './dto/start-invest.dto';
 import { Op } from 'sequelize';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -36,11 +37,44 @@ export class UsersService {
         return users;
     }
 
+    async changePassword(dto: ChangePasswordDto) {
+
+        const user = await this.getUserById(dto.userId);
+
+        const passwordEq = await bcrypt.compare(dto.prevPassword, user.password);
+
+        if ( passwordEq ) {
+            const hashPassword = await bcrypt.hash(dto.newPassword, 5);
+
+            await user.update({
+                password: hashPassword
+            });
+
+            return {
+                status: "SUCCESS",
+                message: "PASSWORD_CHANGED"
+            }
+        } else {
+            throw new HttpException(
+                {
+                    status: "ERROR",
+                    message: "PREVIOUS_PASSWORD_WRONG"
+                },
+                HttpStatus.BAD_REQUEST
+            );
+        }
+
+    }
+
     async getUserByEmail(email: string) {
         const user = await this.userRepository.findOne({
             where: { email },
             include: { all: true }
         });
+
+        if ( !user ) {
+            throw new UserNotFoundException();
+        }
 
         return user;
     }
@@ -120,7 +154,7 @@ export class UsersService {
             );
         }
 
-        if ( user[dto.reciever] < dto.amount ) {
+        if ( user[dto.sender] < dto.amount ) {
             throw new HttpException(
                 {
                     status: "ERROR",
@@ -203,10 +237,13 @@ export class UsersService {
         const user = await this.getUserById(dto.userId);
 
         if (user.investWallet < dto.amount) {
-            return {
-                status: "ERROR",
-                message: "INVEST_WALLET_LOWER_THAN_AMOUNT"
-            }
+            throw new HttpException(
+                {
+                    status: "ERROR",
+                    message: "INVEST_WALLET_LOWER_THAN_AMOUNT"
+                },
+                HttpStatus.BAD_REQUEST
+            );
         }
 
         await user.update({

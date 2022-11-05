@@ -11,6 +11,7 @@ import Chart from 'react-apexcharts';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import useWalletActions from 'services/walletActions';
 import { WalletCategoryWithBalance } from 'lib/types/wallet';
+import { useTheme } from 'lib/hooks/useTheme';
 import { AppLinksEnum } from 'routes/appLinks';
 import InvestorChart from 'modules/Global/components/investorChart/investorChart';
 
@@ -20,7 +21,7 @@ import InvestorChart from 'modules/Global/components/investorChart/investorChart
 interface GraphicProps {
     dates: string[],
     values: number[]
-}    
+}
 
 
 const InvestorWallet = () => {
@@ -31,6 +32,7 @@ const InvestorWallet = () => {
     const [investBalance, setInvestBalance] = useState<number>(0);
     const { promiseWithLoading } = usePromiseWithLoading();
     const { getWallets } = useWalletActions();
+    const { theme } = useTheme();
 
     const [roe, setRoe] = useState<GraphicProps>({
         dates: [],
@@ -76,7 +78,7 @@ const InvestorWallet = () => {
                     className={styles['tools-header-buttons']}
                 >
                     <span
-                        className={styles['header-transfer']} 
+                        className={styles['header-transfer']}
                         onClick={() => OpenTransferModal({})}
                     >
                         Перевод
@@ -123,6 +125,13 @@ const InvestorWallet = () => {
                                     toolbar: { show: false },
                                     offsetY: -60,
                                     offsetX: -25,
+                                    background: 'transparent'
+                                },
+                                theme: {
+                                    mode: theme,
+                                    monochrome: {
+                                        enabled: false
+                                    }
                                 },
                                 grid: {
                                     show: false,

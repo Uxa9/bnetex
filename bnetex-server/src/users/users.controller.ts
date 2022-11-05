@@ -10,6 +10,7 @@ import { TransferMoney } from './dto/transfer-money.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UserIdDto } from './dto/user-id.dto';
 import { StartInvestDto } from './dto/start-invest.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -47,6 +48,12 @@ export class UsersController {
     @Get('/:id')
     getUser(@Param('id') id: number) {
         return this.userService.getUser(id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('/changePassword')
+    changePassword(@Body() dto: ChangePasswordDto) {
+        return this.userService.changePassword(dto);
     }
 
     @ApiOperation({

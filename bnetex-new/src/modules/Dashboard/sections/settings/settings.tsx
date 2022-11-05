@@ -2,8 +2,11 @@ import styles from './settings.module.scss';
 import classNames from 'classnames';
 import { Button } from 'lib/ui-kit';
 import { Key } from 'assets/images/icons';
+import { useModal } from 'lib/hooks/useModal';
+import ChangePasswordModal from './modals/changePasswordModal';
 
 const Settings = () => {
+    const { open: openStartAlgorythmModal } = useModal(ChangePasswordModal);
 
     return(
         <div className={styles.settings}>
@@ -19,6 +22,7 @@ const Settings = () => {
                     <Button
                         buttonStyle='primary'
                         text='Изменить'
+                        onClick={openStartAlgorythmModal}
                     />
                 </div>
             </div>
