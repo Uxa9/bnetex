@@ -91,7 +91,7 @@ const InvestorView = () => {
             >
                 <ToolTip
                     title='Доход инвестора'
-                    infoText=''
+                    infoText='Доход инвестора это PNL алгоритма за вычетом комиссии BNETEX (50%), от суммы переданной алгоритму.'
                 />
                 <div
                     className={styles['data-card__row']}

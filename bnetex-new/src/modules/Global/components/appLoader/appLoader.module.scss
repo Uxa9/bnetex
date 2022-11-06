@@ -12,9 +12,9 @@
 
   .loader-container {
     display: grid;
-    grid-template-columns: repeat(2, minmax(100px, 7vw));
-    grid-template-rows: repeat(2, minmax(100px, 7vw));
-    gap: max(20px, 1.4vw);
+    grid-template-columns: repeat(2, minmax(50px, 3vw));
+    grid-template-rows: repeat(2, minmax(50px, 3vw));
+    gap: max(10px, 0.6vw);
     transform: rotate(45deg);
 
     .loader-section {
