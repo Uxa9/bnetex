@@ -1,4 +1,4 @@
-import useApi from "lib/hooks/useApi";
+import useApi from 'lib/hooks/useApi';
 
 const [api] = useApi();
 
@@ -12,15 +12,15 @@ export const getHistoricalData = async (period: number, amount: number): Promise
     const result = await api.post('positions/getHistData',
         {
             period,
-            amount
+            amount,
         });
 
     return {
         dates: result.data.dates,
         pnlValues: result.data.pnlValues,
-        roeValues: result.data.roeValues
+        roeValues: result.data.roeValues,
     };
-}
+};
 
 export const getHistoricalDataOrders = async (period: number) => {
     return await api.get(`/positions/${period}`);

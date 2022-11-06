@@ -39,7 +39,7 @@ const ChangePasswordModal = (props: BaseModalProps) => {
     const onSubmit = async (data: PasswordFormData) => {
         changeUserPassword(data.prevPassword, data.newPassword)
             .then(() => {
-                bakeToast.success("Пароль изменен!");
+                bakeToast.success('Пароль изменен!');
                 onClose();
             })
             .catch((error) => {
@@ -70,7 +70,7 @@ const ChangePasswordModal = (props: BaseModalProps) => {
                         inputControl={register('newPassword', newPasswordValidation)}
                         errorText={errors.newPassword?.message}
                         key={'newPassword'}
-                    />
+                    />,
                 ]} 
                 button={
                     <Button 
