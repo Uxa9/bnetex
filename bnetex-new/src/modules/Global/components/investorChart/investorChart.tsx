@@ -63,19 +63,16 @@ const InvestorChart = ({dates, values, type}: InvestorChartProps) => {
                         <ToolTip
                             title={'PnL'}
                             infoText={'PNL (Profit and Loss) – это величина, которая показывает разницу между прибылью и убытками в трейдинге.'}
-                            alignment={'right'}
                         /> :
                         <ToolTip
                             title={'ROE'}
                             infoText={'ROE — это та процентная ставка, под которую в компании работают средства акционеров. Этот показатель является ключевым для определения эффективности деятельности компании. Например, показатель ROE = 20% говорит о том, что каждый рубль, вложенный в компанию, ежегодно приносит 20 копеек прибыли.'}
-                            alignment={'right'}
                         />
                 }
                 <div className={styles['comission-block']}>
                     <ToolTip
                         title={'С комиссией'}
                         infoText={'Комиссия за сделки — этот платеж взимается с клиента в виде процента от прибыли со всех торговых операции. Ставка комиссии - 50% от прибыли (PNL/ROE).'}
-                        alignment={'left'}
                     />
                     <Switch 
                         checked={withComission}

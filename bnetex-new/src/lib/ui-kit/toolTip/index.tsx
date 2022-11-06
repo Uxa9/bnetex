@@ -8,7 +8,6 @@ interface ToolTipProps {
     title: string;
     infoText: string; 
     className?: string;
-    alignment?: 'left' | 'right';
 }
 
 interface TipPosition extends Pick<CSSProperties, 'right'> {}
