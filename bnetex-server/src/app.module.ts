@@ -13,6 +13,9 @@ import { RequestModule } from './request/request.module';
 import { MailSenderModule } from './mailSender/mailer.module';
 import { MongooseModule } from "@nestjs/mongoose";
 import { PositionsModule } from './positions/positions.module';
+import { InvestSessionsModule } from './invest-sessions/invest-sessions.module';
+import { Request } from "./request/request.model";
+import { InvestSession } from "./invest-sessions/invest-sessions.model";
 
 
 @Module({
@@ -29,7 +32,7 @@ import { PositionsModule } from './positions/positions.module';
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRES_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, UserRoles],
+            models: [User, Role, UserRoles, Request, InvestSession],
             autoLoadModels: true
         }),
         MongooseModule.forRoot('mongodb://localhost:27017/exchange'),
@@ -39,7 +42,8 @@ import { PositionsModule } from './positions/positions.module';
         TransactionModule,
         RequestModule,
         MailSenderModule,
-        PositionsModule
+        PositionsModule,
+        InvestSessionsModule
     ]
 })
 export class AppModule{};

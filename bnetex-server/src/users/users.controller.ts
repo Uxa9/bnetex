@@ -64,14 +64,22 @@ export class UsersController {
         return this.userService.getWallets(id);
     }
 
-    @Post('/getpnl')
-    getPnL(@Body() dto: UserIdDto) {
-        return this.userService.getPnL(dto.userId);
+    @UseGuards(JwtAuthGuard)
+    @Get('/getpnl/:id')
+    getPnL(@Param('id') id: number) {
+        return this.userService.getPnL(id);
     }
 
-    @Post('/getroe')
-    getRoE(@Body() dto: UserIdDto) {
-        return this.userService.getRoE(dto.userId);
+    @UseGuards(JwtAuthGuard)
+    @Get('/getroe/:id')
+    getRoE(@Param('id') id: number) {
+        return this.userService.getRoE(id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/getRoeAndPnl/:id')
+    getRoeAndPnl(@Param('id') id: number) {
+        return this.userService.getUserPnlAndRoe(id);
     }
 
     @ApiOperation({
@@ -104,8 +112,14 @@ export class UsersController {
     stopInvest(@Param('id') id: number) {
         return this.userService.stopInvest(id);
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/invest/:id')
+    getUserTradeSession(@Param('id') id: number) {
+        return this.userService.getUserActiveSession(id);
+    }
     
-    @Get('/getTotalInvestAmount')
+    @Get('/invest/getTotalInvestAmount')
     getTotalInvestAmount() {
         return this.userService.getTotalInvestAmount();
     }

@@ -28,3 +28,23 @@ export const changeUserPassword = async (prevPassword: string, newPassword: stri
             }
         });
 }
+
+export const getRoeAndPnl = async () => {
+    return await protectedApi.get(
+        `/users/getRoeAndPnl/${getUserId()}`,
+        {
+            headers: {
+                'Authorization': `Bearer ${getToken()}`,
+            }
+        });
+}
+
+export const getInvestInfo = async () => {
+    return await protectedApi.get(
+        `/users/invest/${getUserId()}`,
+        {
+            headers: {
+                'Authorization': `Bearer ${getToken()}`,
+            }
+        });
+}

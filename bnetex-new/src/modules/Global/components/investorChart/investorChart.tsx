@@ -30,6 +30,11 @@ const InvestorChart = ({dates, values, type}: InvestorChartProps) => {
             toolbar: { show : true },
             background: 'transparent'
         },
+        xaxis: {
+            labels: {
+                show: false,
+            }
+        },
         dataLabels: { enabled : false },
         theme: {
             mode: theme, 

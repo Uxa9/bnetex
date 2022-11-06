@@ -1,5 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { BelongsToMany, Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
+import { Request } from "../request/request.model";
+import { InvestSession } from "../invest-sessions/invest-sessions.model";
 import { Role } from "../roles/roles.model";
 import { UserRoles } from "../roles/user-roles.model";
 
@@ -97,18 +99,6 @@ export class User extends Model<User, UserCreationAttrs> {
     investWallet : number;
 
     @Column({
-        type : DataType.DATE,
-        defaultValue : DataType.NOW
-    })
-    startInvestTime : Date;
-
-    @Column({
-        type : DataType.DATE,
-        defaultValue : DataType.NOW
-    })
-    stopInvestTime : Date;
-
-    @Column({
         type : DataType.BOOLEAN,
         defaultValue : false
     })
@@ -122,5 +112,11 @@ export class User extends Model<User, UserCreationAttrs> {
 
     @BelongsToMany(() => Role, () => UserRoles)
     roles: Role[];
+
+    @HasMany(() => InvestSession)
+    investSessions: InvestSession[];
+
+    @HasMany(() => Request)
+    requests: Request[];
 
 }

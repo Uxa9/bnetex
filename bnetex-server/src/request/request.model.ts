@@ -86,4 +86,6 @@ export class Request extends Model<Request, RequestCreationAttrs> {
     })
     fulfilled : boolean;
 
+    @BelongsTo(() => User)
+    user : User;
 }

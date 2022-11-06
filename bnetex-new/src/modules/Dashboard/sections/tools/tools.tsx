@@ -5,8 +5,6 @@ import Chart from 'react-apexcharts';
 import { useEffect, useState } from 'react';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
-import getRoE from 'services/getroe';
-import getPnL from 'services/getpnl';
 import TransactionTable from './transactionTable';
 import getUserTransactions from 'services/getUserTransactions';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
@@ -14,6 +12,7 @@ import useWalletActions from 'services/walletActions';
 import { WalletCategoryWithBalance } from 'lib/types/wallet';
 import { useTheme } from 'lib/hooks/useTheme';
 import InvestorChart from 'modules/Global/components/investorChart/investorChart';
+import { getRoeAndPnl } from 'services/user';
 
 interface GraphicProps {
     dates: string[],
@@ -50,18 +49,15 @@ const Tools = () => {
     const [rows, setRows] = useState<RowData[]>([]);
 
     useEffect(() => {
-        getRoE(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
+        getRoeAndPnl()
             .then(res => {
                 setRoe({
-                    dates: res.dates,
-                    values: res.values.map((item: any) => Number(Number(item).toFixed(2))),
+                    dates: res.data.dates,
+                    values: res.data.roe.map((item: any) => Number(Number(item).toFixed(2))),
                 });
-            });
-        getPnL(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
-            .then(res => {
                 setPnl({
-                    dates: res.dates,
-                    values: res.values.map((item: any) => Number(Number(item).toFixed(2))),
+                    dates: res.data.dates,
+                    values: res.data.pnl.map((item: any) => Number(Number(item).toFixed(2))),
                 });
             });
         getUserTransactions(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)

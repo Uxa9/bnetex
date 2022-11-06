@@ -5,8 +5,6 @@ import { useGoToState } from 'lib/hooks/useGoToState';
 import { useEffect, useState } from 'react';
 import { useModal } from 'lib/hooks/useModal';
 import TransferModal from 'modules/Payments/Transfer/transferModal';
-import getRoE from 'services/getroe';
-import getPnL from 'services/getpnl';
 import Chart from 'react-apexcharts';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import useWalletActions from 'services/walletActions';
@@ -14,6 +12,8 @@ import { WalletCategoryWithBalance } from 'lib/types/wallet';
 import { useTheme } from 'lib/hooks/useTheme';
 import { AppLinksEnum } from 'routes/appLinks';
 import InvestorChart from 'modules/Global/components/investorChart/investorChart';
+import { getInvestInfo, getRoeAndPnl } from 'services/user';
+import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 
 // toDo
 // сделать нормальные кнопки
@@ -23,6 +23,12 @@ interface GraphicProps {
     values: number[]
 }
 
+interface InvestInfoProps {
+    balance : number,
+    startTime : Date,
+    pnl : number,
+    roe : number
+}
 
 const InvestorWallet = () => {
 
@@ -44,20 +50,46 @@ const InvestorWallet = () => {
         values: [],
     });
 
+    const [investInfo, setInvestInfo] = useState<InvestInfoProps>({
+        balance : 0,
+        startTime : new Date(),
+        pnl : 0,
+        roe : 0
+    });
+
+    const renderTime = () => {
+
+        const diff = new Date().getTime() - investInfo.startTime.getTime() || 0;
+        const hours = diff / 3600000;
+        const days  = hours / 24;
+
+        if ( days < 1 ) {
+            return `${Number(hours).toFixed(0)} час`;
+        } else {
+            return `${Number(days).toFixed(0)} дней ${Number(hours - Math.floor(days) * 24).toFixed(0)} час`;
+        }
+    }
+
     useEffect(() => {
-        getRoE(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
+        getRoeAndPnl()
             .then(res => {
                 setRoe({
-                    dates: res.dates,
-                    values: res.values.map((item: any) => Number(Number(item).toFixed(2))),
+                    dates: res.data.dates,
+                    values: res.data.roe.map((item: any) => Number(Number(item).toFixed(2))),
+                });
+                setPnl({
+                    dates: res.data.dates,
+                    values: res.data.pnl.map((item: any) => Number(Number(item).toFixed(2))),
                 });
             });
-        getPnL(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
+        getInvestInfo()
             .then(res => {
-                setPnl({
-                    dates: res.dates,
-                    values: res.values.map((item: any) => Number(Number(item).toFixed(2))),
-                });
+                setInvestInfo({
+                    startTime : new Date(res.data.startSessionTime),
+                    pnl : res.data.pnl || 0,
+                    roe : res.data.roe || 0,
+                    balance : res.data.balance || 0
+                })
             });
         promiseWithLoading<WalletCategoryWithBalance>(getWallets())
             .then(res => {
@@ -99,7 +131,7 @@ const InvestorWallet = () => {
                     <p
                         className={styles['user-balance']}
                     >
-                        {`${Number(investBalance).toFixed(2)} USDT`}
+                        {`${Number(investBalance + investInfo.balance).toFixed(2)} USDT`}
                     </p>
                     <div>
                         {/* toDo: убрать нахуй это говно */}
@@ -108,7 +140,7 @@ const InvestorWallet = () => {
                             series={[
                                 {
                                     name: 'В работе',
-                                    data: [Number(Number(mainBalance).toFixed(2))],
+                                    data: [Number(Number(investInfo.balance).toFixed(2))],
                                 },
                                 {
                                     name: 'Доступно для вывода',
@@ -184,7 +216,7 @@ const InvestorWallet = () => {
                             В работе
                         </span>
                         <span>
-                            1244.55
+                            {investInfo.balance}
                         </span>
                     </p>
                     <p>
@@ -192,24 +224,26 @@ const InvestorWallet = () => {
                             Время работы
                         </span>
                         <span>
-                            3 дня 2 часа
+                            {renderTime()}
                         </span>
                     </p>
                     <p>
                         <span>
                             PNL
                         </span>
-                        <span className={styles['positive']}>
-                            +322.28 USDT
-                        </span>
+                        <SignedNumber
+                            value={investInfo.pnl}
+                            postfix={""}
+                        />
                     </p>
                     <p>
                         <span>
                             ROE
                         </span>
-                        <span className={styles['negative']}>
-                            - 2.28%
-                        </span>
+                        <SignedNumber
+                            value={investInfo.roe}
+                            postfix={"%"}
+                        />
                     </p>
                     <Button
                         buttonStyle='primary'

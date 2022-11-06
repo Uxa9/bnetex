@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { UserNotFoundException } from '../exceptions/userNotFound.exception';
 import { RolesService } from '../roles/roles.service';
@@ -10,12 +10,15 @@ import * as bcrypt from 'bcryptjs';
 import { StartInvestDto } from './dto/start-invest.dto';
 import { Op } from 'sequelize';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { InvestSessionsService } from '../invest-sessions/invest-sessions.service';
 
 @Injectable()
 export class UsersService {
 
     constructor(@InjectModel(User) private userRepository: typeof User,
-        private roleService: RolesService) { }
+        private roleService: RolesService,
+        @Inject(forwardRef(() => InvestSessionsService)) // чета хуита какая-то
+        private investSessions: InvestSessionsService) { }
 
     async createUser(dto: CreateUserDto) {
         const user = await this.userRepository.create(dto);
@@ -175,98 +178,121 @@ export class UsersService {
         return Math.random() * (max - min) + min;
     }
 
-    async getPnL(id: number) {        
-        const user = await this.getUserById(id);
+    async getPnL(id: number) {
+        await this.getUserById(id);
 
         return {
             pnl: {
                 values: [
-                    // this.generatenumber(200, -50),
-                    // this.generatenumber(200, -50),
-                    // this.generatenumber(200, -50),
-                    // this.generatenumber(200, -50),
-                    // this.generatenumber(200, -50),
-                    // this.generatenumber(200, -50),
-                    // this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
+                    this.generatenumber(200, -50),
                 ],
                 dates: [
-                    // '10.02',
-                    // '17.02',
-                    // '24.02',
-                    // '31.02',
-                    // '07.03',
-                    // '14.03',
-                    // '21.04'
+                    '10.02',
+                    '17.02',
+                    '24.02',
+                    '31.02',
+                    '07.03',
+                    '14.03',
+                    '21.04'
                 ]
             }
         }
     }
 
     async getRoE(id: number) {
-        const user = await this.getUserById(id);
+        await this.getUserById(id);
 
         return {
             roe: {
                 values: [
-                    // this.generatenumber(100, -10),
-                    // this.generatenumber(100, -10),
-                    // this.generatenumber(100, -10),
-                    // this.generatenumber(100, -10),
-                    // this.generatenumber(100, -10),
-                    // this.generatenumber(100, -10),
-                    // this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
+                    this.generatenumber(100, -10),
                 ],
                 dates: [
-                    // '10.02',
-                    // '17.02',
-                    // '24.02',
-                    // '31.02',
-                    // '07.03',
-                    // '14.03',
-                    // '21.04'
+                    '10.02',
+                    '17.02',
+                    '24.02',
+                    '31.02',
+                    '07.03',
+                    '14.03',
+                    '21.04'
                 ]
             }
         }
     }
 
-    async startInvest(dto: StartInvestDto) {
-        const user = await this.getUserById(dto.userId);
+    async getUserPnlAndRoe(id: number) {
+        const sessions = await this.investSessions.getAllUserSessions(id);
 
-        if (user.investWallet < dto.amount) {
-            throw new HttpException(
-                {
-                    status: "ERROR",
-                    message: "INVEST_WALLET_LOWER_THAN_AMOUNT"
-                },
-                HttpStatus.BAD_REQUEST
-            );
+        let pnl = [];
+        let roe = [];
+        let dates = [];
+
+        pnl.push(sessions[0].lastPnl);
+        roe.push(sessions[0].lastRoe);
+        dates.push(new Date(new Date(sessions[0].stopSessionTime).getTime()).toLocaleString());
+
+        for (let i = 1; i < sessions.length - 1; i++) {
+            pnl.push(0);
+            roe.push(0);
+            dates.push(new Date(new Date(sessions[i].stopSessionTime).getTime() - 1).toLocaleString());
+            pnl.push(sessions[i].lastPnl);
+            roe.push(sessions[i].lastRoe);
+            dates.push(new Date(new Date(sessions[i].stopSessionTime).getTime()).toLocaleString());
         }
 
-        await user.update({
-            openTrade: true,
-            startInvestTime: new Date,
-            tradeBalance: dto.amount,
-            investWallet: user.investWallet - dto.amount
-        });
-
+        if ( sessions[sessions.length - 1].stopSessionTime === null ) {
+            pnl.push(sessions[sessions.length - 1].lastPnl || 0);
+            roe.push(sessions[sessions.length - 1].lastRoe || 0);
+            dates.push(new Date().toLocaleString());
+        }
+        
+        
         return {
-            status: "SUCCESS",
-            message: "TRADING_STARTED"
+            pnl,
+            roe,
+            dates
         }
     }
 
-    async stopInvest(id: number) {
-        const user = await this.getUserById(id);
+    async startInvest(dto: StartInvestDto) {
+        return await this.investSessions.createSession(dto);
+    }
 
-        await user.update({
-            openTrade: false,
-            stopInvestTime: new Date,
-            investWallet: user.investWallet + user.tradeBalance
-        });
+    async stopInvest(id: number) {
+        const res = await this.investSessions.stopSession(id);
+        
+        return res; //опять чето странное
+    }
+
+    async getUserActiveSession(id: number) {
+        const session = await this.investSessions.getUserActiveSession(id);
+
+        if ( !session ) {
+            return {
+                startSessionTime : new Date().getTime() ,
+                pnl : 0,
+                roe : 0,
+                balance : 0
+            }
+        }
 
         return {
-            status: "SUCCESS",
-            message: "TRADING_FINISHED"
+            startSessionTime : session.startSessionTime ,
+            pnl : session.lastPnl,
+            roe : session.lastRoe,
+            balance : session.tradeBalance
         }
     }
 
