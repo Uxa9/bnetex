@@ -30,10 +30,6 @@ const ToolTip = ({title, infoText, className }: ToolTipProps) => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    useEffect(() => {
-        isToolTipVisible && handleResize();
-    }, [isToolTipVisible]);
-
     const handleResize = () => {
         if (!tipRef.current || !iconContainerRef.current) return;
 
