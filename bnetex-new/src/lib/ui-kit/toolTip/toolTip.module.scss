@@ -12,6 +12,7 @@
 
   .iconWrapper {
     @include size-svg(16px, 16px);
+
     position: relative;
 
     .infoIcon {
@@ -28,6 +29,7 @@
       display: block;
       opacity: 1;
       visibility: visible;
+      z-index: 1000;
     }
 
     .tip {
@@ -43,26 +45,18 @@
 .tip {
   position: absolute;
   bottom: calc(100% + 16px);
-  width: 80vw;
-  max-width: 50ch;
-  background-color: $grayscale-2;
+  width: max-content;
+  max-width: min(50ch, 80vw);
+  background-color: $grayscale-3;
   border-radius: 8px;
   padding: 12px;
   visibility: hidden;
   opacity: 0;
   transition: $default-transition ease;
-
-  &--right {
-    left: -16px;
-  }
-
-  &--left {
-    right: 0px;
-  }
 }
 
 .needle {
-  fill: $grayscale-2;
+  fill: $grayscale-3;
   position: absolute;
   bottom: 100%;
   left: 50%;
