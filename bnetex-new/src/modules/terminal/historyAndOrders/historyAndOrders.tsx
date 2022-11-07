@@ -18,10 +18,10 @@ const historyAndOrdersSections: HistoryAndOrdersSection[] = [
         section: 'openedPositions',
         title: 'Позиции',
     },
-    {
-        section: 'openedOrders',
-        title: 'Открытые ордера',
-    },
+    // {
+    //     section: 'openedOrders',
+    //     title: 'Открытые ордера',
+    // },
     {
         section: 'tradeHistory',
         title: 'История сделок',
@@ -30,16 +30,16 @@ const historyAndOrdersSections: HistoryAndOrdersSection[] = [
 
 const HistoryAndOrders = ({className}: {className: string}) => {
 
-    const [activeSection, setActiveSection] = useState<SectionType>('openedPositions');
+    const [activeSection, setActiveSection] = useState<SectionType>('tradeHistory');
 
     const sectionComponent = useMemo(() => {
         switch(activeSection) {
             case 'openedPositions': {
                 return <OpenedPositions />;
             }
-            case 'openedOrders': {
-                return <OpenedOrders />;
-            }
+            // case 'openedOrders': {
+            //     return <OpenedOrders />;
+            // }
             default: {
                 return <OrderHistory />;
             }
@@ -50,7 +50,6 @@ const HistoryAndOrders = ({className}: {className: string}) => {
         <div className={classNames(
             styles['history-and-orders'],
             className,
-            'scroll'
         )}
         >
             <div className={styles['toggle-section-group']}>
@@ -75,7 +74,13 @@ const HistoryAndOrders = ({className}: {className: string}) => {
                     }
                 </ToggleButtonGroup>
             </div>
-            { sectionComponent }
+            <div className={classNames(
+                styles['history-and-orders__content'],
+                'scroll',
+            )}
+            >
+                { sectionComponent }
+            </div>
         </div>
     );
 };

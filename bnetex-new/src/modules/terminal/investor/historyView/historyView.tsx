@@ -11,7 +11,7 @@ interface HistoryViewProps {
 
 const HistoryView: FC<HistoryViewProps> = props => {
 
-    const [period, setPeriod] = useState(1);
+    const [period, setPeriod] = useState<number>(1);
 
     const [inputValue, setInputValue] = useState<number | ''>('');
 
@@ -47,27 +47,28 @@ const HistoryView: FC<HistoryViewProps> = props => {
                     name={''} 
                     onChange={setPeriod}
                     value={period}
+                    asNumber
                 >
                     <ToggleButton 
                         text={'1 мес.'} 
-                        value={'1'} 
+                        value={1} 
                     />
                     <ToggleButton 
                         text={'3 мес.'} 
-                        value={'3'} 
+                        value={3} 
                     />
                     <ToggleButton 
                         text={'6 мес.'} 
-                        value={'6'} 
+                        value={6} 
                     />
-                    <ToggleButton 
+                    {/* <ToggleButton 
                         text={'9 мес.'} 
                         value={'9'} 
                     />
                     <ToggleButton 
                         text={'12 мес.'} 
                         value={'12'} 
-                    />
+                    /> */}
                 </ToggleButtonGroup>
             </div>
             <div
@@ -78,7 +79,7 @@ const HistoryView: FC<HistoryViewProps> = props => {
                     disabled={!inputValue}
                     text={'Рассчитать доход'}
                     fillContainer
-                    onClick={() => {props.handleClick(Number(period), Number(inputValue))}}
+                    onClick={() => {props.handleClick(Number(period), Number(inputValue));}}
                 />
             </div>
         </>

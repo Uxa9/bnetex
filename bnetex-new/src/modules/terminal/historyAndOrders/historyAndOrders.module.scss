@@ -3,7 +3,7 @@
 @import 'styles/shadows';
 
 .history-and-orders {
-  @include column-flex;
+  @include column-flex(8px);
 
   @include min-width(701) {
     @include card-shadow;
@@ -13,8 +13,10 @@
     background-color: $grayscale-card;
   }
 
-  max-height: 300px;
-  overflow-y: scroll;
+  &__content {
+    max-height: 220px;
+    overflow-y: scroll;
+  }
 }
 
 .toggle-section-group {
