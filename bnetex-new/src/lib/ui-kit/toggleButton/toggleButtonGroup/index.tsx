@@ -21,7 +21,8 @@ const ToggleButtonGroup: FC<ToggleButtonGroupProps> = props => {
         onChange, asNumber, buttonStyle, buttonClassname } = props;
 
     const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        onChange(asNumber ? event.currentTarget.valueAsNumber : event.currentTarget.value, event.currentTarget.name);
+        const value = event.currentTarget.value;
+        onChange(asNumber ? Number(value) : value, event.currentTarget.name);
     };
 
     const propsToToggleButtons: Omit<ToggleButtonProps, 'text' | 'value'> = {

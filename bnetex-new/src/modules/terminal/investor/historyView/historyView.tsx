@@ -4,6 +4,7 @@ import { Button, Input, ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
 import styles from './historyView.module.scss';
 import { blockEAndDashKey } from 'lib/utils';
 import classNames from 'classnames';
+import { useActions } from 'lib/hooks/useActionCreators';
 
 interface HistoryViewProps {
     handleClick(period: number, amount: number): void
@@ -12,13 +13,18 @@ interface HistoryViewProps {
 const HistoryView: FC<HistoryViewProps> = props => {
 
     const [period, setPeriod] = useState<number>(1);
+    const [inputValue, setInputValue] = useState<number>(NaN);
+    const { getTradeHistory } = useActions();
 
-    const [inputValue, setInputValue] = useState<number | ''>('');
-
+    // toDo: помойка! переделать через hook-form
     const validateInputChange = (event: React.ChangeEvent<HTMLInputElement> ) => {
         const value = event.currentTarget.valueAsNumber;
+        setInputValue(value);
+    };
 
-        setInputValue(isNaN(value) ? '' : value);
+    const handleSubmit = () => {
+        getTradeHistory(period, inputValue);
+        props.handleClick(period, inputValue);
     };
 
     return (
@@ -44,10 +50,11 @@ const HistoryView: FC<HistoryViewProps> = props => {
                 </p>
                 <ToggleButtonGroup 
                     title={''} 
-                    name={''} 
+                    name={'historyPeriod'} 
                     onChange={setPeriod}
                     value={period}
                     asNumber
+                    exclusive
                 >
                     <ToggleButton 
                         text={'1 мес.'} 
@@ -79,7 +86,7 @@ const HistoryView: FC<HistoryViewProps> = props => {
                     disabled={!inputValue}
                     text={'Рассчитать доход'}
                     fillContainer
-                    onClick={() => {props.handleClick(Number(period), Number(inputValue));}}
+                    onClick={handleSubmit}
                 />
             </div>
         </>

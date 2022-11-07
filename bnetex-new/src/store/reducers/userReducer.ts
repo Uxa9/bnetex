@@ -4,7 +4,7 @@ const initialState: UserState = {
     id: 0,
     roles: [''],
     mainWallet: 0,
-    investWallet: 0
+    investWallet: 0,
 };
 
 export const userReducer = (state = initialState, action: UserAction): UserState => {
