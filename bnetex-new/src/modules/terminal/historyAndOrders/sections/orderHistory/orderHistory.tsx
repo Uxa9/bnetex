@@ -22,12 +22,6 @@ export interface OrderHistoryItem  {
 const OrderHistory = () => {
     const { loading, error, tradeHistory } = useTypedSelector(state => state.tradeHistory);
 
-    useEffect(() => {
-        console.log(tradeHistory);
-        console.log(tradeHistory.length);
-        
-    }, [tradeHistory]);
-
     return(
         <table className={styles['order-history']}>
             <thead>
