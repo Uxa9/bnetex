@@ -118,3 +118,21 @@
   height: 100vh;
   height: -webkit-fill-available;
 }
+
+@mixin color-index-map {
+  &--accent {
+    background-color: $accent-3;
+  }
+  &--blue {
+    background-color: $blue-3;
+  }
+  &--orange {
+    background-color: $orange-3;
+  }
+  &--green {
+    background-color: $green-3;
+  }
+  &--red {
+    background-color: $red-3;
+  }
+}
