@@ -1,0 +1,28 @@
+@import 'styles/mixins';
+@import 'styles/variables';
+@import 'styles/colors/colors';
+
+.icon-link-button {
+  @include column-flex-center(4px);
+
+  color: $grayscale-11;
+  transition: opacity $default-transition ease;
+
+  &:not(&--active) {
+    // color: $grayscale-6;
+    opacity: 0.5;
+  }
+
+  &__icon {
+    @include color-index-map(6, '', '', 3);
+
+    padding: 6px;
+    border-radius: 6px;
+    height: 36px;
+  }
+
+  &__label {
+    max-width: 12ch;
+    text-align: center;
+  }
+}

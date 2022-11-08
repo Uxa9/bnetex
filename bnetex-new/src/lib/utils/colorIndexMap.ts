@@ -1,6 +1,5 @@
-// toDo: надо как то доставать цвета из палитры...
-const colors = ['accent', 'blue', 'orange', 'green', 'red'];
+import { AppColorsArray } from 'lib/types/appColors';
 
 export const colorIndexMap = (className: string, index: number) => {
-    return `${className}--${colors[index]}`;
+    return `${className}--${AppColorsArray[index]}`;
 };

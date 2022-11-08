@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'colors/colors';
 
 @mixin stretch-screen {
   position: fixed;
@@ -119,20 +120,28 @@
   height: -webkit-fill-available;
 }
 
-@mixin color-index-map {
-  &--accent {
-    background-color: $accent-3;
-  }
-  &--blue {
-    background-color: $blue-3;
-  }
-  &--orange {
-    background-color: $orange-3;
-  }
-  &--green {
-    background-color: $green-3;
-  }
-  &--red {
-    background-color: $red-3;
+@mixin color-index-map(
+  $background-color-postfix: '',
+  $color-postfix: '',
+  $fill-postfix: '',
+  $svg-fill-postfix: ''
+) {
+  @each $key, $color in $main-colors {
+    &--#{$key} {
+      @if $background-color-postfix != '' {
+        background-color: var(--#{$key}-#{$background-color-postfix});
+      }
+      @if $color-postfix != '' {
+        color: var(--#{$key}-#{$color-postfix});
+      }
+      @if $fill-postfix != '' {
+        fill: var(--#{$key}-#{$fill-postfix});
+      }
+      @if $svg-fill-postfix != '' {
+        svg {
+          fill: var(--#{$key}-#{$svg-fill-postfix});
+        }
+      }
+    }
   }
 }

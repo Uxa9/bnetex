@@ -150,7 +150,7 @@ const InvestorWallet = () => {
                     </div>
                 </div>
                 <div
-                    className={classNames(styles['invest-info'], 'card')}
+                    className={classNames(styles['invest-info'], 'card', 'text')}
                 >
                     <p>
                         <span>

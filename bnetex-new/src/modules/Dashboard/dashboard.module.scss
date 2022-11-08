@@ -1,5 +1,6 @@
 @import 'styles/colors/colors';
 @import 'styles/variables';
+@import 'styles/mixins';
 
 $control-menu-width: 285px;
 
@@ -12,13 +13,13 @@ $control-menu-width: 285px;
 }
 
 .control-menu {
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
-  flex-grow: 1;
-  padding: 16px 0px;
+  @include column-flex;
+
   align-items: center;
+  width: fit-content;
+  padding: 16px 0px;
   height: fit-content;
+  flex-grow: 1;
   row-gap: 8px;
   width: 100%;
 
@@ -39,6 +40,30 @@ $control-menu-width: 285px;
 
     &--active {
       background-color: $accent-6;
+    }
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  @include mobile {
+    flex-wrap: wrap;
+    row-gap: 16px;
+    column-gap: 16px;
+    align-items: baseline;
+    max-width: 280px;
+    justify-content: center;
+    justify-self: center;
+
+    &::after {
+      background: none;
+    }
+  }
+
+  .link-icon {
+    @include desktop {
+      display: none;
     }
   }
 }

@@ -10,7 +10,7 @@ $grayscale-5: var(--grayscale-5);
 $grayscale-6: var(--grayscale-6);
 $grayscale-7: var(--grayscale-7);
 $grayscale-8: var(--grayscale-8);
-$grayscale-9: var(--grayscale-9); 
+$grayscale-9: var(--grayscale-9);
 $grayscale-10: var(--grayscale-10);
 $grayscale-11: var(--grayscale-11);
 $grayscale-12: var(--grayscale-12);
@@ -56,3 +56,11 @@ $blue-3: var(--blue-3);
 $blue-4: var(--blue-4);
 $blue-5: var(--blue-5);
 $blue-6: var(--blue-6);
+
+$main-colors: (
+  accent: $accent-3,
+  blue: $blue-3,
+  orange: $orange-3,
+  green: $green-3,
+  red: $red-3,
+);

@@ -25,6 +25,8 @@ interface RowData {
     amount: number
 }
 
+//toDo: все переделать к хуям)) В стилях грязь, в tsx выделить стейты в redux store и навести порядок
+
 const Tools = () => {
 
     const { goToState } = useGoToState();
@@ -108,27 +110,21 @@ const Tools = () => {
                     >
                         Баланс
                     </p>
-                    <p
-                        className={styles['user-balance']}
-                    >
+                    <h6>
                         {`${Number(mainBalance + investBalance).toFixed(2)} USDT`}
-                    </p>
-                    <div
-                        className={styles['chart-wrapper']}
-                    >
-                        <LineChart 
-                            values={[
-                                {
-                                    name: 'Основной кошелек',
-                                    value: mainBalance,
-                                },
-                                {
-                                    name: 'Инвестиционный кошелек',
-                                    value: investBalance,
-                                },
-                            ]}
-                        />
-                    </div>
+                    </h6>
+                    <LineChart 
+                        values={[
+                            {
+                                name: 'Основной кошелек',
+                                value: mainBalance,
+                            },
+                            {
+                                name: 'Инвестиционный кошелек',
+                                value: investBalance,
+                            },
+                        ]}
+                    />
                 </div>
                 <div
                     className={classNames(styles['transactions'], 'card')}
