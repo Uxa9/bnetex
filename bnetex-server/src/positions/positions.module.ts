@@ -9,6 +9,9 @@ import { Position, PositionSchema } from './shemas/position.schema';
   providers: [PositionsService],
   imports: [
     MongooseModule.forFeature([{ name: Position.name, schema: PositionSchema }])
+  ],
+  exports: [
+    PositionsService
   ]
 })
 export class PositionsModule {}

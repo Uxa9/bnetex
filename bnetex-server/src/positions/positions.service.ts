@@ -93,12 +93,17 @@ export class PositionsService {
 
     async getCurrentOpenPosition() {
         const position = await this.PositionModel.findOne(
-            {}, 
+            {
+                closeTime: { $exists: false }
+            }, 
             {}, 
             { sort: { 'enterTime' : -1 } }
         );
-
-
-        return position;       
+        
+        if ( position ) {
+            return position;            
+        }
+        
+        return null;
     }
 }

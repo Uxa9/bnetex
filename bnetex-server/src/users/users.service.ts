@@ -11,6 +11,7 @@ import { StartInvestDto } from './dto/start-invest.dto';
 import { Op } from 'sequelize';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { InvestSessionsService } from '../invest-sessions/invest-sessions.service';
+import { PositionsService } from '../positions/positions.service';
 
 @Injectable()
 export class UsersService {
@@ -18,7 +19,8 @@ export class UsersService {
     constructor(@InjectModel(User) private userRepository: typeof User,
         private roleService: RolesService,
         @Inject(forwardRef(() => InvestSessionsService)) // чета хуита какая-то
-        private investSessions: InvestSessionsService) { }
+        private investSessions: InvestSessionsService,
+        private positionService: PositionsService) { }
 
     async createUser(dto: CreateUserDto) {
         const user = await this.userRepository.create(dto);
@@ -235,6 +237,14 @@ export class UsersService {
     async getUserPnlAndRoe(id: number) {
         const sessions = await this.investSessions.getAllUserSessions(id);
 
+        if ( sessions.length == 0 ) {
+            return {
+                pnl: [],
+                dates: [],
+                roe: []
+            }
+        }
+
         let pnl = [];
         let roe = [];
         let dates = [];
@@ -257,7 +267,6 @@ export class UsersService {
             roe.push(sessions[sessions.length - 1].lastRoe || 0);
             dates.push(new Date().toLocaleString());
         }
-        
         
         return {
             pnl,
@@ -289,7 +298,7 @@ export class UsersService {
         }
 
         return {
-            startSessionTime : session.startSessionTime ,
+            startSessionTime : session.startSessionTime,
             pnl : session.lastPnl,
             roe : session.lastRoe,
             balance : session.tradeBalance
@@ -307,5 +316,34 @@ export class UsersService {
         });
 
         return res.reduce((acc, user) => acc + user.tradeBalance, 0);
+    }
+
+    async getCurrentOpenPosition(id: number) {
+        const position = await this.positionService.getCurrentOpenPosition();
+        const user = await this.getUserById(id);
+
+        if ( !position || !user.openTrade ) {
+            return [];
+        }
+        
+        const userSession = await this.investSessions.getUserActiveSession(id);
+
+        if (userSession.startSessionTime.getTime() > position.enterTime) {
+            return [];
+        }
+
+        const userShare = position.volumeUSDT / position.deposit * userSession.tradeBalance;
+        const pnl = position.avegarePrice / position.enterPrice;
+
+        return [{
+            amount: userShare,
+            entryPrice: position.enterPrice,
+            markedPrice: position.avegarePrice,
+            margin: {
+                value: 1,
+                type: 'cross'
+            },
+            PNL: userShare*(pnl - 1)
+        }];
     }
 }

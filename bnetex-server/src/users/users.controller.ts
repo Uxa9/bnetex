@@ -123,4 +123,9 @@ export class UsersController {
     getTotalInvestAmount() {
         return this.userService.getTotalInvestAmount();
     }
+
+    @Get('invest/positions/:id')
+    getOpenUserPosition(@Param('id') id: number) {
+        return this.userService.getCurrentOpenPosition(id);
+    }
 }
