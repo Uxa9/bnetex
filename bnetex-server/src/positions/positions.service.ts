@@ -33,13 +33,15 @@ export class PositionsService {
 
         data.map((position, index) => {
     
+            const lever = 10;
             dates.push(new Date(position.closeTime).toLocaleDateString());
             const percent = position.sumProfit / position.deposit * 100;
             const x = position.volumeUSDT / position.deposit * acc;
-            const pnl = x * percent / 100;
+            const pnl = x * percent / 100 * lever; 
+
 
             index !== 0 ? 
-                roeValues.push((roeValues[index-1] + percent)):
+                roeValues.push(roeValues[index-1] + percent):
                 roeValues.push(percent);
             pnlValues.push(pnl);
 
@@ -66,12 +68,14 @@ export class PositionsService {
         positions.map(position => {
 
             const { positionEnters } = position;
+            
+            const lever = 10;
 
             const enters = positionEnters.map(enter => {
                 return {
                     date: enter.time,
                     action: "purchase",
-                    amount: enter.volumeUSDT,
+                    amount: enter.volumeUSDT * lever,
                     price: enter.buyPrice,
                     PNL: 0
                 }
@@ -82,9 +86,9 @@ export class PositionsService {
             res.push({
                 date: position.closeTime,
                 action: position.positionType === "LONG" ? "sale" : "purchase",
-                amount: position.volumeUSDT,
+                amount: position.volumeUSDT * lever,
                 price: position.closePrice,
-                PNL: position.sumProfit
+                PNL: position.sumProfit * lever
             });
         });
         
