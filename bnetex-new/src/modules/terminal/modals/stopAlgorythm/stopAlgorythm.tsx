@@ -4,26 +4,56 @@ import { BaseModalProps } from 'lib/hooks/useModal';
 import { Button } from 'lib/ui-kit';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
+import { useEffect, useState } from 'react';
+import { getInvestInfo } from 'services/user';
 
 interface StopAlgorythmModalProps { 
     onSubmit: (value: boolean) => void; //Костыль, нужно отправлять запрос на бек, получать статус и изменять его в useEffect
 }
 
+interface CloseData {
+    currentPositionSum: number,
+    closingPNL: number,
+    totalPNL: number,
+    totalROE: number,
+    totalDays: number
+}
+
 const StopAlgorythmModal = (props: StopAlgorythmModalProps & BaseModalProps) => {
 
     const { onSubmit, onClose } = props;
+    const [data, setData] = useState<CloseData>({
+        currentPositionSum : 0,
+        closingPNL : 0,
+        totalPNL : 0,
+        totalROE : 0,
+        totalDays : 0,
+    });
 
     const handleSubmit = () => {
         onSubmit(false);
         onClose();
     };
 
+    useEffect(() => {
+        getInvestInfo()
+            .then(res => {
+                setData({
+                    currentPositionSum : res.data.balance,
+                    closingPNL : res.data.pnl,
+                    totalPNL : res.data.pnl,
+                    totalROE : res.data.roe,
+                    totalDays : (new Date().getTime() - res.data.startSessionTime.getTime()) / 1000 / 60 / 60,
+                })
+            });
+    }, [])
+
     // toDo: fetch from backend
-    const currentPositionSum: number = 100;
-    const closingPNL: number = -2.33;
-    const totalPNL: number = 3.12; 
-    const totalROE: number = 4.56;
-    const totalDays: number = 2; //toDo: parse into dd:hh:mm + nouns
+    // const currentPositionSum: number = 100;
+    // const closingPNL: number = -2.33;
+    // const totalPNL: number = 3.12; 
+    // const totalROE: number = 4.56;
+    // const totalDays: number = 2; //toDo: parse into dd:hh:mm + nouns
 
     return(
         <Modal
@@ -40,31 +70,31 @@ const StopAlgorythmModal = (props: StopAlgorythmModalProps & BaseModalProps) => 
                 </p>
                 <div className={styles['disclaimer__data']}>
                     <p>
-                        Сумма позиций: <strong>{currentPositionSum} USDT</strong>
+                        Сумма позиций: <strong>{data.currentPositionSum} USDT</strong>
                     </p>
                     <p>
                         <span>Расчетный PNL: </span>
                         <SignedNumber 
-                            value={closingPNL} 
+                            value={data.closingPNL} 
                             postfix={'USDT'}
                         />
                     </p>
                 </div>
                 <p>
-                    Результаты <strong>{totalDays}</strong> дней работы алгоритма:
+                    Результаты <strong>{data.totalDays}</strong> дней работы алгоритма:
                 </p>
                 <div className={styles['disclaimer__data']}>
                     <p>
                         <span>PNL: </span>
                         <SignedNumber
-                            value={totalPNL}  
+                            value={data.totalPNL}  
                             postfix={'USDT'}
                         />
                     </p>
                     <p>
                         <span>ROE: </span>
                         <SignedNumber 
-                            value={totalROE} 
+                            value={data.totalROE} 
                             postfix={'%'}
                         />
                     </p>

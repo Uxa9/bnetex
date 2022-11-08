@@ -35,6 +35,13 @@ const InvestorChart = ({dates, values, type}: InvestorChartProps) => {
                 show: false,
             },
         },
+        yaxis: [{
+            labels: {
+                formatter: function (val: number) {
+                    return (val.toFixed(2))
+                }
+            }
+        }],
         dataLabels: { enabled : false },
         theme: {
             mode: theme, 

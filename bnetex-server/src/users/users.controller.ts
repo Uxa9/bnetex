@@ -119,8 +119,13 @@ export class UsersController {
         return this.userService.getUserActiveSession(id);
     }
     
-    @Get('/invest/getTotalInvestAmount')
+    @Get('/totalInvestAmount/get')
     getTotalInvestAmount() {
         return this.userService.getTotalInvestAmount();
+    }
+
+    @Get('invest/positions/:id')
+    getOpenUserPosition(@Param('id') id: number) {
+        return this.userService.getCurrentOpenPosition(id);
     }
 }

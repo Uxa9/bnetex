@@ -2,7 +2,7 @@ import useApi from 'lib/hooks/useApi';
 import { getUserId } from 'lib/utils/getUserId';
 import { getToken } from './utils/getToken';
 
-const [ protectedApi ] = useApi();
+const [protectedApi] = useApi();
 
 
 export const getUser = async () => {
@@ -42,6 +42,16 @@ export const getRoeAndPnl = async () => {
 export const getInvestInfo = async () => {
     return await protectedApi.get(
         `/users/invest/${getUserId()}`,
+        {
+            headers: {
+                'Authorization': `Bearer ${getToken()}`,
+            }
+        });
+}
+
+export const getUserOpenPosition = async () => {
+    return await protectedApi.get(
+        `/users/invest/positions/${getUserId()}`,
         {
             headers: {
                 'Authorization': `Bearer ${getToken()}`,

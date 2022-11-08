@@ -76,7 +76,7 @@ const OrderHistory = () => {
                                         {...{
                                             firstCoin: 'BTC',
                                             secondCoin: 'USDT',
-                                            lever: 1,
+                                            lever: 10,
                                             type: 'Бессрочные',
                                         }}
                                     />
