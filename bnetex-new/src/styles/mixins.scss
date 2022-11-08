@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'colors/colors';
 
 @mixin stretch-screen {
   position: fixed;
@@ -117,4 +118,30 @@
 @mixin mobile-100vh() {
   height: 100vh;
   height: -webkit-fill-available;
+}
+
+@mixin color-index-map(
+  $background-color-postfix: '',
+  $color-postfix: '',
+  $fill-postfix: '',
+  $svg-fill-postfix: ''
+) {
+  @each $key, $color in $main-colors {
+    &--#{$key} {
+      @if $background-color-postfix != '' {
+        background-color: var(--#{$key}-#{$background-color-postfix});
+      }
+      @if $color-postfix != '' {
+        color: var(--#{$key}-#{$color-postfix});
+      }
+      @if $fill-postfix != '' {
+        fill: var(--#{$key}-#{$fill-postfix});
+      }
+      @if $svg-fill-postfix != '' {
+        svg {
+          fill: var(--#{$key}-#{$svg-fill-postfix});
+        }
+      }
+    }
+  }
 }

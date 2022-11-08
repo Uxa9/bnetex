@@ -1,4 +1,7 @@
 import classNames from 'classnames';
+import { useGoToState } from 'lib/hooks/useGoToState';
+import { AppColorsArray } from 'lib/types/appColors';
+import IconLinkButton from 'lib/ui-kit/iconLinkButton/iconLinkButton';
 import Skeleton from 'lib/ui-kit/skeleton/skeleton';
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
@@ -16,6 +19,7 @@ const Dashboard = () => {
     const [activeSection, setActiveSection] = useState<ActiveSectionType | undefined>(undefined);
     const { pathname } = useLocation();
     const { TOOLS, SETTINGS, MAIN_WALLET, INVESTOR_WALLET, TRANSACTIONS, DASHBOARD } = AppLinksEnum;
+    const { goToState } = useGoToState();
 
     useEffect(() => {
         setActiveSection('tools'); //toDo костыль, передалать
@@ -58,29 +62,39 @@ const Dashboard = () => {
                 <main className={classNames('container', styles.dashboard)}>
                     <aside className={classNames(styles['control-menu'], 'card', 'scroll')}>
                         {
-                            dashboardSections.map((section: DashboardSection) => 
-                                <Link 
-                                    key={section.link}
-                                    to={section.link}
-                                    className={classNames(
-                                        styles.link,
-                                        { [styles['link--active']] : activeSection === section.link},
-                                        'text',
-                                    )}
-                                    onClick={() => setActiveSection(section.link)}
-                                >
-                                    {section.title}
-                                </Link>
+                            dashboardSections.map((section: DashboardSection, index: number) => 
+                                <>
+                                    <Link 
+                                        key={section.link}
+                                        to={section.link}
+                                        className={classNames(
+                                            styles['link'],
+                                            { [styles['link--active']] : activeSection === section.link},
+                                            'text',
+                                        )}
+                                        onClick={() => setActiveSection(section.link)}
+                                    >
+                                        {section.title}
+                                    </Link>
+                                    <IconLinkButton 
+                                        key={section.link}
+                                        label={section.title} 
+                                        color={AppColorsArray[index]} 
+                                        Icon={section.icon}     
+                                        active={activeSection === section.link}    
+                                        className={styles['link-icon']}  
+                                        onClick={() => {
+                                            setActiveSection(section.link);
+                                            goToState(section.link, null, true);
+                                        }}
+                                    />
+                                </>
                             )
                         }
                     </aside>
-                    <div
-                        className={styles['dashboard-content']}
-                    >
-                        <Suspense  fallback={<Skeleton height={'50px'} />}>
-                            { loadSection() }
-                        </Suspense>
-                    </div>
+                    <Suspense  fallback={<Skeleton height={'50px'} />}>
+                        { loadSection() }
+                    </Suspense>
                 </main>
             </div>
         </>

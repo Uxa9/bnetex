@@ -30,3 +30,7 @@ export {ReactComponent as Spinner} from './uil_spinner.svg';
 export {ReactComponent as Warning} from './uil_exclamation-triangle.svg';
 export {ReactComponent as USDT} from './uil_usdt.svg';
 export {ReactComponent as Key} from './uil_key.svg';
+export {ReactComponent as Wrench} from './uil_wrench.svg';
+export {ReactComponent as History} from './uil_history.svg';
+export {ReactComponent as Coins} from './uil_coins.svg';
+export {ReactComponent as Bitcoin} from './uil_bitcoin.svg';

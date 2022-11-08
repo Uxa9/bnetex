@@ -1,162 +1,149 @@
 @import 'styles/colors/colors';
+@import 'styles/mixins';
 
 .wallet {
-    width: 100%;
+  width: 100%;
 }
 
 .wallet-header {
-    display: flex;
-    justify-content: space-between;
-    height: fit-content;
-    grid-column: 1/-1;
+  display: flex;
+  justify-content: space-between;
+  height: fit-content;
+  grid-column: 1/-1;
 
-    align-items: center;
+  align-items: center;
 }
 .wallet-data {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    row-gap: 20px;
-    column-gap: 20px;
-    padding-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 20px;
+  column-gap: 20px;
+  padding-top: 20px;
 }
 
 .wallet-card {
-    padding: 15px 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .balance-item {
+  display: flex;
+  flex-direction: column;
+
+  &__values {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    column-gap: 0.5ch;
+  }
 
-    &__values {
-        display: flex;
-        align-items: center;
-        column-gap: 0.5ch;
-    }
+  &__label {
+    color: $grayscale-6;
+  }
 
-    &__label {
-        color: $grayscale-6;
+  &__value {
+    &::after {
+      content: ' USDT';
     }
-
-    &__value {
-        &::after {
-            content: ' USDT';
-        }
-    }
+  }
 }
 
 .header-transfer {
-    font-size: 16px;
-    font-weight: bold;
-    color: $accent-3;
+  font-size: 16px;
+  font-weight: bold;
+  color: $accent-3;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .charts {
-    display: flex;
-    align-items: flex-start;
+  display: flex;
+  align-items: flex-start;
 }
 
 .balance,
 .invest-info,
 .chart {
-    flex-grow: 1;
-    width: 50%;
-    padding: 16px;
-    margin: 8px;
+  flex-grow: 1;
+  width: 50%;
+  padding: 16px;
+  margin: 8px;
 }
 
 .balance-and-info {
-    display: flex;
+  display: flex;
 
-    .balance {
-        box-sizing: border-box;
-        max-height: 210px;
+  .balance {
+    box-sizing: border-box;
+    max-height: 210px;
 
-        .balance-header {
-            color: $grayscale-6;
-            margin-bottom: 12px;
-        }
-
-        .user-balance {
-            margin-bottom: 20px;
-
-            font-weight: 500;
-            font-size: 20px;
-            line-height: 24px;
-
-            span {
-                color: $grayscale-6;
-            }
-        }
+    .balance-header {
+      color: $grayscale-6;
+      margin-bottom: 12px;
     }
 
-    .invest-info {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
+    .user-balance {
+      margin-bottom: 20px;
 
-        p {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 24px;
 
-            span {
-                &:first-child {
-                    color: $grayscale-6;
-                }
-            }
-
-            .positive {
-                color: $green-4;
-            }
-            
-            .negative {
-                color: $red-4
-            }
-        }
+      span {
+        color: $grayscale-6;
+      }
     }
+  }
+
+  .invest-info {
+    @include column-flex-center(16px);
+
+    p {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      span {
+        &:first-child {
+          color: $grayscale-6;
+        }
+      }
+
+      .positive {
+        color: $green-4;
+      }
+
+      .negative {
+        color: $red-4;
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 800px) {
-    
-    .wallet-header {
-        flex-direction: column;
-        align-items: flex-start;
+  .wallet-header {
+    flex-direction: column;
+    align-items: flex-start;
 
-        >div {
-            margin: 8px 0;
-        }
+    > div {
+      margin: 8px 0;
     }
+  }
 
-    .balance-and-info,
-    .charts {
-        flex-direction: column;
-    }
+  .balance-and-info,
+  .charts {
+    flex-direction: column;
+  }
 
-    .balance,
-    .invest-info,
-    .chart {
-        width: 100%;
-        margin: 8px 0;
-    }
+  .balance,
+  .invest-info,
+  .chart {
+    width: 100%;
+    margin: 8px 0;
+  }
 
-    .balance {
-        height: 180px;
-    }
-    
-    .invest-info {
-        p {
-            margin: 8px 0;
-        }
-
-        button {
-            margin-top: 8px;
-        }
-    }
+  .balance {
+    height: 180px;
+  }
 }
