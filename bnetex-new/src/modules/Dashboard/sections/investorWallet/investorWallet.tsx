@@ -5,7 +5,6 @@ import { useGoToState } from 'lib/hooks/useGoToState';
 import { useEffect, useState } from 'react';
 import { useModal } from 'lib/hooks/useModal';
 import TransferModal from 'modules/Payments/Transfer/transferModal';
-import Chart from 'react-apexcharts';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import useWalletActions from 'services/walletActions';
 import { WalletCategoryWithBalance } from 'lib/types/wallet';
@@ -14,6 +13,7 @@ import { AppLinksEnum } from 'routes/appLinks';
 import InvestorChart from 'modules/Global/components/investorChart/investorChart';
 import { getInvestInfo, getRoeAndPnl } from 'services/user';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
+import LineChart from 'modules/Global/components/lineChart/lineChart';
 
 // toDo
 // сделать нормальные кнопки
@@ -30,6 +30,7 @@ interface InvestInfoProps {
     roe : number
 }
 
+//toDo: почистить компонент, выделить баланс и прочую хуйню в стор
 const InvestorWallet = () => {
 
     const { goToState } = useGoToState();
@@ -54,7 +55,7 @@ const InvestorWallet = () => {
         balance : 0,
         startTime : new Date(),
         pnl : 0,
-        roe : 0
+        roe : 0,
     });
 
     const renderTime = () => {
@@ -68,7 +69,7 @@ const InvestorWallet = () => {
         } else {
             return `${Number(days).toFixed(0)} дней ${Number(hours - Math.floor(days) * 24).toFixed(0)} час`;
         }
-    }
+    };
 
     useEffect(() => {
         getRoeAndPnl()
@@ -88,8 +89,8 @@ const InvestorWallet = () => {
                     startTime : new Date(res.data.startSessionTime),
                     pnl : res.data.pnl || 0,
                     roe : res.data.roe || 0,
-                    balance : res.data.balance || 0
-                })
+                    balance : res.data.balance || 0,
+                });
             });
         promiseWithLoading<WalletCategoryWithBalance>(getWallets())
             .then(res => {
@@ -134,77 +135,17 @@ const InvestorWallet = () => {
                         {`${Number(investBalance + investInfo.balance).toFixed(2)} USDT`}
                     </p>
                     <div>
-                        {/* toDo: убрать нахуй это говно */}
-                        <Chart
-                            type='bar'
-                            series={[
+                        <LineChart 
+                            values={[
                                 {
                                     name: 'В работе',
-                                    data: [Number(Number(investInfo.balance).toFixed(2))],
+                                    value: investInfo.balance,
                                 },
                                 {
                                     name: 'Доступно для вывода',
-                                    data: [Number(Number(investBalance).toFixed(2))],
+                                    value: investBalance,
                                 },
                             ]}
-                            height={'150px'}
-                            width={'100%'}
-                            options={{ // приготовьтесь охуеть
-                                chart: {
-                                    stacked: true,
-                                    zoom: { enabled: false },
-                                    selection: { enabled: false },
-                                    toolbar: { show: false },
-                                    offsetY: -60,
-                                    offsetX: -25,
-                                    background: 'transparent'
-                                },
-                                theme: {
-                                    mode: theme,
-                                    monochrome: {
-                                        enabled: false
-                                    }
-                                },
-                                grid: {
-                                    show: false,
-                                    xaxis: {
-                                        lines: { show: false },
-                                    },
-                                    yaxis: {
-                                        lines: { show: false },
-                                    },
-                                },
-                                plotOptions: {
-                                    bar: {
-                                        horizontal: true,
-                                        barHeight: '18px',
-                                        borderRadius: 4,
-                                    },
-                                },
-                                xaxis: {
-                                    categories: [''],
-                                    labels: {
-                                        show: false,
-                                    },
-                                    axisBorder: { show: false },
-                                    axisTicks: { show: false },
-                                },
-                                yaxis: {
-                                    show: false,
-                                },
-                                stroke: {
-                                    width: 0,
-                                },
-                                legend: {
-                                    showForNullSeries: false,
-                                    showForSingleSeries: false,
-                                    offsetY: -10,
-                                    offsetX: -7,
-                                    horizontalAlign: 'left',
-                                },
-                                colors: ['#9202FF', '#1A75FF'],
-                                dataLabels: { enabled: false },
-                            }}
                         />
                     </div>
                 </div>
@@ -233,7 +174,7 @@ const InvestorWallet = () => {
                         </span>
                         <SignedNumber
                             value={investInfo.pnl}
-                            postfix={""}
+                            postfix={''}
                         />
                     </p>
                     <p>
@@ -242,7 +183,7 @@ const InvestorWallet = () => {
                         </span>
                         <SignedNumber
                             value={investInfo.roe}
-                            postfix={"%"}
+                            postfix={'%'}
                         />
                     </p>
                     <Button

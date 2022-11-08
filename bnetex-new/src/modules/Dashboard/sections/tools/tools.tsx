@@ -28,8 +28,8 @@ interface RowData {
 const Tools = () => {
 
     const { goToState } = useGoToState();
-    const [mainBalance, setMainBalance] = useState<number>(75);
-    const [investBalance, setInvestBalance] = useState<number>(25);
+    const [mainBalance, setMainBalance] = useState<number>(0);
+    const [investBalance, setInvestBalance] = useState<number>(0);
     const { promiseWithLoading } = usePromiseWithLoading();
     const { getWallets } = useWalletActions();
     const { DEPOSIT, WITHDRAW, DASHBOARD, TRANSACTIONS } = AppLinksEnum;
@@ -71,11 +71,11 @@ const Tools = () => {
 
                 setRows(data);
             });
-        // promiseWithLoading<WalletCategoryWithBalance>(getWallets())
-        //     .then(res => {
-        //         setMainBalance(res.main);
-        //         setInvestBalance(res.investor);
-        //     });
+        promiseWithLoading<WalletCategoryWithBalance>(getWallets())
+            .then(res => {
+                setMainBalance(res.main);
+                setInvestBalance(res.investor);
+            });
     }, []);
 
     return (

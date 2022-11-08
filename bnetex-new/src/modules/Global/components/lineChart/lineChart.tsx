@@ -22,20 +22,23 @@ const LineChart = ({values}: LineChartProps) => {
 
     return(
         <div className={styles['line-chart']}>
-            <div className={styles['line-chart__chart']}>
-                {
-                    values.map((value: LineChartItem, index: number) => 
-                        <div
-                            className={classNames(
-                                styles['chart-line'],
-                                styles[colorIndexMap('chart-line', index)],
-                            )}
-                            key={index}
-                            style={{width: `${100 * value.value/totalVolume}%`}}
-                        />
-                    )
-                }
-            </div>
+            {
+                !values.every(item => item.value === 0) &&
+                    <div className={styles['line-chart__chart']}>
+                        {
+                            values.map((value: LineChartItem, index: number) => 
+                                <div
+                                    className={classNames(
+                                        styles['chart-line'],
+                                        styles[colorIndexMap('chart-line', index)],
+                                    )}
+                                    key={index}
+                                    style={{width: `${100 * value.value/totalVolume}%`}}
+                                />
+                            )
+                        }
+                    </div>
+            }
             <div className={styles['line-chart__names']}>
                 {
                     values.map((item: LineChartItem, index: number) => 
