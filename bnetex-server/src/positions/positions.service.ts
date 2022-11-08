@@ -15,7 +15,8 @@ export class PositionsService {
         const date = new Date().setMonth(new Date().getMonth() - dto.period);
 
         const positions = await this.PositionModel.find({
-            enterTime: { $gte: date }
+            enterTime: { $gte: date },
+            closeTime: { $exists: true }
         });
 
         const result = await this.getHistoricalData(positions, dto.amount);
@@ -33,12 +34,13 @@ export class PositionsService {
         data.map((position, index) => {
     
             dates.push(new Date(position.closeTime).toLocaleDateString());
+            const percent = position.sumProfit / position.deposit * 100;
             const x = position.volumeUSDT / position.deposit * acc;
-            const pnl = x * position.percentProfit / 100;
+            const pnl = x * percent / 100;
 
             index !== 0 ? 
-                roeValues.push((roeValues[index-1] + position.percentProfit)):
-                roeValues.push(position.percentProfit);
+                roeValues.push((roeValues[index-1] + percent)):
+                roeValues.push(percent);
             pnlValues.push(pnl);
 
             acc+=pnl;            
@@ -55,7 +57,8 @@ export class PositionsService {
         const date = new Date().setMonth(new Date().getMonth() - period);
 
         const positions = await this.PositionModel.find({
-            enterTime: { $gte: date }
+            enterTime: { $gte: date },
+            closeTime: { $exists: true }
         });
 
         let res = [];
@@ -86,5 +89,16 @@ export class PositionsService {
         });
         
         return res;
+    }
+
+    async getCurrentOpenPosition() {
+        const position = await this.PositionModel.findOne(
+            {}, 
+            {}, 
+            { sort: { 'enterTime' : -1 } }
+        );
+
+
+        return position;       
     }
 }

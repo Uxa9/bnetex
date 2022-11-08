@@ -24,6 +24,7 @@ export interface OrderHistoryItem  {
 const OrderHistory = () => {
 
     const [orderHistory, setOrdersHistory] = useState<OrderHistoryItem[]>([]);
+    const lever = 10; //mem
 
     useEffect(() => {
         getHistoricalDataOrders(6)
@@ -66,7 +67,7 @@ const OrderHistory = () => {
                                     {...{
                                         firstCoin: 'BTC',
                                         secondCoin: 'USDT',
-                                        lever: 1,
+                                        lever: lever,
                                         type: 'Бессрочные',
                                     }}
                                 />
@@ -114,7 +115,7 @@ const OrderHistory = () => {
                                 >
                                     Объем
                                 </span>
-                                {position.amount}
+                                {position.amount * lever}
                             </td>
                             <td className={styles['price']}> 
                                 <span 
@@ -148,7 +149,7 @@ const OrderHistory = () => {
                                     PNL
                                 </span>
                                 <SignedNumber 
-                                    value={Number(Number(position.PNL).toFixed(6))}
+                                    value={Number(Number(position.PNL * lever).toFixed(6))}
                                 />
                             </td>
                         </tr>

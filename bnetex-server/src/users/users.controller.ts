@@ -119,7 +119,7 @@ export class UsersController {
         return this.userService.getUserActiveSession(id);
     }
     
-    @Get('/invest/getTotalInvestAmount')
+    @Get('/totalInvestAmount/get')
     getTotalInvestAmount() {
         return this.userService.getTotalInvestAmount();
     }

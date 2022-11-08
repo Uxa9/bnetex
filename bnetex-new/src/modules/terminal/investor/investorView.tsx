@@ -37,8 +37,13 @@ const InvestorView = () => {
             roeValues: res.roeValues.map((item: any) => Number(Number(item).toFixed(2))),
         });
 
-        await setInvestPercentProfit(res.roeValues[res.roeValues.length - 1]);
-        await setInvestProfit(res.roeValues[res.roeValues.length - 1] * amount / 100);
+        if (res.roeValues.length > 0) {
+            await setInvestPercentProfit(res.roeValues[res.roeValues.length - 1]);
+            await setInvestProfit(res.roeValues[res.roeValues.length - 1] * amount / 100);
+        } else {
+            setInvestPercentProfit(0);
+            setInvestProfit(0);
+        }
 
         return;
     };
@@ -99,10 +104,10 @@ const InvestorView = () => {
                     <span
                         className={'subtitle'}
                     >
-                        {Number(Number(investProfit).toFixed(2))}
+                        {Number(Number(investProfit * 5).toFixed(2))}
                     </span>
                     <SignedNumber 
-                        value={Number(Number(investPercentProfit).toFixed(2))}
+                        value={Number(Number(investPercentProfit * 5).toFixed(2))}
                         postfix={'%'}
                     />
                 </div>
@@ -115,7 +120,7 @@ const InvestorView = () => {
             >
                 <InvestorChart 
                     dates={graphicData.dates}
-                    values={graphicData.pnlValues}
+                    values={graphicData.pnlValues.map(item => item*10)}
                     type={'PNL'}
                 />
             </div>
@@ -127,7 +132,7 @@ const InvestorView = () => {
             >
                 <InvestorChart 
                     dates={graphicData.dates}
-                    values={graphicData.roeValues}
+                    values={graphicData.roeValues.map(item => item*10)}
                     type={'ROE'}
                 />
             </div>
