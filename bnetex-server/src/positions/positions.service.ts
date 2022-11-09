@@ -34,7 +34,7 @@ export class PositionsService {
         data.map((position, index) => {
     
             const lever = 10;
-            dates.push(new Date(position.closeTime).toLocaleDateString());
+            dates.push(position.closeTime);
             const percent = position.sumProfit / position.deposit * 100;
             const x = position.volumeUSDT / position.deposit * acc;
             const pnl = x * percent / 100 * lever; 

@@ -155,4 +155,10 @@ export class InvestSessionsService {
             ]
         });
     }
+
+    async acceptBotCallback(data: any) {
+        console.log('пошел процесс');
+        
+        return { status: "ok" }
+    }
 }
