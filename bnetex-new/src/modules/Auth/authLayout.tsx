@@ -19,8 +19,6 @@ const AuthLayout = () => {
 
     const loadSection = useCallback(() => {
         const authSectionPath = pathname.split('/').at(-1);
-        console.log(authSectionPath);
-        
         switch (authSectionPath) {
             case REGISTRATION: {
                 return <Registration />;
