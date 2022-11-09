@@ -6,9 +6,8 @@ import { formatDate } from 'lib/utils/formatDate';
 import PositionAction from 'modules/terminal/components/positionAction/positionAction';
 import { PositionActionType } from 'modules/terminal/types/positionAction';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
-import React, { useEffect } from 'react';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
-import Skeleton from 'lib/ui-kit/skeleton/skeleton';
+import TableSkeletonRows from 'modules/terminal/components/tableSkeletorRows/tableSkeletonRows';
 
 export interface OrderHistoryItem  {
     coinSymbol: CoinSymbolProps;
@@ -19,8 +18,10 @@ export interface OrderHistoryItem  {
     PNL: number;
 }
 
+const TABLE_COLUMNS = 6;
+
 const OrderHistory = () => {
-    const { loading, error, tradeHistory } = useTypedSelector(state => state.tradeHistory);
+    const { loading, tradeHistory } = useTypedSelector(state => state.tradeHistory);
 
     return(
         <table className={styles['order-history']}>
@@ -37,26 +38,10 @@ const OrderHistory = () => {
             <tbody>
                 {
                     loading ? 
-                        <tr>
-                            <td>
-                                <Skeleton height={'8px'} />
-                            </td>
-                            <td>
-                                <Skeleton height={'8px'} />
-                            </td>
-                            <td>
-                                <Skeleton height={'8px'} />
-                            </td>
-                            <td>
-                                <Skeleton height={'8px'} />
-                            </td>
-                            <td>
-                                <Skeleton height={'8px'} />
-                            </td>
-                            <td>
-                                <Skeleton height={'8px'} />
-                            </td>
-                        </tr> 
+                        <TableSkeletonRows 
+                            columnCount={TABLE_COLUMNS}
+                            skeletonClassname={styles['skeleton']}
+                        />
                         :
                         tradeHistory.map((position: OrderHistoryItem, index: number) => 
                             <tr 
