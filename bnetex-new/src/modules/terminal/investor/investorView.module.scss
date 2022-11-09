@@ -62,7 +62,7 @@
   grid-column: 2;
   grid-row: 3;
   width: 100%;
-
+  overflow-x: hidden;
   @include max-width(1200) {
     grid-column: 1;
     grid-row: 2;
@@ -76,7 +76,7 @@
 .ROE-card {
   grid-row: 4;
   width: 100%;
-
+  overflow-x: hidden;
   @include max-width(1200) {
     grid-column: 1;
     grid-row: 3;
@@ -96,10 +96,10 @@
 }
 
 .investor-view-wrapper__header {
-    display: flex;
-    margin-bottom: 36px;
-    
-    >div {
-        margin-left: 8px;
-    }
+  display: flex;
+  margin-bottom: 36px;
+
+  > div {
+    margin-left: 8px;
+  }
 }

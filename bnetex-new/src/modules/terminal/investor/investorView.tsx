@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import { getHistoricalData } from 'services/getHistoricalData';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import InvestorChart from 'modules/Global/components/investorChart/investorChart';
+import Chart from 'modules/Global/components/lightChart/chart';
 
 type InvestorViewType = 'trade' | 'history';
 
@@ -113,10 +114,15 @@ const InvestorView = () => {
                 'card'
             )}
             >
-                <InvestorChart 
-                    dates={graphicData.dates}
-                    values={graphicData.pnlValues}
-                    type={'PNL'}
+                <Chart 
+                    data={
+                        graphicData.dates.map((date, index) => {
+                            return {
+                                time: date,
+                                value: graphicData.pnlValues[index],
+                            };
+                        })
+                    }
                 />
             </div>
             <div className={classNames(
@@ -125,10 +131,15 @@ const InvestorView = () => {
                 'card',
             )}
             >
-                <InvestorChart 
-                    dates={graphicData.dates}
-                    values={graphicData.roeValues}
-                    type={'ROE'}
+                <Chart 
+                    data={
+                        graphicData.dates.map((date, index) => {
+                            return {
+                                time: date,
+                                value: graphicData.roeValues[index],
+                            };
+                        })
+                    }
                 />
             </div>
         </>
