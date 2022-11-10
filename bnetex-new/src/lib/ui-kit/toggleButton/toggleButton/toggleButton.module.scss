@@ -40,3 +40,7 @@ input:checked + .button {
 input:checked + .button:not(.button--underlined) {
   border-left: 1px solid !important;
 }
+
+.button:not(.button--underlined):hover {
+  border-left: 1px solid !important;
+}
