@@ -1,16 +1,22 @@
 import styles from './chart.module.scss';
 import { createChart, IChartApi, ISeriesApi, SingleValueData } from 'lightweight-charts';
 import { useEffect, useRef, useState } from 'react';
+import { Switch, ToolTip } from 'lib/ui-kit';
 
 interface ChartProps {
-    data: SingleValueData[]
+    data: SingleValueData[];
+    type: 'ROE' | 'PNL';
 }
 
-const Chart = ({data}: ChartProps) => {
+const Chart = ({ data, type }: ChartProps) => {
 
     const chartRef = useRef<HTMLDivElement | null>(null);
     const [chartBase, setChartBase] = useState<IChartApi | null>(null);
     const [lineChart, setLineChart] = useState<ISeriesApi<'Area'> | null>(null);
+
+    const [withComission, setWithCommision] = useState<boolean>(false);
+    const toggleComission = () => setWithCommision(prevState => !prevState);
+
 
     useEffect(() => {
         if (!chartRef.current) return;
@@ -73,7 +79,6 @@ const Chart = ({data}: ChartProps) => {
         const observer = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 const { width } = entry.contentRect;
-                console.log(width);
                 
                 chartBase?.applyOptions({width: width});
             }
@@ -87,10 +92,36 @@ const Chart = ({data}: ChartProps) => {
     }, [ chartBase ]);
 
     return(
-        <div
-            className={styles['chart-container']}
-            ref={chartRef}
-        />
+        <div className={styles['container']}>
+            <div className={styles['header']}>
+                {
+                    type === 'PNL' ? 
+                        <ToolTip
+                            title={'PnL'}
+                            infoText={'PNL (Profit and Loss) – это величина, которая показывает разницу между прибылью и убытками в трейдинге.'}
+                        /> :
+                        <ToolTip
+                            title={'ROE'}
+                            infoText={'ROE — это та процентная ставка, под которую в компании работают средства акционеров. Этот показатель является ключевым для определения эффективности деятельности компании. Например, показатель ROE = 20% говорит о том, что каждый рубль, вложенный в компанию, ежегодно приносит 20 копеек прибыли.'}
+                        />
+                }
+                <div className={styles['comission-block']}>
+                    <ToolTip
+                        title={'С комиссией'}
+                        infoText={'Комиссия за сделки — этот платеж взимается с клиента в виде процента от прибыли со всех торговых операции. Ставка комиссии - 50% от прибыли (PNL/ROE).'}
+                    />
+                    <Switch 
+                        checked={withComission}
+                        onChange={toggleComission}
+                        justify={'gap'}
+                    />
+                </div>
+            </div>
+            <div
+                className={styles['wrapper']}
+                ref={chartRef}
+            />
+        </div>
     );
 };
 

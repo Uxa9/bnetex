@@ -1,19 +1,8 @@
 @import 'styles/colors/colors';
 @import 'styles/mixins';
 
-.actions-card {
-  @include column-flex(24px);
-
-  .toggle-group-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    column-gap: 12px;
-  }
-
-  @include max-width(800) {
-    grid-row: 2;
-  }
+.toggle-section-card {
+  height: 280px;
 }
 
 .investor-view-wrapper__header {
@@ -62,7 +51,7 @@
   grid-column: 2;
   grid-row: 3;
   width: 100%;
-  overflow-x: hidden;
+
   @include max-width(1200) {
     grid-column: 1;
     grid-row: 2;
@@ -76,7 +65,7 @@
 .ROE-card {
   grid-row: 4;
   width: 100%;
-  overflow-x: hidden;
+
   @include max-width(1200) {
     grid-column: 1;
     grid-row: 3;

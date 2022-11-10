@@ -7,8 +7,8 @@ import ToolTip from 'lib/ui-kit/toolTip';
 import classNames from 'classnames';
 import { getHistoricalData } from 'services/getHistoricalData';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
-import InvestorChart from 'modules/Global/components/investorChart/investorChart';
 import Chart from 'modules/Global/components/lightChart/chart';
+import { format } from 'date-fns';
 
 type InvestorViewType = 'trade' | 'history';
 
@@ -32,56 +32,57 @@ const InvestorView = () => {
     const getData = async (period: number, amount: number) => {
         const res = await getHistoricalData(period, amount);
 
+        // toDO убрать как поправят бек
+        res.dates = res.dates.map(date => format(new Date(date), 'yyyy-MM-dd'));
+        res.dates = Array.from(new Set(res.dates));
+
         setGraphicData({
             dates: res.dates,
             pnlValues: res.pnlValues.map((item: any) => Number(Number(item).toFixed(2))),
             roeValues: res.roeValues.map((item: any) => Number(Number(item).toFixed(2))),
         });
 
-        await setInvestPercentProfit(res.roeValues[res.roeValues.length - 1]);
-        await setInvestProfit(res.roeValues[res.roeValues.length - 1] * amount / 100);
-
-        return;
+        setInvestPercentProfit(res.roeValues[res.roeValues.length - 1]);
+        setInvestProfit(res.roeValues[res.roeValues.length - 1] * amount / 100);
+ 
     };
 
     return (
         <>
-            <div className='terminal-side-block'>
-                <div
-                    className={classNames(styles['investor-view-card'], 'card')}
-                >
-                    <div className={styles['investor-view-wrapper__header']}>
-                        <ToggleButtonGroup
-                            title={''}
-                            name={'investor_terminal'}
-                            onChange={(value: InvestorViewType) => {
-                                setViewType(value);
-                            }}
-                            value={viewType}
-                        >
-                            <ToggleButton
-                                text={'Торговля'}
-                                value={'trade'}
-                            />
-                            <ToggleButton
-                                text={'История'}
-                                value={'history'}
-                            />
-                        </ToggleButtonGroup>
-                        <ToolTip
-                            title='Что такое история?'
-                            infoText='История или история сделок - это исторические записи фактических транзакций по позициям. 
-                        В раздел попадают только исполненные ордера.'
+            <div
+                className={classNames(styles['investor-view-card'], styles['toggle-section-card'], 'card')}
+            >
+                <div className={styles['investor-view-wrapper__header']}>
+                    <ToggleButtonGroup
+                        title={''}
+                        name={'investor_terminal'}
+                        onChange={(value: InvestorViewType) => {
+                            setViewType(value);
+                        }}
+                        value={viewType}
+                    >
+                        <ToggleButton
+                            text={'Торговля'}
+                            value={'trade'}
                         />
-                    </div>
-                    {
-                        viewType === 'trade' ?
-                            <TradeView /> :
-                            <HistoryView
-                                handleClick={getData}
-                            />
-                    }
+                        <ToggleButton
+                            text={'История'}
+                            value={'history'}
+                        />
+                    </ToggleButtonGroup>
+                    <ToolTip
+                        title='Что такое история?'
+                        infoText='История или история сделок - это исторические записи фактических транзакций по позициям. 
+                        В раздел попадают только исполненные ордера.'
+                    />
                 </div>
+                {
+                    viewType === 'trade' ?
+                        <TradeView /> :
+                        <HistoryView
+                            handleClick={getData}
+                        />
+                }
             </div>
             <div
                 className={classNames(
@@ -123,6 +124,7 @@ const InvestorView = () => {
                             };
                         })
                     }
+                    type={'PNL'}
                 />
             </div>
             <div className={classNames(
@@ -140,6 +142,7 @@ const InvestorView = () => {
                             };
                         })
                     }
+                    type={'ROE'}
                 />
             </div>
         </>
