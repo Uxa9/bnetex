@@ -74,12 +74,14 @@ const HistoryAndOrders = ({className}: {className: string}) => {
                     }
                 </ToggleButtonGroup>
             </div>
-            <div className={classNames(
-                styles['history-and-orders__content'],
-                'scroll',
-            )}
-            >
-                { sectionComponent }
+            <div className={styles['history-and-orders__content-wrapper']}>
+                <div className={classNames(
+                    styles['history-and-orders__content'],
+                    'scroll',
+                )}
+                >
+                    { sectionComponent }
+                </div>
             </div>
         </div>
     );

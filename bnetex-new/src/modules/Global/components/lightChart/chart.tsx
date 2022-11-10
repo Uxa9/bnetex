@@ -4,15 +4,17 @@ import { useEffect, useRef, useState } from 'react';
 import { Switch, ToolTip } from 'lib/ui-kit';
 import { useTheme } from 'lib/hooks/useTheme';
 import { evaluateTheme } from 'lib/utils/evaluateAppColors';
+import classNames from 'classnames';
 
 interface ChartProps {
     data: SingleValueData[];
     type: 'ROE' | 'PNL';
+    className?: string;
 }
 
 const ALGORYTHM_COMISSION = 0.5;
 
-const Chart = ({ data, type }: ChartProps) => {
+const Chart = ({ data, type, className }: ChartProps) => {
 
     const chartRef = useRef<HTMLDivElement | null>(null);
     const [chartBase, setChartBase] = useState<IChartApi | null>(null);
@@ -22,35 +24,27 @@ const Chart = ({ data, type }: ChartProps) => {
     const toggleComission = () => setWithCommision(prevState => !prevState);
     const { theme } = useTheme();
 
-    useEffect(() => {
-        const colors = evaluateTheme();
-        console.log(colors);
-        
-    }, [ theme ]);
-
+    // Базовое создание графика
     useEffect(() => {
         if (!chartRef.current) return;
 
         const chart = createChart(chartRef.current, {
-            layout: {
-                textColor: '#d1d4dc',
-                backgroundColor: '#00000000',
-            },
             rightPriceScale: {
                 scaleMargins: {
                     top: 0.3,
-                    bottom: 0.25,
+                    bottom: 0.3,
                 },
+                borderVisible: false,
+            },
+            timeScale: {
+                borderVisible: false,
             },
             crosshair: {
                 vertLine: {
-                    width: 4,
-                    color: 'rgba(224, 227, 235, 0.1)',
-                    style: 0,
+                    visible: false,
                 },
                 horzLine: {
                     visible: false,
-                    labelVisible: false,
                 },
             },
             grid: {
@@ -66,9 +60,6 @@ const Chart = ({ data, type }: ChartProps) => {
         setChartBase(chart);
 
         const areaSeries = chart.addAreaSeries({
-            topColor: 'rgba(38, 198, 218, 0.56)',
-            bottomColor: 'rgba(38, 198, 218, 0)',
-            lineColor: 'rgba(38, 198, 218, 1)',
             lineWidth: 2,
         });
 
@@ -76,15 +67,36 @@ const Chart = ({ data, type }: ChartProps) => {
 
     }, [chartRef]);
 
+    // Колоризация
+    useEffect(() => {
+        if (!chartRef.current) return;
+
+        const colors = evaluateTheme();
+
+        chartBase?.applyOptions({
+            layout: {
+                textColor: colors.grayscale[11],
+                backgroundColor: '#00000000',
+            },
+        });
+
+        lineChart?.applyOptions({
+            lineColor: `${colors.accent.accent[3]}`,
+            topColor: `${colors.accent.accent[3]}50`,
+            bottomColor: `${colors.accent.accent[3]}00`,
+        });
+    }, [ chartBase, lineChart, theme ]);
+
+    // Вкл/выкл. комиссии
     useEffect(() => {
         if (!lineChart) return;
         lineChart.setData(withComission ? 
             data.map(item => {return{...item, value: item.value * ALGORYTHM_COMISSION};}) :
             data);
-    }, [data, withComission]);
+    }, [ data, withComission ]);
 
+    // Ресайз
     useEffect(() => {
-
         if (!chartRef.current) return;
 
         const observer = new ResizeObserver((entries) => {
@@ -103,7 +115,7 @@ const Chart = ({ data, type }: ChartProps) => {
     }, [ chartBase ]);
 
     return(
-        <div className={styles['container']}>
+        <div className={classNames(styles['container'], 'card', className)}>
             <div className={styles['header']}>
                 {
                     type === 'PNL' ? 
@@ -131,7 +143,15 @@ const Chart = ({ data, type }: ChartProps) => {
             <div
                 className={styles['wrapper']}
                 ref={chartRef}
-            />
+            >
+                {
+                    !data.length &&  
+                <p className={classNames(styles['empty'], 'text')}>
+                    Данные о вашем {type} отстутствуют. Начните работу с алгоритмом или посмотрите 
+                    историю работы алгоритма.
+                </p>
+                }
+            </div>
         </div>
     );
 };

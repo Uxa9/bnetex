@@ -32,12 +32,6 @@ const InvestorView = () => {
     const getData = async (period: number, amount: number) => {
         const res = await getHistoricalData(period, amount);
 
-        // toDO убрать как поправят бек
-        res.dates = res.dates.map(date => format(new Date(date), 'yyyy-MM-dd'));
-        console.log(res.dates);
-        
-        res.dates = Array.from(new Set(res.dates));
-
         setGraphicData({
             dates: res.dates,
             pnlValues: res.pnlValues.map((item: any) => Number(Number(item).toFixed(2))),
@@ -111,42 +105,38 @@ const InvestorView = () => {
                     />
                 </div>
             </div>
-            <div className={classNames(
-                styles['investor-view-card'],
-                styles['PNL-card'],
-                'card'
-            )}
-            >
-                <Chart 
-                    data={
-                        graphicData.dates.map((date, index) => {
-                            return {
-                                time: date,
-                                value: graphicData.pnlValues[index],
-                            };
-                        })
-                    }
-                    type={'PNL'}
-                />
-            </div>
-            <div className={classNames(
-                styles['investor-view-card'],
-                styles['ROE-card'],
-                'card',
-            )}
-            >
-                <Chart 
-                    data={
-                        graphicData.dates.map((date, index) => {
-                            return {
-                                time: date,
-                                value: graphicData.roeValues[index],
-                            };
-                        })
-                    }
-                    type={'ROE'}
-                />
-            </div>
+            <Chart 
+                data={
+                    graphicData.dates.map((date, index) => {
+                        return {
+                            time: date,
+                            value: graphicData.pnlValues[index],
+                        };
+                    })
+                }
+                type={'PNL'}
+                className={classNames(
+                    styles['investor-view-card'],
+                    styles['PNL-card'],
+                    'card'
+                )}
+            />
+            <Chart 
+                data={
+                    graphicData.dates.map((date, index) => {
+                        return {
+                            time: date,
+                            value: graphicData.roeValues[index],
+                        };
+                    })
+                }
+                type={'ROE'}
+                className={classNames(
+                    styles['investor-view-card'],
+                    styles['ROE-card'],
+                    'card',
+                )}
+            />
         </>
     );
 };
