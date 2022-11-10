@@ -9,7 +9,7 @@ export class PositionsService {
 
     constructor(
         @InjectModel(Position.name) private PositionModel: Model<PositionDocument>
-    ) {}
+    ) { }
 
     async getPnlAndRoe(dto: GetDataDto) {
         const date = new Date().setMonth(new Date().getMonth() - dto.period);
@@ -17,35 +17,52 @@ export class PositionsService {
         const positions = await this.PositionModel.find({
             enterTime: { $gte: date },
             closeTime: { $exists: true }
-        });
+        },
+            {},
+            { sort: { 'enterTime': 1 } }
+        );
 
         const result = await this.getHistoricalData(positions, dto.amount);
-        
+
         return result;
     }
 
     async getHistoricalData(data: any, amount: number) {
-        
-        let dates  = [];
+
+        let dates = [];
         let pnlValues = [];
         let roeValues = [];
         let acc = amount;
 
-        data.map((position, index) => {
-    
+        data.map((position) => {
+
             const lever = 10;
-            dates.push(position.closeTime);
             const percent = position.sumProfit / position.deposit * 100;
             const x = position.volumeUSDT / position.deposit * acc;
-            const pnl = x * percent / 100 * lever; 
+            const pnl = x * percent / 100 * lever;
+            console.log(new Date(position.closeTime).getDate());
+            
+            
 
+            if ( new Date(position.closeTime).getDate() !== 
+                 new Date(dates[dates.length - 1]).getDate() &&
+                 new Date(position.closeTime).getMonth() !== 
+                 new Date(dates[dates.length - 1]).getMonth()
+                ) {
 
-            index !== 0 ? 
-                roeValues.push(roeValues[index-1] + percent):
-                roeValues.push(percent);
-            pnlValues.push(pnl);
+                const date = new Date(position.closeTime);
+                dates.push(`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`);
+                roeValues.push((roeValues[roeValues.length - 1] || 0) + percent);
+                pnlValues.push(pnl);
+            } else {               
+                roeValues[roeValues.length - 1]+= percent
+                pnlValues[pnlValues.length - 1]+= pnl;
+            }               
 
-            acc+=pnl;            
+            // roeValues.push(roeValues[index - 1] + percent)
+            //     pnlValues.push(pnlValues[index - 1] + percent);
+
+            acc += pnl;
         });
 
         return {
@@ -68,7 +85,7 @@ export class PositionsService {
         positions.map(position => {
 
             const { positionEnters } = position;
-            
+
             const lever = 10;
 
             const enters = positionEnters.map(enter => {
@@ -91,7 +108,7 @@ export class PositionsService {
                 PNL: position.sumProfit * lever
             });
         });
-        
+
         return res;
     }
 
@@ -99,15 +116,25 @@ export class PositionsService {
         const position = await this.PositionModel.findOne(
             {
                 closeTime: { $exists: false }
-            }, 
-            {}, 
-            { sort: { 'enterTime' : -1 } }
+            },
+            {},
+            { sort: { 'enterTime': -1 } }
         );
-        
-        if ( position ) {
-            return position;            
+
+        if (position) {
+            return position;
         }
-        
+
         return null;
+    }
+
+    async getLastClosedPosition() {
+        return await this.PositionModel.findOne(
+            {
+                closeTime: { $exists: true }
+            },
+            {},
+            { sort: { 'closeTime': -1 } }
+        );
     }
 }

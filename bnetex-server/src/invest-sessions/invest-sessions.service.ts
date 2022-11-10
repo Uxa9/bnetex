@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { PositionsService } from '../positions/positions.service';
 import { UsersService } from '../users/users.service';
 import { CreateTradeSessionDto } from './dto/create-session.dto';
 import { InvestSession } from './invest-sessions.model';
@@ -9,7 +10,8 @@ export class InvestSessionsService {
 
     constructor(
         @InjectModel(InvestSession) private investSessionRepository: typeof InvestSession,
-        private userService: UsersService
+        private userService: UsersService,
+        private positionService: PositionsService,
     ) { }
 
     async createSession(dto: CreateTradeSessionDto) {
@@ -156,7 +158,7 @@ export class InvestSessionsService {
         });
     }
 
-    async acceptBotCallback(data: any) {
+    async acceptBotCallback() {
         console.log('пошел процесс');
         
         return { status: "ok" }
