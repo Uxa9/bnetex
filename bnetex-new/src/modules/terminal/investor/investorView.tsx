@@ -34,6 +34,8 @@ const InvestorView = () => {
 
         // toDO убрать как поправят бек
         res.dates = res.dates.map(date => format(new Date(date), 'yyyy-MM-dd'));
+        console.log(res.dates);
+        
         res.dates = Array.from(new Set(res.dates));
 
         setGraphicData({

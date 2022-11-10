@@ -5,7 +5,7 @@
   --pad-and-gap: 16px;
 
   display: grid;
-  grid-template-columns: 1fr minmax(360px, 420px);
+  grid-template-columns: 1fr 400px;
   grid-template-rows: repeat(4, auto);
   column-gap: var(--pad-and-gap);
   row-gap: var(--pad-and-gap);
