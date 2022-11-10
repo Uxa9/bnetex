@@ -8,6 +8,8 @@ interface ChartProps {
     type: 'ROE' | 'PNL';
 }
 
+const ALGORYTHM_COMISSION = 0.5;
+
 const Chart = ({ data, type }: ChartProps) => {
 
     const chartRef = useRef<HTMLDivElement | null>(null);
@@ -68,9 +70,10 @@ const Chart = ({ data, type }: ChartProps) => {
 
     useEffect(() => {
         if (!lineChart) return;
-
-        lineChart.setData(data);
-    }, [data]);
+        lineChart.setData(withComission ? 
+            data.map(item => {return{...item, value: item.value * ALGORYTHM_COMISSION};}) :
+            data);
+    }, [data, withComission]);
 
     useEffect(() => {
 
