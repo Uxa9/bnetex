@@ -2,6 +2,8 @@ import styles from './chart.module.scss';
 import { createChart, IChartApi, ISeriesApi, SingleValueData } from 'lightweight-charts';
 import { useEffect, useRef, useState } from 'react';
 import { Switch, ToolTip } from 'lib/ui-kit';
+import { useTheme } from 'lib/hooks/useTheme';
+import { evaluateTheme } from 'lib/utils/evaluateAppColors';
 
 interface ChartProps {
     data: SingleValueData[];
@@ -18,7 +20,13 @@ const Chart = ({ data, type }: ChartProps) => {
 
     const [withComission, setWithCommision] = useState<boolean>(false);
     const toggleComission = () => setWithCommision(prevState => !prevState);
+    const { theme } = useTheme();
 
+    useEffect(() => {
+        const colors = evaluateTheme();
+        console.log(colors);
+        
+    }, [ theme ]);
 
     useEffect(() => {
         if (!chartRef.current) return;

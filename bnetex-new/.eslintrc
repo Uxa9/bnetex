@@ -33,18 +33,6 @@
                 "argsIgnorePattern": "^_"
             }
         ],
-        "no-magic-numbers": [
-            "warn",
-            {
-                "ignore": [
-                    -1,
-                    0,
-                    1,
-                    2, 
-                    100
-                ]
-            }
-        ],
         "brace-style": 0,
         "no-var": [
             "warn"

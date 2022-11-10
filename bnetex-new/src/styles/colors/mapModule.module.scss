@@ -1,0 +1,62 @@
+@import 'colors';
+
+:export {
+  constant-white: $constant-white;
+  constant-black: $constant-black;
+
+  // Grayscale
+  grayscale-1: $grayscale-1;
+  grayscale-2: $grayscale-2;
+  grayscale-3: $grayscale-3;
+  grayscale-4: $grayscale-4;
+  grayscale-5: $grayscale-5;
+  grayscale-6: $grayscale-6;
+  grayscale-7: $grayscale-7;
+  grayscale-8: $grayscale-8;
+  grayscale-9: $grayscale-9;
+  grayscale-10: $grayscale-10;
+  grayscale-11: $grayscale-11;
+  grayscale-12: $grayscale-12;
+  grayscale-card: $grayscale-card;
+  grayscale-input: $grayscale-input;
+
+  // Accent
+  accent-1: $accent-1;
+  accent-2: $accent-2;
+  accent-3: $accent-3;
+  accent-4: $accent-4;
+  accent-5: $accent-5;
+  accent-6: $accent-6;
+
+  // Green
+  green-1: $green-1;
+  green-2: $green-2;
+  green-3: $green-3;
+  green-4: $green-4;
+  green-5: $green-5;
+  green-6: $green-6;
+
+  // Red
+  red-1: $red-1;
+  red-2: $red-2;
+  red-3: $red-3;
+  red-4: $red-4;
+  red-5: $red-5;
+  red-6: $red-6;
+
+  // Orange
+  orange-1: $orange-1;
+  orange-2: $orange-2;
+  orange-3: $orange-3;
+  orange-4: $orange-4;
+  orange-5: $orange-5;
+  orange-6: $orange-6;
+
+  // Blue
+  blue-1: $blue-1;
+  blue-2: $blue-2;
+  blue-3: $blue-3;
+  blue-4: $blue-4;
+  blue-5: $blue-5;
+  blue-6: $blue-6;
+}

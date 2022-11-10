@@ -11,6 +11,8 @@ type ThemeType = 'dark' | 'light';
 
 const themeContext = createContext<ThemeContext | null>(null);
 
+export const THEME_ROOT_ID = 'theme-root';
+
 export const useTheme = () => 
     useContext(themeContext) ?? throwError('useTheme может использоваться только внутри ThemeProvider');
 
@@ -42,6 +44,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
                 'theme-wrapper',
                 theme === 'dark' ? 'dark-theme' : 'light-theme'
             )}
+            id={THEME_ROOT_ID}
         >
             {children}
         </div>
