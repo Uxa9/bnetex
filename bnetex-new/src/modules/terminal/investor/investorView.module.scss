@@ -1,19 +1,8 @@
 @import 'styles/colors/colors';
 @import 'styles/mixins';
 
-.actions-card {
-  @include column-flex(24px);
-
-  .toggle-group-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    column-gap: 12px;
-  }
-
-  @include max-width(800) {
-    grid-row: 2;
-  }
+.toggle-section-card {
+  min-height: 282px;
 }
 
 .investor-view-wrapper__header {
@@ -62,6 +51,8 @@
   grid-column: 2;
   grid-row: 3;
   width: 100%;
+  // 100vw right col - left/right pad (16 + 16) - gap (16px)
+  max-width: calc(100vw - 448px);
 
   @include max-width(1200) {
     grid-column: 1;
@@ -70,12 +61,18 @@
 
   @include max-width(800) {
     grid-row: 4;
+    max-width: calc(100vw - 32px);
+  }
+
+  @include mobile {
+    max-width: calc(100vw - 16px);
   }
 }
 
 .ROE-card {
   grid-row: 4;
   width: 100%;
+  max-width: calc(100vw - 448px);
 
   @include max-width(1200) {
     grid-column: 1;
@@ -84,6 +81,11 @@
 
   @include max-width(800) {
     grid-row: 5;
+    max-width: calc(100vw - 32px);
+  }
+
+  @include mobile {
+    max-width: calc(100vw - 16px);
   }
 }
 
@@ -96,10 +98,10 @@
 }
 
 .investor-view-wrapper__header {
-    display: flex;
-    margin-bottom: 36px;
-    
-    >div {
-        margin-left: 8px;
-    }
+  display: flex;
+  margin-bottom: 36px;
+
+  > div {
+    margin-left: 8px;
+  }
 }

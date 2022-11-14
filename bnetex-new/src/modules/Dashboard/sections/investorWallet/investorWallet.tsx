@@ -8,15 +8,11 @@ import TransferModal from 'modules/Payments/Transfer/transferModal';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import useWalletActions from 'services/walletActions';
 import { WalletCategoryWithBalance } from 'lib/types/wallet';
-import { useTheme } from 'lib/hooks/useTheme';
 import { AppLinksEnum } from 'routes/appLinks';
-import InvestorChart from 'modules/Global/components/investorChart/investorChart';
 import { getInvestInfo, getRoeAndPnl } from 'services/user';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import LineChart from 'modules/Global/components/lineChart/lineChart';
-
-// toDo
-// сделать нормальные кнопки
+import Chart from 'modules/Global/components/lightChart/chart';
 
 interface GraphicProps {
     dates: string[],
@@ -39,7 +35,6 @@ const InvestorWallet = () => {
     const [investBalance, setInvestBalance] = useState<number>(0);
     const { promiseWithLoading } = usePromiseWithLoading();
     const { getWallets } = useWalletActions();
-    const { theme } = useTheme();
 
     const [roe, setRoe] = useState<GraphicProps>({
         dates: [],
@@ -196,22 +191,32 @@ const InvestorWallet = () => {
             <div
                 className={styles['charts']}
             >
+                <Chart 
+                    data={
+                        pnl.dates.map((date, index) => {
+                            return {
+                                time: date,
+                                value: pnl.values[index],
+                            };
+                        })
+                    }
+                    type={'PNL'}
+                    className={styles['chart']}
+                />
                 <div
                     className={classNames(styles['chart'], 'card')}
                 >
-                    <InvestorChart 
-                        dates={pnl.dates}
-                        values={pnl.values}
-                        type={'PNL'}
-                    />
-                </div>
-                <div
-                    className={classNames(styles['chart'], 'card')}
-                >
-                    <InvestorChart 
-                        dates={roe.dates}
-                        values={roe.values}
+                    <Chart 
+                        data={
+                            roe.dates.map((date, index) => {
+                                return {
+                                    time: date,
+                                    value: roe.values[index],
+                                };
+                            })
+                        }
                         type={'ROE'}
+                        className={styles['chart']}
                     />
                 </div>
             </div>

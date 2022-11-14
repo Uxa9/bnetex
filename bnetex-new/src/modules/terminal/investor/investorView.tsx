@@ -7,7 +7,7 @@ import ToolTip from 'lib/ui-kit/toolTip';
 import classNames from 'classnames';
 import { getHistoricalData } from 'services/getHistoricalData';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
-import InvestorChart from 'modules/Global/components/investorChart/investorChart';
+import Chart from 'modules/Global/components/lightChart/chart';
 
 type InvestorViewType = 'trade' | 'history';
 
@@ -37,55 +37,47 @@ const InvestorView = () => {
             roeValues: res.roeValues.map((item: any) => Number(Number(item).toFixed(2))),
         });
 
-        if (res.roeValues.length > 0) {
-            await setInvestPercentProfit(res.roeValues[res.roeValues.length - 1]);
-            await setInvestProfit(res.roeValues[res.roeValues.length - 1] * amount / 100);
-        } else {
-            setInvestPercentProfit(0);
-            setInvestProfit(0);
-        }
-
-        return;
+        setInvestPercentProfit(res.roeValues[res.roeValues.length - 1]);
+        setInvestProfit(res.roeValues[res.roeValues.length - 1] * amount / 100);
+ 
     };
 
     return (
         <>
-            <div className='terminal-side-block'>
-                <div
-                    className={classNames(styles['investor-view-card'], 'card')}
-                >
-                    <div className={styles['investor-view-wrapper__header']}>
-                        <ToggleButtonGroup
-                            title={''}
-                            name={'investor_terminal'}
-                            onChange={(value: InvestorViewType) => {
-                                setViewType(value);
-                            }}
-                            value={viewType}
-                        >
-                            <ToggleButton
-                                text={'Торговля'}
-                                value={'trade'}
-                            />
-                            <ToggleButton
-                                text={'История'}
-                                value={'history'}
-                            />
-                        </ToggleButtonGroup>
-                        <ToolTip
-                            title='Что такое история?'
-                            infoText='История или история сделок - это исторические записи фактических транзакций по позициям. 
-                        В раздел попадают только исполненные ордера.'
+            <div
+                className={classNames(styles['investor-view-card'], styles['toggle-section-card'], 'card')}
+            >
+                <div className={styles['investor-view-wrapper__header']}>
+                    <ToggleButtonGroup
+                        title={''}
+                        name={'investor_terminal'}
+                        onChange={(value: InvestorViewType) => {
+                            setViewType(value);
+                        }}
+                        value={viewType}
+                    >
+                        <ToggleButton
+                            text={'Торговля'}
+                            value={'trade'}
                         />
-                    </div>
-                    {
-                        viewType === 'trade' ?
-                            <TradeView /> :
-                            <HistoryView
-                                handleClick={getData}
-                            />
-                    }
+                        <ToggleButton
+                            text={'История'}
+                            value={'history'}
+                        />
+                    </ToggleButtonGroup>
+                    <ToolTip
+                        title='Что такое история?'
+                        infoText='История или история сделок - это исторические записи фактических транзакций по позициям. 
+                        В раздел попадают только исполненные ордера.'
+                    />
                 </div>
+                {
+                    viewType === 'trade' ?
+                        <TradeView /> :
+                        <HistoryView
+                            handleClick={getData}
+                        />
+                }
             </div>
             <div
                 className={classNames(
@@ -112,30 +104,36 @@ const InvestorView = () => {
                     />
                 </div>
             </div>
-            <div className={classNames(
-                styles['investor-view-card'],
-                styles['PNL-card'],
-                'card'
-            )}
-            >
-                <InvestorChart 
-                    dates={graphicData.dates}
-                    values={graphicData.pnlValues.map(item => item*10)}
-                    type={'PNL'}
-                />
-            </div>
-            <div className={classNames(
-                styles['investor-view-card'],
-                styles['ROE-card'],
-                'card',
-            )}
-            >
-                <InvestorChart 
-                    dates={graphicData.dates}
-                    values={graphicData.roeValues.map(item => item*10)}
-                    type={'ROE'}
-                />
-            </div>
+            <Chart 
+                data={
+                    graphicData.dates.map((date, index) => {
+                        return {
+                            time: date,
+                            value: graphicData.pnlValues[index],
+                        };
+                    })
+                }
+                type={'PNL'}
+                className={classNames(
+                    styles['investor-view-card'],
+                    styles['PNL-card'],
+                )}
+            />
+            <Chart 
+                data={
+                    graphicData.dates.map((date, index) => {
+                        return {
+                            time: date,
+                            value: graphicData.roeValues[index],
+                        };
+                    })
+                }
+                type={'ROE'}
+                className={classNames(
+                    styles['investor-view-card'],
+                    styles['ROE-card'],
+                )}
+            />
         </>
     );
 };

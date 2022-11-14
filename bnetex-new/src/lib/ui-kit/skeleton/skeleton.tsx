@@ -5,6 +5,7 @@ interface SkeletonProps {
     height: string;
     width?: string;
     type?: 'line' | 'square' | 'circle' | 'input' | 'button';
+    className?: string;
 }
 
 interface InlineStyle {
@@ -12,7 +13,7 @@ interface InlineStyle {
     height?: string;
 }
 
-const Skeleton = ({height, width = '100%', type = 'line'}: SkeletonProps) => {
+const Skeleton = ({height, width = '100%', type = 'line', className}: SkeletonProps) => {
 
     if (type === 'square' || type === 'circle') width = height;
 
@@ -26,7 +27,8 @@ const Skeleton = ({height, width = '100%', type = 'line'}: SkeletonProps) => {
         <div 
             className={classNames(
                 styles['skeleton'],
-                styles[`skeleton--${type}`]
+                styles[`skeleton--${type}`],
+                className,
             )} 
             style={inlineStyle}
         />
