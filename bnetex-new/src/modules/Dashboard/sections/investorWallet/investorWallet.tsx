@@ -203,22 +203,18 @@ const InvestorWallet = () => {
                     type={'PNL'}
                     className={styles['chart']}
                 />
-                <div
-                    className={classNames(styles['chart'], 'card')}
-                >
-                    <Chart 
-                        data={
-                            roe.dates.map((date, index) => {
-                                return {
-                                    time: date,
-                                    value: roe.values[index],
-                                };
-                            })
-                        }
-                        type={'ROE'}
-                        className={styles['chart']}
-                    />
-                </div>
+                <Chart 
+                    data={
+                        roe.dates.map((date, index) => {
+                            return {
+                                time: date,
+                                value: roe.values[index],
+                            };
+                        })
+                    }
+                    type={'ROE'}
+                    className={styles['chart']}
+                />
             </div>
         </div>
     );
