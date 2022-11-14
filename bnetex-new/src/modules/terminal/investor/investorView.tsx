@@ -8,7 +8,6 @@ import classNames from 'classnames';
 import { getHistoricalData } from 'services/getHistoricalData';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import Chart from 'modules/Global/components/lightChart/chart';
-import { format } from 'date-fns';
 
 type InvestorViewType = 'trade' | 'history';
 
@@ -97,10 +96,10 @@ const InvestorView = () => {
                     <span
                         className={'subtitle'}
                     >
-                        {Number(Number(investProfit).toFixed(2))}
+                        {Number(Number(investProfit * 5).toFixed(2))}
                     </span>
                     <SignedNumber 
-                        value={Number(Number(investPercentProfit).toFixed(2))}
+                        value={Number(Number(investPercentProfit * 5).toFixed(2))}
                         postfix={'%'}
                     />
                 </div>

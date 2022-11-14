@@ -10,6 +10,7 @@ import { User } from './users.model';
 import { UsersService } from './users.service';
 import { Request } from '../request/request.model';
 import { InvestSession } from '../invest-sessions/invest-sessions.model';
+import { PositionsModule } from '../positions/positions.module';
 
 @Module({
     controllers: [UsersController],
@@ -18,7 +19,8 @@ import { InvestSession } from '../invest-sessions/invest-sessions.model';
         SequelizeModule.forFeature([User, Role, UserRoles, Request, InvestSession]),
         RolesModule,
         forwardRef(() => AuthModule),
-        forwardRef(() => InvestSessionsModule)
+        forwardRef(() => InvestSessionsModule),
+        PositionsModule
     ],
     exports: [
         UsersService,
