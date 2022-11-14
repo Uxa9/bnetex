@@ -118,7 +118,6 @@ const InvestorView = () => {
                 className={classNames(
                     styles['investor-view-card'],
                     styles['PNL-card'],
-                    'card'
                 )}
             />
             <Chart 
@@ -134,7 +133,6 @@ const InvestorView = () => {
                 className={classNames(
                     styles['investor-view-card'],
                     styles['ROE-card'],
-                    'card',
                 )}
             />
         </>

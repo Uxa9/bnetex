@@ -9,9 +9,9 @@ import getUserTransactions from 'services/getUserTransactions';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import useWalletActions from 'services/walletActions';
 import { WalletCategoryWithBalance } from 'lib/types/wallet';
-import InvestorChart from 'modules/Global/components/investorChart/investorChart';
 import { getRoeAndPnl } from 'services/user';
 import LineChart from 'modules/Global/components/lineChart/lineChart';
+import Chart from 'modules/Global/components/lightChart/chart';
 
 interface GraphicProps {
     dates: string[],
@@ -156,24 +156,30 @@ const Tools = () => {
             <div
                 className={styles['charts']}
             >
-                <div
-                    className={classNames(styles['chart'], 'card')}
-                >
-                    <InvestorChart 
-                        dates={pnl.dates}
-                        values={pnl.values}
-                        type={'PNL'}
-                    />
-                </div>
-                <div
-                    className={classNames(styles['chart'], 'card')}
-                >
-                    <InvestorChart 
-                        dates={roe.dates}
-                        values={roe.values}
-                        type={'ROE'}
-                    />
-                </div>
+                <Chart 
+                    data={
+                        pnl.dates.map((date, index) => {
+                            return {
+                                time: date,
+                                value: pnl.values[index],
+                            };
+                        })
+                    }
+                    type={'PNL'}
+                    className={styles['chart']}
+                />
+                <Chart 
+                    data={
+                        roe.dates.map((date, index) => {
+                            return {
+                                time: date,
+                                value: roe.values[index],
+                            };
+                        })
+                    }
+                    type={'PNL'}
+                    className={styles['chart']}
+                />
             </div>
         </div>
     );
