@@ -22,6 +22,8 @@ interface BakeToast {
 export const useToast = () => useContext(toastContext) 
     ?? throwError('useToast can be used only inside ToastProvider');
 
+const MAX_TOAST_SIZE = 4;
+
 export function ToastProvider({children}: {children: ReactNode}) {
     const [ toaster, setToaster ] = useState<Map<UUID, ToastInterface>>(new Map<UUID, ToastInterface>());
 
@@ -34,13 +36,19 @@ export function ToastProvider({children}: {children: ReactNode}) {
             createToast({id: uuidV4(), type: 'info', description: message, title: title ?? 'Информация'}),
     };
 
-    const deleteToast = (id: UUID) => {
-        toaster.delete(id);
-        setToaster(new Map<UUID, ToastInterface>(toaster));
+    const deleteToast =  (id: UUID) => {
+        setToaster((prevState) => {
+            const mapWithDeletedElem = Array.from(prevState).filter(([_, toast]) => toast.id !== id);
+            return new Map<UUID, ToastInterface>(mapWithDeletedElem);
+        });
     };
 
     const createToast = (toast: ToastInterface) => {
-        setToaster(new Map<UUID, ToastInterface>(toaster.set(toast.id, toast)));
+        setToaster((prevState) => {
+            return prevState.size < MAX_TOAST_SIZE ?
+                new Map<UUID, ToastInterface>(prevState.set(toast.id, toast)) :
+                prevState;
+        });
     };
 
     return (

@@ -6,7 +6,6 @@ const Toaster = () => {
 
     const { toaster, deleteToast } = useToast();
 
-
     return (
         <>
             {

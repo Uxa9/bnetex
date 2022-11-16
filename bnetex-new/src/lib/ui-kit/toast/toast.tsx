@@ -19,8 +19,7 @@ const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
 
     useEffect(() => {
         setIsVisible(true);
-        if (toastLifeTimer.current) 
-            toastLifeTimer.current = setTimeout(closeToast, TOAST_LIFESPAN);
+        toastLifeTimer.current = setTimeout(closeToast, TOAST_LIFESPAN);
 
         return () => {
             toastLifeTimer.current && clearTimeout(toastLifeTimer.current);
@@ -28,6 +27,8 @@ const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
     }, []);
 
     const closeToast = () => {
+        console.log('close');
+        
         setIsVisible(false);
         toastLifeTimer.current && clearTimeout(toastLifeTimer.current);
         delay(TOAST_ANIMATION_TIME)
