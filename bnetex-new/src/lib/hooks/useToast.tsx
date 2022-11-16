@@ -1,4 +1,4 @@
-import { Toast } from 'lib/types/toast';
+import { ToastInterface } from 'lib/types/toast';
 import { UUID } from 'lib/types/uuid';
 import { mapError } from 'lib/utils/errorMap';
 import { throwError } from 'lib/utils/errorThrower';
@@ -8,7 +8,7 @@ import { v4 as uuidV4 } from 'uuid';
 const toastContext = createContext<ToastContext | null>(null);
 
 export interface ToastContext {
-    toaster: Map<UUID, Toast>;
+    toaster: Map<UUID, ToastInterface>;
     bakeToast: BakeToast;
     deleteToast(id: UUID): void;
 }
@@ -23,21 +23,24 @@ export const useToast = () => useContext(toastContext)
     ?? throwError('useToast can be used only inside ToastProvider');
 
 export function ToastProvider({children}: {children: ReactNode}) {
-    const [ toaster, setToaster ] = useState<Map<UUID, Toast>>(new Map<UUID, Toast>());
+    const [ toaster, setToaster ] = useState<Map<UUID, ToastInterface>>(new Map<UUID, ToastInterface>());
 
     const bakeToast = {
-        error: (message: string) => createToast({id: uuidV4(), type: 'error', text: mapError(message)}),
-        success: (message: string) => createToast({id: uuidV4(), type: 'success', text: message}),
-        info: (message: string) => createToast({id: uuidV4(), type: 'info', text: message}),
+        error: (message: string, title?: string) => 
+            createToast({id: uuidV4(), type: 'error', description: mapError(message), title: title ?? 'Ошибка'}),
+        success: (message: string, title?: string) =>
+            createToast({id: uuidV4(), type: 'success', description: message, title: title ?? 'Успех'}),
+        info: (message: string, title?: string) => 
+            createToast({id: uuidV4(), type: 'info', description: message, title: title ?? 'Информация'}),
     };
 
     const deleteToast = (id: UUID) => {
         toaster.delete(id);
-        setToaster(new Map<UUID, Toast>(toaster));
+        setToaster(new Map<UUID, ToastInterface>(toaster));
     };
 
-    const createToast = (toast: Toast) => {
-        setToaster(new Map<UUID, Toast>(toaster.set(toast.id, toast)));
+    const createToast = (toast: ToastInterface) => {
+        setToaster(new Map<UUID, ToastInterface>(toaster.set(toast.id, toast)));
     };
 
     return (

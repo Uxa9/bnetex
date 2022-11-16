@@ -1,3 +1,64 @@
 @import 'styles/mixins';
+@import 'styles/shadows';
+@import 'styles/variables';
 @import 'styles/colors/colors';
 
+.toast {
+  @include toast-shadow;
+
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: repeat(2, auto);
+  max-width: min(450px, calc(100vw - 16px));
+  background-color: $grayscale-1;
+  border-radius: 8px;
+  overflow: hidden;
+  // Размер контейнера (toaster) + отступ контейнера справа (16px)
+  transform: translateX(calc(100% + 16px));
+  transition: transform $default-transition ease;
+
+  &--visible {
+    transform: translateX(0);
+  }
+
+  &__main {
+    display: flex;
+    column-gap: 8px;
+    padding: 8px;
+  }
+
+  &__icon {
+    @include size-svg(36px);
+
+    height: 36px;
+
+    &--error {
+      @include color-svg($red-3);
+    }
+
+    &--success {
+      @include color-svg($green-3);
+    }
+
+    &--info {
+      @include color-svg($blue-3);
+    }
+  }
+
+  &__text {
+    @include column-flex;
+
+    .description {
+      color: $grayscale-8;
+    }
+  }
+
+  &__close {
+    @include column-flex-center;
+
+    color: $grayscale-4;
+    height: 100%;
+    padding: 0 12px;
+    border-left: 1px solid $grayscale-4;
+  }
+}

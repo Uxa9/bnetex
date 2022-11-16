@@ -1,4 +1,4 @@
-import { CircledCheck, CircledCross, Info, Cross } from 'assets/images/icons';
+import { CircledCheck, CircledCross, Info } from 'assets/images/icons';
 import classNames from 'classnames';
 import { ToastInterface } from 'lib/types/toast';
 import { delay } from 'lib/utils/delay';
@@ -10,8 +10,10 @@ import { ToastContext } from 'lib/hooks/useToast';
 const TOAST_LIFESPAN: number = 3000;
 const TOAST_ANIMATION_TIME = Number(variablesMap['defaultTransition'].replace(/ms/, ''));
 
-const Toast = ({id, type, text, deleteToast}: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
+const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
     
+    const {id, type, description, title, deleteToast} = props;
+
     const [ isVisible, setIsVisible ] = useState<boolean>(false);
     const toastLifeTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -53,12 +55,31 @@ const Toast = ({id, type, text, deleteToast}: ToastInterface & Pick<ToastContext
                 isVisible && styles['toast--visible']
             )}
         >
-            { evaluateToastIcon() }
-            <p className={classNames(styles['toast__text'], 'text')}>{text}</p>
-            <Cross 
-                onClick={closeToast}
+            <div className={styles['toast__main']}>
+                <div className={classNames(
+                    styles['toast__icon'],
+                    styles[`toast__icon--${type}`]
+                )}
+                >
+                    { evaluateToastIcon() }
+                </div>
+                <div className={styles['toast__text']}>
+                    <span className={'text'}>{title}</span>
+                    <span className={classNames(
+                        styles['description'],
+                        'caption-mini',
+                    )}
+                    >
+                        {description}
+                    </span>
+                </div>
+            </div>
+            <button 
                 className={styles['toast__close']}
-            />
+                onClick={closeToast}
+            >
+                <span className={'caption-mini'}>Ок</span>
+            </button>
         </div>
     );
 };
