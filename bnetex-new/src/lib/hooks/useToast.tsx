@@ -1,46 +1,52 @@
+import { Toast } from 'lib/types/toast';
+import { UUID } from 'lib/types/uuid';
 import { mapError } from 'lib/utils/errorMap';
 import { throwError } from 'lib/utils/errorThrower';
-import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
+import { v4 as uuidV4 } from 'uuid';
 
 const toastContext = createContext<ToastContext | null>(null);
 
 export interface ToastContext {
-    toast: Toast | null;
-    bakeToast: BakeToastObject;
-    clearToast(): void;
+    toaster: Map<UUID, Toast>;
+    bakeToast: BakeToast;
+    deleteToast(id: UUID): void;
 }
 
-interface BakeToastObject {
+interface BakeToast {
     error: (message: string) => void;
     success: (message: string) => void;
+    info: (message: string) => void;
 }
 
-export interface Toast {
-    type: 'error' | 'success';
-    text: string;
-}
-
-export const useToast = () => useContext(toastContext) ?? throwError('useToast can be used only inside ToastProvider');
+export const useToast = () => useContext(toastContext) 
+    ?? throwError('useToast can be used only inside ToastProvider');
 
 export function ToastProvider({children}: {children: ReactNode}) {
-    const [ toast, setToast ] = useState<Toast | null>(null);
+    const [ toaster, setToaster ] = useState<Map<UUID, Toast>>(new Map<UUID, Toast>());
 
     const bakeToast = {
-        error: (message: string) => setToast({type: 'error', text: mapError(message)}),
-        success: (message: string) => setToast({type: 'success', text: message}),
+        error: (message: string) => createToast({id: uuidV4(), type: 'error', text: mapError(message)}),
+        success: (message: string) => createToast({id: uuidV4(), type: 'success', text: message}),
+        info: (message: string) => createToast({id: uuidV4(), type: 'info', text: message}),
     };
 
-    const clearToast = () => setToast(null);
+    const deleteToast = (id: UUID) => {
+        toaster.delete(id);
+        setToaster(new Map<UUID, Toast>(toaster));
+    };
 
-    const memorized = useMemo(() => ({
-        toast,
-        bakeToast,
-        clearToast,
-    }), [ toast ]);
+    const createToast = (toast: Toast) => {
+        setToaster(new Map<UUID, Toast>(toaster.set(toast.id, toast)));
+    };
 
     return (
         <toastContext.Provider
-            value={memorized}
+            value={{
+                toaster,
+                bakeToast,
+                deleteToast,
+            }}
         >
             {children}
         </toastContext.Provider>

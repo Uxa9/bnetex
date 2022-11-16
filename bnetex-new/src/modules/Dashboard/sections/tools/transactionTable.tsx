@@ -15,9 +15,9 @@ interface TableData {
 }
 
 const typesLib = {  // хз пока куда это девать
-    withdraw: "Отправлено",
-    deposit: "Получено"
-}
+    withdraw: 'Отправлено',
+    deposit: 'Получено',
+};
 
 const TransactionTable = (props: TableData) => {
 
@@ -35,7 +35,7 @@ const TransactionTable = (props: TableData) => {
                                 USDT
                             </span>
                         </>
-                    )
+                    );
                 default:
                     return (
                         <>
@@ -43,7 +43,7 @@ const TransactionTable = (props: TableData) => {
                         </>
                     );
             }
-        }
+        };
 
         const renderDate = (date: Date | string) => {
             if (typeof date === 'object') {
@@ -51,15 +51,15 @@ const TransactionTable = (props: TableData) => {
                     <>
                         {`${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`}
                     </>
-                )
+                );
             } else {
                 return (
                     <>
                         {date}
                     </>
-                )
+                );
             }
-        }
+        };
 
         type RowKey = keyof typeof typesLib;
         const type = row.type as RowKey;
@@ -89,8 +89,8 @@ const TransactionTable = (props: TableData) => {
                     {row.amount.toFixed(2)}
                 </div>
             </div>
-        )
-    }
+        );
+    };
 
     return (
         <div
@@ -98,7 +98,7 @@ const TransactionTable = (props: TableData) => {
         >
             {props.rows.map(row => rowRender(row))}
         </div>
-    )
-}
+    );
+};
 
 export default TransactionTable;
