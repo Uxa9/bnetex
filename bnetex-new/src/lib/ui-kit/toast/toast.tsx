@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './toast.module.scss';
 import variablesMap from 'styles/exportedVariables.module.scss';
 import { ToastContext } from 'lib/hooks/useToast';
+import { useTheme } from 'lib/hooks/useTheme';
 
 const TOAST_LIFESPAN: number = 3000;
 const TOAST_ANIMATION_TIME = Number(variablesMap['defaultTransition'].replace(/ms/, ''));
@@ -13,6 +14,7 @@ const TOAST_ANIMATION_TIME = Number(variablesMap['defaultTransition'].replace(/m
 const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
     
     const {id, type, description, title, deleteToast} = props;
+    const { theme } = useTheme();
 
     const [ isVisible, setIsVisible ] = useState<boolean>(false);
     const toastLifeTimer = useRef<NodeJS.Timeout | null>(null);
@@ -27,8 +29,6 @@ const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
     }, []);
 
     const closeToast = () => {
-        console.log('close');
-        
         setIsVisible(false);
         toastLifeTimer.current && clearTimeout(toastLifeTimer.current);
         delay(TOAST_ANIMATION_TIME)
@@ -53,7 +53,8 @@ const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
         <div 
             className={classNames(
                 styles.toast,
-                isVisible && styles['toast--visible']
+                isVisible && styles['toast--visible'],
+                theme === 'dark' && styles['toast--dark'],
             )}
         >
             <div className={styles['toast__main']}>
@@ -65,10 +66,10 @@ const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
                     { evaluateToastIcon() }
                 </div>
                 <div className={styles['toast__text']}>
-                    <span className={'text'}>{title}</span>
+                    <span className={'subtitle'}>{title}</span>
                     <span className={classNames(
                         styles['description'],
-                        'caption-mini',
+                        'caption',
                     )}
                     >
                         {description}
@@ -79,7 +80,7 @@ const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
                 className={styles['toast__close']}
                 onClick={closeToast}
             >
-                <span className={'caption-mini'}>Ок</span>
+                <span className={'caption'}>Ок</span>
             </button>
         </div>
     );

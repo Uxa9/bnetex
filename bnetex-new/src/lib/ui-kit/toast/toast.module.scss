@@ -9,16 +9,26 @@
   display: grid;
   grid-template-columns: repeat(2, auto);
   grid-template-rows: repeat(2, auto);
-  max-width: min(450px, calc(100vw - 16px));
+  column-gap: 16px;
   background-color: $grayscale-1;
   border-radius: 8px;
   overflow: hidden;
+  max-width: 400px;
   // Размер контейнера (toaster) + отступ контейнера справа (16px)
   transform: translateX(calc(100% + 16px));
   transition: transform $default-transition ease;
 
+  @include mobile {
+    width: calc(100vw - 16px);
+    justify-content: space-between;
+  }
+
   &--visible {
     transform: translateX(0);
+  }
+
+  &--dark {
+    border: 1px solid $grayscale-4;
   }
 
   &__main {
@@ -46,7 +56,7 @@
   }
 
   &__text {
-    @include column-flex;
+    @include column-flex(4px);
 
     .description {
       color: $grayscale-8;
@@ -59,6 +69,14 @@
     color: $grayscale-4;
     height: 100%;
     padding: 0 12px;
+    width: fit-content;
     border-left: 1px solid $grayscale-4;
+    transition: background-color $default-transition ease,
+      color $default-transition ease;
+
+    &:hover {
+      background-color: $grayscale-2;
+      color: $grayscale-11;
+    }
   }
 }

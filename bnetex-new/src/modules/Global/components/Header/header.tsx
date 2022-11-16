@@ -63,7 +63,7 @@ const Header = () => {
                             className={styles['trading-link']}
                             text={'Испечь тост'}
                             buttonStyle={'thin'}
-                            onClick={() => bakeToast.success('Млем млем млем')}
+                            onClick={() => bakeToast.info('Млем млем млем Млем млем млем Млем млем млем Млем млем млем Млем млем млем Млем млем млем Млем млем млем ')}
                             mini
                         />
                     </div>
