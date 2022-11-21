@@ -1,46 +1,63 @@
+import { ToastInterface } from 'lib/types/toast';
+import { UUID } from 'lib/types/uuid';
 import { mapError } from 'lib/utils/errorMap';
 import { throwError } from 'lib/utils/errorThrower';
-import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
+import { v4 as uuidV4 } from 'uuid';
 
 const toastContext = createContext<ToastContext | null>(null);
 
 export interface ToastContext {
-    toast: Toast | null;
-    bakeToast: BakeToastObject;
-    clearToast(): void;
+    toaster: Map<UUID, ToastInterface>;
+    bakeToast: BakeToast;
+    deleteToast(id: UUID): void;
 }
 
-interface BakeToastObject {
+interface BakeToast {
     error: (message: string) => void;
     success: (message: string) => void;
+    info: (message: string) => void;
 }
 
-export interface Toast {
-    type: 'error' | 'success';
-    text: string;
-}
+export const useToast = () => useContext(toastContext) 
+    ?? throwError('useToast can be used only inside ToastProvider');
 
-export const useToast = () => useContext(toastContext) ?? throwError('useToast can be used only inside ToastProvider');
+const MAX_TOAST_SIZE = 4;
 
 export function ToastProvider({children}: {children: ReactNode}) {
-    const [ toast, setToast ] = useState<Toast | null>(null);
+    const [ toaster, setToaster ] = useState<Map<UUID, ToastInterface>>(new Map<UUID, ToastInterface>());
 
     const bakeToast = {
-        error: (message: string) => setToast({type: 'error', text: mapError(message)}),
-        success: (message: string) => setToast({type: 'success', text: message}),
+        error: (message: string, title?: string) => 
+            createToast({id: uuidV4(), type: 'error', description: mapError(message), title: title ?? 'Ошибка'}),
+        success: (message: string, title?: string) =>
+            createToast({id: uuidV4(), type: 'success', description: message, title: title ?? 'Успех'}),
+        info: (message: string, title?: string) => 
+            createToast({id: uuidV4(), type: 'info', description: message, title: title ?? 'Информация'}),
     };
 
-    const clearToast = () => setToast(null);
+    const deleteToast =  (id: UUID) => {
+        setToaster((prevState) => {
+            const mapWithDeletedElem = Array.from(prevState).filter(([_, toast]) => toast.id !== id);
+            return new Map<UUID, ToastInterface>(mapWithDeletedElem);
+        });
+    };
 
-    const memorized = useMemo(() => ({
-        toast,
-        bakeToast,
-        clearToast,
-    }), [ toast ]);
+    const createToast = (toast: ToastInterface) => {
+        setToaster((prevState) => {
+            return prevState.size < MAX_TOAST_SIZE ?
+                new Map<UUID, ToastInterface>(prevState.set(toast.id, toast)) :
+                prevState;
+        });
+    };
 
     return (
         <toastContext.Provider
-            value={memorized}
+            value={{
+                toaster,
+                bakeToast,
+                deleteToast,
+            }}
         >
             {children}
         </toastContext.Provider>
