@@ -10,7 +10,6 @@ import HeaderUserLinks from './headerUserLinks';
 import BurgerMenu from './BurgerMenu/burgerMenu';
 import classNames from 'classnames';
 import variablesMap from 'styles/exportedVariables.module.scss';
-import { useToast } from 'lib/hooks/useToast';
 
 const mobileMediaQuery = window.matchMedia(`(min-width: ${Number(variablesMap.earlyMobileBp) + 1}px)`);
 
@@ -25,8 +24,6 @@ const Header = () => {
     const closeMenuOnResize = (isMatched: boolean) => {
         isMatched && setIsMenuOpened(false);
     };
-
-    const { bakeToast } = useToast();
 
     useEffect(() => {
         mobileMediaQuery
@@ -57,13 +54,6 @@ const Header = () => {
                             text={'Алготрейдинг'}
                             buttonStyle={'thin'}
                             onClick={() => goToState(`${TERMINAL}/investor`)}
-                            mini
-                        />
-                        <Button
-                            className={styles['trading-link']}
-                            text={'Испечь тост'}
-                            buttonStyle={'thin'}
-                            onClick={() => bakeToast.info('Млем млем млем Млем млем млем Млем млем млем Млем млем млем Млем млем млем Млем млем млем Млем млем млем ')}
                             mini
                         />
                     </div>

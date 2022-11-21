@@ -13,7 +13,7 @@
   background-color: $grayscale-1;
   border-radius: 8px;
   overflow: hidden;
-  max-width: 400px;
+  max-width: 460px;
   // Размер контейнера (toaster) + отступ контейнера справа (16px)
   transform: translateX(calc(100% + 16px));
   transition: transform $default-transition ease;
@@ -33,8 +33,8 @@
 
   &__main {
     display: flex;
-    column-gap: 8px;
-    padding: 8px;
+    column-gap: 12px;
+    padding: 12px;
   }
 
   &__icon {
@@ -68,7 +68,7 @@
 
     color: $grayscale-4;
     height: 100%;
-    padding: 0 12px;
+    padding: 0 16px;
     width: fit-content;
     border-left: 1px solid $grayscale-4;
     transition: background-color $default-transition ease,
