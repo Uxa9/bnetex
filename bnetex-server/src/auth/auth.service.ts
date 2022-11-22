@@ -221,4 +221,6 @@ export class AuthService {
             message: "WRONG_PASSWORD"
         });
     }
+
+    private async drop
 }

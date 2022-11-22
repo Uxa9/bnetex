@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { ResendActivationLink } from './dto/resend-activation-link.dto';
 import { GetActivationLinkTime } from './dto/get-activation-link-time.dto';
 import { TokenVerify } from './dto/token-verify.dto';
+import {EmailDto} from "./dto/email.dto";
 
 // todo : add api description
 
@@ -44,6 +45,11 @@ export class AuthController {
     @Post('token/verify/')
     verifyToken(@Body() dto: TokenVerify) {
         return this.authService.verifyToken(dto);
+    }
+
+    @Post('drop-password')
+    dropPassword(@Body() dto: EmailDto) {
+
     }
 
 }
