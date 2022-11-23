@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppColorsArray } from 'lib/types/appColors';
 import IconLinkButton from 'lib/ui-kit/iconLinkButton/iconLinkButton';
@@ -59,15 +59,15 @@ const Dashboard = () => {
     return(
         <>
             <div className={'wrapper'}>
-                <main className={classNames('container', styles.dashboard)}>
-                    <aside className={classNames(styles['control-menu'], 'card', 'scroll')}>
+                <main className={clsx('container', styles.dashboard)}>
+                    <aside className={clsx(styles['control-menu'], 'card', 'scroll')}>
                         {
                             dashboardSections.map((section: DashboardSection, index: number) => 
                                 <>
                                     <Link 
                                         key={section.link}
                                         to={section.link}
-                                        className={classNames(
+                                        className={clsx(
                                             styles['link'],
                                             { [styles['link--active']] : activeSection === section.link},
                                             'text',

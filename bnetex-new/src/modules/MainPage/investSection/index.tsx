@@ -1,5 +1,5 @@
 import { CornerArrow } from 'assets/images/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import styles from './investSection.module.scss';
 import { Button } from 'lib/ui-kit';
 import { RoeCard, roeCards } from './roeCards';
@@ -24,13 +24,13 @@ const Invest = () => {
                 type={'circle'}
             />
             <DynamicImg 
-                path={`landing/invest/invest__${theme}.png`}
+                path={`invest__${theme}.png`}
                 className={styles['invest-image']}
             />
             <div className={styles['invest__text']}>
                 <h2>Торгуйте как <span>профессионал</span></h2>
                 <p
-                    className={classNames('text-bold', styles['extra-text'])}
+                    className={clsx('text-bold', styles['extra-text'])}
                 >
                     Доверьте свои инвестиции инновационному торговому алгоритму.
                 </p>
@@ -40,7 +40,7 @@ const Invest = () => {
                         roeCards.map((card: RoeCard) => 
                             <div 
                                 key={card.income}
-                                className={classNames(
+                                className={clsx(
                                     styles['ROE-card'],
                                     'caption'
                                 )}

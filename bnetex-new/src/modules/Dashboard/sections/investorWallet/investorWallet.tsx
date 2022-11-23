@@ -1,5 +1,5 @@
 import styles from './investorWallet.module.scss';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Button } from 'lib/ui-kit';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { useEffect, useState } from 'react';
@@ -117,7 +117,7 @@ const InvestorWallet = () => {
                 className={styles['balance-and-info']}
             >
                 <div
-                    className={classNames(styles['balance'], 'card')}
+                    className={clsx(styles['balance'], 'card')}
                 >
                     <p
                         className={styles['balance-header']}
@@ -145,7 +145,7 @@ const InvestorWallet = () => {
                     </div>
                 </div>
                 <div
-                    className={classNames(styles['invest-info'], 'card', 'text')}
+                    className={clsx(styles['invest-info'], 'card', 'text')}
                 >
                     <p>
                         <span>

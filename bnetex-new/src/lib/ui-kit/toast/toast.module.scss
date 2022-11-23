@@ -1,63 +1,82 @@
-@import 'styles/mixins.scss';
-@import 'styles/colors/colors.scss';
+@import 'styles/mixins';
+@import 'styles/shadows';
+@import 'styles/variables';
+@import 'styles/colors/colors';
 
 .toast {
-    @include column-flex(16px);
-    position: fixed;
-    top: 76px;
-    right: -150px;
-    background-color: $grayscale-card;
-    padding: 12px 16px;
-    border-radius: 16px;
-    box-shadow: 4px 4px 10px rgba(161, 118, 193, 0.4), 0px 0px 50px rgba(161, 118, 193, 0.2);
-    max-width: 322px;
-    z-index: 9999;
-    opacity: 0;
-    transition: right 0.35s ease, opacity 0.35s;
-    transform: translateX(100%);
+  @include toast-shadow;
 
-    @include max-width(500) {
-        width: calc(100vw - 32px);
-        max-width: unset;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: repeat(2, auto);
+  column-gap: 16px;
+  background-color: $grayscale-1;
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 460px;
+  // Размер контейнера (toaster) + отступ контейнера справа (16px)
+  transform: translateX(calc(100% + 16px));
+  transition: transform $default-transition ease;
+
+  @include mobile {
+    width: calc(100vw - 16px);
+    justify-content: space-between;
+  }
+
+  &--visible {
+    transform: translateX(0);
+  }
+
+  &--dark {
+    border: 1px solid $grayscale-4;
+  }
+
+  &__main {
+    display: flex;
+    column-gap: 12px;
+    padding: 12px;
+  }
+
+  &__icon {
+    @include size-svg(36px);
+
+    height: 36px;
+
+    &--error {
+      @include color-svg($red-3);
     }
 
-    &--visible {
-        right: 16px;
-        opacity: 1;
-        transform: translateX(0);
+    &--success {
+      @include color-svg($green-3);
     }
 
-    &__type {
-        &--error {
-            fill: $red-1;
-        }
-
-        &--success {
-            fill: $green-1;
-        }
+    &--info {
+      @include color-svg($blue-3);
     }
+  }
 
-    &__title {
-        @include align-center-row-flex(8px);
+  &__text {
+    @include column-flex(4px);
+
+    .description {
+      color: $grayscale-8;
     }
+  }
 
-    &__text {
-        @include line-overflow(6);
-        overflow-y: hidden;
+  &__close {
+    @include column-flex-center;
+
+    color: $grayscale-4;
+    height: 100%;
+    padding: 0 16px;
+    width: fit-content;
+    border-left: 1px solid $grayscale-4;
+    transition: background-color $default-transition ease,
+      color $default-transition ease;
+
+    &:hover {
+      background-color: $grayscale-2;
+      color: $grayscale-11;
     }
-
-    &__close {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        width: 16px;
-        height: 16px;
-        fill: $grayscale-4;
-        cursor: pointer;
-        transition: 0.25s;
-
-        &:hover {
-            fill: $grayscale-11;
-        }
-    }
+  }
 }

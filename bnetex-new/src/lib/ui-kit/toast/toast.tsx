@@ -1,64 +1,87 @@
-import { CircledCheck, CircledCross, Cross } from 'assets/images/icons';
-import classNames from 'classnames';
-import { useToast } from 'lib/hooks/useToast';
+import { CircledCheck, CircledCross, Info } from 'assets/images/icons';
+import clsx from 'clsx';
+import { ToastInterface } from 'lib/types/toast';
 import { delay } from 'lib/utils/delay';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './toast.module.scss';
+import variablesMap from 'styles/exportedVariables.module.scss';
+import { ToastContext } from 'lib/hooks/useToast';
+import { useTheme } from 'lib/hooks/useTheme';
 
 const TOAST_LIFESPAN: number = 3000;
-const TOAST_ANIMATION_TIME: number = 350;
+const TOAST_ANIMATION_TIME = Number(variablesMap['defaultTransition'].replace(/ms/, ''));
 
-const Toast = () => {
-    const { toast, clearToast } = useToast();
-    const [isVisible, setIsVisible] = useState<boolean>(false);
+const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
+    
+    const {id, type, description, title, deleteToast} = props;
+    const { theme } = useTheme();
+
+    const [ isVisible, setIsVisible ] = useState<boolean>(false);
+    const toastLifeTimer = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
-        toast && onToastChange();
-    }, [toast]);
-
-    const onToastChange = async () => {
         setIsVisible(true);
-        await delay(TOAST_LIFESPAN)
-            .then(() => setIsVisible(false))
-            .then(() => delay(TOAST_ANIMATION_TIME))
-            .then(() => clearToast());
-    };
+        toastLifeTimer.current = setTimeout(closeToast, TOAST_LIFESPAN);
+
+        return () => {
+            toastLifeTimer.current && clearTimeout(toastLifeTimer.current);
+        };
+    }, []);
 
     const closeToast = () => {
         setIsVisible(false);
-        setTimeout(() => {
-            clearToast();
-        }, TOAST_ANIMATION_TIME);
+        toastLifeTimer.current && clearTimeout(toastLifeTimer.current);
+        delay(TOAST_ANIMATION_TIME)
+            .then(() => deleteToast(id));
     };
 
-    return(
+    const evaluateToastIcon = useCallback(() => {
+        switch (type) {
+            case 'success': {
+                return <CircledCheck />;
+            }
+            case 'error': {
+                return <CircledCross />;
+            }
+            default: {
+                return <Info />;
+            }
+        }
+    }, [ type ]);
+
+    return (
         <div 
-            className={classNames(styles.toast,
-                isVisible && styles['toast--visible']
+            className={clsx(
+                styles.toast,
+                isVisible && styles['toast--visible'],
+                theme === 'dark' && styles['toast--dark'],
             )}
         >
-            <div className={styles['toast__title']}>
-                {
-                    toast && toast.type === 'error' ?
-                        <CircledCross 
-                            className={classNames(styles['toast__type'],
-                                styles['toast__type--error']
-                            )}
-                        />
-                        :
-                        <CircledCheck 
-                            className={classNames(styles['toast__type'],
-                                styles['toast__type--success']
-                            )}
-                        />
-                }
-                <h5>{toast && toast.type === 'error' ? 'Ошибка' : 'Успех'}</h5>
+            <div className={styles['toast__main']}>
+                <div className={clsx(
+                    styles['toast__icon'],
+                    styles[`toast__icon--${type}`]
+                )}
+                >
+                    { evaluateToastIcon() }
+                </div>
+                <div className={styles['toast__text']}>
+                    <span className={'subtitle'}>{title}</span>
+                    <span className={clsx(
+                        styles['description'],
+                        'caption',
+                    )}
+                    >
+                        {description}
+                    </span>
+                </div>
             </div>
-            <p className={classNames(styles['toast__text'], 'text')}>{toast && toast.text}</p>
-            <Cross 
-                onClick={closeToast}
+            <button 
                 className={styles['toast__close']}
-            />
+                onClick={closeToast}
+            >
+                <span className={'caption'}>Ок</span>
+            </button>
         </div>
     );
 };

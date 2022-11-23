@@ -1,5 +1,5 @@
 import styles from './mainWallet.module.scss';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Button } from 'lib/ui-kit';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
@@ -48,10 +48,10 @@ const MainWallet = () => {
                 </div>
             </div>
 
-            <div className={classNames(styles['wallet-card'], 'card')}>
+            <div className={clsx(styles['wallet-card'], 'card')}>
                 <div className={styles['balance-item']}>
                     <p 
-                        className={classNames(
+                        className={clsx(
                             styles['balance-item__label'],
                             'caption',
                         )}

@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { PositionsService } from '../positions/positions.service';
 import { UsersService } from '../users/users.service';
 import { CreateTradeSessionDto } from './dto/create-session.dto';
 import { InvestSession } from './invest-sessions.model';
@@ -9,7 +10,8 @@ export class InvestSessionsService {
 
     constructor(
         @InjectModel(InvestSession) private investSessionRepository: typeof InvestSession,
-        private userService: UsersService
+        private userService: UsersService,
+        private positionService: PositionsService,
     ) { }
 
     async createSession(dto: CreateTradeSessionDto) {
@@ -154,5 +156,20 @@ export class InvestSessionsService {
                 ["startSessionTime", "ASC"]
             ]
         });
+    }
+
+    async acceptBotCallback() {
+        const position = await this.positionService.getLastClosedPosition();
+
+        if ( !position ) {
+            throw new HttpException(
+                {
+                    status: "ERROR",
+                    message: "CLOSED_SESSION_NOT_FOUND"
+                },
+                HttpStatus.NO_CONTENT
+            );
+        }
+
     }
 }

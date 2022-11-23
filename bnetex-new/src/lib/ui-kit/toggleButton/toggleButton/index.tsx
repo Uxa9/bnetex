@@ -1,7 +1,7 @@
 import { FC, InputHTMLAttributes, useMemo } from 'react';
 import styles from './toggleButton.module.scss';
 import { v4 as uuidV4 } from 'uuid';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 export interface ToggleButtonProps extends InputHTMLAttributes<HTMLInputElement> {
     text: string | JSX.Element;
@@ -27,7 +27,7 @@ const ToggleButton: FC<ToggleButtonProps> = props => {
                 {...rest}
             />
             <label
-                className={classNames(
+                className={clsx(
                     styles.button, 
                     styles[`button--${buttonStyle}`],
                     styles[`button--${location}`],

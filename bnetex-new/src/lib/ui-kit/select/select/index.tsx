@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { ReactElement, useState, useMemo, SetStateAction, Dispatch  , MouseEvent } from 'react';
 import { SelectOptionProps } from '../selectOption';
 import styles from './select.module.scss';
@@ -45,7 +45,7 @@ function Select<T> ({label, value, onChange, children}: SelectProps<T>) {
 
     return(
         <button 
-            className={classNames(
+            className={clsx(
                 styles['select'],
                 isMenuVisible && styles['select--active']
             )}
@@ -54,7 +54,7 @@ function Select<T> ({label, value, onChange, children}: SelectProps<T>) {
             type={'button'}
         >
             <fieldset  
-                className={classNames(styles['fieldset-outline'])}
+                className={clsx(styles['fieldset-outline'])}
             >
                 <legend className={styles['fieldset-outline__legend']}>
                     <span>{label}</span>
@@ -74,7 +74,7 @@ function Select<T> ({label, value, onChange, children}: SelectProps<T>) {
                 <Angle className={styles['select__arrow']} />
             </div>
             <div 
-                className={classNames(
+                className={clsx(
                     styles['select__menu'],
                     isMenuVisible && styles['select__menu--visible']
                 )}

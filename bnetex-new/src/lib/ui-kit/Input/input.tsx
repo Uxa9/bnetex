@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { v4 as uuidV4 } from 'uuid';
 import React, { InputHTMLAttributes, ReactNode, useMemo, useState } from 'react';
 import styles from './input.module.scss';
@@ -36,7 +36,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     };
 
     return(
-        <div className={classNames(
+        <div className={clsx(
             styles['input-wrapper'],
             {[styles['input-wrapper--activeOrFilled']]: isActive},
             {[styles['input-wrapper--focused']]: isFocused},
@@ -45,7 +45,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         )}
         >
             <label 
-                className={classNames(
+                className={clsx(
                     styles.label,
                     'text'
                 )}
@@ -57,7 +57,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                 <input 
                     type={type}
                     id={id}
-                    className={classNames(
+                    className={clsx(
                         styles.input,
                         'text'
                     )}
@@ -71,7 +71,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                 />
                 
                 <fieldset className={
-                    classNames(
+                    clsx(
                         styles['fieldset-outline'],
                         {[styles['fieldset-outline--background']]: hasBackground}
                     )}
@@ -82,7 +82,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                 </fieldset>
                 {postfix}
             </div>
-            <div className={classNames(
+            <div className={clsx(
                 styles['input__helper'],
                 errorText && styles['input__helper--error'],
                 'caption',

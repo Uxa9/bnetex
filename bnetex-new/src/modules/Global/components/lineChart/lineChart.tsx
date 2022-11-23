@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { colorIndexMap } from 'lib/utils/colorIndexMap';
 import { useMemo } from 'react';
 import styles from './lineChart.module.scss';
@@ -28,7 +28,7 @@ const LineChart = ({values}: LineChartProps) => {
                         {
                             values.map((value: LineChartItem, index: number) => 
                                 <div
-                                    className={classNames(
+                                    className={clsx(
                                         styles['chart-line'],
                                         styles[colorIndexMap('chart-line', index)],
                                     )}
@@ -43,12 +43,12 @@ const LineChart = ({values}: LineChartProps) => {
                 {
                     values.map((item: LineChartItem, index: number) => 
                         <div
-                            className={classNames(styles['chart-line-item'], 'text')}
+                            className={clsx(styles['chart-line-item'], 'text')}
                             key={index}
                         >
                             <div className={styles['chart-line-item__name-block']}>
                                 <div 
-                                    className={classNames(
+                                    className={clsx(
                                         styles['chart-line-item__color-border'],
                                         styles[colorIndexMap('chart-line-item__color-border', index)],
                                     )} 

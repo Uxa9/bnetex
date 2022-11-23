@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useTheme } from 'lib/hooks/useTheme';
 import { Button, Switch } from 'lib/ui-kit';
 import { useEffect, useState } from 'react';
@@ -41,7 +41,7 @@ export default function BurgerMenu({isOpened, onClose}: BurgerMenuProps) {
     return (
         <>
             <div 
-                className={classNames(
+                className={clsx(
                     styles['overlay'],
                     isOpened && styles['overlay--visible']
                 )}
@@ -49,7 +49,7 @@ export default function BurgerMenu({isOpened, onClose}: BurgerMenuProps) {
                 style={{visibility: isOverlayVisible ? 'visible' : 'hidden'}}
             />
             <aside
-                className={classNames(
+                className={clsx(
                     styles['burger-menu'],
                     isOpened && styles['burger-menu--opened']
                 )}

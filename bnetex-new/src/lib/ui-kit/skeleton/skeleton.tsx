@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import styles from './skeleton.module.scss';
 
 interface SkeletonProps {
@@ -25,7 +25,7 @@ const Skeleton = ({height, width = '100%', type = 'line', className}: SkeletonPr
 
     return(
         <div 
-            className={classNames(
+            className={clsx(
                 styles['skeleton'],
                 styles[`skeleton--${type}`],
                 className,

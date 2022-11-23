@@ -1,5 +1,5 @@
 
-import classNames from 'classnames';
+import clsx from 'clsx';
 import styles from './button.module.scss';
 import { ButtonHTMLAttributes, FC } from 'react';
 import { Spinner } from 'assets/images/icons';
@@ -25,7 +25,7 @@ const Button: FC<ButtonProps> = props => {
         <button
             className=
                 {
-                    classNames(
+                    clsx(
                         styles['button'],
                         styles[`button_style--${buttonStyle}`],
                         styles[`button_style--${buttonStyle}-${buttonTheme}`],

@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Button } from 'lib/ui-kit';
 import styles from './tools.module.scss';
 import { useEffect, useState } from 'react';
@@ -103,7 +103,7 @@ const Tools = () => {
                 className={styles['balance-and-transactions']}
             >
                 <div
-                    className={classNames(styles['balance'], 'card')}
+                    className={clsx(styles['balance'], 'card')}
                 >
                     <p
                         className={styles['balance-header']}
@@ -127,7 +127,7 @@ const Tools = () => {
                     />
                 </div>
                 <div
-                    className={classNames(styles['transactions'], 'card')}
+                    className={clsx(styles['transactions'], 'card')}
                 >
                     <p
                         className={styles['transactions-header']}
@@ -145,7 +145,7 @@ const Tools = () => {
                         </span>
                     </p>
                     <div
-                        className={classNames(styles['transaction-table-wrapper'], 'scroll')}
+                        className={clsx(styles['transaction-table-wrapper'], 'scroll')}
                     >
                         <TransactionTable
                             rows={rows}

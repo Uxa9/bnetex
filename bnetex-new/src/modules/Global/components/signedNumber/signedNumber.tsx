@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import styles from './signedNumber.module.scss';
 
 interface SignedNumberProps {
@@ -28,7 +28,7 @@ const SignedNumber = ({value, postfix, withSign = true, className}: SignedNumber
 
     return(
         <span
-            className={classNames(
+            className={clsx(
                 styles[evaluateNumberStyle()],
                 className,  
             )}

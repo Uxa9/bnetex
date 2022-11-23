@@ -1,5 +1,5 @@
 import { Info, ToolTipNeedle } from 'assets/images/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 import styles from './toolTip.module.scss';
 import { Properties as CSSProperties } from 'csstype';
@@ -46,7 +46,7 @@ const ToolTip = ({title, infoText, className }: ToolTipProps) => {
 
     return(
         <div 
-            className={classNames(
+            className={clsx(
                 styles.title,
                 {[styles['title--active']]: isToolTipVisible},
                 className,
@@ -68,7 +68,7 @@ const ToolTip = ({title, infoText, className }: ToolTipProps) => {
                     className={styles.infoIcon}
                 />
                 <div 
-                    className={classNames(
+                    className={clsx(
                         styles.tip,
                         'caption'
                     )}

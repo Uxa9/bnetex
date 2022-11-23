@@ -1,0 +1,116 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true,
+            "modules": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
+    "settings": {
+        "react": {
+            "version": "15.4.2"
+        }
+    },
+    "rules": {
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            {
+                "vars": "all",
+                "args": "all",
+                "ignoreRestSiblings": false,
+                "argsIgnorePattern": "^_"
+            }
+        ],
+        "brace-style": 0,
+        "no-var": [
+            "warn"
+        ],
+        "no-loop-func": [
+            "warn"
+        ],
+        "default-case": [
+            "warn"
+        ],
+        "eqeqeq": [
+            "warn",
+            "always"
+        ],
+        "no-throw-literal": [
+            "warn"
+        ],
+        "radix": [
+            "warn"
+        ],
+        "prefer-arrow-callback": [
+            "warn"
+        ],
+        "no-extra-boolean-cast": [
+            "warn"
+        ],
+        "indent": [
+            "warn",
+            4,
+            {
+                "ignoredNodes": [
+                    "PropertyDefinition"
+                ],
+                "SwitchCase": 1
+            }
+        ],
+        "quotes": [
+            "warn",
+            "single"
+        ],
+        "semi": [
+            "warn",
+            "always"
+        ],
+        "no-console": [
+            "warn"
+        ],
+        "no-useless-escape": 0,
+        "react/prop-types": 0,
+        "comma-dangle": [
+            "warn",
+            {
+                "arrays": "always-multiline",
+                "objects": "always-multiline",
+                "imports": "always-multiline",
+                "exports": "always-multiline",
+                "functions": "ignore"
+            }
+        ],
+        "react/no-string-refs": 0,
+        "react/no-find-dom-node": 0,
+        "react/jsx-first-prop-new-line": [
+            "warn",
+            "multiline-multiprop"
+        ],
+        "react/jsx-max-props-per-line": 0,
+        "react/jsx-closing-bracket-location": [
+            2,
+            "line-aligned"
+        ],
+        "no-multiple-empty-lines": "warn",
+        "eol-last": "warn",
+        "react/jsx-tag-spacing": [
+            1,
+            {
+                "beforeSelfClosing": "always",
+                "afterOpening": "never"
+            }
+        ]
+    }
+}
