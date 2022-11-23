@@ -24,7 +24,7 @@ const Invest = () => {
                 type={'circle'}
             />
             <DynamicImg 
-                path={`landing/invest/invest__${theme}.png`}
+                path={`invest__${theme}.png`}
                 className={styles['invest-image']}
             />
             <div className={styles['invest__text']}>

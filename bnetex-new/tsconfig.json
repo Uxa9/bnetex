@@ -1,46 +1,33 @@
 {
   "compilerOptions": {
-    // базовые настройки
     "target": "es6",
     "module": "esnext",
     "moduleResolution": "node",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "baseUrl": "src",
     "resolveJsonModule": true,
-    // оптимизация сборки
     "isolatedModules": true,
     "skipLibCheck": true,
     "noEmit": true,
     "importHelpers": true,
     "noEmitHelpers": true,
-    // настройки строгости
     "allowJs": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
-    // настройки чистоты кода
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noUnusedLocals": false,
     "noFallthroughCasesInSwitch": true,
     "noUnusedParameters": true,
     "allowUnreachableCode": false,
-    // дополнительно
     "removeComments": true,
-    "pretty": false
+    "pretty": false,
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "src/config/globalConfig.js"
-  ]
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

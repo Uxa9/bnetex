@@ -8,8 +8,8 @@ import ChangePasswordModal from './modals/changePasswordModal';
 const Settings = () => {
     const { open: openStartAlgorythmModal } = useModal(ChangePasswordModal);
 
-    return(
-        <div className={styles.settings}>
+    return (
+        <div className={styles['settings']}>
             <h3>Настройки</h3>
             <div
                 className={clsx(styles['setting-card'], 'card')}

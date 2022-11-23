@@ -3,7 +3,7 @@ import { Environment } from 'lib/types/environment';
 
 const useApi = () => {
     const { BACKEND_URL } = Environment;
-    const baseURL = process.env[BACKEND_URL];
+    const baseURL = import.meta.env[BACKEND_URL];
     
     const api = axios.create({
         baseURL: baseURL,

@@ -89,7 +89,7 @@ const Earn = () => {
                     </div>
                 </div>
                 <DynamicImg 
-                    path={`landing/earn/earn__${theme}.svg`}
+                    path={`earn__${theme}.svg`}
                     className={styles['candles']}
                 />
                 <div className={styles['buttons']}>

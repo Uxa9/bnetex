@@ -131,19 +131,19 @@
   $svg-fill-postfix: ''
 ) {
   @each $key, $color in $main-colors {
-    &--#{$key} {
+    &--#{'' + $key} {
       @if $background-color-postfix != '' {
-        background-color: var(--#{$key}-#{$background-color-postfix});
+        background-color: var(--#{'' + $key}-#{$background-color-postfix});
       }
       @if $color-postfix != '' {
-        color: var(--#{$key}-#{$color-postfix});
+        color: var(--#{'' + $key}-#{$color-postfix});
       }
       @if $fill-postfix != '' {
-        fill: var(--#{$key}-#{$fill-postfix});
+        fill: var(--#{'' + $key}-#{$fill-postfix});
       }
       @if $svg-fill-postfix != '' {
         svg {
-          fill: var(--#{$key}-#{$svg-fill-postfix});
+          fill: var(--#{'' + $key}-#{$svg-fill-postfix});
         }
       }
     }
