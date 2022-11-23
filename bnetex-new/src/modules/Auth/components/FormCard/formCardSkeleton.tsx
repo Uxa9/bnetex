@@ -1,11 +1,11 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import Skeleton from 'lib/ui-kit/skeleton/skeleton';
 import styles from './formCard.module.scss';
 
 const FormCardSkeleton = () => {
     return(
         <form  
-            className={classNames(
+            className={clsx(
                 styles.form,
                 'card',
             )}

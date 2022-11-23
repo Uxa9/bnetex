@@ -3,7 +3,7 @@ import { FC, useState } from 'react';
 import { Button, Input, ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
 import styles from './historyView.module.scss';
 import { blockEAndDashKey } from 'lib/utils';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useActions } from 'lib/hooks/useActionCreators';
 
 interface HistoryViewProps {
@@ -41,7 +41,7 @@ const HistoryView: FC<HistoryViewProps> = props => {
                 className={styles['prediction-period']}
             >
                 <p
-                    className={classNames(
+                    className={clsx(
                         styles['prediction-period__label'],
                         'caption-mini'
                     )}

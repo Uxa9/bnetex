@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import styles from './historyAndOrders.module.scss';
 import { ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
 import OpenedPositions from './sections/openedPositions/openedPositions';
@@ -47,7 +47,7 @@ const HistoryAndOrders = ({className}: {className: string}) => {
     }, [ activeSection ]);
 
     return (
-        <div className={classNames(
+        <div className={clsx(
             styles['history-and-orders'],
             className,
         )}
@@ -58,7 +58,7 @@ const HistoryAndOrders = ({className}: {className: string}) => {
                     onChange={setActiveSection}
                     value={activeSection}
                     buttonStyle={'underlined'}
-                    buttonClassname={classNames(
+                    buttonClassname={clsx(
                         styles['toggle-section-button'],
                         'text',
                     )}
@@ -75,7 +75,7 @@ const HistoryAndOrders = ({className}: {className: string}) => {
                 </ToggleButtonGroup>
             </div>
             <div className={styles['history-and-orders__content-wrapper']}>
-                <div className={classNames(
+                <div className={clsx(
                     styles['history-and-orders__content'],
                     'scroll',
                 )}

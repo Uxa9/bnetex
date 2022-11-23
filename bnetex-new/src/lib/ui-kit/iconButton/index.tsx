@@ -1,5 +1,5 @@
 
-import classNames from 'classnames';
+import clsx from 'clsx';
 import styles from './iconButton.module.scss';
 import { ButtonHTMLAttributes, FC } from 'react';
 import { Spinner } from 'assets/images/icons';
@@ -20,7 +20,7 @@ const Button: FC<IconButtonProps> = props => {
         <button
             className=
                 {
-                    classNames(
+                    clsx(
                         styles['button'],
                         styles[`button_style--${buttonStyle}`],
                         mini && 'button-mini',

@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useModal } from 'lib/hooks/useModal';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { WalletCategoryWithBalance } from 'lib/types/wallet';
@@ -117,7 +117,7 @@ const TradeView = () => {
                 className={styles['trade-view__balance']}
             >
                 <div className={styles['balance-item']}>
-                    <p className={classNames(
+                    <p className={clsx(
                         styles['balance-label'],
                         'caption-mini'
                     )}
@@ -133,7 +133,7 @@ const TradeView = () => {
                 {
                     operationalBalance !== 0 &&
                     <div  className={styles['balance-item']}>
-                        <p className={classNames(
+                        <p className={clsx(
                             styles['balance-label'],
                             'caption-mini'
                         )}
@@ -165,7 +165,7 @@ const TradeView = () => {
                             <Button 
                                 text={'Весь баланс'}
                                 buttonStyle={'flat'}
-                                className={classNames(
+                                className={clsx(
                                     styles['all-balance-btn'],
                                     'caption'
                                 )}

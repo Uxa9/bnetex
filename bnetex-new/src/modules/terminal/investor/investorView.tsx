@@ -4,7 +4,7 @@ import TradeView from './tradeView/tradeView';
 import HistoryView from './historyView/historyView';
 import styles from './investorView.module.scss';
 import ToolTip from 'lib/ui-kit/toolTip';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { getHistoricalData } from 'services/getHistoricalData';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import Chart from 'modules/Global/components/lightChart/chart';
@@ -45,7 +45,7 @@ const InvestorView = () => {
     return (
         <>
             <div
-                className={classNames(styles['investor-view-card'], styles['toggle-section-card'], 'card')}
+                className={clsx(styles['investor-view-card'], styles['toggle-section-card'], 'card')}
             >
                 <div className={styles['investor-view-wrapper__header']}>
                     <ToggleButtonGroup
@@ -80,7 +80,7 @@ const InvestorView = () => {
                 }
             </div>
             <div
-                className={classNames(
+                className={clsx(
                     styles['investor-view-card'],
                     styles['data-card'],
                     'card'
@@ -114,7 +114,7 @@ const InvestorView = () => {
                     })
                 }
                 type={'PNL'}
-                className={classNames(
+                className={clsx(
                     styles['investor-view-card'],
                     styles['PNL-card'],
                 )}
@@ -129,7 +129,7 @@ const InvestorView = () => {
                     })
                 }
                 type={'ROE'}
-                className={classNames(
+                className={clsx(
                     styles['investor-view-card'],
                     styles['ROE-card'],
                 )}

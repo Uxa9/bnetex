@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import styles from './changePasswordModal.module.scss';
 import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
 import { BaseModalProps } from 'lib/hooks/useModal';

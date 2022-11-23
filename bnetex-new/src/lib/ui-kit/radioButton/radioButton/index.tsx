@@ -1,7 +1,7 @@
 import { FC, InputHTMLAttributes, useMemo, useState } from 'react';
 import styles from './radioButton.module.scss';
 import { v4 as uuidV4 } from 'uuid';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 export interface RadioButtonProps extends InputHTMLAttributes<HTMLInputElement> {
     label: string
@@ -16,7 +16,7 @@ const RadioButton: FC<RadioButtonProps> = props => {
     
     return (
         <label
-            className={classNames(styles.container)}
+            className={clsx(styles.container)}
             htmlFor={inputID}
         >
 

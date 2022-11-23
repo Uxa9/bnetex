@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import CoinSymbol from 'modules/terminal/components/coinSymbol/coinSymbol';
 import { CoinSymbolProps } from 'modules/terminal/types/coinSymbol';
 import styles from './orderHistory.module.scss';
@@ -50,7 +50,7 @@ const OrderHistory = () => {
                             >
                                 <td className={styles['coin-symbol']}>
                                     <span 
-                                        className={classNames(
+                                        className={clsx(
                                             styles['body-label'],
                                             'caption',
                                         )}
@@ -68,7 +68,7 @@ const OrderHistory = () => {
                                 </td>
                                 <td className={styles['time']}>
                                     <span 
-                                        className={classNames(
+                                        className={clsx(
                                             styles['body-label'],
                                             'caption',
                                         )}
@@ -79,7 +79,7 @@ const OrderHistory = () => {
                                 </td>
                                 <td className={styles['action']}>
                                     <span
-                                        className={classNames(
+                                        className={clsx(
                                             styles['body-label'],
                                             'caption',
                                         )}
@@ -92,7 +92,7 @@ const OrderHistory = () => {
                                 </td>
                                 <td className={styles['amount']}>
                                     <span 
-                                        className={classNames(
+                                        className={clsx(
                                             styles['body-label'],
                                             'caption',
                                         )}
@@ -103,7 +103,7 @@ const OrderHistory = () => {
                                 </td>
                                 <td className={styles['price']}> 
                                     <span 
-                                        className={classNames(
+                                        className={clsx(
                                             styles['body-label'],
                                             'caption',
                                         )}
@@ -114,7 +114,7 @@ const OrderHistory = () => {
                                 </td>
                                 <td className={styles['PNL']}> 
                                     <span 
-                                        className={classNames(
+                                        className={clsx(
                                             styles['body-label'],
                                             'caption',
                                         )}

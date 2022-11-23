@@ -1,3 +1,3 @@
 export enum Environment {
-    BACKEND_URL = 'REACT_APP_SERVER_URL',
+    BACKEND_URL = 'VITE_SERVER_URL',
 }

@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { ButtonHTMLAttributes, ReactElement } from 'react';
 import styles from './selectOption.module.scss';
 
@@ -14,7 +14,7 @@ function SelectOption<T> ({ option, onClick }: SelectOptionProps<T>) {
             onClick={onClick}
         >
             <div
-                className={classNames(styles['text-option'], 'text')}
+                className={clsx(styles['text-option'], 'text')}
             >
                 { option }
             </div>

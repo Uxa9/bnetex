@@ -1,5 +1,5 @@
 import { USDT } from 'assets/images/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { CryptoTransactionItemStatusMap, CryptoTransactionItemType } from 'lib/types/cryptoTransactionItem';
 import { formatDate } from 'lib/utils/formatDate';
@@ -162,9 +162,9 @@ const Transactions = () => {
     return (
         <div className={styles.transactions}>
             <h3>Транзакции</h3>
-            <table className={classNames(styles['transactions-table'], 'card')}>
+            <table className={clsx(styles['transactions-table'], 'card')}>
                 <thead>
-                    <tr className={classNames(styles['transactions-table__row'],
+                    <tr className={clsx(styles['transactions-table__row'],
                         styles['transactions-table__header-row'],
                         'caption',
                     )}
@@ -197,7 +197,7 @@ const Transactions = () => {
                 </tbody>
             </table>
             <div
-                className={classNames(styles["mobile-table"], 'card')}
+                className={clsx(styles["mobile-table"], 'card')}
             >
                 {
                     rows.map((transaction: CryptoTransactionItemType) => {
@@ -212,7 +212,7 @@ const Transactions = () => {
                                         className={styles['item-type-amount-coin']}
                                     >
                                         <span
-                                            className={classNames(styles['item-type'],
+                                            className={clsx(styles['item-type'],
                                                 styles[`item-type--${transaction.type}`],
                                                 'caption',
                                             )}
@@ -227,7 +227,7 @@ const Transactions = () => {
                                         </div>
                                     </div>
                                     <div
-                                        className={classNames(styles['item-status'],
+                                        className={clsx(styles['item-status'],
                                             styles[`item-status--${transaction.status}`],
                                             'caption-mini',
                                         )}

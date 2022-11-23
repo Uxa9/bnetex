@@ -98,7 +98,7 @@
             "warn",
             "multiline-multiprop"
         ],
-        "react/jsx-max-props-per-line": 1,
+        "react/jsx-max-props-per-line": 0,
         "react/jsx-closing-bracket-location": [
             2,
             "line-aligned"

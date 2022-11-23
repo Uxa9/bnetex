@@ -1,6 +1,6 @@
 import styles from './textIcon.module.scss';
 import { BaseHTMLAttributes, ForwardedRef, forwardRef } from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 export interface TextIconProps extends BaseHTMLAttributes<HTMLDivElement> {
     label: string;
@@ -13,7 +13,7 @@ const TextIcon = forwardRef((props: TextIconProps, ref: ForwardedRef<HTMLDivElem
 
     return (
         <div
-            className={classnames(
+            className={clsx(
                 styles['text-icon'],
                 styles[`text-icon--icon-${iconAlignment}`],
                 'text',

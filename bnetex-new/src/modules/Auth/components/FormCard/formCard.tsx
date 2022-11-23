@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Button, Input } from 'lib/ui-kit';
 import { FC, HTMLAttributes, ReactElement, ReactNode } from 'react';
 import styles from './formCard.module.scss';
@@ -18,7 +18,7 @@ const FormCard: FC<FormCardProps> = (props) => {
 
     return(
         <form  
-            className={classNames(
+            className={clsx(
                 styles.form,
                 'card',
                 className
@@ -28,7 +28,7 @@ const FormCard: FC<FormCardProps> = (props) => {
             <div className={styles['form__header']}>
                 {
                     step && 
-                    <p className={classNames(
+                    <p className={clsx(
                         styles['form__step'],
                         'caption',
                     )}

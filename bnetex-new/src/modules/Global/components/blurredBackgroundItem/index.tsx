@@ -1,5 +1,5 @@
 import styles from './blur.module.scss';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { FC } from 'react';
 
 export interface BlurProps {
@@ -23,7 +23,7 @@ const Blur:FC<BlurProps> = props => {
             style={blurStyle}
             className=
                 {
-                    classNames(styles['blur'], 
+                    clsx(styles['blur'], 
                         styles[`blur_${props.type}`],
                         styles[`blur_color--${props.color}`])
                 }

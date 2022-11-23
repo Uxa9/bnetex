@@ -1,5 +1,5 @@
 import styles from './startAlgorythm.module.scss';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { BaseModalProps } from 'lib/hooks/useModal';
 import { Button } from 'lib/ui-kit';
 import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
@@ -22,7 +22,7 @@ const StartAlgorythmModal = (props: StartAlgorythmModalProps & BaseModalProps) =
         <Modal
             title={'Начало работы с алгоритмом'}
             onClose={onClose}
-            className={classNames(
+            className={clsx(
                 styles['content'],
                 'text'
             )}

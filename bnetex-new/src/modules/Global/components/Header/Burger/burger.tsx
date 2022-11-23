@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import styles from './burger.module.scss';
 
 interface BurgerProps {
@@ -11,7 +11,7 @@ interface BurgerProps {
 const Burger = ({isOpened, onClick, roundedCorner, className}: BurgerProps) => {
     return(
         <button
-            className={classNames(
+            className={clsx(
                 styles['burger'],
                 roundedCorner && styles['burger--rounded'],
                 isOpened && styles['burger--opened'],

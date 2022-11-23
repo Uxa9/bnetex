@@ -1,5 +1,5 @@
 import { CircledCheck } from 'assets/images/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { Button } from 'lib/ui-kit';
 import { useEffect } from 'react';
@@ -17,7 +17,7 @@ const RegistrationFinalize = () => {
 
     return(
         <div 
-            className={classNames(
+            className={clsx(
                 styles['card'],
                 'card',
             )}

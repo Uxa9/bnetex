@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { BaseModalProps } from 'lib/hooks/useModal';
 import { CryptoTransactionItemStatusMap, CryptoTransactionItemType } from 'lib/types/cryptoTransactionItem';
 import styles from './cryptoTransactionItemModal.module.scss';
@@ -19,7 +19,7 @@ const CryptoTransactionItemModal = (props: CryptoTransactionItemModalProps & Bas
         <Modal
             title={'Детали транзакции'}
             onClose={onClose}
-            className={classNames(
+            className={clsx(
                 styles['content'],
                 'text'
             )}
@@ -27,7 +27,7 @@ const CryptoTransactionItemModal = (props: CryptoTransactionItemModalProps & Bas
             <div className={styles['data-line']}>
                 <span className={styles['data-line__label']}>Статус</span>
                 <p
-                    className={classNames(itemStyles['item-status'],
+                    className={clsx(itemStyles['item-status'],
                         itemStyles[`item-status--${item.status}`],
                         'caption-mini',
                     )}
@@ -42,7 +42,7 @@ const CryptoTransactionItemModal = (props: CryptoTransactionItemModalProps & Bas
             <div className={styles['data-line']}>
                 <span className={styles['data-line__label']}>Перевод</span>
                 <p
-                    className={classNames(itemStyles['item-type'],
+                    className={clsx(itemStyles['item-type'],
                         itemStyles[`item-type--${item.type}`],
                     )}
                 >

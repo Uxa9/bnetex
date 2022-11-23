@@ -1,5 +1,5 @@
 import styles from './stopAlgorythm.module.scss';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { BaseModalProps } from 'lib/hooks/useModal';
 import { Button } from 'lib/ui-kit';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
@@ -59,7 +59,7 @@ const StopAlgorythmModal = (props: StopAlgorythmModalProps & BaseModalProps) => 
         <Modal
             title={'Завершение работы с алгоритмом'}
             onClose={onClose}
-            className={classNames(
+            className={clsx(
                 styles['content'],
                 'text'
             )}

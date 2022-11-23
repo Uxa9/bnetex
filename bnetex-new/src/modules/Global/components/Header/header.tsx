@@ -8,8 +8,8 @@ import Burger from './Burger/burger';
 import { useEffect, useState } from 'react';
 import HeaderUserLinks from './headerUserLinks';
 import BurgerMenu from './BurgerMenu/burgerMenu';
-import classNames from 'classnames';
 import variablesMap from 'styles/exportedVariables.module.scss';
+import clsx from 'clsx';
 
 const mobileMediaQuery = window.matchMedia(`(min-width: ${Number(variablesMap.earlyMobileBp) + 1}px)`);
 
@@ -35,7 +35,7 @@ const Header = () => {
     return (
         <>
             <header
-                className={classNames(
+                className={clsx(
                     styles.header,
                     isMenuOpened && styles['header--menu-opened']
                 )}
