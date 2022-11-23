@@ -19,7 +19,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
-    "noPropertyAccessFromIndexSignature": true,
+    "noPropertyAccessFromIndexSignature": false,
     "noImplicitReturns": true,
     "noUnusedLocals": false,
     "noFallthroughCasesInSwitch": true,
