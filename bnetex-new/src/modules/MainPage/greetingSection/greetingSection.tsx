@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Button } from 'lib/ui-kit';
 import styles from './greetingSection.module.scss';
 import { ReactComponent as GraphicLine } from '../../../assets/images/landing/graphic__line.svg';
@@ -37,7 +37,7 @@ const GreetingSection = () => {
             <div className={styles['greeting-text']}>
                 <h1>Инновационный статистический <span>алгоритм</span></h1>
                 <p 
-                    className={classNames('text-bold', styles['extra-text'])}
+                    className={clsx('text-bold', styles['extra-text'])}
                 >
                     Интерактивный сигнальный индикатор выведет вашу торговлю на совершенно новый уровень.
                     Торгуйте как профессионал. Это просто.
@@ -51,7 +51,7 @@ const GreetingSection = () => {
             <div 
                 className={styles['greeting-img']}
             >
-                <div className={classNames(styles['greeting-card'], styles['token-card'])}>
+                <div className={clsx(styles['greeting-card'], styles['token-card'])}>
                     <div className={styles['token']}>
                         <DynamicImg 
                             path={'logo_BTC.png'}
@@ -71,7 +71,7 @@ const GreetingSection = () => {
                         <GraphicGradient className={styles['graphic__gradient']} />
                     </div>
                 </div>
-                <div className={classNames(styles['greeting-card'], styles['data-card'])}>
+                <div className={clsx(styles['greeting-card'], styles['data-card'])}>
                     <div className={styles['data-item']}>
                         <div className={styles['skeleton']} style={{width: '30%'}} />
                         <div className={styles['skeleton-progress']}>
@@ -115,12 +115,12 @@ const GreetingSection = () => {
                         </div>
                     </div>
                 </div>
-                <div className={classNames(styles['greeting-card'], styles['pie-chart-card'])}>
-                    <div className={classNames(styles['sector'], styles['sector--blue'])} />
-                    <div className={classNames(styles['sector'], styles['sector--purple'])} />
-                    <div className={classNames(styles['sector'], styles['sector--orange'])} />
-                    <div className={classNames(styles['sector'], styles['sector--red'])} />
-                    <div className={classNames(styles['sector'], styles['sector--hide'])} />
+                <div className={clsx(styles['greeting-card'], styles['pie-chart-card'])}>
+                    <div className={clsx(styles['sector'], styles['sector--blue'])} />
+                    <div className={clsx(styles['sector'], styles['sector--purple'])} />
+                    <div className={clsx(styles['sector'], styles['sector--orange'])} />
+                    <div className={clsx(styles['sector'], styles['sector--red'])} />
+                    <div className={clsx(styles['sector'], styles['sector--hide'])} />
                 </div>
             </div>
         </section>

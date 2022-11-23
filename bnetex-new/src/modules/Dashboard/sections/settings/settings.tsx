@@ -1,5 +1,5 @@
 import styles from './settings.module.scss';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Button } from 'lib/ui-kit';
 import { Key } from 'assets/images/icons';
 import { useModal } from 'lib/hooks/useModal';
@@ -12,7 +12,7 @@ const Settings = () => {
         <div className={styles.settings}>
             <h3>Настройки</h3>
             <div
-                className={classNames(styles['setting-card'], 'card')}
+                className={clsx(styles['setting-card'], 'card')}
             >
                 <Key />
                 <div

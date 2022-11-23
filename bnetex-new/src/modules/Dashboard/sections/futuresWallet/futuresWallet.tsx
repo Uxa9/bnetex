@@ -1,5 +1,5 @@
 import styles from './futuresWallet.module.scss';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 // toDo
 // сделать нормальные кнопки
@@ -16,9 +16,9 @@ const FuturesWallet = () => {
                 </div>
             </div>
 
-            <div className={classNames(styles['wallet-card'], 'card')}>
+            <div className={clsx(styles['wallet-card'], 'card')}>
 
-                <div className={classNames(styles['balance-item'], styles['balance-item--big'])}>
+                <div className={clsx(styles['balance-item'], styles['balance-item--big'])}>
                     <p className={styles['balance-item__label']}>
                         Баланс (USD-M)
                     </p>

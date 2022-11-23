@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import CoinSymbol from 'modules/terminal/components/coinSymbol/coinSymbol';
 import { CoinSymbolProps } from 'modules/terminal/types/coinSymbol';
@@ -59,7 +59,7 @@ const OpenedPositions = () => {
                         >
                             <td className={styles['coin-symbol']}>
                                 <span
-                                    className={classNames(
+                                    className={clsx(
                                         styles['body-label'],
                                         'caption',
                                     )}
@@ -75,7 +75,7 @@ const OpenedPositions = () => {
                             </td>
                             <td className={styles['amount']}>
                                 <span
-                                    className={classNames(
+                                    className={clsx(
                                         styles['body-label'],
                                         'caption',
                                     )}
@@ -87,7 +87,7 @@ const OpenedPositions = () => {
                                 {position.amount * 10}
                             </td>
                             <td className={styles['entry-price']}>
-                                <span className={classNames(
+                                <span className={clsx(
                                     styles['body-label'],
                                     'caption',
                                 )}
@@ -98,7 +98,7 @@ const OpenedPositions = () => {
                             </td>
                             <td className={styles['marked-price']}>
                                 <span
-                                    className={classNames(
+                                    className={clsx(
                                         styles['body-label'],
                                         'caption',
                                     )}
@@ -112,7 +112,7 @@ const OpenedPositions = () => {
                             </td> */}
                             <td className={styles['joined-price']}>
                                 <span
-                                    className={classNames(
+                                    className={clsx(
                                         styles['body-label'],
                                         'caption',
                                     )}
@@ -124,7 +124,7 @@ const OpenedPositions = () => {
                             </td>
                             <td className={styles['margin-cell']}>
                                 <span
-                                    className={classNames(
+                                    className={clsx(
                                         styles['body-label'],
                                         'caption',
                                     )}
@@ -138,7 +138,7 @@ const OpenedPositions = () => {
                             </td>
                             <td className={styles['PNL']}>
                                 <span
-                                    className={classNames(
+                                    className={clsx(
                                         styles['body-label'],
                                         'caption',
                                     )}

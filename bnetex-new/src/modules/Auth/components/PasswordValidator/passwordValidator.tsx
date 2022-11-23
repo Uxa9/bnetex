@@ -1,5 +1,5 @@
 import { Check, Cross } from 'assets/images/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { TextIcon } from 'lib/ui-kit';
 import { MIN_PASSWORD_LENGTH } from 'lib/utils/hookFormValidation';
 import { useEffect, useState } from 'react';
@@ -40,7 +40,7 @@ const PasswordValidator = ({ inputValue, isVisible }:PasswordValidatorProps) => 
 
     return(
         <div 
-            className={classNames(
+            className={clsx(
                 styles['password-validator'],
                 isVisible && styles['password-validator--visible'],
             )}
@@ -48,7 +48,7 @@ const PasswordValidator = ({ inputValue, isVisible }:PasswordValidatorProps) => 
             <TextIcon 
                 label='Минимум 8 символов'
                 Icon={passwordValidation.atleastEight ? Check : Cross}
-                className={classNames(
+                className={clsx(
                     styles['password-validator__item'],
                     passwordValidation.atleastEight && styles['password-validator__item--valid']
                 )}
@@ -56,7 +56,7 @@ const PasswordValidator = ({ inputValue, isVisible }:PasswordValidatorProps) => 
             <TextIcon 
                 label='Хотя бы 1 цифра'
                 Icon={passwordValidation.atleastOneDigit ? Check : Cross}
-                className={classNames(
+                className={clsx(
                     styles['password-validator__item'],
                     passwordValidation.atleastOneDigit && styles['password-validator__item--valid']
                 )}
@@ -64,7 +64,7 @@ const PasswordValidator = ({ inputValue, isVisible }:PasswordValidatorProps) => 
             <TextIcon 
                 label='Хотя бы 1 заглавная буква'
                 Icon={passwordValidation.atleactOneUppercase ? Check : Cross}
-                className={classNames(
+                className={clsx(
                     styles['password-validator__item'],
                     passwordValidation.atleactOneUppercase && styles['password-validator__item--valid']
                 )}

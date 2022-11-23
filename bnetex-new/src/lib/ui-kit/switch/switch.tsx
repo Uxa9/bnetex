@@ -1,7 +1,7 @@
 import { InputHTMLAttributes, useMemo } from 'react';
 import styles from './switch.module.scss';
 import { v4 as uuidV4 } from 'uuid';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 interface SwitchProps extends InputHTMLAttributes<HTMLInputElement> {
     label?: string;
@@ -14,14 +14,14 @@ const Switch = ({label, className, justify = 'space-between', ...rest}: SwitchPr
 
     return (
         <div
-            className={classNames(
+            className={clsx(
                 styles['switch-container'],
                 styles[`switch-container--${justify}`],
                 className
             )}
         >
             <label
-                className={classNames(
+                className={clsx(
                     styles['switch-container__label'],
                     'text'
                 )}

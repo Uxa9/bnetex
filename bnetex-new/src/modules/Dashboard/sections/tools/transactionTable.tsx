@@ -1,5 +1,5 @@
 import { USDT } from 'assets/images/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import styles from './transactionTable.module.scss';
 
 
@@ -79,7 +79,7 @@ const TransactionTable = (props: TableData) => {
                     {renderDate(row.date)}
                 </div>
                 <div
-                    className={classNames(styles[`status-${row.type}`], 'status')}
+                    className={clsx(styles[`status-${row.type}`], 'status')}
                 >
                     {typesLib[type]}
                 </div>

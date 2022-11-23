@@ -1,5 +1,5 @@
 import { CornerArrow } from 'assets/images/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import styles from './earnSection.module.scss';
 import { Button } from 'lib/ui-kit';
 import { DynamicImg } from 'lib/utils/DynamicImg';
@@ -39,7 +39,7 @@ const Earn = () => {
             <div className={styles['start-earning__text']}>
                 <h2>Начните <span>зарабатывать</span> на рынке криптовалют</h2>
                 <p 
-                    className={classNames('text', styles['extra-text'])}
+                    className={clsx('text', styles['extra-text'])}
                 >
                     Простой и понятный интерфейс ориентированный на активную торговлю.
                 </p>
@@ -52,7 +52,7 @@ const Earn = () => {
                 />
             </div>
             <div
-                className={classNames(
+                className={clsx(
                     styles['start-earning__image'],
                     styles[`start-earning__image--${theme}`]
                 )}
@@ -64,23 +64,23 @@ const Earn = () => {
                         />
                         <div className={styles['header__column']}>
                             <span className={'subtitle'}>BTC</span>
-                            <span className={classNames(styles['header__text--gray'], 'caption')}>Bitcoin</span>
+                            <span className={clsx(styles['header__text--gray'], 'caption')}>Bitcoin</span>
                         </div>
                     </div>
                     <div className={styles['header__data']}>
                         <div className={styles['header__column']}>
-                            <span className={classNames(styles['header__text--gray'], 'caption')}>Цена (USDT)</span>
+                            <span className={clsx(styles['header__text--gray'], 'caption')}>Цена (USDT)</span>
                             <span className={'text'}>23458.02</span>
                         </div>
                         <div className={styles['header__column']}>
-                            <span className={classNames(styles['header__text--gray'], 'caption')}>YTD</span>
+                            <span className={clsx(styles['header__text--gray'], 'caption')}>YTD</span>
                             <SignedNumber 
                                 value={52.44}
                                 postfix={'USDT'}
                             />
                         </div>
                         <div className={styles['header__column']}>
-                            <span className={classNames(styles['header__text--gray'], 'caption')}>24 ч.</span>
+                            <span className={clsx(styles['header__text--gray'], 'caption')}>24 ч.</span>
                             <SignedNumber 
                                 value={1.37}
                                 postfix={'USDT'}

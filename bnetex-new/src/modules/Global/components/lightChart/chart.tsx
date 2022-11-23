@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Switch, ToolTip } from 'lib/ui-kit';
 import { useTheme } from 'lib/hooks/useTheme';
 import { evaluateTheme } from 'lib/utils/evaluateAppColors';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 interface ChartProps {
     data: SingleValueData[];
@@ -115,7 +115,7 @@ const Chart = ({ data, type, className }: ChartProps) => {
     }, [ chartBase ]);
 
     return(
-        <div className={classNames(styles['container'], 'card', className)}>
+        <div className={clsx(styles['container'], 'card', className)}>
             <div className={styles['header']}>
                 {
                     type === 'PNL' ? 
@@ -146,7 +146,7 @@ const Chart = ({ data, type, className }: ChartProps) => {
             >
                 {
                     !data.length &&  
-                <p className={classNames(styles['empty'], 'text')}>
+                <p className={clsx(styles['empty'], 'text')}>
                     Данные о вашем {type} отстутствуют. Начните работу с алгоритмом или посмотрите 
                     историю работы алгоритма.
                 </p>

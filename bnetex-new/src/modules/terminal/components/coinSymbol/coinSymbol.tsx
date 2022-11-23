@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { CoinSymbolProps } from 'modules/terminal/types/coinSymbol';
 import styles from './coinSymbol.module.scss';
 
@@ -8,7 +8,7 @@ const CoinSymbol = ({firstCoin, secondCoin, lever, type}: CoinSymbolProps) => {
             className={styles['coin-symbol']}
         >
             <div 
-                className={classNames(
+                className={clsx(
                     styles['coin-symbol__main'],
                     'text',
                 )}
@@ -22,7 +22,7 @@ const CoinSymbol = ({firstCoin, secondCoin, lever, type}: CoinSymbolProps) => {
                     {`x${lever}`}
                 </p>
             </div>
-            <span className={classNames(
+            <span className={clsx(
                 styles['coin-symbol__type'],
                 'caption-mini'  
             )}

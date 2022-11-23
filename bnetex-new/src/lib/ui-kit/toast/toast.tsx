@@ -1,5 +1,5 @@
 import { CircledCheck, CircledCross, Info } from 'assets/images/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { ToastInterface } from 'lib/types/toast';
 import { delay } from 'lib/utils/delay';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -51,14 +51,14 @@ const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
 
     return (
         <div 
-            className={classNames(
+            className={clsx(
                 styles.toast,
                 isVisible && styles['toast--visible'],
                 theme === 'dark' && styles['toast--dark'],
             )}
         >
             <div className={styles['toast__main']}>
-                <div className={classNames(
+                <div className={clsx(
                     styles['toast__icon'],
                     styles[`toast__icon--${type}`]
                 )}
@@ -67,7 +67,7 @@ const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
                 </div>
                 <div className={styles['toast__text']}>
                     <span className={'subtitle'}>{title}</span>
-                    <span className={classNames(
+                    <span className={clsx(
                         styles['description'],
                         'caption',
                     )}

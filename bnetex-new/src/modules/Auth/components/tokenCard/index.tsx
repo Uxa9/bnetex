@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { DynamicImg } from 'lib/utils/DynamicImg';
 import styles from './tokenCard.module.scss';
 
@@ -16,7 +16,7 @@ const TokenCard = ({imagePath, hasRedSkeleton}: TokenCardProps) => {
             <div className={styles['token-card__skeletons']}>
                 <div className={styles['skeleton-row']}>
                     <div className={styles['skeleton']}></div>
-                    <div className={classNames(
+                    <div className={clsx(
                         styles['skeleton'],
                         hasRedSkeleton && styles['skeleton--red'],
                     )}

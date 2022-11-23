@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import CoinSymbol from 'modules/terminal/components/coinSymbol/coinSymbol';
 import { CoinSymbolProps } from 'modules/terminal/types/coinSymbol';
 import { mockedOpenedOrders } from './mock';
@@ -40,7 +40,7 @@ const OpenedOrders = () => {
                         >
                             <td className={styles['coin-symbol']}>
                                 <span 
-                                    className={classNames(
+                                    className={clsx(
                                         styles['body-label'],
                                         'caption',
                                     )}
@@ -53,7 +53,7 @@ const OpenedOrders = () => {
                             </td>
                             <td className={styles['time']}>
                                 <span 
-                                    className={classNames(
+                                    className={clsx(
                                         styles['body-label'],
                                         'caption',
                                     )}
@@ -63,7 +63,7 @@ const OpenedOrders = () => {
                                 {formatDate(position.date, true)}
                             </td>
                             <td className={styles['type']}> 
-                                <span className={classNames(
+                                <span className={clsx(
                                     styles['body-label'],
                                     'caption',
                                 )}
@@ -74,7 +74,7 @@ const OpenedOrders = () => {
                             </td>
                             <td className={styles['action']}>
                                 <span
-                                    className={classNames(
+                                    className={clsx(
                                         styles['body-label'],
                                         'caption',
                                     )}
@@ -87,7 +87,7 @@ const OpenedOrders = () => {
                             </td>
                             <td className={styles['amount']}>
                                 <span 
-                                    className={classNames(
+                                    className={clsx(
                                         styles['body-label'],
                                         'caption',
                                     )}
@@ -98,7 +98,7 @@ const OpenedOrders = () => {
                             </td>
                             <td className={styles['price']}> 
                                 <span 
-                                    className={classNames(
+                                    className={clsx(
                                         styles['body-label'],
                                         'caption',
                                     )}

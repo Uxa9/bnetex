@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { Button } from 'lib/ui-kit';
 import { AppLinksEnum } from 'routes/appLinks';
@@ -25,7 +25,7 @@ const Page404 = () => {
             <div className={styles['page-404']}>
                 <h1 className={styles['page-404__header']}>404</h1>
                 <p 
-                    className={classNames(
+                    className={clsx(
                         styles['page-404__disclaimer'],
                         'subtitle'
                     )}

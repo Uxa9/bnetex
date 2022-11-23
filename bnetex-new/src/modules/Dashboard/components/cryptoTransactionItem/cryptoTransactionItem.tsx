@@ -1,5 +1,5 @@
 import { Angle } from 'assets/images/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useModal } from 'lib/hooks/useModal';
 import { CryptoTransactionItemStatusMap, CryptoTransactionItemType } from 'lib/types/cryptoTransactionItem';
 import { IconButton } from 'lib/ui-kit';
@@ -24,7 +24,7 @@ const CryptoTransactionItem = (props: CryptoTransactionItemProps) => {
         <>
             <td className={'caption'}>{formatDate(item.date, true)}</td>
             <td
-                className={classNames(styles['item-type'],
+                className={clsx(styles['item-type'],
                     styles[`item-type--${item.type}`],
                     'caption',
                 )}
@@ -34,7 +34,7 @@ const CryptoTransactionItem = (props: CryptoTransactionItemProps) => {
             <td className={'caption'}>{item.wallet}</td>
             <td className={'caption'}>{item.coin}</td>
             <td className={'caption'}>{item.amount}</td>
-            <td className={classNames(styles['item-destination'],
+            <td className={clsx(styles['item-destination'],
                 styles['item-destination--fill'],
                 'caption')}
             >
@@ -47,7 +47,7 @@ const CryptoTransactionItem = (props: CryptoTransactionItemProps) => {
                 />
             </td>
             <td
-                className={classNames(styles['item-status'],
+                className={clsx(styles['item-status'],
                     styles[`item-status--${item.status}`],
                     'caption-mini',
                 )}

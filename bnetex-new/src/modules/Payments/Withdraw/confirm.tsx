@@ -1,5 +1,5 @@
 import { Angle } from 'assets/images/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
@@ -59,7 +59,7 @@ const WithdrawConfirm = () => {
                 </button>
                 <form 
                     onSubmit={handleSubmit(onSubmit)}
-                    className={classNames(styles.card, 'card')}
+                    className={clsx(styles.card, 'card')}
                 >
                     <Input
                         label={'Код подтверждения'}

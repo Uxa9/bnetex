@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { throwError } from 'lib/utils/errorThrower';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
@@ -40,7 +40,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         value={{ theme, toggleTheme }}
     >
         <div 
-            className={classNames(
+            className={clsx(
                 'theme-wrapper',
                 theme === 'dark' ? 'dark-theme' : 'light-theme'
             )}

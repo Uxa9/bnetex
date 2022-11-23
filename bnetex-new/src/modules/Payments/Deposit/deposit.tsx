@@ -3,7 +3,7 @@ import { Angle } from 'assets/images/icons';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
 import CopyButton from 'lib/ui-kit/copyButton/copyButton';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 const Deposit = () => {
 
@@ -21,7 +21,7 @@ const Deposit = () => {
                     <Angle />
                     <h5>Ввод криптовалюты</h5>
                 </button>
-                <div className={classNames(styles.card, 'card')}>
+                <div className={clsx(styles.card, 'card')}>
                     <div className={styles.address}>
                         <span className='label-1'>Адрес</span>
                         <div className={styles['address__wrapper']}>

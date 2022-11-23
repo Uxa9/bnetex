@@ -1,7 +1,7 @@
 import styles from './modal.module.scss';
 import { ReactNode } from 'react';
 import { Cross } from 'assets/images/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useModalSpawner } from 'lib/hooks/useModal';
 
 export interface ModalProps {
@@ -19,14 +19,14 @@ export function Modal(props: ModalProps) {
 
     return (
         <section
-            className={classNames(
+            className={clsx(
                 styles['modal'],
                 isModalVisible && styles['modal--visible'],
             )}
             onClick={ props.onClose }
         >
             <div
-                className={classNames(
+                className={clsx(
                     styles['modal__container'],
                     isModalVisible && styles['modal__container--visible']
                 )}
@@ -50,7 +50,7 @@ export function Modal(props: ModalProps) {
                     </button>
                 </header>
                 <div 
-                    className={classNames(
+                    className={clsx(
                         styles['modal__content'],
                         className
                     )}
