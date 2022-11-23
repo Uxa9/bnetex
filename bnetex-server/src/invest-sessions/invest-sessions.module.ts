@@ -5,12 +5,14 @@ import { User } from '../users/users.model';
 import { InvestSessionsController } from './invest-sessions.controller';
 import { InvestSessionsService } from './invest-sessions.service';
 import { InvestSession } from './invest-sessions.model';
+import { PositionsModule } from '../positions/positions.module';
 
 @Module({
     controllers: [InvestSessionsController],
     providers: [InvestSessionsService],
     imports: [
         forwardRef(() => UsersModule),
+        PositionsModule,
         SequelizeModule.forFeature([User, InvestSession]),
     ],
     exports: [
