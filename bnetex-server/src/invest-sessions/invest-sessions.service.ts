@@ -159,8 +159,17 @@ export class InvestSessionsService {
     }
 
     async acceptBotCallback() {
-        console.log('пошел процесс');
-        
-        return { status: "ok" }
+        const position = await this.positionService.getLastClosedPosition();
+
+        if ( !position ) {
+            throw new HttpException(
+                {
+                    status: "ERROR",
+                    message: "CLOSED_SESSION_NOT_FOUND"
+                },
+                HttpStatus.NO_CONTENT
+            );
+        }
+
     }
 }
