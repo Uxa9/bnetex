@@ -49,7 +49,12 @@ export class AuthController {
 
     @Post('drop-password')
     dropPassword(@Body() dto: EmailDto) {
+        return this.authService.dropPassword(dto);
+    }
 
+    @Post('get-new-password')
+    getNewPassword(@Body() dto: ConfirmEmail) {
+        return this.authService.getNewPassword(dto);
     }
 
 }

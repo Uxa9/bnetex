@@ -13,6 +13,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { ResendActivationLink } from './dto/resend-activation-link.dto';
 import { GetActivationLinkTime } from './dto/get-activation-link-time.dto';
 import { TokenVerify } from './dto/token-verify.dto';
+import { EmailDto } from './dto/email.dto';
 
 @Injectable()
 export class AuthService {
@@ -135,8 +136,11 @@ export class AuthService {
 
             const token = await this.generateToken(user);
 
+            let authCode = generateAuthCode();
+
             user.update({
-                isActivated: true
+                isActivated: true,
+                activationLink: authCode
             });
 
             return {
@@ -222,5 +226,61 @@ export class AuthService {
         });
     }
 
-    private async drop
+    async dropPassword(dto: EmailDto) {
+        const user = await this.userService.getUserByEmail(dto.email);
+
+        if (!user) {
+            throw new UserNotFoundException();
+        }
+
+        let authCode = generateAuthCode();
+
+        user.update({
+            activationLink: authCode
+        });
+
+        await this.mailerService.sendMail({
+            to: dto.email,
+            from: 'infobnetex@internet.ru',
+            subject: 'Сброс пароля',
+            template: 'dropPassword',
+            context: {
+                code: authCode
+            }
+        });
+
+        return {
+            status: "SUCCESS",
+            message: "MAIL_SENT"
+        }
+    }
+
+    async getNewPassword(dto: ConfirmEmail) {
+        const user = await this.userService.getUserByEmail(dto.email);
+
+        if (!user) {
+            throw new UserNotFoundException();
+        }
+
+        const password = generateAuthCode(12);
+
+        await user.update({
+            password: bcrypt.hashSync(password, 5)
+        });
+
+        await this.mailerService.sendMail({
+            to: dto.email,
+            from: 'infobnetex@internet.ru',
+            subject: 'Новый пароль',
+            template: 'newPassword',
+            context: {
+                password: password
+            }
+        });
+
+        return {
+            status: "SUCCESS",
+            message: "MAIL_SENT"
+        }
+    }
 }
