@@ -42,9 +42,6 @@ $control-menu-width: 285px;
       background-color: $accent-6;
     }
 
-    @include mobile {
-      display: none;
-    }
   }
 
   @include mobile {
@@ -58,12 +55,6 @@ $control-menu-width: 285px;
 
     &::after {
       background: none;
-    }
-  }
-
-  .link-icon {
-    @include desktop {
-      display: none;
     }
   }
 }

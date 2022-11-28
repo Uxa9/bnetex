@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { useGoToState } from 'lib/hooks/useGoToState';
+import { useCurrentPlatform } from 'lib/hooks/usePlatform';
 import { AppColorsArray } from 'lib/types/appColors';
 import IconLinkButton from 'lib/ui-kit/iconLinkButton/iconLinkButton';
 import Skeleton from 'lib/ui-kit/skeleton/skeleton';
@@ -20,15 +21,12 @@ const Dashboard = () => {
     const { pathname } = useLocation();
     const { TOOLS, SETTINGS, MAIN_WALLET, INVESTOR_WALLET, TRANSACTIONS, DASHBOARD } = AppLinksEnum;
     const { goToState } = useGoToState();
+    const { isCurrentPlatformMobile } = useCurrentPlatform();
 
     useEffect(() => {
-        setActiveSection('tools'); //toDo костыль, передалать
-        dashboardSections.forEach((section: DashboardSection) => {
-            if (pathname.match(section.link)) {
-                setActiveSection(section.link);
-                return;
-            }
-        });
+        const pathMathedSection = dashboardSections.filter(section => pathname.match(section.link));
+        setActiveSection(pathMathedSection[0]?.link ?? 'tools');
+
     }, [ pathname ]);
 
     const loadSection = useCallback(() => {
@@ -63,7 +61,7 @@ const Dashboard = () => {
                     <aside className={clsx(styles['control-menu'], 'card', 'scroll')}>
                         {
                             dashboardSections.map((section: DashboardSection, index: number) => 
-                                <>
+                                !isCurrentPlatformMobile ? 
                                     <Link 
                                         key={section.link}
                                         to={section.link}
@@ -75,7 +73,7 @@ const Dashboard = () => {
                                         onClick={() => setActiveSection(section.link)}
                                     >
                                         {section.title}
-                                    </Link>
+                                    </Link> :
                                     <IconLinkButton 
                                         key={section.link}
                                         label={section.title} 
@@ -88,11 +86,10 @@ const Dashboard = () => {
                                             goToState(section.link, null, true);
                                         }}
                                     />
-                                </>
                             )
                         }
                     </aside>
-                    <Suspense  fallback={<Skeleton height={'50px'} />}>
+                    <Suspense fallback={<Skeleton height={'50px'} />}>
                         { loadSection() }
                     </Suspense>
                 </main>
