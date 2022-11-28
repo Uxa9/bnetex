@@ -45,7 +45,7 @@ export const resendActivationCode = async (email: string) => {
         });
 };
 
-const checkActivationCodeTime = async (email: string) => {
+export const checkActivationCodeTime = async (email: string) => {
     return await api.post(
         '/auth/activattion-link-datetime', {
             email: email,

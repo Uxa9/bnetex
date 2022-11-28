@@ -44,8 +44,6 @@ const Login = () => {
         dispatch(loginUser(data.email, data.password))
             .then(() => goToState(DASHBOARD))
             .catch((error: Error) => {
-                console.log(error);
-                
                 error.message === 'USER_NOT_ACTIVATED' && 
                     goToState(`${AUTH}/${VERIFY_EMAIL}`);
                 bakeToast.error(error.message);

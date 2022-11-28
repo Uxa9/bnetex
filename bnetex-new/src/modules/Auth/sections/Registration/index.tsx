@@ -47,7 +47,7 @@ const Registration = () => {
             .then(() => {
                 goToState(`${AUTH}/${VERIFY_EMAIL}`);
             })
-            .catch((error) => bakeToast.error(error.response?.data.message));
+            .catch((error: Error) => bakeToast.error(error.message));
     };
 
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {

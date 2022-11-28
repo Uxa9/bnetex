@@ -52,7 +52,7 @@ const EmailValidation = () => {
             .then(() => {
                 goToState(`${AUTH}/${REGISTRATION_FINALIZE}`);
             })
-            .catch((error) => bakeToast.error(error.response?.data.message));
+            .catch((error: Error) => bakeToast.error(error.message));
     };
 
     return(

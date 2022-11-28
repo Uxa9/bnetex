@@ -6,6 +6,7 @@ import { Button } from 'lib/ui-kit';
 import Skeleton from 'lib/ui-kit/skeleton/skeleton';
 import { pad } from 'lib/utils/pad';
 import { useEffect, useRef, useState } from 'react';
+import { checkActivationCodeTime, resendActivationCode } from 'services/user';
 import styles from './resendCodeAction.module.scss';
 
 const DEFAULT_DELAY_BETWEEN_REQUESTS = 30; 
@@ -31,7 +32,7 @@ const ResendCodeAction = ({ userEmail }: {userEmail: string}) => {
     };
     
     useEffect(() => {
-        // userEmail && checkTime();
+        userEmail && checkTime();
 
         return () => {
             timer.current && clearInterval(timer.current);
@@ -39,26 +40,26 @@ const ResendCodeAction = ({ userEmail }: {userEmail: string}) => {
 
     }, [ userEmail ]);
 
-    // const checkTime = () => {
-    //     promiseWithLoading(checkActivationCodeTime(userEmail))
-    //         .then(response => {
-    //             const prevCodeSendTime = new Date(response.data);
-    //             const timeElapsed = differenceInSeconds(new Date(), prevCodeSendTime);
-    //             if (timeElapsed < DEFAULT_DELAY_BETWEEN_REQUESTS) {
-    //                 setTimeToNextCodeSending(DEFAULT_DELAY_BETWEEN_REQUESTS - timeElapsed);
-    //                 timer.current = setInterval(runTimer, TIMER_INTERVAL);
-    //             }
-    //             else setTimeToNextCodeSending(0);
-    //         })
-    //         .catch((err) => bakeToast.error(err.message));
-    // };
+    const checkTime = () => {
+        promiseWithLoading(checkActivationCodeTime(userEmail))
+            .then(response => {
+                const prevCodeSendTime = new Date(response.data);
+                const timeElapsed = differenceInSeconds(new Date(), prevCodeSendTime);
+                if (timeElapsed < DEFAULT_DELAY_BETWEEN_REQUESTS) {
+                    setTimeToNextCodeSending(DEFAULT_DELAY_BETWEEN_REQUESTS - timeElapsed);
+                    timer.current = setInterval(runTimer, TIMER_INTERVAL);
+                }
+                else setTimeToNextCodeSending(0);
+            })
+            .catch((err) => bakeToast.error(err.message));
+    };
 
-    // const handleSubmit = () => {
-    //     setTimeToNextCodeSending(-1);
-    //     promiseWithLoading(resendActivationCode(userEmail))
-    //         .then(() => bakeToast.success(`Код отправлен на ${userEmail}`))
-    //         .then(() => checkTime());
-    // };
+    const handleSubmit = () => {
+        setTimeToNextCodeSending(-1);
+        promiseWithLoading(resendActivationCode(userEmail))
+            .then(() => bakeToast.info(`Код отправлен на ${userEmail}`))
+            .then(() => checkTime());
+    };
 
     return(
         <>
@@ -84,7 +85,7 @@ const ResendCodeAction = ({ userEmail }: {userEmail: string}) => {
                                     buttonStyle={'flat'}
                                     text={'Отправить код повторно'}
                                     className={'caption-mini'}
-                                    // onClick={handleSubmit}
+                                    onClick={handleSubmit}
                                     type={'button'}
                                 />
                         }
