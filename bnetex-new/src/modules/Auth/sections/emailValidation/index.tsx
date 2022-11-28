@@ -1,16 +1,17 @@
-import { useActions } from 'lib/hooks/useActionCreators';
+import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { useModal } from 'lib/hooks/useModal';
-import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { Button, Input } from 'lib/ui-kit';
+import { getUserInfo } from 'lib/utils/getUserInfo';
 import { requiredValidation } from 'lib/utils/hookFormValidation';
 import NoEmailModal from 'modules/Auth/components/NoEmailModal/noEmailModal';
 import ResendCodeAction from 'modules/Auth/components/ResendCodeAction/resendCodeAction';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AppLinksEnum } from 'routes/appLinks';
-import useAuthActions from 'services/auth';
+import { confirmEmail } from 'store/action-creators/auth';
 import FormCard from '../../components/FormCard/formCard';
 
 interface EmailValidationData {
@@ -20,22 +21,17 @@ interface EmailValidationData {
 const EmailValidation = () => {
 
     const { bakeToast } = useToast();
-    const { isLoading, promiseWithLoading } = usePromiseWithLoading();
     const { goToState } = useGoToState();
-    const { confirmEmail } = useAuthActions();
     const { open: OpenNoEmailModal } = useModal(NoEmailModal);
     const { AUTH, LOGIN, REGISTRATION_FINALIZE } = AppLinksEnum;
-    const { loginUser } = useActions();
+    const dispatch = useAppDispatch();
+    const { loading } = useTypedSelector(state => state.auth);
 
     const [userEmail, setUserEmail] = useState<string>('');
 
     useEffect(() => {
-        const email = localStorage.getItem('userEmail');
+        const email = getUserInfo().email;
         email ? setUserEmail(email) : goToState(`${AUTH}/${LOGIN}`);
-    }, []);
-
-    useEffect(() => {
-        
     }, []);
 
     const {
@@ -52,9 +48,8 @@ const EmailValidation = () => {
     });
 
     const onSubmit = async (data: EmailValidationData) => {
-        promiseWithLoading(confirmEmail(userEmail, data.activationCode))
+        dispatch(confirmEmail(userEmail, data.activationCode))
             .then(() => {
-                loginUser();
                 goToState(`${AUTH}/${REGISTRATION_FINALIZE}`);
             })
             .catch((error) => bakeToast.error(error.response?.data.message));
@@ -63,7 +58,7 @@ const EmailValidation = () => {
     return(
         <>
             <FormCard 
-                title={'Верификация email!'}
+                title={'Верификация email'}
                 subtitle={`Пожалуйста, введите код подтверждения, отправленный на ${userEmail}.`}
                 onSubmit={handleSubmit(onSubmit)}
                 step={'2/2'}
@@ -84,7 +79,7 @@ const EmailValidation = () => {
                         text={'Далее'}
                         type={'submit'}
                         disabled={!isValid}
-                        isLoading={isLoading}
+                        isLoading={loading}
                     />
                 }
                 actions={

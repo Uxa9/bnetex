@@ -4,6 +4,7 @@ import { useGoToState } from 'lib/hooks/useGoToState';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
 import { Button, Input } from 'lib/ui-kit';
+import { getUserInfo } from 'lib/utils/getUserInfo';
 import { numberValidation, requiredValidation } from 'lib/utils/hookFormValidation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -46,7 +47,7 @@ const Withdraw = () => {
     const onSubmit = (data: any) => {
         promiseWithLoading(withdrawRequest({
             ...data,
-            userId: JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId,
+            userId: getUserInfo().userId,
             type: 'withdraw',
         }))
             .then((res) => {

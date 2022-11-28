@@ -2,7 +2,7 @@ import useApi from 'lib/hooks/useApi';
 
 const getUserTransactions = async (id: number) => {
 
-    const [api] = useApi();
+    const { api } = useApi();
 
     return await api.get(
         `/request/user/${id}`,

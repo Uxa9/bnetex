@@ -2,7 +2,7 @@ import useApi from 'lib/hooks/useApi';
 
 const getPnL = async (id: number) => {
 
-    const [api] = useApi();
+    const { api } = useApi();
 
     return await api.post(
         '/users/getpnl', {

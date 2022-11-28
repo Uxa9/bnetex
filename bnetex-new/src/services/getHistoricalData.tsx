@@ -1,6 +1,6 @@
 import useApi from 'lib/hooks/useApi';
 
-const [api] = useApi();
+const { api } = useApi();
 
 interface ReturnType {
     dates: string[],

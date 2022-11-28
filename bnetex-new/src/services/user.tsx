@@ -1,60 +1,53 @@
 import useApi from 'lib/hooks/useApi';
-import { getUserId } from 'lib/utils/getUserId';
-import { getToken } from './utils/getToken';
+import { getUserInfo } from 'lib/utils/getUserInfo';
 
-const [protectedApi] = useApi();
-
+const { api, protectedApi } = useApi();
 
 export const getUser = async () => {
     return await protectedApi.get(
-        `/users/${getUserId()}`,
+        `/users/${getUserInfo().userId}`,
         {
             headers: {
-                'Authorization': `Bearer ${getToken()}`,
-            }
+                'Authorization': `Bearer ${getUserInfo().token}`,
+            },
         });
 };
 
 export const changeUserPassword = async (prevPassword: string, newPassword: string) => {
     return await protectedApi.post(
         '/users/changePassword', {
-        userId: getUserId(),
-        prevPassword: prevPassword,
-        newPassword: newPassword
-    },
-        {
-            headers: {
-                'Authorization': `Bearer ${getToken()}`,
-            }
+            userId: getUserInfo().userId,
+            prevPassword: prevPassword,
+            newPassword: newPassword,
         });
-}
+};
 
 export const getRoeAndPnl = async () => {
     return await protectedApi.get(
-        `/users/getRoeAndPnl/${getUserId()}`,
-        {
-            headers: {
-                'Authorization': `Bearer ${getToken()}`,
-            }
-        });
-}
+        `/users/getRoeAndPnl/${getUserInfo().userId}`,
+    );
+};
 
 export const getInvestInfo = async () => {
     return await protectedApi.get(
-        `/users/invest/${getUserId()}`,
-        {
-            headers: {
-                'Authorization': `Bearer ${getToken()}`,
-            }
-        });
-}
+        `/users/invest/${getUserInfo().userId}`);
+};
 
 export const getUserOpenPosition = async () => {
     return await protectedApi.get(
-        `/users/invest/positions/${getUserId()}`,
-        {
-            headers: {
-                'Authorization': `Bearer ${getToken()}`,
-            }
+        `/users/invest/positions/${getUserInfo().userId}`);
+};
+
+export const resendActivationCode = async (email: string) => {
+    return await api.post(
+        '/auth/resend-activation-link', {
+            email: email,
         });
-}
+};
+
+const checkActivationCodeTime = async (email: string) => {
+    return await api.post(
+        '/auth/activattion-link-datetime', {
+            email: email,
+        });
+};

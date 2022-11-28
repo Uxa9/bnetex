@@ -12,6 +12,7 @@ import { WalletCategoryWithBalance } from 'lib/types/wallet';
 import { getRoeAndPnl } from 'services/user';
 import LineChart from 'modules/Global/components/lineChart/lineChart';
 import Chart from 'modules/Global/components/lightChart/chart';
+import { getUserInfo } from 'lib/utils/getUserInfo';
 
 interface GraphicProps {
     dates: string[],
@@ -60,7 +61,7 @@ const Tools = () => {
                     values: res.data.pnl.map((item: any) => Number(Number(item).toFixed(2))),
                 });
             });
-        getUserTransactions(JSON.parse(localStorage.getItem('userInfo-BNETEX') || '{}')?.userId || 1)
+        getUserTransactions(getUserInfo().userId)
             .then(res => {
                 let data = res.map((item: any) => {
                     return ({

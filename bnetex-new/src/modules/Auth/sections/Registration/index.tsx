@@ -1,14 +1,15 @@
 import {  Eye, EyeSlash } from 'assets/images/icons';
+import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { useGoToState } from 'lib/hooks/useGoToState';
-import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { Button, Input } from 'lib/ui-kit';
 import { emailValidation, newPasswordValidation } from 'lib/utils/hookFormValidation';
 import PasswordValidator from 'modules/Auth/components/PasswordValidator/passwordValidator';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AppLinksEnum } from 'routes/appLinks';
-import useAuthActions from 'services/auth';
+import { signup } from 'store/action-creators/auth';
 import FormCard from '../../components/FormCard/formCard';
 import styles from './registration.module.scss';
 
@@ -24,8 +25,8 @@ const Registration = () => {
     const [ passwordValue, setPasswordValue ] = useState<string>('');
     const [ isValidatorVisible, setIsValidatorVisible ] = useState<boolean>(false);
     const { bakeToast } = useToast();
-    const { promiseWithLoading, isLoading } = usePromiseWithLoading();
-    const { signup } = useAuthActions();
+    const dispatch = useAppDispatch();
+    const { loading } = useTypedSelector(state => state.auth);
     const { goToState } = useGoToState();
     const { AUTH, VERIFY_EMAIL } = AppLinksEnum;
     const {
@@ -42,7 +43,7 @@ const Registration = () => {
     });
 
     const onSubmit = async (data: RegistrationFormData) => {
-        promiseWithLoading(signup(data.email, data.password))
+        dispatch(signup(data.email, data.password))
             .then(() => {
                 goToState(`${AUTH}/${VERIFY_EMAIL}`);
             })
@@ -107,7 +108,7 @@ const Registration = () => {
                         text={'Далее'}
                         type={'submit'}
                         disabled={!isValid}
-                        isLoading={isLoading}
+                        isLoading={loading}
                     />
                 }
             />
