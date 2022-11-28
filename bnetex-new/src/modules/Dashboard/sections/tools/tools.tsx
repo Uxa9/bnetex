@@ -9,10 +9,12 @@ import getUserTransactions from 'services/getUserTransactions';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import useWalletActions from 'services/walletActions';
 import { WalletCategoryWithBalance } from 'lib/types/wallet';
-import { getRoeAndPnl } from 'services/user';
 import LineChart from 'modules/Global/components/lineChart/lineChart';
 import Chart from 'modules/Global/components/lightChart/chart';
 import { getUserInfo } from 'lib/utils/getUserInfo';
+import { useAppDispatch } from 'lib/hooks/useAppDispatch';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
+import { getRoeAndPnl } from 'store/action-creators/roepnl';
 
 interface GraphicProps {
     dates: string[],
@@ -36,32 +38,14 @@ const Tools = () => {
     const { promiseWithLoading } = usePromiseWithLoading();
     const { getWallets } = useWalletActions();
     const { DEPOSIT, WITHDRAW, DASHBOARD, TRANSACTIONS } = AppLinksEnum;
-
-    const [roe, setRoe] = useState<GraphicProps>({
-        dates: [],
-        values: [],
-    });
-
-    const [pnl, setPnl] = useState<GraphicProps>({
-        dates: [],
-        values: [],
-    });
+    const dispath = useAppDispatch();
+    const { dates, pnl, roe, loading } = useTypedSelector(state => state.roePnl);
 
     const [rows, setRows] = useState<RowData[]>([]);
 
     useEffect(() => {
-        getRoeAndPnl()
-            .then(res => {
-                setRoe({
-                    dates: res.data.dates,
-                    values: res.data.roe.map((item: any) => Number(Number(item).toFixed(2))),
-                });
-                setPnl({
-                    dates: res.data.dates,
-                    values: res.data.pnl.map((item: any) => Number(Number(item).toFixed(2))),
-                });
-            });
-        getUserTransactions(getUserInfo().userId)
+        dispath(getRoeAndPnl());
+        getUserTransactions(getUserInfo().userId ?? 0)
             .then(res => {
                 let data = res.map((item: any) => {
                     return ({
@@ -159,27 +143,29 @@ const Tools = () => {
             >
                 <Chart 
                     data={
-                        pnl.dates.map((date, index) => {
+                        dates.map((date, index) => {
                             return {
                                 time: date,
-                                value: pnl.values[index],
+                                value: pnl[index],
                             };
                         })
                     }
                     type={'PNL'}
                     className={styles['chart']}
+                    loading={loading}
                 />
                 <Chart 
                     data={
-                        roe.dates.map((date, index) => {
+                        dates.map((date, index) => {
                             return {
                                 time: date,
-                                value: roe.values[index],
+                                value: roe[index],
                             };
                         })
                     }
                     type={'PNL'}
                     className={styles['chart']}
+                    loading={loading}
                 />
             </div>
         </div>
