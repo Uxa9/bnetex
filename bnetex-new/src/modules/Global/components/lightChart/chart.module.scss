@@ -26,14 +26,34 @@
     overflow-x: hidden;
     position: relative;
 
-    .empty {
-      color: $grayscale-6;
+    .empty,
+    .spinner {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, calc(-50% - 8px));
+    }
+
+    .empty {
+      color: $grayscale-6;
       text-align: center;
       width: 80%;
     }
+
+    .spinner {
+      fill: $grayscale-11;
+      animation: spin $default-transition infinite linear;
+      top: 40%;
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }

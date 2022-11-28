@@ -2,11 +2,10 @@
 @import 'styles/variables';
 @import 'styles/mixins';
 
-$control-menu-width: 285px;
 
 .dashboard {
   display: grid;
-  grid-template-columns: $control-menu-width 1fr;
+  grid-template-columns: $dashboard-control-menu-width 1fr;
   column-gap: 16px;
   row-gap: 16px;
   padding-top: $header-height;

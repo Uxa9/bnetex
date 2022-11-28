@@ -5,42 +5,16 @@ import HistoryView from './historyView/historyView';
 import styles from './investorView.module.scss';
 import ToolTip from 'lib/ui-kit/toolTip';
 import clsx from 'clsx';
-import { getHistoricalData } from 'services/getHistoricalData';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import Chart from 'modules/Global/components/lightChart/chart';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 
 type InvestorViewType = 'trade' | 'history';
-
-interface InvestProfitInterface {
-    dates: string[],
-    pnlValues: number[],
-    roeValues: number[]
-}
 
 const InvestorView = () => {
 
     const [viewType, setViewType] = useState<InvestorViewType>('trade');
-    const [graphicData, setGraphicData] = useState<InvestProfitInterface>({
-        dates: [],
-        pnlValues: [],
-        roeValues: [],
-    });
-    const [investProfit, setInvestProfit] = useState(0);
-    const [investPercentProfit, setInvestPercentProfit] = useState(0);
-
-    const getData = async (period: number, amount: number) => {
-        const res = await getHistoricalData(period, amount);
-
-        setGraphicData({
-            dates: res.dates,
-            pnlValues: res.pnlValues.map((item: any) => Number(Number(item).toFixed(2))),
-            roeValues: res.roeValues.map((item: any) => Number(Number(item).toFixed(2))),
-        });
-
-        setInvestPercentProfit(res.roeValues[res.roeValues.length - 1]);
-        setInvestProfit(res.roeValues[res.roeValues.length - 1] * amount / 100);
- 
-    };
+    const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
 
     return (
         <>
@@ -74,9 +48,7 @@ const InvestorView = () => {
                 {
                     viewType === 'trade' ?
                         <TradeView /> :
-                        <HistoryView
-                            handleClick={getData}
-                        />
+                        <HistoryView />
                 }
             </div>
             <div
@@ -96,20 +68,20 @@ const InvestorView = () => {
                     <span
                         className={'subtitle'}
                     >
-                        {Number(Number(investProfit * 5).toFixed(2))}
+                        { pnl.reduce((acc, it) => acc + it, 0) }
                     </span>
                     <SignedNumber 
-                        value={Number(Number(investPercentProfit * 5).toFixed(2))}
+                        value={roe.at(-1) ?? 0}
                         postfix={'%'}
                     />
                 </div>
             </div>
             <Chart 
                 data={
-                    graphicData.dates.map((date, index) => {
+                    dates.map((date, index) => {
                         return {
                             time: date,
-                            value: graphicData.pnlValues[index],
+                            value: pnl[index],
                         };
                     })
                 }
@@ -118,13 +90,14 @@ const InvestorView = () => {
                     styles['investor-view-card'],
                     styles['PNL-card'],
                 )}
+                loading={loading}
             />
             <Chart 
                 data={
-                    graphicData.dates.map((date, index) => {
+                    dates.map((date, index) => {
                         return {
                             time: date,
-                            value: graphicData.roeValues[index],
+                            value: roe[index],
                         };
                     })
                 }
@@ -133,6 +106,7 @@ const InvestorView = () => {
                     styles['investor-view-card'],
                     styles['ROE-card'],
                 )}
+                loading={loading}
             />
         </>
     );

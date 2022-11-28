@@ -200,7 +200,7 @@
 }
 
 .spinner {
-    animation: spin 0.35s ease infinite;
+    animation: spin 0.35s linear infinite;
 }
 
 @keyframes spin {
