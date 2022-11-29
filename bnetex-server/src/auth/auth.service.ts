@@ -14,6 +14,7 @@ import { ResendActivationLink } from './dto/resend-activation-link.dto';
 import { GetActivationLinkTime } from './dto/get-activation-link-time.dto';
 import { TokenVerify } from './dto/token-verify.dto';
 import { EmailDto } from './dto/email.dto';
+import {ResetPasswordDto} from "./dto/reset-password.dto";
 
 @Injectable()
 export class AuthService {
@@ -237,7 +238,8 @@ export class AuthService {
         let authCode = generateAuthCode();
 
         user.update({
-            activationLink: authCode
+            activationLink: authCode,
+            linkTimestamp: new Date
         });
 
         await this.mailerService.sendMail({
@@ -246,7 +248,7 @@ export class AuthService {
             subject: 'Сброс пароля',
             template: 'dropPassword',
             context: {
-                code: authCode
+                link: `https://bnetex.com/auth/password-recovery?code=${authCode}`
             }
         });
 
@@ -256,32 +258,37 @@ export class AuthService {
         }
     }
 
-    async getNewPassword(dto: ConfirmEmail) {
+    async getNewPassword(dto: ResetPasswordDto) {
         const user = await this.userService.getUserByEmail(dto.email);
 
         if (!user) {
             throw new UserNotFoundException();
         }
 
-        const password = generateAuthCode(12);
+        if (dto.code === user.activationLink) {
+            const password = await bcrypt.hash(dto.password, 5);
 
-        await user.update({
-            password: bcrypt.hashSync(password, 5)
-        });
+            await user.update({
+                password: password,
+                activationLink: ""
+            });
 
-        await this.mailerService.sendMail({
-            to: dto.email,
-            from: 'infobnetex@internet.ru',
-            subject: 'Новый пароль',
-            template: 'newPassword',
-            context: {
-                password: password
-            }
-        });
+            const token = await this.generateToken(user);
 
-        return {
-            status: "SUCCESS",
-            message: "MAIL_SENT"
+            return {
+                status: "SUCCESS",
+                message: "PASSWORD_CHANGED",
+                userId: user.id,
+                ...token
+            };
+        } else {
+
+            throw new HttpException({
+                    status: "ERROR",
+                    message: "WRONG_CODE"
+                },
+                HttpStatus.FORBIDDEN
+            );
         }
     }
 }

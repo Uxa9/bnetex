@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="acdce120-48f5-415e-8258-3978cfedca6a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/bnetex-server/src/auth/dto/email.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bnetex-server/src/auth/dto/reset-password.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bnetex-new/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-new/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bnetex-server/src/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/app.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bnetex-server/src/auth/auth.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/auth/auth.controller.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bnetex-server/src/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/auth/auth.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bnetex-server/src/mailSender/mailTemplates/dropPassword.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/mailSender/mailTemplates/dropPassword.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bnetex-server/src/mailSender/mailTemplates/newPassword.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/mailSender/mailTemplates/newPassword.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bnetex-server/src/services/generateAuthCode.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/services/generateAuthCode.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +38,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "editor.preferences.fonts.default",
-    "ts.external.directory.path": "C:\\Users\\Uxa\\Documents\\GitHub\\bnetex\\bnetex-server\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "C:\\Users\\Uxa\\Documents\\GitHub\\bnetex\\bnetex-new\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -59,6 +65,7 @@
       <workItem from="1667972224708" duration="1090000" />
       <workItem from="1668043089935" duration="934000" />
       <workItem from="1668666714561" duration="1556000" />
+      <workItem from="1669264767543" duration="3339000" />
     </task>
     <servers />
   </component>
