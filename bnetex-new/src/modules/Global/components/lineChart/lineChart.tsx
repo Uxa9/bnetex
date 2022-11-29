@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import Skeleton from 'lib/ui-kit/skeleton/skeleton';
 import { colorIndexMap } from 'lib/utils/colorIndexMap';
 import { useMemo } from 'react';
 import styles from './lineChart.module.scss';
@@ -10,20 +11,24 @@ export interface LineChartItem {
 
 interface LineChartProps {
     values: LineChartItem[];
+    loading?: boolean;
 }   
 
-const LineChart = ({values}: LineChartProps) => {
+const LineChart = ({ values, loading }: LineChartProps) => {
 
-    const totalVolume = useMemo(() => 
-        values.reduce((acc: number, value: LineChartItem ) => {
-            return acc + value.value;
-        }, 0),
-    [ values ]);
+    const totalVolume = useMemo(() => {
+        return values.reduce((acc: number, value: LineChartItem ) => 
+            acc + value.value, 0);
+    }, [ values ]);
 
     return(
         <div className={styles['line-chart']}>
             {
-                !values.every(item => item.value === 0) &&
+                loading ?
+                    <Skeleton 
+                        height={'12px'}
+                    /> :
+                    !values.every(item => item.value === 0) &&
                     <div className={styles['line-chart__chart']}>
                         {
                             values.map((value: LineChartItem, index: number) => 
@@ -55,7 +60,14 @@ const LineChart = ({values}: LineChartProps) => {
                                 />
                                 <p>{item.name}</p>
                             </div>
-                            <div className={styles['chart-line-item__value']}>{item.value}</div>
+                            {
+                                loading ? 
+                                    <Skeleton 
+                                        height={'18px'}
+                                        width={'80px'}
+                                    /> :
+                                    <div className={styles['chart-line-item__value']}>{item.value}</div>
+                            }
                         </div>
                     )
                 }

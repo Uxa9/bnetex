@@ -21,8 +21,7 @@ const typesLib = {  // хз пока куда это девать
 
 const TransactionTable = (props: TableData) => {
 
-    const rowRender = (row: RowData) => {
-
+    const rowRender = (row: RowData, key: number) => {
         const renderCurrency = (name: string) => {
             switch (name) {
                 case 'usdt':
@@ -67,6 +66,7 @@ const TransactionTable = (props: TableData) => {
         return (
             <div
                 className={styles['table-row']}
+                key={key}
             >
                 <div
                     className={styles['currency-wrapper']}
@@ -96,7 +96,7 @@ const TransactionTable = (props: TableData) => {
         <div
             className={styles['transaction-table-container']}
         >
-            {props.rows.map(row => rowRender(row))}
+            {props.rows.map((row, index) => rowRender(row, index))}
         </div>
     );
 };

@@ -1,18 +1,18 @@
 import { Eye, EyeSlash } from 'assets/images/icons';
-import { useActions } from 'lib/hooks/useActionCreators';
+import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { useGoToState } from 'lib/hooks/useGoToState';
-import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { Button, Input } from 'lib/ui-kit';
 import { emailValidation, requiredValidation } from 'lib/utils/hookFormValidation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AppLinksEnum } from 'routes/appLinks';
-import useAuthActions from 'services/auth';
+import { loginUser } from 'store/action-creators/auth';
 import FormCard from '../../components/FormCard/formCard';
 import styles from './login.module.scss';
 
-interface LoginFormData{
+interface LoginFormData {
     email: string,
     password: string
 }
@@ -22,12 +22,10 @@ const Login = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
     const { bakeToast } = useToast();
-    const { isLoading, promiseWithLoading } = usePromiseWithLoading();
+    const { loading } = useTypedSelector(state => state.auth);
     const { goToState } = useGoToState();
-    const { loginUser } = useActions();
     const { AUTH, DASHBOARD, VERIFY_EMAIL, REGISTRATION } = AppLinksEnum;
-
-    const { login } = useAuthActions();
+    const dispatch = useAppDispatch();
 
     const {
         register,
@@ -42,19 +40,15 @@ const Login = () => {
         reValidateMode: 'onChange',
     });
 
-    const onSubmit = async (data: LoginFormData) => {
-        promiseWithLoading(login(data.email, data.password))
-            .then(() => {
-                loginUser();
-                goToState(DASHBOARD);
-            })
-            .catch((error) => {
-                error.response.data.message === 'USER_NOT_ACTIVATED' && 
+    const onSubmit = (data: LoginFormData) => {
+        dispatch(loginUser(data.email, data.password))
+            .then(() => goToState(DASHBOARD))
+            .catch((error: Error) => {
+                error.message === 'USER_NOT_ACTIVATED' && 
                     goToState(`${AUTH}/${VERIFY_EMAIL}`);
-                bakeToast.error(error.response?.data.message);
+                bakeToast.error(error.message);
             });
     };
-
 
     return(
         <>
@@ -93,7 +87,7 @@ const Login = () => {
                         text={'Войти'}
                         type={'submit'}
                         disabled={!isValid}
-                        isLoading={isLoading}
+                        isLoading={loading}
                     />
                 }
                 actions={

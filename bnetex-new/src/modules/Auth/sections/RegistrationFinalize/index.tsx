@@ -8,7 +8,7 @@ import styles from './registrationFinalize.module.scss';
 
 const RegistrationFinalize = () => {
     const { goToState } = useGoToState();
-    const { HOME, DASHBOARD, MAIN_WALLET }  = AppLinksEnum;
+    const { HOME, DASHBOARD } = AppLinksEnum;
 
     useEffect(() => {
         const isJustRegistered = localStorage.getItem('justRegistered');

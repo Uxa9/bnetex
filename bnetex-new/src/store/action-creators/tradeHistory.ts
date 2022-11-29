@@ -4,7 +4,7 @@ import { TradeHistoryItem } from 'lib/types/tradeHistoryItem';
 import { Dispatch } from 'redux';
 import { TradeHistoryAction, TradeHistoryActionTypes } from 'store/actions/tradeHistory';
 
-const [ api ] = useApi();
+const { api } = useApi();
 
 export const getTradeHistory = (period: number, amount: number) => {
     return async (dispatch: Dispatch<TradeHistoryAction>) => {

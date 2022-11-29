@@ -1,9 +1,11 @@
 import { Exchange } from 'assets/images/icons';
+import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { BaseModalProps } from 'lib/hooks/useModal';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
-import { WalletCategoryEnum, WalletCategoryType, WalletCategoryWithBalance } from 'lib/types/wallet';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
+import { WalletCategoryEnum, WalletCategoryType } from 'lib/types/wallet';
 import { Button, Input, Select, SelectOption } from 'lib/ui-kit';
 import { blockEAndDashKey } from 'lib/utils';
 import { numberValidation } from 'lib/utils/hookFormValidation';
@@ -12,11 +14,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AppLinksEnum } from 'routes/appLinks';
 import useWalletActions from 'services/walletActions';
+import { getWallets } from 'store/action-creators/wallet';
 import styles from './transferModal.module.scss';
 
 interface TransferFormData {
-    sender: string;
-    reciever: string;
+    sender: WalletCategoryType;
+    reciever: WalletCategoryType;
     amount: number;
 }
 
@@ -24,27 +27,25 @@ const TransferModal = (props: BaseModalProps) => {
 
     const [ senderWalletValue, setSenderWalletValue ] = useState<WalletCategoryType>('main'); 
     const [ recieverWalletValue, setRecieverWalletValue ] = useState<WalletCategoryType>('investor'); 
-    const [ walletBalances, setWalletBalances ] = useState<WalletCategoryWithBalance>({main: 0, investor: 0}); 
     const isWalletSelectionValid = useMemo(() => senderWalletValue !== recieverWalletValue, 
         [ senderWalletValue, recieverWalletValue ]);
 
     const { isLoading, promiseWithLoading } = usePromiseWithLoading();
     const { bakeToast } = useToast();
-    const { transferBetweenWallets, getWallets } = useWalletActions();
+    const { transferBetweenWallets } = useWalletActions();
     const { goToState } = useGoToState();
-
+    const dispath = useAppDispatch();
+    const { mainWallet, investWallet } = useTypedSelector(state => state.wallet);
+   
+    useEffect(() => {
+        dispath(getWallets());
+    }, []);
+    
     const swapSelectorValues = () => {
         const senderWallet = senderWalletValue;
         setSenderWalletValue(recieverWalletValue);
         setRecieverWalletValue(senderWallet); 
     };
-
-    useEffect(() => {
-        promiseWithLoading<WalletCategoryWithBalance>(getWallets())
-            .then(response => {
-                setWalletBalances({...response});
-            });
-    }, []);
 
     const {
         register,
@@ -78,7 +79,6 @@ const TransferModal = (props: BaseModalProps) => {
             });
     };
 
-
     return(
         <Modal
             title={'Перевод средств'}
@@ -99,7 +99,7 @@ const TransferModal = (props: BaseModalProps) => {
                             option={
                                 <p className={styles['wallet-category']}>
                                     Основной кошелек
-                                    <span>{walletBalances.main}</span>
+                                    <span>{mainWallet}</span>
                                 </p>
                             }
                         />
@@ -108,7 +108,7 @@ const TransferModal = (props: BaseModalProps) => {
                             option={
                                 <p className={styles['wallet-category']}>
                                     Инвестиционный кошелек
-                                    <span>{walletBalances.investor}</span>
+                                    <span>{investWallet}</span>
                                 </p>
                             }
                         />
@@ -130,7 +130,7 @@ const TransferModal = (props: BaseModalProps) => {
                             option={
                                 <p className={styles['wallet-category']}>
                                     Основной кошелек
-                                    <span>{walletBalances.main}</span>
+                                    <span>{mainWallet}</span>
                                 </p>
                             }
                         />
@@ -139,7 +139,7 @@ const TransferModal = (props: BaseModalProps) => {
                             option={
                                 <p className={styles['wallet-category']}>
                                     Инвестиционный кошелек
-                                    <span>{walletBalances.investor}</span>
+                                    <span>{investWallet}</span>
                                 </p>
                             }
                         />
@@ -151,7 +151,7 @@ const TransferModal = (props: BaseModalProps) => {
                         ...numberValidation, 
                         validate: {
                             inputValueIsLesserThanSenderWalletBalance: 
-                                (value) => Number(value) <= walletBalances[senderWalletValue],
+                                (value) => value <= (senderWalletValue === 'main' ? mainWallet : investWallet),
                         },
                     })}
                     errorText={errors.amount?.message}

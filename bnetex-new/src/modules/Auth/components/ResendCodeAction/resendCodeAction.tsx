@@ -6,7 +6,7 @@ import { Button } from 'lib/ui-kit';
 import Skeleton from 'lib/ui-kit/skeleton/skeleton';
 import { pad } from 'lib/utils/pad';
 import { useEffect, useRef, useState } from 'react';
-import useAuthActions from 'services/auth';
+import { checkActivationCodeTime, resendActivationCode } from 'services/user';
 import styles from './resendCodeAction.module.scss';
 
 const DEFAULT_DELAY_BETWEEN_REQUESTS = 30; 
@@ -14,7 +14,6 @@ const TIMER_INTERVAL = 1000;
 
 const ResendCodeAction = ({ userEmail }: {userEmail: string}) => {
     const { promiseWithLoading } = usePromiseWithLoading();
-    const { checkActivationCodeTime, resendActivationCode } = useAuthActions();
     const { bakeToast } = useToast();
 
     const [ timeToNextCodeSending, setTimeToNextCodeSending ] = useState<number>(-1);
@@ -58,7 +57,7 @@ const ResendCodeAction = ({ userEmail }: {userEmail: string}) => {
     const handleSubmit = () => {
         setTimeToNextCodeSending(-1);
         promiseWithLoading(resendActivationCode(userEmail))
-            .then(() => bakeToast.success(`Код отправлен на ${userEmail}`))
+            .then(() => bakeToast.info(`Код отправлен на ${userEmail}`))
             .then(() => checkTime());
     };
 

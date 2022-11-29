@@ -14,8 +14,6 @@
 
 .tools-header-buttons {
   @include align-center-row-flex(16px);
-
-  margin-left: 16px;
 }
 
 .charts {
@@ -67,11 +65,6 @@
     .transactions-header {
       display: flex;
       justify-content: space-between;
-
-      font-weight: 400;
-      font-size: 14px;
-      line-height: 17px;
-
       margin-bottom: 16px;
     }
 

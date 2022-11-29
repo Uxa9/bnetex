@@ -5,6 +5,8 @@ export enum AppLinksEnum {
     VERIFY_EMAIL = 'email-verification',
     REGISTRATION_FINALIZE = 'registration-finalize',
     LOGIN = 'login',
+    RECOVER_PASSWORD_REQUEST = 'recover-password',
+    CHANGE_PASSWORD = 'change-password',
     TERMINAL = 'terminal',
     DASHBOARD = 'dashboard',
     DEPOSIT = 'deposit',

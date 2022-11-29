@@ -2,13 +2,13 @@ import PageLayout from 'modules/Global/components/appLayout/appLayout';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
 import { lazy, Suspense, useEffect } from 'react';
-import useAuthActions from 'services/auth';
-import { useActions } from 'lib/hooks/useActionCreators';
 import AppLoader from 'modules/Global/components/appLoader/appLoader';
 import { ProtectedRoute } from './protectedRoute';
 import Page404 from 'modules/Global/pages/404/page404';
 import EmailValidation from 'modules/Auth/sections/emailValidation';
 import RegistrationFinalize from 'modules/Auth/sections/registrationFinalize';
+import { useAppDispatch } from 'lib/hooks/useAppDispatch';
+import { verifyToken } from 'store/action-creators/auth';
 
 const MainPage = lazy(() => import('modules/MainPage/MainPage'));
 const AuthLayout = lazy(() => import('modules/Auth/authLayout'));
@@ -22,18 +22,11 @@ const InvestorView = lazy(() => import('modules/terminal/investor/investorView')
 const AppRoutes = () => {
 
     const { HOME, AUTH, TERMINAL, DASHBOARD, DEPOSIT, WITHDRAW, WITHDRAW_CONFIRM, NOT_FOUND_404, VERIFY_EMAIL, REGISTRATION_FINALIZE } = AppLinksEnum;
-    const { loginUser, logoutUser } = useActions();
-    const { verifyToken } = useAuthActions();
+    const dispatch = useAppDispatch();
 
-    // Тут супер говеное костыльное решение, потом пофиксим нормально, щас лень
     useEffect(() => {
-        verifyToken()
-            .then((response) => {
-                const isTokenValid = response.data.valid;
-                isTokenValid ? loginUser() : logoutUser();
-            })
-            .catch(() => logoutUser());
-    });
+        dispatch(verifyToken());
+    }, []);
 
     return (
         <Suspense fallback={<AppLoader />}>

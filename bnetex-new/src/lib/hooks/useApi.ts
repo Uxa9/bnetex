@@ -1,7 +1,13 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { Environment } from 'lib/types/environment';
+import { getUserInfo } from 'lib/utils/getUserInfo';
 
-const useApi = () => {
+interface UseApi {
+    api: AxiosInstance;
+    protectedApi: AxiosInstance;
+}
+
+const useApi = (): UseApi => {
     const { BACKEND_URL } = Environment;
     const baseURL = import.meta.env[BACKEND_URL];
     
@@ -12,19 +18,19 @@ const useApi = () => {
         },
     });
 
-    const getToken = () => {
-        const userInfo = localStorage.getItem('userInfo-BNETEX');
-        return userInfo ? JSON.parse(userInfo).token : '';
-    };
+    const { token } = getUserInfo();
 
     const protectedApi = axios.create({
         baseURL: baseURL,
         headers: {
-            'Authorization': `Bearer ${getToken()}`,
+            'Authorization': `Bearer ${token}`,
         },
     });
 
-    return [api, protectedApi];
+    return {
+        api,
+        protectedApi,
+    };
 };
 
 export default useApi;

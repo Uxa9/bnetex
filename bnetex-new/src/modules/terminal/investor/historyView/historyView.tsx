@@ -5,16 +5,15 @@ import styles from './historyView.module.scss';
 import { blockEAndDashKey } from 'lib/utils';
 import clsx from 'clsx';
 import { useActions } from 'lib/hooks/useActionCreators';
+import { getHistoricalData } from 'store/action-creators/roepnl';
+import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 
-interface HistoryViewProps {
-    handleClick(period: number, amount: number): void
-}
-
-const HistoryView: FC<HistoryViewProps> = props => {
+const HistoryView = () => {
 
     const [period, setPeriod] = useState<number>(1);
     const [inputValue, setInputValue] = useState<number>(NaN);
     const { getTradeHistory } = useActions();
+    const dispatch = useAppDispatch();
 
     // toDo: помойка! переделать через hook-form
     const validateInputChange = (event: React.ChangeEvent<HTMLInputElement> ) => {
@@ -24,7 +23,7 @@ const HistoryView: FC<HistoryViewProps> = props => {
 
     const handleSubmit = () => {
         getTradeHistory(period, inputValue);
-        props.handleClick(period, inputValue);
+        dispatch(getHistoricalData(period, inputValue));
     };
 
     return (
@@ -68,14 +67,6 @@ const HistoryView: FC<HistoryViewProps> = props => {
                         text={'6 мес.'} 
                         value={6} 
                     />
-                    {/* <ToggleButton 
-                        text={'9 мес.'} 
-                        value={'9'} 
-                    />
-                    <ToggleButton 
-                        text={'12 мес.'} 
-                        value={'12'} 
-                    /> */}
                 </ToggleButtonGroup>
             </div>
             <div

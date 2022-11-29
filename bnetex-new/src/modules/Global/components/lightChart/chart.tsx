@@ -5,16 +5,18 @@ import { Switch, ToolTip } from 'lib/ui-kit';
 import { useTheme } from 'lib/hooks/useTheme';
 import { evaluateTheme } from 'lib/utils/evaluateAppColors';
 import clsx from 'clsx';
+import { Spinner } from 'assets/images/icons';
 
 interface ChartProps {
     data: SingleValueData[];
     type: 'ROE' | 'PNL';
     className?: string;
+    loading: boolean;
 }
 
 const ALGORYTHM_COMISSION = 0.5;
 
-const Chart = ({ data, type, className }: ChartProps) => {
+const Chart = ({ data, type, className, loading }: ChartProps) => {
 
     const chartRef = useRef<HTMLDivElement | null>(null);
     const [chartBase, setChartBase] = useState<IChartApi | null>(null);
@@ -145,11 +147,17 @@ const Chart = ({ data, type, className }: ChartProps) => {
                 ref={chartRef}
             >
                 {
-                    !data.length &&  
-                <p className={clsx(styles['empty'], 'text')}>
-                    Данные о вашем {type} отстутствуют. Начните работу с алгоритмом или посмотрите 
-                    историю работы алгоритма.
-                </p>
+                    !data.length && !loading && 
+                        <p className={clsx(styles['empty'], 'text')}>
+                            Данные о вашем {type} отстутствуют. Начните работу с алгоритмом или посмотрите 
+                            историю работы алгоритма.
+                        </p>
+                }
+                {
+                    loading &&
+                    <Spinner 
+                        className={styles['spinner']}
+                    />
                 }
             </div>
         </div>

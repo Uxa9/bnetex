@@ -1,4 +1,5 @@
 import { ModalSpawnerProvider } from 'lib/hooks/useModal';
+import { CurrentPlatformProvider } from 'lib/hooks/usePlatform';
 import { PromiseWithLoadingProvider } from 'lib/hooks/usePromiseWithLoading';
 import { ThemeProvider } from 'lib/hooks/useTheme';
 import { ToastProvider } from 'lib/hooks/useToast';
@@ -10,14 +11,16 @@ function App() {
     return (
         <BrowserRouter>
             <ThemeProvider>
-                <ToastProvider>
-                    <PromiseWithLoadingProvider>
-                        <ModalSpawnerProvider>
-                            <AppRoutes />
-                            <ModalSpawner />
-                        </ModalSpawnerProvider>
-                    </PromiseWithLoadingProvider>
-                </ToastProvider>
+                <CurrentPlatformProvider>
+                    <ToastProvider>
+                        <PromiseWithLoadingProvider>
+                            <ModalSpawnerProvider>
+                                <AppRoutes />
+                                <ModalSpawner />
+                            </ModalSpawnerProvider>
+                        </PromiseWithLoadingProvider>
+                    </ToastProvider>
+                </CurrentPlatformProvider>
             </ThemeProvider>
         </BrowserRouter>
     );

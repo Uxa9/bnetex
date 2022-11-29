@@ -13,7 +13,7 @@
     overflow: hidden;
 
     .chart-line {
-      @include color-index-map();
+      @include color-index-map(3);
 
       height: 12px;
     }
@@ -35,7 +35,7 @@
       }
 
       &__color-border {
-        @include color-index-map();
+        @include color-index-map(3);
 
         height: 18px;
         width: 3px;

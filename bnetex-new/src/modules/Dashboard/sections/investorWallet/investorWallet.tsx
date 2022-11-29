@@ -5,19 +5,16 @@ import { useGoToState } from 'lib/hooks/useGoToState';
 import { useEffect, useState } from 'react';
 import { useModal } from 'lib/hooks/useModal';
 import TransferModal from 'modules/Payments/Transfer/transferModal';
-import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
-import useWalletActions from 'services/walletActions';
-import { WalletCategoryWithBalance } from 'lib/types/wallet';
 import { AppLinksEnum } from 'routes/appLinks';
-import { getInvestInfo, getRoeAndPnl } from 'services/user';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import LineChart from 'modules/Global/components/lineChart/lineChart';
 import Chart from 'modules/Global/components/lightChart/chart';
-
-interface GraphicProps {
-    dates: string[],
-    values: number[]
-}
+import { useAppDispatch } from 'lib/hooks/useAppDispatch';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
+import { getRoeAndPnl } from 'store/action-creators/roepnl';
+import { getInvestInfo } from 'services/user';
+import { getWallets } from 'store/action-creators/wallet';
+import Skeleton from 'lib/ui-kit/skeleton/skeleton';
 
 interface InvestInfoProps {
     balance : number,
@@ -31,20 +28,9 @@ const InvestorWallet = () => {
 
     const { goToState } = useGoToState();
     const { open: OpenTransferModal } = useModal(TransferModal);
-    const [mainBalance, setMainBalance] = useState<number>(0);
-    const [investBalance, setInvestBalance] = useState<number>(0);
-    const { promiseWithLoading } = usePromiseWithLoading();
-    const { getWallets } = useWalletActions();
-
-    const [roe, setRoe] = useState<GraphicProps>({
-        dates: [],
-        values: [],
-    });
-
-    const [pnl, setPnl] = useState<GraphicProps>({
-        dates: [],
-        values: [],
-    });
+    const dispath = useAppDispatch();
+    const { dates, pnl, roe, loading } = useTypedSelector(state => state.roePnl);
+    const { investWallet, loading: walletsLoading } = useTypedSelector(state => state.wallet);
 
     const [investInfo, setInvestInfo] = useState<InvestInfoProps>({
         balance : 0,
@@ -67,17 +53,7 @@ const InvestorWallet = () => {
     };
 
     useEffect(() => {
-        getRoeAndPnl()
-            .then(res => {
-                setRoe({
-                    dates: res.data.dates,
-                    values: res.data.roe.map((item: any) => Number(Number(item).toFixed(2))),
-                });
-                setPnl({
-                    dates: res.data.dates,
-                    values: res.data.pnl.map((item: any) => Number(Number(item).toFixed(2))),
-                });
-            });
+        dispath(getRoeAndPnl());
         getInvestInfo()
             .then(res => {
                 setInvestInfo({
@@ -87,11 +63,7 @@ const InvestorWallet = () => {
                     balance : res.data.balance || 0,
                 });
             });
-        promiseWithLoading<WalletCategoryWithBalance>(getWallets())
-            .then(res => {
-                setMainBalance(res.main);
-                setInvestBalance(res.investor);
-            });
+        dispath(getWallets());
     }, []);
 
     return (
@@ -127,7 +99,14 @@ const InvestorWallet = () => {
                     <p
                         className={styles['user-balance']}
                     >
-                        {`${Number(investBalance + investInfo.balance).toFixed(2)} USDT`}
+                        {
+                            walletsLoading ?
+                                <Skeleton 
+                                    height={'24px'}
+                                    width={'40%'}
+                                /> :
+                                `${Number(investWallet + investInfo.balance).toFixed(2)} USDT`
+                        }
                     </p>
                     <div>
                         <LineChart 
@@ -138,9 +117,10 @@ const InvestorWallet = () => {
                                 },
                                 {
                                     name: 'Доступно для вывода',
-                                    value: investBalance,
+                                    value: investWallet,
                                 },
                             ]}
+                            loading={walletsLoading}
                         />
                     </div>
                 </div>
@@ -193,27 +173,29 @@ const InvestorWallet = () => {
             >
                 <Chart 
                     data={
-                        pnl.dates.map((date, index) => {
+                        dates.map((date, index) => {
                             return {
                                 time: date,
-                                value: pnl.values[index],
+                                value: pnl[index],
                             };
                         })
                     }
                     type={'PNL'}
                     className={styles['chart']}
+                    loading={loading}
                 />
                 <Chart 
                     data={
-                        roe.dates.map((date, index) => {
+                        dates.map((date, index) => {
                             return {
                                 time: date,
-                                value: roe.values[index],
+                                value: roe[index],
                             };
                         })
                     }
                     type={'ROE'}
                     className={styles['chart']}
+                    loading={loading}
                 />
             </div>
         </div>

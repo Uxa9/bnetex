@@ -1,11 +1,10 @@
 import useApi from 'lib/hooks/useApi';
-import { WalletCategoryWithBalance } from 'lib/types/wallet';
-import { getUserId } from 'lib/utils/getUserId';
-import { getToken } from './utils/getToken';
+import { WalletCategoryType, WalletCategoryWithBalance } from 'lib/types/wallet';
+import { getUserInfo } from 'lib/utils/getUserInfo';
 
 interface transferBetweenWalletsData {
-    sender: string,
-    reciever: string,
+    sender: WalletCategoryType,
+    reciever: WalletCategoryType,
     amount: number
 }
 
@@ -17,25 +16,25 @@ interface WithdrawConfirmFormData {
 const WalletCategoryEnum: {[key: string]: string} = {
     main: 'mainWallet',
     investor: 'investWallet',
-}
+};
 
 const useWalletActions = () => {
 
-    const [ protectedApi, api ] = useApi();
+    const { protectedApi, api } = useApi();
     
     const transferBetweenWallets = async (data: transferBetweenWalletsData) => {
 
         const sendData = {
             sender: WalletCategoryEnum[data.sender],
             reciever: WalletCategoryEnum[data.reciever],
-            amount: data.amount
-        }
+            amount: data.amount,
+        };
 
         return await protectedApi.post(
             '/users/transfer-money', 
-            {...sendData, userId: getUserId()},
+            {...sendData, userId: getUserInfo().userId},
             {headers: {
-                'Authorization': `Bearer ${getToken()}`,
+                'Authorization': `Bearer ${getUserInfo().token}`,
             }}
         );
     };
@@ -45,7 +44,7 @@ const useWalletActions = () => {
             '/request/fulfill', 
             {...data, requestId: Number(localStorage.getItem('requestId'))},
             {headers: {
-                'Authorization': `Bearer ${getToken()}`,
+                'Authorization': `Bearer ${getUserInfo().token}`,
             }}
         );
     };
@@ -62,13 +61,13 @@ const useWalletActions = () => {
             '/request/create', 
             data,
             {headers: {
-                'Authorization': `Bearer ${getToken()}`,
+                'Authorization': `Bearer ${getUserInfo().token}`,
             }}
         );
     };
 
     const getWallets = async (): Promise<WalletCategoryWithBalance> => {
-        return await api.get(`/users/getWallets/${getUserId()}`)
+        return await api.get(`/users/getWallets/${getUserInfo().userId}`)
             .then((response) => {
                 return {
                     main: response.data.mainWallet,
