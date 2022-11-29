@@ -8,10 +8,14 @@ const { protectedApi, api } = useApi();
 
 // toDo: такая штука должна быть на беке
 const transformDataToFixed = (data: SuccessfulRoePnlRequestData): Omit<RoePnlState, 'loading'> => {
+    // toDo: костыль ебаный, с history приходит pnlValues, с getRoeAndPnl - pnl. Какого хуя?
+    const pnl = data.pnlValues ?? data.pnl;
+    const roe = data.roeValues ?? data.roe;
+
     return {
         dates: data.dates,
-        pnl: data.pnlValues.map(it => Number(it.toFixed(2))),
-        roe: data.roeValues.map(it => Number(it.toFixed(2))),
+        pnl: pnl.map(it => Number(it.toFixed(2))),
+        roe: roe.map(it => Number(it.toFixed(2))),
     };
 };
 
@@ -20,7 +24,7 @@ export const getRoeAndPnl = () => {
         dispatch({ type: RoePnlActionTypes.SEND_REQUEST});
 
         return protectedApi
-            .post<SuccessfulRoePnlRequestData>(`/users/getRoeAndPnl/${getUserInfo().userId}`) 
+            .get<SuccessfulRoePnlRequestData>(`/users/getRoeAndPnl/${getUserInfo().userId}`) 
             .then((res) => {
                 dispatch({ type: RoePnlActionTypes.GET_ROE_PNL, data: transformDataToFixed(res.data)});
             })
@@ -44,7 +48,6 @@ export const getHistoricalData = (period: number, amount: number) => {
                 dispatch({ type: RoePnlActionTypes.GET_HISTORICAL_DATA, data: transformDataToFixed(res.data)});
             })
             .catch((err) => {
-                
                 dispatch({ type: RoePnlActionTypes.REQUEST_ERROR});
                 throw new Error(err.response.data.message);
             });

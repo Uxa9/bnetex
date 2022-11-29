@@ -9,6 +9,8 @@ export interface SuccessfulRoePnlRequestData {
     dates: string[],
     roeValues: number[],
     pnlValues: number[],
+    roe?: number[],
+    pnl?: number[],
 }
 
 export enum RoePnlActionTypes {

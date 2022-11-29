@@ -1,7 +1,7 @@
 import clsx from 'clsx';
+import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { useModal } from 'lib/hooks/useModal';
-import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
-import { WalletCategoryWithBalance } from 'lib/types/wallet';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { Button, Input } from 'lib/ui-kit';
 import { blockEAndDashKey } from 'lib/utils';
 import { numberValidation } from 'lib/utils/hookFormValidation';
@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { startInvestTrading, stopInvestTrading } from 'services/investTrading';
 import { getUser } from 'services/user';
-import useWalletActions from 'services/walletActions';
+import { getWallets } from 'store/action-creators/wallet';
 import styles from './tradeView.module.scss';
 
 interface TradeViewData {
@@ -20,20 +20,15 @@ interface TradeViewData {
 
 const TradeView = () => {
 
-    const { promiseWithLoading } = usePromiseWithLoading();
-    const { getWallets } = useWalletActions();
     const { open: openStartAlgorythmModal } = useModal(StartAlgorythmModal);
     const { open: openStopAlgorythmModal } = useModal(StopAlgorythmModal);
+    const dispath = useAppDispatch();
+    const { investWallet } = useTypedSelector(state => state.wallet);
 
-    const [balance, setBalance] = useState<number>(0);
     const [operationalBalance, setOperationalBalance] = useState<number>(0);
     const [ isAlgorythmActive, setIsAlgorythmActive ] = useState<boolean>(false);
 
     useEffect(() => {
-        promiseWithLoading<WalletCategoryWithBalance>(getWallets())
-            .then(res => {
-                setBalance(res.investor);
-            });
         getUser()
             .then(res => {
                 setIsAlgorythmActive(res.data.openTrade);
@@ -41,11 +36,8 @@ const TradeView = () => {
     }, []);
 
     useEffect(() => {
-        promiseWithLoading<WalletCategoryWithBalance>(getWallets())
-            .then(res => {
-                setBalance(res.investor);
-            });
-    }, [isAlgorythmActive]);
+        dispath(getWallets());
+    }, [ isAlgorythmActive ]);
 
     const startInvestAlgorythm = (amount: number) => {
         setIsAlgorythmActive(true);
@@ -83,14 +75,14 @@ const TradeView = () => {
         },
         validate: {
             isNotGreaterThanBalance: value => {
-                if (value > balance) setError('amount', {message: 'На балансе недостаточно средств'});
-                return value <= balance;
+                if (value > investWallet) setError('amount', {message: 'На балансе недостаточно средств'});
+                return value <= investWallet;
             },
         },
     });
 
     const setInputValueToBalance = () => {
-        setValue('amount', balance, {shouldValidate: true});
+        setValue('amount', investWallet, {shouldValidate: true});
         inputRef.current?.focus();
     };
 
@@ -127,7 +119,7 @@ const TradeView = () => {
                     <p
                         className={'subtitle'}
                     >
-                        { balance } USDT 
+                        { investWallet } USDT 
                     </p>
                 </div>
                 {

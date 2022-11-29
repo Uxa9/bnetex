@@ -2,7 +2,6 @@ import PageLayout from 'modules/Global/components/appLayout/appLayout';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLinksEnum } from './appLinks';
 import { lazy, Suspense, useEffect } from 'react';
-import { useActions } from 'lib/hooks/useActionCreators';
 import AppLoader from 'modules/Global/components/appLoader/appLoader';
 import { ProtectedRoute } from './protectedRoute';
 import Page404 from 'modules/Global/pages/404/page404';
@@ -23,12 +22,11 @@ const InvestorView = lazy(() => import('modules/terminal/investor/investorView')
 const AppRoutes = () => {
 
     const { HOME, AUTH, TERMINAL, DASHBOARD, DEPOSIT, WITHDRAW, WITHDRAW_CONFIRM, NOT_FOUND_404, VERIFY_EMAIL, REGISTRATION_FINALIZE } = AppLinksEnum;
-    const { loginUser, logoutUser } = useActions();
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         dispatch(verifyToken());
-    });
+    }, []);
 
     return (
         <Suspense fallback={<AppLoader />}>

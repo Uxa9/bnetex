@@ -1,10 +1,10 @@
 import useApi from 'lib/hooks/useApi';
-import { WalletCategoryWithBalance } from 'lib/types/wallet';
+import { WalletCategoryType, WalletCategoryWithBalance } from 'lib/types/wallet';
 import { getUserInfo } from 'lib/utils/getUserInfo';
 
 interface transferBetweenWalletsData {
-    sender: string,
-    reciever: string,
+    sender: WalletCategoryType,
+    reciever: WalletCategoryType,
     amount: number
 }
 

@@ -5,10 +5,11 @@ import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
 import { useModal } from 'lib/hooks/useModal';
 import TransferModal from 'modules/Payments/Transfer/transferModal';
-import { useEffect, useState } from 'react';
-import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
-import useWalletActions from 'services/walletActions';
-import { WalletCategoryWithBalance } from 'lib/types/wallet';
+import { useEffect } from 'react';
+import { useAppDispatch } from 'lib/hooks/useAppDispatch';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
+import { getWallets } from 'store/action-creators/wallet';
+import Skeleton from 'lib/ui-kit/skeleton/skeleton';
 
 // toDo
 // сделать нормальные кнопки
@@ -16,13 +17,11 @@ import { WalletCategoryWithBalance } from 'lib/types/wallet';
 const MainWallet = () => {
     
     const { goToState } = useGoToState();
-    const [balance, setBalance] = useState<number>(0);
-    const { promiseWithLoading } = usePromiseWithLoading();
-    const { getWallets } = useWalletActions();
-
+    const dispath = useAppDispatch();
+    const { mainWallet, loading: walletsLoading } = useTypedSelector(state => state.wallet);
+   
     useEffect(() => {
-        promiseWithLoading<WalletCategoryWithBalance>(getWallets())
-            .then(res => setBalance(res.main));
+        dispath(getWallets());
     }, []);
 
     const { open: OpenTransferModal } = useModal(TransferModal);
@@ -59,7 +58,14 @@ const MainWallet = () => {
                             Баланс
                     </p>
                     <h6 className={styles['balance-item__value']}>
-                        {balance}
+                        {
+                            walletsLoading ?
+                                <Skeleton 
+                                    height={'24px'}
+                                    width={'40%'}
+                                /> :
+                                <>{mainWallet}</>
+                        }
                     </h6>
                 </div>
             </div>

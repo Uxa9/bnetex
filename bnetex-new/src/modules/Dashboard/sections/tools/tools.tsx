@@ -6,20 +6,14 @@ import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
 import TransactionTable from './transactionTable';
 import getUserTransactions from 'services/getUserTransactions';
-import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
-import useWalletActions from 'services/walletActions';
-import { WalletCategoryWithBalance } from 'lib/types/wallet';
 import LineChart from 'modules/Global/components/lineChart/lineChart';
 import Chart from 'modules/Global/components/lightChart/chart';
 import { getUserInfo } from 'lib/utils/getUserInfo';
 import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { getRoeAndPnl } from 'store/action-creators/roepnl';
-
-interface GraphicProps {
-    dates: string[],
-    values: number[]
-}
+import { getWallets } from 'store/action-creators/wallet';
+import Skeleton from 'lib/ui-kit/skeleton/skeleton';
 
 interface RowData {
     currency: string,
@@ -33,13 +27,10 @@ interface RowData {
 const Tools = () => {
 
     const { goToState } = useGoToState();
-    const [mainBalance, setMainBalance] = useState<number>(0);
-    const [investBalance, setInvestBalance] = useState<number>(0);
-    const { promiseWithLoading } = usePromiseWithLoading();
-    const { getWallets } = useWalletActions();
     const { DEPOSIT, WITHDRAW, DASHBOARD, TRANSACTIONS } = AppLinksEnum;
     const dispath = useAppDispatch();
     const { dates, pnl, roe, loading } = useTypedSelector(state => state.roePnl);
+    const { mainWallet, investWallet, loading: walletsLoading } = useTypedSelector(state => state.wallet);
 
     const [rows, setRows] = useState<RowData[]>([]);
 
@@ -51,18 +42,13 @@ const Tools = () => {
                     return ({
                         currency : 'usdt',
                         date : new Date(item.createdAt),
-                        type : item.type === 1 ? 'withdraw' : 'deposit',
+                        type : item.type === '1' ? 'withdraw' : 'deposit',
                         amount : item.amount,
                     });
                 });
-
                 setRows(data);
             });
-        promiseWithLoading<WalletCategoryWithBalance>(getWallets())
-            .then(res => {
-                setMainBalance(res.main);
-                setInvestBalance(res.investor);
-            });
+        dispath(getWallets());
     }, []);
 
     return (
@@ -96,19 +82,27 @@ const Tools = () => {
                         Баланс
                     </p>
                     <h6>
-                        {`${Number(mainBalance + investBalance).toFixed(2)} USDT`}
+                        {
+                            walletsLoading ?
+                                <Skeleton 
+                                    height={'24px'}
+                                    width={'40%'}
+                                /> :
+                                `${mainWallet + investWallet} USDT` 
+                        }
                     </h6>
                     <LineChart 
                         values={[
                             {
                                 name: 'Основной кошелек',
-                                value: mainBalance,
+                                value: mainWallet,
                             },
                             {
                                 name: 'Инвестиционный кошелек',
-                                value: investBalance,
+                                value: investWallet,
                             },
                         ]}
+                        loading={walletsLoading}
                     />
                 </div>
                 <div
