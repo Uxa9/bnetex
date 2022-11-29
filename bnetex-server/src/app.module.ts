@@ -35,7 +35,7 @@ import { InvestSession } from "./invest-sessions/invest-sessions.model";
             models: [User, Role, UserRoles, Request, InvestSession],
             autoLoadModels: true
         }),
-        MongooseModule.forRoot(`mongodb://localhost:${Number(process.env.MONGO_PORT)}/${process.env.MONGO_DB}`),
+        MongooseModule.forRoot(`mongodb://localhost:27017/exchange`),
         UsersModule,
         RolesModule,
         AuthModule,

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { SetStateAction, SetStateAction, useState } from 'react';
 
 import { Button, OrderInput, ToggleButton, NumInput } from '../../lib/ui-kit';
 import LeverPopUp  from '../../components/leverPopUp';
@@ -10,7 +10,7 @@ import { Edit, Info } from 'assets/images/icons';
 // toDo
 // декомпозировать, перенести на tsx
 
-const BeginnerTerminal = props => {
+const BeginnerTerminal = (props: any) => {
 
     const [mode, setMode]           = useState('view');
     const [tradeMode, setTradeMode] = useState('percent');
@@ -26,7 +26,7 @@ const BeginnerTerminal = props => {
     const [marginPopUp, showMarginPopUp] = useState(false);
     const [leverPopUp,  showLeverPopUp]  = useState(false);
 
-    const acceptMarginPopUp = margin => {
+    const acceptMarginPopUp = (margin: SetStateAction<string>) => {
         setMargin(margin);
         showMarginPopUp(false);
     };
@@ -35,7 +35,7 @@ const BeginnerTerminal = props => {
         showMarginPopUp(false);
     };
 
-    const acceptLeverPopUp = lever => {
+    const acceptLeverPopUp = (lever: SetStateAction<number>) => {
         setLever(lever);
         showLeverPopUp(false);
     };
@@ -50,7 +50,7 @@ const BeginnerTerminal = props => {
         setMode('view');
     };
 
-    const moneySwitchHandler = value => {
+    const moneySwitchHandler = (value: string) => {
         if (value == 'left') {
             setTradeMode('percent');
             return;
@@ -62,7 +62,7 @@ const BeginnerTerminal = props => {
         }
     };
 
-    const tradeTypeChangeHandler = value => {
+    const tradeTypeChangeHandler = (value: string) => {
         if (value == 'left') {
             setTradeType('market');
             return;
@@ -74,16 +74,16 @@ const BeginnerTerminal = props => {
         }
     };
 
-    const getDataFromInput = (value, n, type) => {
+    const getDataFromInput = (value: number, n: number, type: string) => {
         let newValues = type == 'precent' ?
             userPercentValues :
             userAmountValues;
         
         newValues[n] = value;
 
-        type === 'percent' ? 
-            localStorage.setItem('percent', newValues) :
-            localStorage.setItem('amount', newValues);
+        // type == 'percent' ? 
+        //     localStorage.setItem('percent', newValues) :
+        //     localStorage.setItem('amount', newValues);
 
         // type == 'percent' ? 
         //     setUserPercentValues(newValues) :
@@ -198,12 +198,12 @@ const BeginnerTerminal = props => {
                 <div
                     className="trade-type-and-tooltip"
                 >
-                    <ToggleButton
+                    {/* <ToggleButton
                         className="trade-type"
                         leftField={_l.trade_market}
                         rightField={_l.trade_tpsl}
                         handleChange={tradeTypeChangeHandler}
-                    />
+                    /> */}
                     {
                         tradeType == 'tpsl' &&
                         <div
@@ -255,12 +255,12 @@ const BeginnerTerminal = props => {
                         <div
                             className='money-type-switcher-and-edit'
                         >
-                            <ToggleButton
+                            {/* <ToggleButton
                                 className='money-type-switcher'
                                 leftField={'%'}
                                 rightField={'$'}
                                 handleChange={moneySwitchHandler}
-                            />
+                            /> */}
                             <div
                                 className="edit-mode-menu"
                             >
@@ -300,7 +300,7 @@ const BeginnerTerminal = props => {
                             {
                                 tradeMode == 'percent' &&
                                 <>
-                                    <OrderInput
+                                    {/* <OrderInput
                                         mode={mode}
                                         value={userPercentValues[0]}
                                         suffix="%"
@@ -334,13 +334,13 @@ const BeginnerTerminal = props => {
                                         suffix="%"
                                         sendValue={(value) => getDataFromInput(value, 4, 'percent')}
                                         forceSendValue={forceSendValue}
-                                    />
+                                    /> */}
                                 </>
                             }
                             {
                                 tradeMode == 'amount' &&
                                 <>
-                                    <OrderInput
+                                    {/* <OrderInput
                                         mode={mode}
                                         value={userAmountValues[0]}
                                         suffix="$"
@@ -374,7 +374,7 @@ const BeginnerTerminal = props => {
                                         suffix="$"
                                         sendValue={(value) => getDataFromInput(value, 4, 'amount')}
                                         forceSendValue={forceSendValue}
-                                    />
+                                    /> */}
                                 </>
                             }
                         </div>
@@ -410,7 +410,7 @@ const BeginnerTerminal = props => {
                         <div
                             className="buy-and-sell-buttons"
                         >
-                            <Button
+                            {/* <Button
                                 type='accept'
                                 width="190px"
                             >
@@ -421,7 +421,7 @@ const BeginnerTerminal = props => {
                                 width="190px"
                             >
                                 {_l.sell_short}
-                            </Button>
+                            </Button> */}
                         </div>
                         <div
                             className="final-price-calculations"
@@ -542,7 +542,7 @@ const BeginnerTerminal = props => {
                             <div
                                 className="user-values-selector"
                             >
-                                <OrderInput
+                                {/* <OrderInput
                                     mode={mode}
                                     value={userTPSLValues[0]}
                                     suffix="%"
@@ -566,7 +566,7 @@ const BeginnerTerminal = props => {
                                     value={userTPSLValues[3]}
                                     sendValue={(value) => getDataFromInput(value, 3, 'tpsl-pair')}
                                     forceSendValue={forceSendValue}
-                                />
+                                /> */}
                             </div>
                             <div
                                 className="edit-mode-menu"
@@ -623,11 +623,11 @@ const BeginnerTerminal = props => {
                                 {stopLossText()}
                             </p>
                         </div>
-                        <Button
+                        {/* <Button
                             width="100%"
                         >
                             {_l.confirm}
-                        </Button>
+                        </Button> */}
                     </div>
                 }
             </div>

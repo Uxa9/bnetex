@@ -13,6 +13,8 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { ResendActivationLink } from './dto/resend-activation-link.dto';
 import { GetActivationLinkTime } from './dto/get-activation-link-time.dto';
 import { TokenVerify } from './dto/token-verify.dto';
+import { EmailDto } from './dto/email.dto';
+import {ResetPasswordDto} from "./dto/reset-password.dto";
 
 @Injectable()
 export class AuthService {
@@ -135,14 +137,18 @@ export class AuthService {
 
             const token = await this.generateToken(user);
 
+            let authCode = generateAuthCode();
+
             user.update({
-                isActivated: true
+                isActivated: true,
+                activationLink: authCode
             });
 
             return {
                 status: "SUCCESS",
                 message: "EMAIL_CONFIRMED",
-                ...token
+                ...token,
+                userId: user.id,
             };
         } else {
 
@@ -220,5 +226,69 @@ export class AuthService {
             status: "ERROR",
             message: "WRONG_PASSWORD"
         });
+    }
+
+    async dropPassword(dto: EmailDto) {
+        const user = await this.userService.getUserByEmail(dto.email);
+
+        if (!user) {
+            throw new UserNotFoundException();
+        }
+
+        let authCode = generateAuthCode();
+
+        user.update({
+            activationLink: authCode,
+            linkTimestamp: new Date
+        });
+
+        await this.mailerService.sendMail({
+            to: dto.email,
+            from: 'infobnetex@internet.ru',
+            subject: 'Сброс пароля',
+            template: 'dropPassword',
+            context: {
+                link: `https://bnetex.com/auth/password-recovery?code=${authCode}`
+            }
+        });
+
+        return {
+            status: "SUCCESS",
+            message: "MAIL_SENT"
+        }
+    }
+
+    async getNewPassword(dto: ResetPasswordDto) {
+        const user = await this.userService.getUserByEmail(dto.email);
+
+        if (!user) {
+            throw new UserNotFoundException();
+        }
+
+        if (dto.code === user.activationLink) {
+            const password = await bcrypt.hash(dto.password, 5);
+
+            await user.update({
+                password: password,
+                activationLink: ""
+            });
+
+            const token = await this.generateToken(user);
+
+            return {
+                status: "SUCCESS",
+                message: "PASSWORD_CHANGED",
+                userId: user.id,
+                ...token
+            };
+        } else {
+
+            throw new HttpException({
+                    status: "ERROR",
+                    message: "WRONG_CODE"
+                },
+                HttpStatus.FORBIDDEN
+            );
+        }
     }
 }
