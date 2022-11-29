@@ -9,6 +9,7 @@ import { ProtectedRoute } from './protectedRoute';
 import Page404 from 'modules/Global/pages/404/page404';
 import EmailValidation from 'modules/Auth/sections/emailValidation';
 import RegistrationFinalize from 'modules/Auth/sections/registrationFinalize';
+import Terminal from 'modules/terminal/terminal';
 
 const MainPage = lazy(() => import('modules/MainPage/MainPage'));
 const AuthLayout = lazy(() => import('modules/Auth/authLayout'));
@@ -62,6 +63,7 @@ const AppRoutes = () => {
                     <Route path={WITHDRAW_CONFIRM} element={<WithdrawConfirm />} />
                     <Route path={NOT_FOUND_404} element={<Page404 />} />
                     <Route path={'*'} element={<Navigate to={NOT_FOUND_404} />} />
+                    <Route path={'test'} element={<Terminal />} />
                 </Route>
             </Routes>
         </Suspense>

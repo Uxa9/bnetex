@@ -146,7 +146,8 @@ export class AuthService {
             return {
                 status: "SUCCESS",
                 message: "EMAIL_CONFIRMED",
-                ...token
+                ...token,
+                userId: user.id,
             };
         } else {
 
