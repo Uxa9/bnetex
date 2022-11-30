@@ -1,0 +1,37 @@
+.trade-layout {
+    display: flex;
+}
+
+.trade-panel {
+    padding: 16px;
+    margin-left: 16px;
+
+    flex-grow: 2;
+}
+
+.trader-view-wrapper__header {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 16px;
+
+    width: 100%;
+
+    >* {
+        width: 50%;
+    }
+}
+
+.cup {
+    padding: 16px;
+    width: 260px;
+}
+
+.cup-head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cup-position {
+    display: flex;
+    justify-content: space-between;
+}

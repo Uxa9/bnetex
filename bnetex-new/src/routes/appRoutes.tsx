@@ -18,6 +18,7 @@ const Withdraw = lazy(() => import('modules/Payments/Withdraw/withdraw'));
 const WithdrawConfirm = lazy(() => import('modules/Payments/Withdraw/confirm'));
 const TerminalLayout = lazy(() => import('modules/terminal/terminalLayout'));
 const InvestorView = lazy(() => import('modules/terminal/investor/investorView'));
+const TradeView = lazy(() => import('modules/terminal/trader/traderView'));
 
 const AppRoutes = () => {
 
@@ -36,6 +37,7 @@ const AppRoutes = () => {
                     <Route path={HOME} element={<MainPage />}></Route>
                     <Route path={TERMINAL} element={<TerminalLayout />}>
                         <Route path="investor" element={<InvestorView />} />
+                        <Route path="trader" element={<TradeView />} />
                     </Route>
                     <Route 
                         path={`${DASHBOARD}/*`} 
