@@ -78,14 +78,14 @@ const BeginnerTerminal = (props: any) => {
         let newValues = type == 'precent' ?
             userPercentValues :
             userAmountValues;
-        
+
         newValues[n] = value;
 
-        // type == 'percent' ? 
+        // type == 'percent' ?
         //     localStorage.setItem('percent', newValues) :
         //     localStorage.setItem('amount', newValues);
 
-        // type == 'percent' ? 
+        // type == 'percent' ?
         //     setUserPercentValues(newValues) :
         //     setUserAmountValues(newValues);
 
@@ -182,13 +182,13 @@ const BeginnerTerminal = (props: any) => {
                 <div
                     className="margin-and-lever-selector"
                 >
-                    <div 
+                    <div
                         className="selector-select-button"
                         onClick={() => showMarginPopUp(true)}
                     >
                         {_l[`margin_${margin}`]}
                     </div>
-                    <div 
+                    <div
                         className="selector-select-button"
                         onClick={() => showLeverPopUp(true)}
                     >
@@ -212,7 +212,7 @@ const BeginnerTerminal = (props: any) => {
                             <span>
                                 Что такое TP/SL
                             </span>
-                            <Info 
+                            <Info
                                 width="25px"
                                 height="25px"
                             />
@@ -265,13 +265,13 @@ const BeginnerTerminal = (props: any) => {
                                 className="edit-mode-menu"
                             >
                                 <div
-                                    className={mode == 'edit' ? 
-                                        'money-type-edit money-type-edit-active' : 
+                                    className={mode == 'edit' ?
+                                        'money-type-edit money-type-edit-active' :
                                         'money-type-edit'
                                     }
                                     onClick={() => setMode('edit')}
                                 >
-                                    <Edit 
+                                    <Edit
                                         width='20px'
                                         height='20px'
                                     />
@@ -306,7 +306,7 @@ const BeginnerTerminal = (props: any) => {
                                         suffix="%"
                                         sendValue={(value) => getDataFromInput(value, 0, 'percent')}
                                         forceSendValue={forceSendValue}
-                                    />                    
+                                    />
                                     <OrderInput
                                         mode={mode}
                                         value={userPercentValues[1]}
@@ -346,7 +346,7 @@ const BeginnerTerminal = (props: any) => {
                                         suffix="$"
                                         sendValue={(value) => getDataFromInput(value, 0, 'amount')}
                                         forceSendValue={forceSendValue}
-                                    />                    
+                                    />
                                     <OrderInput
                                         mode={mode}
                                         value={userAmountValues[1]}
@@ -548,7 +548,7 @@ const BeginnerTerminal = (props: any) => {
                                     suffix="%"
                                     sendValue={(value) => getDataFromInput(value, 0, 'tpsl-pair')}
                                     forceSendValue={forceSendValue}
-                                />                    
+                                />
                                 <OrderInput
                                     mode={mode}
                                     value={userTPSLValues[1]}
@@ -572,13 +572,13 @@ const BeginnerTerminal = (props: any) => {
                                 className="edit-mode-menu"
                             >
                                 <div
-                                    className={mode == 'edit' ? 
-                                        'money-type-edit money-type-edit-active' : 
+                                    className={mode == 'edit' ?
+                                        'money-type-edit money-type-edit-active' :
                                         'money-type-edit'
                                     }
                                     onClick={() => setMode('edit')}
                                 >
-                                    <Edit 
+                                    <Edit
                                         width='20px'
                                         height='20px'
                                     />

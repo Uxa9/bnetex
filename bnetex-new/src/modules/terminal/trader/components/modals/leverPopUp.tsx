@@ -5,22 +5,11 @@ import PopUp from 'lib/ui-kit/popUp';
 import {Info} from 'assets/images/icons';
 import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
 import clsx from 'clsx';
+import {BaseModalProps} from "../../../../../lib/hooks/useModal";
 
-interface LeverPopUpProps{
-    lever: number,
-    acceptFunc: (value: any) => void,
-    onClose: () => void
-}
-
-const LeverPopUp:FC<LeverPopUpProps> = props => {
+const LeverPopUp = (props: { lever: number } & BaseModalProps) => {
 
     const MAX_SUM = 300000000;
-    const sliderObj = {
-        value: 1,
-        style: {
-            background: '',
-        },
-    };
 
     const { onClose } = props;
     const [lever, setLever] = useState<number>(1);

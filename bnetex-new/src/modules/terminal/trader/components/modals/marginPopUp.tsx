@@ -3,15 +3,9 @@ import styles from './marginPopUp.module.scss';
 import PopUp from 'lib/ui-kit/popUp';
 import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
 import clsx from 'clsx';
+import {BaseModalProps} from "../../../../../lib/hooks/useModal";
 
-interface MarginPopUpProps {
-    type: 'cross' | 'isolated',
-    hasOrder: boolean,
-    onClose: () => void,
-    acceptFunc: (value: any) => void
-}
-
-const MarginPopUp: FC<MarginPopUpProps> = props => {
+const MarginPopUp = (props: { type: string } & BaseModalProps) => {
 
     const { onClose } = props;
 

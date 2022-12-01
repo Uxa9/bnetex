@@ -9,7 +9,7 @@ import clsx from 'clsx';
 
 const TerminalLayout = () => {
 
-    const [layoutStyles, setLayoutStyles] = useState(clsx(styles['content-wrapper']))
+    const [layoutStyles, setLayoutStyles] = useState(clsx(styles['content-wrapper']));
     const location = useLocation();
 
     useEffect(() => {

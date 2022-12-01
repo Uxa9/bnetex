@@ -35,3 +35,52 @@
     display: flex;
     justify-content: space-between;
 }
+
+.trader-view-trade-type {
+    margin: 16px 0 32px;
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+
+    span:last-child {
+        margin-top: 8px;
+    }
+}
+
+.balance-and-max {
+    display: flex;
+    justify-content: space-between;
+}
+
+.input-fields {
+    >* {
+        margin-top: 16px;
+    }
+
+    margin-bottom: 32px;
+}
+
+.trade-sum-type {
+    width: 80px;
+}
+
+.trade-sum-selector {
+    margin: 16px 0 32px;
+}
+
+.submit-form-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-buttons-text {
+    p:first-child {
+        margin-top: 32px;
+    }
+
+    p:not(:first-child) {
+        margin-top: 16px;
+    }
+}
