@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom';
 import styles from './terminalLayout.module.scss';
 import { useActions } from 'lib/hooks/useActionCreators';
 import { useEffect } from 'react';
+import TradingViewWidget from 'modules/TradingView/TradingViewWidget';
 
 const TerminalLayout = () => {
 
@@ -21,7 +22,10 @@ const TerminalLayout = () => {
         <div
             className={styles['content-wrapper']}
         >
-            <ChartView 
+            {/* <ChartView 
+                className={styles.chart}
+            /> */}
+            <TradingViewWidget
                 className={styles.chart}
             />
             <HistoryAndOrders 
