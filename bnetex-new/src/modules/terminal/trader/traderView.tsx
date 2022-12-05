@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactChild, ReactFragment, ReactPortal, useEffect, useState } from 'react';
 import {Button, Input, ToggleButton, ToggleButtonGroup} from 'lib/ui-kit';
 import clsx from 'clsx';
 import styles from './traderView.module.scss';
@@ -6,33 +6,41 @@ import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import MarginPopUp from './components/modals/marginPopUp';
 import LeverPopUp from './components/modals/leverPopUp';
 import { useModal } from 'lib/hooks/useModal';
+import { useGoToState } from 'lib/hooks/useGoToState';
+import { useAppDispatch } from 'lib/hooks/useAppDispatch';
+import { getWallets } from 'store/action-creators/wallet';
 
 type TraderViewType = 'limit' | 'tpsl';
 type TraderSumType  = 'exactSum' | 'percent';
 
 const TradeView = () => {
 
+    const { goToState } = useGoToState();
+    const dispath = useAppDispatch();
+    const { mainWallet, loading: walletsLoading } = useTypedSelector(state => state.wallet);
+   
+    useEffect(() => {
+        dispath(getWallets());
+    }, []);
+
     const [viewType, setViewType] = useState<TraderViewType>('limit');
     const [sumType, setSumType] = useState<TraderSumType>('exactSum');
+    const [orderBook, setOrderBook] = useState<any>([]);
 
     const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
 
     const { open: OpenMarginModal } = useModal(MarginPopUp);
     const { open: OpenLeverModal } = useModal(LeverPopUp);
 
-    const arr = [
-        [1.1, 16000.00],
-        [1.1, 16001.00],
-        [2.1, 16002.00],
-        [1.6, 16003.00],
-        [2.4, 16004.00],
-        [2.2, 16005.00],
-        [5.4, 16006.00],
-        [2.3, 16007.00],
-        [2.1, 16008.00],
-        [1.6, 16009.00],
-        [1.5, 160010.00],
-    ]
+    const orderBookSocket = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@depth20@1000ms');
+
+    orderBookSocket.onmessage = (event) => {
+        console.log(JSON.parse(event.data));
+
+        let data = JSON.parse(event.data);
+        
+        setOrderBook([...data.bids, ...data.asks]);
+    }
 
     return (
         <div
@@ -52,7 +60,7 @@ const TradeView = () => {
                     </span>
                 </div>
                 {
-                    arr.map(item => {
+                    orderBook.map((item: (boolean | ReactChild | ReactFragment | ReactPortal | null | undefined)[]) => {
                         return (
                             <div
                                 className={clsx(styles['cup-position'])}
@@ -61,25 +69,15 @@ const TradeView = () => {
                                 }}
                             >
                                 <span>
-                                    {item[0]}
+                                    {item[1]}
                                 </span>
                                 <span>
-                                    {item[1]}
+                                    {item[0]}
                                 </span>
                             </div>
                         )
                     })
                 }
-                <div
-                    className={clsx(styles['cup-position'])}
-                >
-                    <span>
-                        1.5
-                    </span>
-                    <span>
-                        16000.00
-                    </span>
-                </div>
             </div>
             <form
                 className={clsx('card', styles['trade-panel'])}
@@ -137,7 +135,7 @@ const TradeView = () => {
                         <span
                             className={'subtitle'}
                         >
-                            USDT
+                            {`${mainWallet} USDT`}
                         </span>
                     </p>
                     <p

@@ -9,11 +9,11 @@ const MarginPopUp = (props: { type: string } & BaseModalProps) => {
 
     const { onClose } = props;
 
-    const [switcher, setSwitcher] = useState('cross');
+    // const [switcher, setSwitcher] = useState('cross');
 
-    useEffect(() => {
-        setSwitcher(props.type);
-    }, []);
+    // useEffect(() => {
+    //     setSwitcher(props.type);
+    // }, []);
 
     return (
         <Modal
@@ -27,15 +27,15 @@ const MarginPopUp = (props: { type: string } & BaseModalProps) => {
             <div
                 className='margin-selector'
             >
-                <div
+                {/* <div
                     className={`${switcher === styles['cross'] && styles['active']}`}
-                    onClick={() => setSwitcher('cross')}
+                    onClick={() => onClose('cross')}
                 >
                     {"Перекрестная"}
                 </div>
                 <div
                     className={`${switcher === styles['isolated'] && styles['active']}`}
-                    onClick={() => setSwitcher('isolated')}
+                    onClick={() => onClose('isolated')}
                 >
                     {"Изолированная"}
                 </div>
@@ -57,7 +57,7 @@ const MarginPopUp = (props: { type: string } & BaseModalProps) => {
                         {"Режим изолированной маржи:"}
                     </b>
                     {"маржа, установленная по позиции, ограничена определенной суммой. Если маржа опускается ниже уровня поддерживающей маржи, то позиция ликвидируется. В этом режиме вы можете добавлять и удалять маржу."}
-                </p>
+                </p> */}
             </div>
         </Modal>
     );
