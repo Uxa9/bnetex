@@ -1,3 +1,5 @@
+import { useTheme } from 'lib/hooks/useTheme';
+import { capitalizeFirstLetter } from 'lib/utils/capitalizeString';
 import { useEffect, useRef, useState } from 'react';
 import {
     widget,
@@ -5,8 +7,10 @@ import {
     LanguageCode,
     IChartingLibraryWidget,
     ResolutionString,
+    ThemeName,
 } from '../../charting_library';
 import api from './api/api';
+import { getOverrides } from './colorOverrides';
 
 
 export interface ChartContainerProps {
@@ -24,9 +28,6 @@ export interface ChartContainerProps {
 	autosize: ChartingLibraryWidgetOptions['autosize'];
 	studiesOverrides: ChartingLibraryWidgetOptions['studies_overrides'];
 	container: ChartingLibraryWidgetOptions['container'];
-}
-
-export interface ChartContainerState {
 }
 
 function getLanguageFromURL(): LanguageCode | null {
@@ -47,7 +48,6 @@ const defaultProps: Omit<ChartContainerProps, 'container'> = {
     fullscreen: false,
     autosize: true,
     studiesOverrides: {},
-    
 };
 
 interface TradingViewWidgetProps extends Partial<ChartContainerProps> {
@@ -57,22 +57,8 @@ interface TradingViewWidgetProps extends Partial<ChartContainerProps> {
 const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps) => {
     const widgetRef = useRef<HTMLDivElement | null>(null);
     const [tvWidget, setTvWidget] = useState<IChartingLibraryWidget | null>(null);
-    
+    const { theme } = useTheme();
     const props = {...defaultProps, ...componentProps};
-
-    // useEffect(() => {
-    //     const socket = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@ticker_1h');
-
-    //     socket.onopen = (event: Event) => {
-    //         console.log('Соединение установлено');
-    //         console.log(event);
-    //     };
-
-    //     socket.onmessage = (event: MessageEvent) => {
-    //         console.log('С сервера получены данные');
-    //         console.log(JSON.parse(event.data));
-    //     };
-    // }, []);
 
     useEffect(() => {
         if (!widgetRef.current) {
@@ -80,13 +66,11 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
         }
         const widgetOptions: ChartingLibraryWidgetOptions = {
             symbol: props.symbol as string,
-            // BEWARE: no trailing slash is expected in feed URL
-            // tslint:disable-next-line:no-any
             datafeed: api,
             interval: props.interval as ChartingLibraryWidgetOptions['interval'],
             container: widgetRef.current,
             library_path: props.libraryPath as string,
-            
+
             locale: getLanguageFromURL() || 'en',
             disabled_features: ['use_localstorage_for_settings'],
             enabled_features: ['study_templates'],
@@ -97,6 +81,9 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
             fullscreen: props.fullscreen,
             autosize: props.autosize,
             studies_overrides: props.studiesOverrides,
+            custom_css_url: '/src/modules/TradingView/tradingviewRecolor.scss',
+            theme: capitalizeFirstLetter(theme) as ThemeName,
+            overrides: getOverrides(),
         };
 
         setTvWidget(new widget(widgetOptions));
@@ -107,28 +94,8 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
             }
         };
 
-    }, []);
+    }, [ theme ]);
 
-    useEffect(() => {
-        if (!tvWidget) return;
-
-        tvWidget.onChartReady(() => {
-            tvWidget.headerReady().then(() => {
-                const button = tvWidget.createButton();
-                button.setAttribute('title', 'Click to show a notification popup');
-                button.classList.add('apply-common-tooltip');
-                button.addEventListener('click', () => tvWidget.showNoticeDialog({
-                    title: 'Notification',
-                    body: 'TradingView Charting Library API works correctly',
-                    callback: () => {
-                        console.log('Noticed!');
-                    },
-                }));
-                button.innerHTML = 'Check API';
-            });
-        });
-    }, [ tvWidget ]);
-    
     return (
         <div
             ref={widgetRef}
@@ -136,6 +103,5 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
         />
     );
 };
-
 
 export default TradingViewWidget;

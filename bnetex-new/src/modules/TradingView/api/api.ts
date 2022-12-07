@@ -1,6 +1,9 @@
-import { DatafeedConfiguration, HistoryCallback, LibrarySymbolInfo, ErrorCallback, OnReadyCallback, PeriodParams, ResolutionString, ResolveCallback, SearchSymbolsCallback, ServerTimeCallback, SubscribeBarsCallback, SymbolResolveExtension, GetMarksCallback, Mark } from 'charting_library/charting_library';
+import { HistoryCallback, LibrarySymbolInfo, ErrorCallback, PeriodParams, ResolutionString,
+    SearchSymbolsCallback, ServerTimeCallback, SubscribeBarsCallback,
+    GetMarksCallback, Mark } from 'charting_library/charting_library';
 import { UUID } from 'lib/types/uuid';
-import { getExchangeServerTime, getSymbols, getKlines, subscribeKline, unsubscribeKline, checkInterval } from './services';
+import { getExchangeServerTime, getSymbols, getKlines, checkInterval } from './services';
+import { subscribeOnStream, unsubscribeFromStream } from './streaming';
 import { TVInterval } from './types';
 
 const configurationData = {
@@ -15,23 +18,15 @@ const configurationData = {
 export default {
     // get a configuration of your datafeed (e.g. supported resolutions, exchanges and so on)
     onReady: (callback: any) => {
-        console.log('[onReady]: Method call');
         setTimeout(() => callback(configurationData)); // callback must be called asynchronously.
     },
-    /*
-	 // NO need if not using search
-	searchSymbols: (userInput, exchange, symbolType, onResultReadyCallback) => {
-		console.log('[searchSymbols]: Method call');
-	},
-	 */
+
     // retrieve information about a specific symbol (exchange, price scale, full symbol etc.)
     // ResolveCallback
-    resolveSymbol: (symbolName: string, onResolve: any, onError: (reason: string) => void, extension?: SymbolResolveExtension) => {
-        console.log('[resolveSymbol]: Method call', symbolName);
+    resolveSymbol: (symbolName: string, onResolve: any, onError: (reason: string) => void) => {
 
         const comps = symbolName.split(':');
         symbolName = (comps.length > 1 ? comps[1] : symbolName).toUpperCase();
-
 
         // need for pricescale()
         function pricescale(symbol: any) {
@@ -67,62 +62,88 @@ export default {
             const symbol = symbols.find((i: any) => i.symbol === symbolName);
             return symbol ? onResolve(symbolInfo(symbol)) : onError('[resolveSymbol]: symbol not found');
         });
-
     },
-    // get historical data for the symbol
-    // https://github.com/tradingview/charting_library/wiki/JS-Api#getbarssymbolinfo-resolution-periodparams-onhistorycallback-onerrorcallback
-    getBars: async (symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, periodParams: PeriodParams, onResult: HistoryCallback, onError: ErrorCallback) => {
-        console.log('[getBars] Method call', symbolInfo, resolution);
 
+    getBars: async (symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, periodParams: PeriodParams, onResult: HistoryCallback, onError: ErrorCallback) => {
         if (!checkInterval(resolution)) {
             return onError('[getBars] Invalid interval');
         }
 
-        const klines = await getKlines({ symbol: symbolInfo.name, interval: resolution, from: periodParams.from, to: periodParams.to })
-            .catch(err => console.log(err)
-            );
-        console.log(klines);
-        if (klines.length > 0) {
-            return onResult(klines);
-        }
+        const klines = await getKlines({ 
+            symbol: symbolInfo.name,
+            interval: resolution,
+            from: periodParams.from,
+            to: periodParams.to, 
+        });
+
+        if (klines.length > 0) return onResult(klines);
 
         onError('[getBars] Klines Data error');
-
     },
-    // subscription to real-time updates
-    subscribeBars: (symbolInfo: LibrarySymbolInfo, resolution: TVInterval, onTick: SubscribeBarsCallback, listenerGuid: UUID, onResetCacheNeededCallback: () => void) => {
-        console.log('[subscribeBars]: Method call with subscribeUID:', listenerGuid);
 
-        subscribeKline({ symbol: symbolInfo.name,
-            interval: resolution,
-            uniqueID: listenerGuid,
-            from: undefined,
-            to: undefined, 
-        }, (cb: any) => onTick(cb));
+    // подписать на сокет со свечками
+    subscribeBars: (
+        symbolInfo: LibrarySymbolInfo,
+        resolution: TVInterval, 
+        onTick: SubscribeBarsCallback,
+        listenerGuid: UUID
+    ) => {
+        subscribeOnStream(symbolInfo, resolution, listenerGuid, onTick);
     },
+
+    // закрыть сокет по его id
     unsubscribeBars: (subscriberUID: UUID) => {
-        console.log('[unsubscribeBars]: Method call with subscriberUID:', subscriberUID);
-        unsubscribeKline(subscriberUID);
+        unsubscribeFromStream(subscriberUID);
     },
 
     getServerTime: (callback: ServerTimeCallback) => {
-        getExchangeServerTime().then(time => {
-            callback(Math.floor(time / 1000));
-        }).catch(err => {
-            console.error(err);
-        });
+        getExchangeServerTime()
+            .then((time: number) => {
+                // не знаю почему, но у tv какие то блядские приколы со временем
+                callback(Math.floor(time / 1000));
+            });
     },
 
-    searchSymbols: (userInput: string, exchange: string, symbolType: string, onResult: SearchSymbolsCallback) => {
+    searchSymbols: (
+        _userInput: string,
+        _exchange: string, 
+        _symbolType: string,
+        _onResult: SearchSymbolsCallback
+    ) => {
         
     },
 
-    getMarks: (symbolInfo: LibrarySymbolInfo, from: number, to: number, onDataCallback: GetMarksCallback<Mark>, resolution: ResolutionString) => {
-        console.log('[getMarks]: Method call');
-        console.log( symbolInfo);
-        console.log(from);
-        console.log(to);
-        console.log(resolution);
-        console.log(onDataCallback);
+    getMarks: (
+        _symbolInfo: LibrarySymbolInfo,
+        _from: number,
+        _to: number,
+        onDataCallback: GetMarksCallback<Mark>,
+        _resolution: ResolutionString
+    ) => {
+        const arr: Mark[] = [{
+            time: Number(new Date()) / 1000,
+            id: 1,
+            color: 'red',
+            text:'Продажа какого то актива',
+            label: 'S',
+            minSize: 14,
+            labelFontColor: '#ffffff',
+        },
+        {
+            time: Number(new Date()) / 1000,
+            id: 2,
+            color: 'green',
+            text:'Покупка какого то актива',
+            label: 'B',
+            minSize: 14,
+            labelFontColor: '#ffffff',
+        },
+        ];
+        
+        onDataCallback(arr);
+        // console.log('[getMarks]: Method call');
+        // console.log(symbolInfo);
+        // console.log(resolution);
+        // console.log(onDataCallback);
     },
 };
