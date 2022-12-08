@@ -16,6 +16,7 @@ import { PositionsModule } from './positions/positions.module';
 import { InvestSessionsModule } from './invest-sessions/invest-sessions.module';
 import { Request } from "./request/request.model";
 import { InvestSession } from "./invest-sessions/invest-sessions.model";
+import { InvestTradingModule } from './invest-trading/invest-trading.module';
 
 
 @Module({
@@ -35,7 +36,7 @@ import { InvestSession } from "./invest-sessions/invest-sessions.model";
             models: [User, Role, UserRoles, Request, InvestSession],
             autoLoadModels: true
         }),
-        MongooseModule.forRoot(`mongodb://localhost:27017/exchange`),
+        MongooseModule.forRoot(`mongodb://127.0.0.1:27017/exchange`),
         UsersModule,
         RolesModule,
         AuthModule,
@@ -43,7 +44,8 @@ import { InvestSession } from "./invest-sessions/invest-sessions.model";
         RequestModule,
         MailSenderModule,
         PositionsModule,
-        InvestSessionsModule
+        InvestSessionsModule,
+        InvestTradingModule
     ]
 })
 export class AppModule{};

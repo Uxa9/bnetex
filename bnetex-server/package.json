@@ -33,6 +33,7 @@
     "@nestjs/swagger": "^6.1.1",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
+    "binance": "^2.2.5",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "cross-env": "^7.0.3",
