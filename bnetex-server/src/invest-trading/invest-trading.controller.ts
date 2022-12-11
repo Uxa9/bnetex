@@ -1,4 +1,4 @@
-import {Controller, Get, Post} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post} from '@nestjs/common';
 import {InvestSessionsService} from "../invest-sessions/invest-sessions.service";
 import {InvestTradingService} from "./invest-trading.service";
 
@@ -9,13 +9,13 @@ export class InvestTradingController {
         private investTradingService : InvestTradingService
     ) {}
 
-    @Get()
-    getUserBalance() {
-        return this.investTradingService.getUserBalance();
+    @Get("balance/:id")
+    getUserBalance(@Param("id") id: number) {
+        return this.investTradingService.getUserBalance(id);
     }
 
-    @Post()
-    buyLimit() {
-        return this.investTradingService.buyLimit();
+    @Post("place-order")
+    buyLimit(@Body() params: any) {
+        return this.investTradingService.buyLimit(params);
     }
 }

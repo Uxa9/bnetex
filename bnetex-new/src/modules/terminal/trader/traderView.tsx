@@ -9,20 +9,54 @@ import { useModal } from 'lib/hooks/useModal';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { getWallets } from 'store/action-creators/wallet';
+import { getUserInfo } from 'lib/utils/getUserInfo';
+import { getUserFuturesWallet } from 'services/getUserFuturesWallet';
+import { useForm } from 'react-hook-form';
+import { sendFuturesOrder } from 'services/sendFuturesOrder';
 
 type TraderViewType = 'limit' | 'tpsl';
 type TraderSumType  = 'exactSum' | 'percent';
+
+interface TradeFormData {
+    side: string,
+    type: string,
+    amount: number
+}
 
 const TradeView = () => {
 
     const { goToState } = useGoToState();
     const dispath = useAppDispatch();
-    const { mainWallet, loading: walletsLoading } = useTypedSelector(state => state.wallet);
+    // const { mainWallet, loading: walletsLoading } = useTypedSelector(state => state.wallet);
    
+    const onSubmit = (data: TradeFormData) => {
+        console.log(data);
+        
+    }
+
+    const [tradeType, setTradeType] = useState("");
+    const [amount, setAmount] = useState(0);
+
     useEffect(() => {
-        dispath(getWallets());
+        sendFuturesOrder({
+            side: tradeType,
+            type: "MARKET",
+            amount: amount
+        });
+    }, [tradeType]);
+
+    useEffect(() => {
+        // dispath(getWallets());
+        getUserFuturesWallet()
+            .then((res) => {
+                console.log(res);
+                
+                setFuturesWallet(res.data.toFixed(3));
+            });
     }, []);
 
+
+    const [futuresWallet, setFuturesWallet] = useState(0);
     const [viewType, setViewType] = useState<TraderViewType>('limit');
     const [sumType, setSumType] = useState<TraderSumType>('exactSum');
     const [orderBook, setOrderBook] = useState<any>([]);
@@ -81,6 +115,7 @@ const TradeView = () => {
             </div>
             <form
                 className={clsx('card', styles['trade-panel'])}
+                // onSubmit={onSubmit}
             >
                 <div
                     className={styles['trader-view-wrapper__header']}
@@ -88,16 +123,18 @@ const TradeView = () => {
                     <Button
                         buttonStyle="secondary"
                         text="Перекрестная"
-                        onClick={() => OpenMarginModal({
-                            type: 'isolated'
-                        })}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            OpenMarginModal({type: 'isolated'});
+                        }}
                     />
                     <Button
                         buttonStyle="secondary"
                         text="10x"
-                        onClick={() => OpenLeverModal({
-                            lever: 0
-                        })}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            OpenLeverModal({lever: 0})
+                        }}
                     />
                 </div>
                 <div
@@ -135,7 +172,7 @@ const TradeView = () => {
                         <span
                             className={'subtitle'}
                         >
-                            {`${mainWallet} USDT`}
+                            {`${futuresWallet} USDT`}
                         </span>
                     </p>
                     <p
@@ -163,6 +200,7 @@ const TradeView = () => {
                     <Input
                         label={"Количество"}
                         postfix={"USDT"}
+                        onChange={(e) => setAmount(Number(e.target.value))}
                     />
                 </div>
                 <div
@@ -260,6 +298,10 @@ const TradeView = () => {
                             type={"submit"}
                             buttonStyle={"primary"}
                             buttonTheme={"green"}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setTradeType("BUY");
+                            }}
                         />
                         <div
                             className={styles['form-buttons-text']}
@@ -314,6 +356,10 @@ const TradeView = () => {
                             type={"submit"}
                             buttonStyle={"primary"}
                             buttonTheme={"red"}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setTradeType("SELL");
+                            }}
                         />
                         <div
                             className={styles['form-buttons-text']}
