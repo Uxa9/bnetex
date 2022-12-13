@@ -5,11 +5,11 @@ import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
 import clsx from 'clsx';
 import {BaseModalProps} from "../../../../../lib/hooks/useModal";
 
-const MarginPopUp = (props: { type: string } & BaseModalProps) => {
+const MarginPopUp = (props: { isolated: boolean } & BaseModalProps) => {
 
     const { onClose } = props;
+    const [isolated, setIsolated] = useState<boolean>(false);
 
-    // const [switcher, setSwitcher] = useState('cross');
 
     // useEffect(() => {
     //     setSwitcher(props.type);

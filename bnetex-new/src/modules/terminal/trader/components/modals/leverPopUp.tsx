@@ -6,16 +6,75 @@ import {Info} from 'assets/images/icons';
 import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
 import clsx from 'clsx';
 import {BaseModalProps} from "../../../../../lib/hooks/useModal";
+import {getLeverageBrackets} from "../../../../../services/trading/getLeverageBrackets";
+import {setUserLeverage} from "../../../../../services/trading/setUserLeverage";
+import {Button} from "../../../../../lib/ui-kit";
+
+interface LeverBreakpoint {
+    value: number,
+    capacity: number,
+    floor?: number
+}
 
 const LeverPopUp = (props: { lever: number } & BaseModalProps) => {
 
-    const MAX_SUM = 300000000;
-
     const { onClose } = props;
-    const [lever, setLever] = useState<number>(1);
-    const [maxSum, setMaxSum] = useState<number>(MAX_SUM);
+    const [lever, setLever] = useState<number>(props.lever);
+    const [maxLever, setMaxLever] = useState<number>(0);
+    const [maxSum, setMaxSum] = useState<number>(500000000);
     const [sliderLever, showSliderLever] = useState(false);
+    const [breakpoints, setBreakPoints] = useState<LeverBreakpoint[]>([]);
     const slider = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        setLever(props.lever);
+
+        getLeverageBrackets()
+            .then(async (res) => {
+                // ну это другим словом не назовешь
+                const aboba = await (res.data[0].brackets.map((bracket: any) => {
+                    return {
+                        value : bracket.initialLeverage,
+                        capacity : bracket.notionalCap,
+                        floor : bracket.notionalFloor
+                    }
+                }));
+
+                await aboba.sort(( a: any, b: any ) => {
+                    if ( a.value < b.value ){
+                        return -1;
+                    }
+                    if ( a.value > b.value ){
+                        return 1;
+                    }
+                    return 0;
+                });
+
+                setBreakPoints(aboba);
+                setMaxLever(aboba[aboba.length - 1].lever);
+
+            });
+    }, []);
+
+    // Тут надо почище сделать. Это пиздец)
+    useEffect(() => {
+        if(slider !== null){
+            //@ts-ignore
+            slider.current.value = lever.toString();
+            //@ts-ignore
+            slider.current.style.background =
+                'linear-gradient(to right, #9043CA 0%, #9043CA ' +
+                lever/(maxLever / 100 || 1) + '%, #F9F1FF ' +
+                lever/(maxLever / 100 || 1) + '%, #F9F1FF 100%)';
+        }
+
+        const bp = breakpoints.find(item => item.value === lever)
+
+        if (bp !== undefined) {
+            setMaxSum(bp.capacity);
+        }
+
+    }, [lever]);
 
     const lowerLever = () => {
         if ( lever > 1 ) {
@@ -24,65 +83,16 @@ const LeverPopUp = (props: { lever: number } & BaseModalProps) => {
     };
 
     const upperLever = () => {
-        if ( lever < 125 ) {
+        if ( lever < maxLever ) {
             setLever(Number(lever) + 1);
         }
     };
 
-    useEffect(() => {
-        setLever(props.lever);
-    }, []);
-    
-    // Тут надо почище сделать. Это пиздец)
-    useEffect(() => {
-        if(slider !== null){
-            //@ts-ignore
-            slider.current.value = lever.toString();
-            //@ts-ignore
-            slider.current.style.background = 
-                'linear-gradient(to right, #9043CA 0%, #9043CA ' + 
-                lever/1.25 + '%, #F9F1FF ' + 
-                lever/1.25 + '%, #F9F1FF 100%)';
-        }
-
-        if (lever >= 101) {
-            setMaxSum(50000);
-            return;
-        }
-        if (lever >= 51) {
-            setMaxSum(250000);
-            return;
-        }
-        if (lever >= 21) {
-            setMaxSum(1000000);
-            return;
-        }
-        if (lever >= 11) {
-            setMaxSum(10000000);
-            return;
-        }
-        if (lever >= 6) {
-            setMaxSum(20000000);
-            return;
-        }
-        if (lever >= 5) {
-            setMaxSum(50000000);
-            return;
-        }
-        if (lever >= 4) {
-            setMaxSum(100000000);
-            return;
-        }
-        if (lever >= 3) {
-            setMaxSum(200000000);
-            return;
-        }
-        if (lever >= 2) {
-            setMaxSum(300000000);
-            return;
-        }
-    }, [lever]);
-
+    const setLeverage = async () => {
+        await setUserLeverage({lever});
+    }
+    console.log(breakpoints);
+    console.log(maxLever);
     return (
         <Modal
             title={"Изменить кредитное плечо"}
@@ -128,7 +138,7 @@ const LeverPopUp = (props: { lever: number } & BaseModalProps) => {
             <input
                 type='range'
                 min={1}
-                max={125}
+                max={maxLever}
                 defaultValue={1}
                 list="leverageList"
                 onChange={e => setLever(e.target.valueAsNumber)}
@@ -143,85 +153,51 @@ const LeverPopUp = (props: { lever: number } & BaseModalProps) => {
             >
                 <option
                     value={1}
-                    label="1x"
+                    label={`1x`}
                     className={
                         `${lever > 1 && styles['passed']}`
                     }
                     onClick={() => setLever(1)}
-                />
-                <option
-                    value={25}
-                    label="25x"
-                    className={
-                        `${lever > 25 && styles['passed']}`
-                    }
-                    onClick={() => setLever(25)}
-                />
-                <option
-                    value={50}
-                    label="50x"
-                    className={
-                        `${lever > 50 && styles['passed']}`
-                    }
-                    onClick={() => setLever(50)}
-                />
-                <option
-                    value={75}
-                    label="75x"
-                    className={
-                        `${lever > 75 && styles['passed']}`
-                    }
-                    onClick={() => setLever(75)}
-                />
-                <option
-                    value={100}
-                    label="100x"
-                    className={
-                        `${lever > 100 && styles['passed']}`
-                    }
-                    onClick={() => setLever(100)}
-                />
-                <option
-                    value={125}
-                    label="125x"
-                    className={
-                        `${lever > 125 && styles['passed']}`
-                    }
-                    onClick={() => setLever(125)}
                 />
             </datalist>
             <div
                 className={styles["lever-info"]}
             >
                 <ul>
-                    <li
-                        style={{
-                            maxHeight: lever > 1 ? 'none' : 0,
-                        }}
-                    >
+                    <li>
                         <span>
                             {"Максимальная позиция при текущем кредитном плече:"}
                         </span>
                         <b>
-                            {`${maxSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} USDT`}
+                            {` ${maxSum} USDT`}
                         </b>
                     </li>
                     <li>
                         {"Пожалуйста, учтите, что кредитное плечо будет также применено для открытых позиций и открытых ордеров"}
                     </li>
                 </ul>
-                <div
-                    className={styles["lever-warn"]}
-                >
-                    <Info 
-                        height='25px'
-                        width='25px'
-                    />
-                    <span>
-                        {"Торговля с кредитным плечом, превышающим 10х, увеличивает риск принудительной ликвидации. \nВсегда контролируйте уровень риска."}
-                    </span>
-                </div>
+                {lever > 10 &&
+                    <div
+                        className={styles["lever-warn"]}
+                    >
+                        <Info
+                            height='25px'
+                            width='25px'
+                        />
+                        <span>
+                            {"Торговля с кредитным плечом, превышающим 10х, увеличивает риск принудительной ликвидации. \nВсегда контролируйте уровень риска."}
+                        </span>
+                    </div>
+                }
             </div>
+            <Button
+                text={"Подтвердить"}
+                fillContainer
+                onClick={() => {
+                    setLeverage();
+                    onClose();
+                }}
+            />
         </Modal>
     );
 };

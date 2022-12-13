@@ -12,7 +12,8 @@ import { getWallets } from 'store/action-creators/wallet';
 import { getUserInfo } from 'lib/utils/getUserInfo';
 import { getUserFuturesWallet } from 'services/getUserFuturesWallet';
 import { useForm } from 'react-hook-form';
-import { sendFuturesOrder } from 'services/sendFuturesOrder';
+import { sendFuturesOrder } from 'services/trading/sendFuturesOrder';
+import {getCurrentLeverageAndIsolated} from "../../../services/trading/getCurrentLeverageAndIsolated";
 
 type TraderViewType = 'limit' | 'tpsl';
 type TraderSumType  = 'exactSum' | 'percent';
@@ -28,6 +29,28 @@ const TradeView = () => {
     const { goToState } = useGoToState();
     const dispath = useAppDispatch();
     // const { mainWallet, loading: walletsLoading } = useTypedSelector(state => state.wallet);
+
+    const [futuresWallet, setFuturesWallet] = useState<Number>(0);
+    const [viewType, setViewType] = useState<TraderViewType>('limit');
+    const [sumType, setSumType] = useState<TraderSumType>('exactSum');
+    const [orderBook, setOrderBook] = useState<any>([]);
+    const [leverage, setLeverage] = useState<number>(0);
+    const [isolated, setIsolated] = useState<boolean>(false);
+
+    const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
+
+    const { open: OpenMarginModal } = useModal(MarginPopUp);
+    const { open: OpenLeverModal } = useModal(LeverPopUp);
+
+    // const orderBookSocket = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@depth20@1000ms');
+    //
+    // orderBookSocket.onmessage = (event) => {
+    //     console.log(JSON.parse(event.data));
+    //
+    //     let data = JSON.parse(event.data);
+    //
+    //     setOrderBook([...data.bids, ...data.asks]);
+    // }
    
     const onSubmit = (data: TradeFormData) => {
         console.log(data);
@@ -46,35 +69,17 @@ const TradeView = () => {
     }, [tradeType]);
 
     useEffect(() => {
-        // dispath(getWallets());
         getUserFuturesWallet()
             .then((res) => {
-                console.log(res);
-                
                 setFuturesWallet(res.data.toFixed(3));
             });
+
+        getCurrentLeverageAndIsolated()
+            .then((res) => {
+                setLeverage(Number(res.data.leverage));
+                setIsolated(res.data.isolated);
+            });
     }, []);
-
-
-    const [futuresWallet, setFuturesWallet] = useState(0);
-    const [viewType, setViewType] = useState<TraderViewType>('limit');
-    const [sumType, setSumType] = useState<TraderSumType>('exactSum');
-    const [orderBook, setOrderBook] = useState<any>([]);
-
-    const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
-
-    const { open: OpenMarginModal } = useModal(MarginPopUp);
-    const { open: OpenLeverModal } = useModal(LeverPopUp);
-
-    const orderBookSocket = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@depth20@1000ms');
-
-    orderBookSocket.onmessage = (event) => {
-        console.log(JSON.parse(event.data));
-
-        let data = JSON.parse(event.data);
-        
-        setOrderBook([...data.bids, ...data.asks]);
-    }
 
     return (
         <div
@@ -125,15 +130,15 @@ const TradeView = () => {
                         text="Перекрестная"
                         onClick={(e) => {
                             e.preventDefault();
-                            OpenMarginModal({type: 'isolated'});
+                            OpenMarginModal({isolated: isolated});
                         }}
                     />
                     <Button
                         buttonStyle="secondary"
-                        text="10x"
+                        text={`${leverage}x`}
                         onClick={(e) => {
                             e.preventDefault();
-                            OpenLeverModal({lever: 0})
+                            OpenLeverModal({lever: leverage})
                         }}
                     />
                 </div>

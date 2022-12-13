@@ -15,22 +15,9 @@
 
         transition: background-color .5s;
     }
-
-    &:hover {
-        &::before, &::after {
-            background-color: $grayscale-1;
-        }
-    }
-
-    &:active {
-        &::before, &::after {
-            background-color: $grayscale-1;
-        }
-    }
 }
 
 .credit-lever-header {
-    color: $grayscale-1;
     font-size: 14px;
 }
 
@@ -45,7 +32,6 @@
 
     align-items: center;
 
-    background-color: $grayscale-1;
     border: solid 1px $grayscale-1;
     border-radius: 5px;
 }
@@ -64,8 +50,6 @@
     font-weight: 300;
     padding: 15px 0 7px;
 
-    
-    color: $grayscale-1;
     transition: opacity .2s;
 }
 
@@ -173,8 +157,6 @@
     font-weight: 300;
     font-size: 14px;
 
-    color: $grayscale-1;
-
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;   
@@ -194,8 +176,7 @@
             width: 9px;
             height: 9px;
             border-radius: 50%;
-            
-            background-color: $grayscale-1;
+
             border: 2px solid $grayscale-1;
 
             position: absolute;
@@ -250,8 +231,6 @@
         width: 80%;
         padding-left: 20px;
 
-        color: $grayscale-1;
-
         font-size: 14px;
         
         li {
@@ -263,9 +242,7 @@
 
     .lever-warn {
         display: flex;
-    
-        color: $grayscale-1;
-    
+
         svg {
             position: relative;
             top: -5px;
@@ -292,7 +269,6 @@
         width: 26px;
         height: 4px;
 
-        background-color: $grayscale-1;
     }
 }
 
@@ -308,13 +284,11 @@
         width: 26px;
         height: 4px;
 
-        background-color: $grayscale-1;
     }
 
     &::before {
         width: 4px;
         height: 26px;
 
-        background-color: $grayscale-1;
     }    
 }

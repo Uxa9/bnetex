@@ -15,7 +15,27 @@ export class InvestTradingController {
     }
 
     @Post("place-order")
-    buyLimit(@Body() params: any) {
-        return this.investTradingService.buyLimit(params);
+    placeOrder(@Body() params: any) {
+        return this.investTradingService.placeOrder(params);
+    }
+
+    @Get("getLI/:id")
+    getLeverageAndIsolated(@Param("id") id: number) {
+        return this.investTradingService.getLeverageAndIsolated(id);
+    }
+
+    @Get("getMaxLeverage/:id")
+    getMaxLeverage(@Param("id") id: number) {
+        return this.investTradingService.getMaxLeverage(id);
+    }
+
+    @Post('setUserLeverage')
+    setUserLeverage(@Body() params: any) {
+        return this.investTradingService.setUserLeverage(params);
+    }
+
+    @Get("test")
+    test() {
+        return this.investTradingService.test();
     }
 }
