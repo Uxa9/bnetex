@@ -34,6 +34,16 @@ export class InvestTradingController {
         return this.investTradingService.setUserLeverage(params);
     }
 
+    @Get("userPositions/:id")
+    getUserPositions(@Param("id") id: number) {
+        return this.investTradingService.getUserPositions(id);
+    }
+
+    @Get("closeAllPositions/:id")
+    closeAllPositions(@Param("id") id: number) {
+        return this.investTradingService.closeAllPositions(id);
+    }
+
     @Get("test")
     test() {
         return this.investTradingService.test();

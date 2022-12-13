@@ -139,7 +139,7 @@ const LeverPopUp = (props: { lever: number } & BaseModalProps) => {
                 type='range'
                 min={1}
                 max={maxLever}
-                defaultValue={1}
+                defaultValue={lever}
                 list="leverageList"
                 onChange={e => setLever(e.target.valueAsNumber)}
                 onMouseEnter={() => showSliderLever(true)}

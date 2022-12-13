@@ -80,7 +80,7 @@ export class InvestTradingService {
                     side: params.side,
                     type: params.type,
                     price: params.price,
-                    timeInForce: "GTC",
+                    timeInForce: params.tif || "GTC",
                     quantity: Number((params.amount / params.price).toFixed(3)),
                 });
             }
@@ -107,7 +107,7 @@ export class InvestTradingService {
 
     async setUserLeverage(params: any) {
         // const user = this.userService.getUserById(params.id);
-        console.log(params)
+        
         const client = new USDMClient({
             api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
             api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
@@ -117,6 +117,59 @@ export class InvestTradingService {
             leverage: params.lever,
             symbol: "BTCUSDT"
         });
+    }
+
+    async getUserPositions(id: number) {
+        const client = new USDMClient({
+            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
+            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+        });
+
+        const a = await client.getAccountInformation()
+
+        return a.positions
+        // console.log(a.positions.filter(item => item.symbol === "BTCUSDT"));
+        
+        // return Promise.all([
+        //     // client.getAllOpenOrders(),
+        //     // client.getPositions()
+        //     client.getAccountInformation()
+        // ]).then(([/*orders,*/ info]) => {     
+        //     console.log(info);
+                   
+        //     return {
+        //         // orders,
+        //         info
+        //     }
+        // });
+    }
+
+    async closeAllPositions(id: number) {
+        const client = new USDMClient({
+            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
+            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+        });
+
+        const positions = await client.getPositions();
+
+        const amount = Number(positions.find(item => item.symbol === "BTCUSDT").positionAmt);
+
+        if ( amount > 0) {
+            await client.submitNewOrder({
+                symbol: "BTCUSDT",
+                side: "SELL",
+                type: "MARKET",
+                quantity: amount,
+            });
+        } else {
+                        
+            await client.submitNewOrder({
+                symbol: "BTCUSDT",
+                side: "BUY",
+                type: "MARKET",
+                quantity: amount*-1,
+            });
+        }
     }
 
     async test() {

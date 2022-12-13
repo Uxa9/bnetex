@@ -14,6 +14,7 @@ import { getUserFuturesWallet } from 'services/getUserFuturesWallet';
 import { useForm } from 'react-hook-form';
 import { sendFuturesOrder } from 'services/trading/sendFuturesOrder';
 import {getCurrentLeverageAndIsolated} from "../../../services/trading/getCurrentLeverageAndIsolated";
+import Binance from 'node-binance-api';
 
 type TraderViewType = 'limit' | 'tpsl';
 type TraderSumType  = 'exactSum' | 'percent';
@@ -30,26 +31,34 @@ const TradeView = () => {
     const dispath = useAppDispatch();
     // const { mainWallet, loading: walletsLoading } = useTypedSelector(state => state.wallet);
 
-    const [futuresWallet, setFuturesWallet] = useState<Number>(0);
+    const [futuresWallet, setFuturesWallet] = useState<number>(0);
     const [viewType, setViewType] = useState<TraderViewType>('limit');
     const [sumType, setSumType] = useState<TraderSumType>('exactSum');
     const [orderBook, setOrderBook] = useState<any>([]);
     const [leverage, setLeverage] = useState<number>(0);
     const [isolated, setIsolated] = useState<boolean>(false);
+    const [limitPrice, setLimitPrice] = useState(0);
 
     const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
 
     const { open: OpenMarginModal } = useModal(MarginPopUp);
     const { open: OpenLeverModal } = useModal(LeverPopUp);
 
-    // const orderBookSocket = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@depth20@1000ms');
-    //
+    // const orderBookSocket = new WebSocket('wss://fstream.binance.com/stream?streams=btcusdt@depth20');
+
+    // const binance = new Binance().options({
+    //     APIKEY: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
+    //     APISECRET: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+    // });
+
+    // binance.futuresBookTickerStream( console.log );
+    
     // orderBookSocket.onmessage = (event) => {
     //     console.log(JSON.parse(event.data));
-    //
-    //     let data = JSON.parse(event.data);
-    //
-    //     setOrderBook([...data.bids, ...data.asks]);
+    
+    //     let data = JSON.parse(event.data).data;
+    
+    //     setOrderBook([...data.b, ...data.a]);
     // }
    
     const onSubmit = (data: TradeFormData) => {
@@ -57,16 +66,35 @@ const TradeView = () => {
         
     }
 
-    const [tradeType, setTradeType] = useState("");
+    const [tradeType, setTradeType] = useState("BUY");
     const [amount, setAmount] = useState(0);
 
-    useEffect(() => {
+    const sendOrder = (type: string) => {
+        if (limitPrice !== 0) {
+            sendFuturesOrder({
+                side: tradeType,
+            type: "LIMIT",
+            price: limitPrice,
+            amount: amount
+            });
+        } else {
+            sendFuturesOrder({
+                side: tradeType,
+                type: type,
+                amount: amount
+            });   
+        }        
+    }
+
+    const sendLimitOrder = (price: number, tif?: string) => {
         sendFuturesOrder({
             side: tradeType,
-            type: "MARKET",
-            amount: amount
+            type: "LIMIT",
+            price: price,
+            amount: amount,
+            tif: tif || "GTC"
         });
-    }, [tradeType]);
+    }
 
     useEffect(() => {
         getUserFuturesWallet()
@@ -104,7 +132,7 @@ const TradeView = () => {
                             <div
                                 className={clsx(styles['cup-position'])}
                                 onClick={() => {
-
+                                    sendLimitOrder(Number(item[0]), "FOK");
                                 }}
                             >
                                 <span>
@@ -201,11 +229,13 @@ const TradeView = () => {
                     <Input
                         label={"Цена"}
                         postfix={"USDT"}
+                        onChange={(e) => setLimitPrice(Number(e.target.value))}
                     />
                     <Input
                         label={"Количество"}
                         postfix={"USDT"}
                         onChange={(e) => setAmount(Number(e.target.value))}
+                        value={amount}
                     />
                 </div>
                 <div
@@ -245,22 +275,37 @@ const TradeView = () => {
                             <ToggleButton
                                 text={'1$'}
                                 value={'1'}
+                                onClick={() => {
+                                    setAmount(1)
+                                }}
                             />
                             <ToggleButton
                                 text={'5$'}
                                 value={'5'}
+                                onClick={() => {
+                                    setAmount(5)
+                                }}
                             />
                             <ToggleButton
                                 text={'10$'}
                                 value={'10'}
+                                onClick={() => {
+                                    setAmount(10)
+                                }}
                             />
                             <ToggleButton
                                 text={'50$'}
                                 value={'50'}
+                                onClick={() => {
+                                    setAmount(50)
+                                }}
                             />
                             <ToggleButton
                                 text={'100$'}
                                 value={'100'}
+                                onClick={() => {
+                                    setAmount(100)
+                                }}
                             />
                         </ToggleButtonGroup> :
                         <ToggleButtonGroup
@@ -274,22 +319,37 @@ const TradeView = () => {
                             <ToggleButton
                                 text={'1%'}
                                 value={'1'}
+                                onClick={() => {
+                                    setAmount((1 / (futuresWallet || 1) * 100))
+                                }}
                             />
                             <ToggleButton
                                 text={'5%'}
                                 value={'5'}
+                                onClick={() => {
+                                    setAmount(5 / (futuresWallet || 1) * 100)
+                                }}
                             />
                             <ToggleButton
                                 text={'10%'}
                                 value={'10'}
+                                onClick={() => {
+                                    setAmount(10 / (futuresWallet || 1) * 100)
+                                }}
                             />
                             <ToggleButton
                                 text={'50%'}
                                 value={'50'}
+                                onClick={() => {
+                                    setAmount(50 / (futuresWallet || 1) * 100)
+                                }}
                             />
                             <ToggleButton
                                 text={'100%'}
                                 value={'100'}
+                                onClick={() => {
+                                    setAmount(100 / (futuresWallet || 1) * 100)
+                                }}
                             />
                         </ToggleButtonGroup>
                     }
@@ -306,6 +366,7 @@ const TradeView = () => {
                             onClick={(e) => {
                                 e.preventDefault();
                                 setTradeType("BUY");
+                                sendOrder("MARKET");
                             }}
                         />
                         <div
@@ -364,6 +425,7 @@ const TradeView = () => {
                             onClick={(e) => {
                                 e.preventDefault();
                                 setTradeType("SELL");
+                                sendOrder("MARKET");
                             }}
                         />
                         <div
