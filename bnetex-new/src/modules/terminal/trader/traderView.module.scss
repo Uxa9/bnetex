@@ -29,11 +29,24 @@
 .cup-head {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 16px;
 }
 
 .cup-position {
     display: flex;
     justify-content: space-between;
+    cursor: pointer;
+    
+    span {
+        padding: 2px;
+    }
+
+    &:nth-child(21) {
+        background-color: green;
+    }
+    &:nth-child(22) {
+        background-color: red;
+    }
 }
 
 .trader-view-trade-type {

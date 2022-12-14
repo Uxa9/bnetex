@@ -125,23 +125,28 @@ export class InvestTradingService {
             api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
         });
 
-        const a = await client.getAccountInformation()
+        // const a = await client.getAccountInformation()
 
-        return a.positions
+        // return a.positions
         // console.log(a.positions.filter(item => item.symbol === "BTCUSDT"));
         
-        // return Promise.all([
+        return Promise.all([
         //     // client.getAllOpenOrders(),
-        //     // client.getPositions()
-        //     client.getAccountInformation()
-        // ]).then(([/*orders,*/ info]) => {     
-        //     console.log(info);
-                   
-        //     return {
-        //         // orders,
-        //         info
-        //     }
-        // });
+            client.getPositions(),
+            client.getAccountInformation()
+        ]).then(([/*orders,*/ positions, info]) => {     
+            // console.log(info);
+            const pos = positions.filter(item => item.symbol === "BTCUSDT");
+            const inf = info.positions.filter(item => item.symbol === "BTCUSDT");
+            // console.log(pos);
+            // console.log(inf);
+            
+            return {
+                // orders,
+                pos : pos[0],
+                inf : inf[0]
+            }
+        });
     }
 
     async closeAllPositions(id: number) {

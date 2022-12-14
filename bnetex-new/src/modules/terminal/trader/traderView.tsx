@@ -14,6 +14,9 @@ import { getUserFuturesWallet } from 'services/getUserFuturesWallet';
 import { useForm } from 'react-hook-form';
 import { sendFuturesOrder } from 'services/trading/sendFuturesOrder';
 import {getCurrentLeverageAndIsolated} from "../../../services/trading/getCurrentLeverageAndIsolated";
+import Binance from 'node-binance-api';
+import axios from 'axios';
+import te from 'date-fns/esm/locale/te/index.js';
 
 type TraderViewType = 'limit' | 'tpsl';
 type TraderSumType  = 'exactSum' | 'percent';
@@ -33,10 +36,14 @@ const TradeView = () => {
     const [futuresWallet, setFuturesWallet] = useState<number>(0);
     const [viewType, setViewType] = useState<TraderViewType>('limit');
     const [sumType, setSumType] = useState<TraderSumType>('exactSum');
-    const [orderBook, setOrderBook] = useState<any>([]);
     const [leverage, setLeverage] = useState<number>(0);
     const [isolated, setIsolated] = useState<boolean>(false);
     const [limitPrice, setLimitPrice] = useState(0);
+    // const [orderBook, setOrderBook] = useState<any[]>([]);
+    const [orderBook, setOrderBook] = useState<any>([]);
+    const [orderBookSnapshot, setOrderBookSnapshot] = useState<any[]>([]);
+    
+    // let orderBookSnapshot: any[] = [];
 
     const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
 
@@ -50,6 +57,7 @@ const TradeView = () => {
 
     const [tradeType, setTradeType] = useState("BUY");
     const [amount, setAmount] = useState(0);
+    const [btcprice, setBtcprice] = useState(0);
 
     const sendOrder = (type: string) => {
         if (limitPrice !== 0) {
@@ -90,16 +98,117 @@ const TradeView = () => {
                 setIsolated(res.data.isolated);
             });
 
+            // const orderBookSocket = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@depth20@1000ms');
         const orderBookSocket = new WebSocket('wss://fstream.binance.com/stream?streams=btcusdt@depth20');
+        const btcPrice = new WebSocket('wss://stream.binance.com/stream?streams=btcusdt@miniTicker');
 
         orderBookSocket.onmessage = (event) => {
-            console.log(JSON.parse(event.data));
-
             let data = JSON.parse(event.data).data;
+            console.log(data);
 
-            setOrderBook([...data.b, ...data.a]);
+            const spread = data.b[0];
+
+            let tempArr = [];
+            // tempArr.push(spread);
+
+            tempArr = [
+                ...Array.from({length: 50}, (x, i) => [parseFloat((spread[0] - 50 + i / 10).toString()).toFixed(2), '0']),
+                spread,
+                ...Array.from({length: 50}, (x, i) => [
+                    parseFloat(
+                            (parseFloat( spread[0]) + i / 10 + 0.1).toString()
+                    ).toFixed(2), '0'])
+            ]
+
+            console.log(tempArr[0]);
+
+            orderBookSnapshot.length === 0 && setOrderBookSnapshot(tempArr);
+            
+            console.log(orderBookSnapshot[0]);
+            
+
+            tempArr.map((item, index) => {        
+                const obsItem = orderBookSnapshot.find(snap_item => snap_item[0] === item[0]);
+                console.log(obsItem);
+
+                tempArr[index] = obsItem !== undefined && obsItem;
+            });
+            
+            const wsArr = [...data.a, ...data.b]
+
+            tempArr.map((item, index) => {            
+                const wsItem = wsArr.find(ws_item => ws_item[0] === item[0]);
+
+                tempArr[index] = wsItem !== undefined && wsItem;
+            });
+console.log(tempArr);
+
+            setOrderBook(tempArr);
+
+            // const temp = [ orderBookSnapshot.filter(data.a[0]) ]
+            
+            // setOrderBook([...data.a.reverse(), ...data.b]);
         }
+
+        btcPrice.onmessage = (event) => {
+            // console.log(JSON.parse(event.data));
+
+            let price = JSON.parse(event.data).data.c;
+            // console.log(price);
+            setBtcprice(price);
+
+            // setOrderBook([...data.b, ...data.a]);
+        }
+
+        const getUserLever = async () => {
+            const res = await getCurrentLeverageAndIsolated();
+
+            setLeverage(res.data.leverage);
+            setIsolated(res.data.isolated);            
+        }
+
+        setInterval(getUserLever, 1000);
+
+        const getOrderBookSnapshot = async () => {
+            const res = await axios.get('https://fapi.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=1000');
+
+            console.log(res.data);     
+            setOrderBookSnapshot([...res.data.asks.reverse(), ...res.data.bids]);
+        }
+
+        setInterval(getOrderBookSnapshot, 1000); 
     }, []);
+
+    useEffect(() => {
+        const nominalMargin = btcprice / leverage;
+
+        const bid = orderBook.length !== 0 ? orderBook[20][0] : 1;
+        const ask = orderBook.length !== 0 ? orderBook[19][0] : 1;
+
+        const shortLoss = limitPrice !== 0 ? btcprice - limitPrice : btcprice - bid;
+
+        const openCostLong = nominalMargin;
+        const openCostShort = nominalMargin + shortLoss;
+        
+        const precisionLongOrderCost = limitPrice !== 0 ? limitPrice * 1.05 : bid * 1.05;
+        const precisionShortOrderCost = limitPrice !== 0 ? limitPrice : ask;
+
+        const orderSize = amount / btcprice;
+
+        const longMargin = precisionLongOrderCost * orderSize / leverage;
+        const shortMargin = precisionShortOrderCost * orderSize / leverage;
+
+        const openLongOrderLoss = orderSize * -1 * (btcprice - precisionLongOrderCost);
+        const openShortOrderLoss = orderSize * (btcprice - precisionShortOrderCost)
+
+        const longPrice = longMargin + openLongOrderLoss;
+        const shortPrice = shortMargin + openShortOrderLoss;
+
+        console.log(longPrice);
+        console.log(shortPrice);
+        
+        
+    }, [amount])
 
     return (
         <div
@@ -119,7 +228,7 @@ const TradeView = () => {
                     </span>
                 </div>
                 {
-                    orderBook.map((item: (boolean | ReactChild | ReactFragment | ReactPortal | null | undefined)[]) => {
+                    orderBook.map((item: any[]) => {
                         return (
                             <div
                                 className={clsx(styles['cup-position'])}

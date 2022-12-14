@@ -37,25 +37,32 @@ const OpenedPositions = () => {
             const getUserP = async () => {
                 const res = await getUserPositions();
 
-                console.log(res.data);
+                // console.log(res.data);
 
-                const btcPosition = res.data.positions.find((item: any) => item.symbol === "BTCUSDT");
+                // const btcPosition = res.data.inf.find((item: any) => item.symbol === "BTCUSDT");
 
-                if (Number(btcPosition.positionAmt) === 0) return;
+                const { inf, pos } = res.data;
 
-                setData([{
-                    amount : btcPosition.positionAmt,
-                    entryPrice : btcPosition.entryPrice,
-                    markedPrice : btcPosition.markPrice,
+                // if (Number(inf.positionAmt) === 0) return;
+                // console.log(btcPosition);
+                
+                await setData([{
+                    amount : Number(inf.positionAmt),
+                    entryPrice : Number(Number(inf.entryPrice).toFixed(2)),
+                    markedPrice : Number(Number(pos.markPrice).toFixed(2)),
                     margin : {
-                        value: btcPosition.isolatedMargin,
-                        type: btcPosition.marginType
+                        value: Number(Number(inf.initialMargin).toFixed(2)),
+                        type: pos.marginType
                     },
-                    PNL : btcPosition.unRealizedProfit
-                }])
+                    PNL : Number(inf.unrealizedProfit)
+                }]);
+
+                // console.log(data);
+                
             }
 
-            // const t = setInterval(getUserP, 1000);
+            setInterval(getUserP, 1000);
+            // getUserP()
         }
     }, [])
 
@@ -129,7 +136,7 @@ const OpenedPositions = () => {
                                     {/* <SignedNumber
                                         value={position.amount}
                                     /> */}
-                                    {position.amount * 10}
+                                    {position.amount}
                                 </td>
                                 <td className={styles['entry-price']}>
                                     <span className={clsx(
@@ -177,7 +184,7 @@ const OpenedPositions = () => {
                                         Маржа
                                     </span>
                                     <div className={styles['margin']}>
-                                        <span>{position.margin.value * 10}</span>
+                                        <span>{position.margin.value}</span>
                                         <span>({evaluateMarginType(position.margin.type)})</span>
                                     </div>
                                 </td>
@@ -191,7 +198,7 @@ const OpenedPositions = () => {
                                         PNL
                                     </span>
                                     <SignedNumber
-                                        value={(position.PNL * 10).toFixed(2)}
+                                        value={(position.PNL).toFixed(2)}
                                     />
                                 </td>
                             </tr>
