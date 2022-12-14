@@ -34,25 +34,28 @@ const OpenedPositions = () => {
 
     useEffect(() => {        
         if (location.pathname.split('/').pop() === "trader") {
-            getUserPositions()
-                .then(res => {
-                    console.log(res.data);
-                    
-                    const btcPosition = res.data.positions.find((item: any) => item.symbol === "BTCUSDT");
+            const getUserP = async () => {
+                const res = await getUserPositions();
 
-                    if (Number(btcPosition.positionAmt) === 0) return;
+                console.log(res.data);
 
-                    setData([{
-                        amount : btcPosition.positionAmt,
-                        entryPrice : btcPosition.entryPrice,
-                        markedPrice : btcPosition.markPrice,
-                        margin : { 
-                            value: btcPosition.isolatedMargin,
-                            type: btcPosition.marginType    
-                        },
-                        PNL : btcPosition.unRealizedProfit
-                    }])                    
-                });      
+                const btcPosition = res.data.positions.find((item: any) => item.symbol === "BTCUSDT");
+
+                if (Number(btcPosition.positionAmt) === 0) return;
+
+                setData([{
+                    amount : btcPosition.positionAmt,
+                    entryPrice : btcPosition.entryPrice,
+                    markedPrice : btcPosition.markPrice,
+                    margin : {
+                        value: btcPosition.isolatedMargin,
+                        type: btcPosition.marginType
+                    },
+                    PNL : btcPosition.unRealizedProfit
+                }])
+            }
+
+            // const t = setInterval(getUserP, 1000);
         }
     }, [])
 

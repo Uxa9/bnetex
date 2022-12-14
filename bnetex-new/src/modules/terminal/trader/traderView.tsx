@@ -14,7 +14,6 @@ import { getUserFuturesWallet } from 'services/getUserFuturesWallet';
 import { useForm } from 'react-hook-form';
 import { sendFuturesOrder } from 'services/trading/sendFuturesOrder';
 import {getCurrentLeverageAndIsolated} from "../../../services/trading/getCurrentLeverageAndIsolated";
-import Binance from 'node-binance-api';
 
 type TraderViewType = 'limit' | 'tpsl';
 type TraderSumType  = 'exactSum' | 'percent';
@@ -43,23 +42,6 @@ const TradeView = () => {
 
     const { open: OpenMarginModal } = useModal(MarginPopUp);
     const { open: OpenLeverModal } = useModal(LeverPopUp);
-
-    // const orderBookSocket = new WebSocket('wss://fstream.binance.com/stream?streams=btcusdt@depth20');
-
-    // const binance = new Binance().options({
-    //     APIKEY: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-    //     APISECRET: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
-    // });
-
-    // binance.futuresBookTickerStream( console.log );
-    
-    // orderBookSocket.onmessage = (event) => {
-    //     console.log(JSON.parse(event.data));
-    
-    //     let data = JSON.parse(event.data).data;
-    
-    //     setOrderBook([...data.b, ...data.a]);
-    // }
    
     const onSubmit = (data: TradeFormData) => {
         console.log(data);
@@ -107,6 +89,16 @@ const TradeView = () => {
                 setLeverage(Number(res.data.leverage));
                 setIsolated(res.data.isolated);
             });
+
+        const orderBookSocket = new WebSocket('wss://fstream.binance.com/stream?streams=btcusdt@depth20');
+
+        orderBookSocket.onmessage = (event) => {
+            console.log(JSON.parse(event.data));
+
+            let data = JSON.parse(event.data).data;
+
+            setOrderBook([...data.b, ...data.a]);
+        }
     }, []);
 
     return (
