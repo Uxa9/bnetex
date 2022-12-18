@@ -9,11 +9,11 @@ export const getSymbols = () => binanceRequest('/exchangeInfo').then(res => res.
 export const getKlines = ({ symbol, interval, from, to }: KLine) => {
     const parsedInterval = availableIntervals[interval]; // set interval
 
-    return binanceRequest('/klines', { 
+    return binanceRequest('/klines', {
         symbol: symbol.toUpperCase(),
-        interval: parsedInterval, 
-        startTime: from ? from * 1000 : undefined, 
-        endTime: to ? to * 1000 : undefined, 
+        interval: parsedInterval,
+        startTime: from ? from * 1000 : undefined,
+        endTime: to ? to * 1000 : undefined,
     })
         .then(res => {
             return res.map((i: any[]) => ({
@@ -24,7 +24,9 @@ export const getKlines = ({ symbol, interval, from, to }: KLine) => {
                 close: parseFloat(i[4]),
                 volume: parseFloat(i[5]),
             }));
-        });
+        })
+        .catch(err => console.log(err)
+        );
 };
 
 

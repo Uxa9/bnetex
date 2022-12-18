@@ -4,12 +4,12 @@ import { availableIntervals, TVInterval } from './types';
 
 const socketMap = new Map<UUID, WebSocket>();
 
-// открыть сокет по тикеру и интервалу времени 
+// открыть сокет по тикеру и интервалу времени
 // toDo: багают интервалы
 
 export function subscribeOnStream (
     symbolInfo: LibrarySymbolInfo,
-    resolution: TVInterval, 
+    resolution: TVInterval,
     listenerGuid: UUID,
     onTick: SubscribeBarsCallback
 ) {

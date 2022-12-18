@@ -11,7 +11,7 @@ const configurationData = {
     supports_timescale_marks: false,
     supports_time: true,
     supported_resolutions: [
-        '1', '3', '5', '15', '30', '60', '120', '240', '1D', '3D', '1W', '1M',
+        '1', '3', '5', '15', '30', '60', '120', '240', '1D', '3D',
     ],
 };
 
@@ -69,11 +69,11 @@ export default {
             return onError('[getBars] Invalid interval');
         }
 
-        const klines = await getKlines({ 
+        const klines = await getKlines({
             symbol: symbolInfo.name,
             interval: resolution,
             from: periodParams.from,
-            to: periodParams.to, 
+            to: periodParams.to,
         });
 
         if (klines.length > 0) return onResult(klines);
@@ -84,7 +84,7 @@ export default {
     // подписать на сокет со свечками
     subscribeBars: (
         symbolInfo: LibrarySymbolInfo,
-        resolution: TVInterval, 
+        resolution: TVInterval,
         onTick: SubscribeBarsCallback,
         listenerGuid: UUID
     ) => {
@@ -106,11 +106,11 @@ export default {
 
     searchSymbols: (
         _userInput: string,
-        _exchange: string, 
+        _exchange: string,
         _symbolType: string,
         _onResult: SearchSymbolsCallback
     ) => {
-        
+
     },
 
     getMarks: (
@@ -139,7 +139,7 @@ export default {
             labelFontColor: '#ffffff',
         },
         ];
-        
+
         onDataCallback(arr);
         // console.log('[getMarks]: Method call');
         // console.log(symbolInfo);
