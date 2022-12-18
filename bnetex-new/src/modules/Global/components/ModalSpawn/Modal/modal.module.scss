@@ -23,8 +23,8 @@
     &__container {
         @include card-shadow;
         @include column-flex(32px);
-        transition: background-color $default-transition ease-in-out;
 
+        transition: background-color $default-transition ease-in-out;
         position: relative;
         z-index: 9999;
         background-color: $grayscale-card;

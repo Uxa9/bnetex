@@ -4,9 +4,11 @@ import { Button } from 'lib/ui-kit';
 import { Key } from 'assets/images/icons';
 import { useModal } from 'lib/hooks/useModal';
 import ChangePasswordModal from './modals/changePasswordModal';
+import { useTheme } from 'lib/hooks/useTheme';
 
 const Settings = () => {
-    const { open: openStartAlgorythmModal } = useModal(ChangePasswordModal);
+    const { open: openChangePasswordModal } = useModal(ChangePasswordModal);
+    const { theme } = useTheme();
 
     return (
         <div className={styles['settings']}>
@@ -14,15 +16,27 @@ const Settings = () => {
             <div
                 className={clsx(styles['setting-card'], 'card')}
             >
-                <Key />
-                <div
-                    className={styles['card-content']}
+                <p
+                    className={clsx(styles['card-label'], 'caption')}
                 >
-                    <div>Пароль</div>
+                    Безопасность
+                </p>
+                <div className={styles['setting-item']}>
+                    <div className={styles['setting-item__title']}>
+                        <div
+                            className={clsx(
+                                styles['setting-item__icon-wrapper'],
+                                theme === 'dark' && styles['setting-item__icon-wrapper--dark']
+                            )}
+                        >
+                            <Key />
+                        </div>
+                        <span className={'text'}>Пароль</span>
+                    </div>
                     <Button
-                        buttonStyle='primary'
-                        text='Изменить'
-                        onClick={openStartAlgorythmModal}
+                        buttonStyle={'flat'}
+                        text={'Изменить'}
+                        onClick={openChangePasswordModal}
                     />
                 </div>
             </div>

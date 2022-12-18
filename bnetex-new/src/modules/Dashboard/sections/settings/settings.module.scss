@@ -2,53 +2,42 @@
 @import 'styles/mixins';
 
 .settings {
+  @include column-flex(16px);
+
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  row-gap: 20px;
-}
-
-.settings-card {
-  padding: 15px 20px;
-}
-
-.setting-items {
-  padding-top: 20px;
-  display: flex;
-  flex-direction: column;
-  row-gap: 30px;
-}
-
-.setting-card svg {
-  fill: $grayscale-6;
-
-  height: 70px;
-  width: 70px;
-
-  margin-right: 16px;
 }
 
 .setting-card {
-  display: flex;
-  align-items: center;
+  @include column-flex(16px);
+
   padding: 16px;
-  width: max-content;
+  width: 100%;
+  max-width: 500px;
 }
 
-.card-content {
-  div {
-    font-size: 16px;
-    margin-bottom: 5px;
+.setting-item {
+  @include align-center-row-flex(16px);
+
+  justify-content: space-between;
+
+  &__title {
+    @include align-center-row-flex(8px);
+  }
+
+  &__icon-wrapper {
+    @include color-svg($grayscale-6);
+
+    background-color: $grayscale-2;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+
+    &--dark {
+      border-color: $grayscale-4;
+    }
   }
 }
 
-@media screen and (max-width: 800px) {
-  .setting-card {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .card-content {
-    width: 50%;
-  }
+.card-label {
+  color: $grayscale-6;
 }

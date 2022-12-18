@@ -21,7 +21,7 @@ const TransactionTable = ({ rows }: TableData) => {
     return (
         <div className={clsx(styles['table-wrapper'], 'scroll')}>
             <table
-                className={clsx(styles['table'], 'scroll')}
+                className={styles['table']}
             >
                 <tbody>
                     {
