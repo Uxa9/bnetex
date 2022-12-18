@@ -1,102 +1,66 @@
 import { USDT } from 'assets/images/icons';
 import clsx from 'clsx';
+import { format } from 'date-fns';
+import { MiniTransaction } from 'lib/types/cryptoTransactionItem';
 import styles from './transactionTable.module.scss';
 
-
-interface RowData {
-    currency: string,
-    date: Date | string,
-    type: string,
-    amount: number
-}
-
 interface TableData {
-    rows: RowData[]
+    rows: MiniTransaction[]
 }
 
-const typesLib = {  // хз пока куда это девать
-    withdraw: 'Отправлено',
-    deposit: 'Получено',
-};
+const TransactionTable = ({ rows }: TableData) => {
 
-const TransactionTable = (props: TableData) => {
-
-    const rowRender = (row: RowData, key: number) => {
-        const renderCurrency = (name: string) => {
-            switch (name) {
-                case 'usdt':
-                    return (
-                        <>
-                            <USDT 
-                                className={styles['currency-logo']}
-                            />
-                            <span>
-                                USDT
-                            </span>
-                        </>
-                    );
-                default:
-                    return (
-                        <>
-                            {name}
-                        </>
-                    );
-            }
-        };
-
-        const renderDate = (date: Date | string) => {
-            if (typeof date === 'object') {
-                return (
-                    <>
-                        {`${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`}
-                    </>
-                );
-            } else {
-                return (
-                    <>
-                        {date}
-                    </>
-                );
-            }
-        };
-
-        type RowKey = keyof typeof typesLib;
-        const type = row.type as RowKey;
-
-        return (
-            <div
-                className={styles['table-row']}
-                key={key}
-            >
-                <div
-                    className={styles['currency-wrapper']}
-                >
-                    {renderCurrency(row.currency)}
-                </div>
-                <div
-                    className={styles['date']}
-                >
-                    {renderDate(row.date)}
-                </div>
-                <div
-                    className={clsx(styles[`status-${row.type}`], 'status')}
-                >
-                    {typesLib[type]}
-                </div>
-                <div
-                    className={styles['amount']}
-                >
-                    {row.amount.toFixed(2)}
-                </div>
-            </div>
-        );
-    };
+    if (!rows.length) return (
+        <div
+            className={clsx(styles['empty-table'], 'text')}
+        >
+            Список транзакций пуст
+        </div>
+    );
 
     return (
-        <div
-            className={styles['transaction-table-container']}
-        >
-            {props.rows.map((row, index) => rowRender(row, index))}
+        <div className={clsx(styles['table-wrapper'], 'scroll')}>
+            <table
+                className={clsx(styles['table'], 'scroll')}
+            >
+                <tbody>
+                    {
+                        rows.map((row, key: number) =>
+                            <tr
+                                className={clsx(styles['table__row'], 'caption-mi')}
+                                key={key}
+                            >
+                                <td
+                                    className={styles['currency-wrapper']}
+                                >
+                                    {   //toDo: сделать нормальный evaluate для разных монет (как??)
+                                        row.coin === 'usdt' &&
+                                    <USDT
+                                        className={styles['currency-logo']}
+                                    />
+                                    }
+                                    { row.coin.toUpperCase() }
+                                </td>
+                                <td
+                                    className={styles['date']}
+                                >
+                                    {format(row.date, 'dd/MM/yyyy HH:mm')}
+                                </td>
+                                <td
+                                    className={clsx(styles[`status--${row.type}`], styles['status'])}
+                                >
+                                    { row.type === 'withdraw' ? 'Отправлено' : 'Получено' }
+                                </td>
+                                <td
+                                    className={styles['amount']}
+                                >
+                                    { row.amount }
+                                </td>
+                            </tr>
+                        )
+                    }
+                </tbody>
+            </table>
         </div>
     );
 };

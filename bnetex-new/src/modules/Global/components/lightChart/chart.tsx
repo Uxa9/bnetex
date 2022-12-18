@@ -92,7 +92,7 @@ const Chart = ({ data, type, className, loading }: ChartProps) => {
     // Вкл/выкл. комиссии
     useEffect(() => {
         if (!lineChart) return;
-        lineChart.setData(withComission ? 
+        lineChart.setData(withComission ?
             data.map(item => {return{...item, value: item.value * ALGORYTHM_COMISSION};}) :
             data);
     }, [ data, withComission ]);
@@ -104,7 +104,7 @@ const Chart = ({ data, type, className, loading }: ChartProps) => {
         const observer = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 const { width } = entry.contentRect;
-                
+
                 chartBase?.applyOptions({width: width});
             }
         });
@@ -120,7 +120,7 @@ const Chart = ({ data, type, className, loading }: ChartProps) => {
         <div className={clsx(styles['container'], 'card', className)}>
             <div className={styles['header']}>
                 {
-                    type === 'PNL' ? 
+                    type === 'PNL' ?
                         <ToolTip
                             title={'PnL'}
                             infoText={'PNL (Profit and Loss) – это величина, которая показывает разницу между прибылью и убытками в трейдинге.'}
@@ -130,32 +130,35 @@ const Chart = ({ data, type, className, loading }: ChartProps) => {
                             infoText={'ROE — это та процентная ставка, под которую в компании работают средства акционеров. Этот показатель является ключевым для определения эффективности деятельности компании. Например, показатель ROE = 20% говорит о том, что каждый рубль, вложенный в компанию, ежегодно приносит 20 копеек прибыли.'}
                         />
                 }
-                <div className={styles['comission-block']}>
-                    <ToolTip
-                        title={'С комиссией'}
-                        infoText={'Комиссия за сделки — этот платеж взимается с клиента в виде процента от прибыли со всех торговых операции. Ставка комиссии - 50% от прибыли (PNL/ROE).'}
-                    />
-                    <Switch 
-                        checked={withComission}
-                        onChange={toggleComission}
-                        justify={'gap'}
-                    />
-                </div>
+                {
+                    !!data.length && !loading &&
+                    <div className={styles['comission-block']}>
+                        <ToolTip
+                            title={'С комиссией'}
+                            infoText={'Комиссия за сделки — этот платеж взимается с клиента в виде процента от прибыли со всех торговых операции. Ставка комиссии - 50% от прибыли (PNL/ROE).'}
+                        />
+                        <Switch
+                            checked={withComission}
+                            onChange={toggleComission}
+                            justify={'gap'}
+                        />
+                    </div>
+                }
             </div>
             <div
                 className={styles['wrapper']}
                 ref={chartRef}
             >
                 {
-                    !data.length && !loading && 
+                    !data.length && !loading &&
                         <p className={clsx(styles['empty'], 'text')}>
-                            Данные о вашем {type} отстутствуют. Начните работу с алгоритмом или посмотрите 
+                            Данные о вашем {type} отстутствуют. Начните работу с алгоритмом или посмотрите
                             историю работы алгоритма.
                         </p>
                 }
                 {
                     loading &&
-                    <Spinner 
+                    <Spinner
                         className={styles['spinner']}
                     />
                 }

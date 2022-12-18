@@ -8,6 +8,9 @@ export interface CryptoTransactionItemType {
     status: CryptoTransactionItemStatus,
 }
 
+export type MiniTransaction = Pick<CryptoTransactionItemType, 'date' | 'coin' | 'type' | 'amount'>
+
+
 export type CryptoTransactionItemStatus = 'confirmed' | 'processing' | 'unpayed';
 
 export enum CryptoTransactionItemStatusMap {

@@ -13,16 +13,7 @@ import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { getRoeAndPnl } from 'store/action-creators/roepnl';
 import { getWallets } from 'store/action-creators/wallet';
-import Skeleton from 'lib/ui-kit/skeleton/skeleton';
-
-interface RowData {
-    currency: string,
-    date: Date | string,
-    type: string,
-    amount: number
-}
-
-//toDo: все переделать к хуям)) В стилях грязь, в tsx выделить стейты в redux store и навести порядок
+import { MiniTransaction } from 'lib/types/cryptoTransactionItem';
 
 const Tools = () => {
 
@@ -32,7 +23,7 @@ const Tools = () => {
     const { dates, pnl, roe, loading } = useTypedSelector(state => state.roePnl);
     const { mainWallet, investWallet, loading: walletsLoading } = useTypedSelector(state => state.wallet);
 
-    const [rows, setRows] = useState<RowData[]>([]);
+    const [rows, setRows] = useState<MiniTransaction[]>([]);
 
     useEffect(() => {
         dispath(getRoeAndPnl());
@@ -40,7 +31,7 @@ const Tools = () => {
             .then(res => {
                 let data = res.map((item: any) => {
                     return ({
-                        currency : 'usdt',
+                        coin : 'usdt',
                         date : new Date(item.createdAt),
                         type : item.type === '1' ? 'withdraw' : 'deposit',
                         amount : item.amount,
@@ -75,16 +66,6 @@ const Tools = () => {
                     <p className={clsx(styles['card-header'], 'caption')}>
                         Баланс
                     </p>
-                    <h6>
-                        {
-                            walletsLoading ?
-                                <Skeleton
-                                    height={'24px'}
-                                    width={'40%'}
-                                /> :
-                                `${mainWallet + investWallet} USDT`
-                        }
-                    </h6>
                     <LineChart
                         values={[
                             {
@@ -96,6 +77,7 @@ const Tools = () => {
                                 value: investWallet,
                             },
                         ]}
+                        valuePostfix={'USDT'}
                         loading={walletsLoading}
                     />
                 </div>
@@ -111,13 +93,9 @@ const Tools = () => {
                             mini
                         />
                     </div>
-                    <div
-                        className={clsx(styles['transaction-table-wrapper'], 'scroll')}
-                    >
-                        <TransactionTable
-                            rows={rows}
-                        />
-                    </div>
+                    <TransactionTable
+                        rows={rows}
+                    />
                 </div>
                 <Chart
                     data={
