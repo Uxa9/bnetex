@@ -18,23 +18,6 @@ const TerminalLayout = () => {
         };
     }, []);
 
-    useEffect(() => {
-        const socket = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@kline_1d');
-
-        socket.onopen = (e ) => {
-            console.log(e);
-        };
-
-        socket.onmessage = (ev) => {
-            console.log(JSON.parse(ev.data));
-            console.log('message');
-        };
-
-        socket.onerror = (e ) => {
-            console.log(e);
-        };
-    }, []);
-
     return (
         <div
             className={styles['content-wrapper']}

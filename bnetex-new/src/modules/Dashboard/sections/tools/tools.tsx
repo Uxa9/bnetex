@@ -52,12 +52,12 @@ const Tools = () => {
     }, []);
 
     return (
-        <div className={styles['tools']}>
-            <div className={styles['tools-header']}>
+        <div className={styles['container']}>
+            <div className={styles['header']}>
                 <h3>
                     Панель инструментов
                 </h3>
-                <div className={styles['tools-header-buttons']}>
+                <div className={styles['header__buttons']}>
                     <Button
                         buttonStyle={'primary'}
                         text={'Ввод'}
@@ -70,28 +70,22 @@ const Tools = () => {
                     />
                 </div>
             </div>
-            <div
-                className={styles['balance-and-transactions']}
-            >
-                <div
-                    className={clsx(styles['balance'], 'card')}
-                >
-                    <p
-                        className={styles['balance-header']}
-                    >
+            <div className={styles['cards']}>
+                <div className={clsx(styles['balance'], 'card')} >
+                    <p className={clsx(styles['card-header'], 'caption')}>
                         Баланс
                     </p>
                     <h6>
                         {
                             walletsLoading ?
-                                <Skeleton 
+                                <Skeleton
                                     height={'24px'}
                                     width={'40%'}
                                 /> :
-                                `${mainWallet + investWallet} USDT` 
+                                `${mainWallet + investWallet} USDT`
                         }
                     </h6>
-                    <LineChart 
+                    <LineChart
                         values={[
                             {
                                 name: 'Основной кошелек',
@@ -105,24 +99,18 @@ const Tools = () => {
                         loading={walletsLoading}
                     />
                 </div>
-                <div
-                    className={clsx(styles['transactions'], 'card')}
-                >
-                    <p
-                        className={styles['transactions-header']}
-                    >
-                        <span
-                            className={styles['header-balance']}
-                        >
+                <div className={clsx(styles['transactions'], 'card')}>
+                    <div className={styles['transactions__header']}>
+                        <span className={clsx(styles['header-balance'], styles['card-header'])}>
                             Транзакции
                         </span>
-                        <span
-                            className={styles['header-show-all']} 
+                        <Button
+                            text='Посмотреть все'
+                            buttonStyle={'flat'}
                             onClick={() => goToState(`${DASHBOARD}/${TRANSACTIONS}`)}
-                        >
-                            Посмотреть все
-                        </span>
-                    </p>
+                            mini
+                        />
+                    </div>
                     <div
                         className={clsx(styles['transaction-table-wrapper'], 'scroll')}
                     >
@@ -131,11 +119,7 @@ const Tools = () => {
                         />
                     </div>
                 </div>
-            </div>
-            <div
-                className={styles['charts']}
-            >
-                <Chart 
+                <Chart
                     data={
                         dates.map((date, index) => {
                             return {
@@ -148,7 +132,7 @@ const Tools = () => {
                     className={styles['chart']}
                     loading={loading}
                 />
-                <Chart 
+                <Chart
                     data={
                         dates.map((date, index) => {
                             return {
