@@ -41,9 +41,10 @@ const TradeView = () => {
     const [limitPrice, setLimitPrice] = useState(0);
     // const [orderBook, setOrderBook] = useState<any[]>([]);
     const [orderBook, setOrderBook] = useState<any>([]);
-    const [orderBookSnapshot, setOrderBookSnapshot] = useState<any[]>([]);
+    // const [orderBookSnapshot, setOrderBookSnapshot] = useState<any[]>([]);
+    const [orderBookStep, setOrderBook] = useState<number>(0.1);
     
-    // let orderBookSnapshot: any[] = [];
+    let orderBookSnapshot: any[] = [];
 
     const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
 
@@ -104,7 +105,7 @@ const TradeView = () => {
 
         orderBookSocket.onmessage = (event) => {
             let data = JSON.parse(event.data).data;
-            console.log(data);
+            // console.log(data);
 
             const spread = data.b[0];
 
@@ -112,36 +113,51 @@ const TradeView = () => {
             // tempArr.push(spread);
 
             tempArr = [
-                ...Array.from({length: 50}, (x, i) => [parseFloat((spread[0] - 50 + i / 10).toString()).toFixed(2), '0']),
+                ...Array.from({length: 50}, (x, i) => [parseFloat((spread[0] - 50 + i * orderBookStep).toString()).toFixed(2), '0']),
                 spread,
                 ...Array.from({length: 50}, (x, i) => [
                     parseFloat(
-                            (parseFloat( spread[0]) + i / 10 + 0.1).toString()
+                            (parseFloat( spread[0]) + i * orderBookStep + orderBookStep).toString()
                     ).toFixed(2), '0'])
             ]
 
-            console.log(tempArr[0]);
+            // console.log(tempArr[0]);
 
-            orderBookSnapshot.length === 0 && setOrderBookSnapshot(tempArr);
+            console.log(orderBookSnapshot);      
             
+            if ( orderBookSnapshot.length === 0 ) {
+                orderBookSnapshot = tempArr;
+            }
+            
+            // console.log(orderBookSnapshot[0]);
+            console.log(tempArr[0]);
             console.log(orderBookSnapshot[0]);
             
 
             tempArr.map((item, index) => {        
                 const obsItem = orderBookSnapshot.find(snap_item => snap_item[0] === item[0]);
-                console.log(obsItem);
+                
 
-                tempArr[index] = obsItem !== undefined && obsItem;
+                if (obsItem !== undefined) {
+                    tempArr[index] = obsItem;
+                }
             });
             
             const wsArr = [...data.a, ...data.b]
+// console.log(wsArr);
+// console.log(tempArr);
 
             tempArr.map((item, index) => {            
                 const wsItem = wsArr.find(ws_item => ws_item[0] === item[0]);
+                // console.log(wsItem);
+                
+                if (wsItem !== undefined) {
+                    tempArr[index] = wsItem;
+                }
 
-                tempArr[index] = wsItem !== undefined && wsItem;
+                // tempArr[index] = wsItem !== undefined && wsItem;
             });
-console.log(tempArr);
+// console.log(tempArr);
 
             setOrderBook(tempArr);
 
@@ -172,18 +188,22 @@ console.log(tempArr);
         const getOrderBookSnapshot = async () => {
             const res = await axios.get('https://fapi.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=1000');
 
-            console.log(res.data);     
-            setOrderBookSnapshot([...res.data.asks.reverse(), ...res.data.bids]);
+            // console.log(res.data);   
+            console.log([...res.data.asks.reverse(), ...res.data.bids]);
+            
+            orderBookSnapshot = [...res.data.asks.reverse(), ...res.data.bids];
+
+            // setOrderBookSnapshot([...res.data.asks.reverse(), ...res.data.bids]);
         }
 
-        setInterval(getOrderBookSnapshot, 1000); 
+        setInterval(getOrderBookSnapshot, 2000); 
     }, []);
 
     useEffect(() => {
         const nominalMargin = btcprice / leverage;
 
-        const bid = orderBook.length !== 0 ? orderBook[20][0] : 1;
-        const ask = orderBook.length !== 0 ? orderBook[19][0] : 1;
+        const bid = orderBook.length !== 0 ? orderBook[51][0] : 1;
+        const ask = orderBook.length !== 0 ? orderBook[50][0] : 1;
 
         const shortLoss = limitPrice !== 0 ? btcprice - limitPrice : btcprice - bid;
 
