@@ -2,52 +2,45 @@
 @import 'styles/mixins';
 
 .wallet {
-    @include column-flex(16px);
-    width: 100%;
+  @include column-flex(16px);
+
+  width: 100%;
 }
 
 .wallet-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: space-between;
+
+  @include max-width(650) {
+    grid-template-columns: 1fr;
+    row-gap: 16px;
+  }
 }
 
 .btns {
-    @include align-center-row-flex(16px);
+  @include align-center-row-flex(16px);
+
+  justify-content: flex-end;
+  width: 100%;
+
+  @include max-width(650) {
+    justify-content: initial;
+  }
 }
 
 .wallet-card {
-    padding: 16px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.wallet-items {
-    padding-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    row-gap: 30px;
+  padding: 16px;
 }
 
 .balance-item {
-    @include column-flex(4px);
+  @include column-flex(16px);
 
-    &__label {
-        color: $grayscale-6;
-    }
+  &__label {
+    color: $grayscale-6;
+  }
 
-    &__value::after {
-        content: ' USDT';
-    }
-}
-
-@media screen and (max-width: 800px) {
-    .wallet-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .btns {
-        margin: 8px 0 0;
-    }
+  &__value::after {
+    content: ' USDT';
+  }
 }

@@ -15,11 +15,11 @@ import Skeleton from 'lib/ui-kit/skeleton/skeleton';
 // сделать нормальные кнопки
 
 const MainWallet = () => {
-    
+
     const { goToState } = useGoToState();
     const dispath = useAppDispatch();
     const { mainWallet, loading: walletsLoading } = useTypedSelector(state => state.wallet);
-   
+
     useEffect(() => {
         dispath(getWallets());
     }, []);
@@ -32,11 +32,12 @@ const MainWallet = () => {
                 <h3>Основной кошелек</h3>
                 <div className={styles['btns']}>
                     <Button
-                        text='Ввод'
+                        text={'Ввод'}
                         onClick={() => goToState(AppLinksEnum.DEPOSIT)}
                     />
                     <Button
-                        text='Вывод'
+                        buttonStyle={'outlined'}
+                        text={'Вывод'}
                         onClick={() => goToState(AppLinksEnum.WITHDRAW)}
                     />
                     <Button
@@ -46,25 +47,24 @@ const MainWallet = () => {
                     />
                 </div>
             </div>
-
             <div className={clsx(styles['wallet-card'], 'card')}>
                 <div className={styles['balance-item']}>
-                    <p 
+                    <p
                         className={clsx(
                             styles['balance-item__label'],
                             'caption',
                         )}
                     >
-                            Баланс
+                        Баланс
                     </p>
                     <h6 className={styles['balance-item__value']}>
                         {
                             walletsLoading ?
-                                <Skeleton 
+                                <Skeleton
                                     height={'24px'}
                                     width={'40%'}
                                 /> :
-                                <>{mainWallet}</>
+                                mainWallet
                         }
                     </h6>
                 </div>
