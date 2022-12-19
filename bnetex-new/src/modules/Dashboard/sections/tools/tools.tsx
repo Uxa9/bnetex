@@ -13,7 +13,7 @@ import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { getRoeAndPnl } from 'store/action-creators/roepnl';
 import { getWallets } from 'store/action-creators/wallet';
-import { MiniTransaction } from 'lib/types/cryptoTransactionItem';
+import { MiniTransaction } from 'lib/types/transaction';
 
 const Tools = () => {
 

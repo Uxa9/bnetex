@@ -1,7 +1,7 @@
 import { USDT } from 'assets/images/icons';
 import clsx from 'clsx';
 import { format } from 'date-fns';
-import { MiniTransaction } from 'lib/types/cryptoTransactionItem';
+import { MiniTransaction } from 'lib/types/transaction';
 import styles from './transactionTable.module.scss';
 
 interface TableData {
