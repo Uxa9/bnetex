@@ -11,7 +11,7 @@ import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { getRoeAndPnl } from 'store/action-creators/roepnl';
 import { getWallets } from 'store/action-creators/wallet';
 import { getAlgotradeData } from 'store/action-creators/algotrade';
-import AlgotradeStats from 'modules/Dashboard/algotradeStats/algotradeStats';
+import AlgotradeStats from 'modules/Dashboard/components/algotradeStats/algotradeStats';
 
 const InvestorWallet = () => {
 
