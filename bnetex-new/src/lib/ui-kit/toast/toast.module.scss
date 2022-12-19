@@ -13,18 +13,16 @@
   background-color: $grayscale-1;
   border-radius: 8px;
   overflow: hidden;
-  max-width: 460px;
-  // Размер контейнера (toaster) + отступ контейнера справа (16px)
-  transform: translateX(calc(100% + 16px));
+  width: 100%;
   transition: transform $default-transition ease;
+  animation: swipe-in $default-transition ease forwards;
 
   @include mobile {
-    width: calc(100vw - 16px);
     justify-content: space-between;
   }
 
-  &--visible {
-    transform: translateX(0);
+  &--hidden {
+    animation: swipe-out $default-transition ease forwards;
   }
 
   &--dark {
@@ -78,5 +76,24 @@
       background-color: $grayscale-2;
       color: $grayscale-11;
     }
+  }
+}
+
+@keyframes swipe-in {
+  from {
+    // Размер контейнера (toaster) + отступ контейнера справа (16px)
+    transform: translateX(calc(100% + 16px));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes swipe-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(100% + 16px));
   }
 }

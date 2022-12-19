@@ -12,15 +12,14 @@ const TOAST_LIFESPAN: number = 3000;
 const TOAST_ANIMATION_TIME = Number(variablesMap['defaultTransition'].replace(/ms/, ''));
 
 const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
-    
+
     const {id, type, description, title, deleteToast} = props;
     const { theme } = useTheme();
 
-    const [ isVisible, setIsVisible ] = useState<boolean>(false);
+    const [ isVisible, setIsVisible ] = useState<boolean>(true);
     const toastLifeTimer = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
-        setIsVisible(true);
         toastLifeTimer.current = setTimeout(closeToast, TOAST_LIFESPAN);
 
         return () => {
@@ -50,10 +49,10 @@ const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
     }, [ type ]);
 
     return (
-        <div 
+        <div
             className={clsx(
                 styles.toast,
-                isVisible && styles['toast--visible'],
+                !isVisible && styles['toast--hidden'],
                 theme === 'dark' && styles['toast--dark'],
             )}
         >
@@ -76,7 +75,7 @@ const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
                     </span>
                 </div>
             </div>
-            <button 
+            <button
                 className={styles['toast__close']}
                 onClick={closeToast}
             >
