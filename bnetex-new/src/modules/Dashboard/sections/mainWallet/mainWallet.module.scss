@@ -39,8 +39,4 @@
   &__label {
     color: $grayscale-6;
   }
-
-  &__value::after {
-    content: ' USDT';
-  }
 }

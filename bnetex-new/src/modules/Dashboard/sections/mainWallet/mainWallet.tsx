@@ -64,7 +64,7 @@ const MainWallet = () => {
                                     height={'24px'}
                                     width={'40%'}
                                 /> :
-                                mainWallet
+                                `${mainWallet} USDT`
                         }
                     </h6>
                 </div>
