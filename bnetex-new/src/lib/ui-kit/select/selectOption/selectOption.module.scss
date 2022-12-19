@@ -3,6 +3,7 @@
 
 .container {
     @include dynamic-background(transparent, $accent-6, $accent-5);
+    @include nowrap-overflow;
 
     background-color: transparent;
     height: auto;
@@ -11,6 +12,8 @@
 }
 
 .text-option {
+    @include nowrap-overflow;
+
     padding: 8px 12px;
     color: $grayscale-11;
 }

@@ -4,114 +4,117 @@
 @import 'src/styles/shadows';
 
 .select {
-    position: relative;
-    height: 44px;
+  position: relative;
+  height: 44px;
+  width: 100%;
+  justify-content: space-between;
+  border-radius: 8px;
+  transition: border-color $default-transition ease,
+    border-radius $default-transition ease;
+  cursor: pointer;
+
+  &--active {
+    .select__arrow {
+      transform: rotate(180deg);
+      fill: $accent-3;
+    }
+
+    .fieldset-outline {
+      border-color: $accent-3;
+      border-radius: 8px 8px 0 0;
+
+      &__legend {
+        color: $accent-3;
+      }
+    }
+  }
+
+  &__legend {
+    @include nowrap-overflow;
+    font-size: 12px;
+    max-width: calc(100% - 24px);
+    padding: 0 4px 0 4px;
+    margin: 0;
+    text-align: left;
+    width: auto;
+    float: unset;
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: 1fr 24px; // arrow width
+    align-items: center;
+    height: 100%;
     width: 100%;
     justify-content: space-between;
-    border-radius: 8px;
-    transition: border-color $default-transition ease, border-radius $default-transition ease;
-    cursor: pointer;
+    padding-right: 12px;
+    z-index: 2;
 
-    &--active {
-        .select__arrow {
-            transform: rotate(180deg);
-            fill: $accent-3;
-        }
-
-        .fieldset-outline {
-            border-color: $accent-3;
-            border-radius: 8px 8px 0 0;
-
-            &__legend {
-                color: $accent-3;
-            }
-        }
+    div {
+      &:focus,
+      &:hover {
+        background-color: transparent;
+      }
     }
+  }
 
-    &__legend {
-        @include nowrap-overflow;
-        font-size: 12px;
-        max-width: calc(100% - 24px);
-        padding: 0 4px 0 4px;
-        margin: 0;
-        text-align: left;
-        width: auto;
-        float: unset;
+  &__menu {
+    @include column-flex();
+    @include menu-shadow;
+
+    position: absolute;
+    top: 100%;
+    left: -1px;
+    width: calc(100% + 2px);
+    background-color: $grayscale-card;
+    transform-origin: top;
+    transition: all 100ms ease;
+    max-height: 0;
+    z-index: 10;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+
+    &--visible {
+      border: 1px solid $grayscale-4;
+      max-height: 200px;
+      border-color: $grayscale-4;
+      padding: 8px 0;
     }
+  }
 
-    &__body {
-        @include align-center-row-flex(8px);
-
-        height: 100%;
-        width: 100%;
-        justify-content: space-between;
-        padding-right: 12px;
-        z-index: 2;
-
-        div {
-            &:focus,
-            &:hover {
-                background-color: transparent;
-            }
-        }
-    }
-
-    &__menu {
-        @include column-flex();
-        @include menu-shadow;
-
-        position: absolute;
-        top: 100%;
-        left: -1px;
-        width: calc(100% + 2px);
-        background-color: $grayscale-card;
-        transform-origin: top;
-        transition: all 100ms ease;
-        max-height: 0;
-        z-index: 10;
-        border-radius: 0 0 8px 8px;
-        overflow: hidden;
-
-        &--visible {
-            border: 1px solid $grayscale-4;
-            max-height: 200px;
-            border-color: $grayscale-4;
-            padding: 8px 0;
-        }
-    }
-
-    &__arrow {
-        transition: fill $default-transition ease, transform $default-transition ease;
-        fill: $grayscale-11;
-    }
+  &__arrow {
+    transition: fill $default-transition ease,
+      transform $default-transition ease;
+    fill: $grayscale-11;
+  }
 }
 
 .fieldset-outline {
-    position: absolute;
-    z-index: -1;
-    border-radius: inherit;
-    inset: -6px 0px 0px;
-    padding: 0px 8px;
-    border: 1px solid $grayscale-4;
-    pointer-events: none;
-    transition: border-color $default-transition ease;
-    max-width: 100%;
-    width: 100%;
-    background-color: $grayscale-input;
-    border-radius: 8px;
+  position: absolute;
+  z-index: -1;
+  border-radius: inherit;
+  inset: -6px 0px 0px;
+  padding: 0px 8px;
+  border: 1px solid $grayscale-4;
+  pointer-events: none;
+  transition: border-color $default-transition ease;
+  max-width: 100%;
+  width: 100%;
+  background-color: $grayscale-input;
+  border-radius: 8px;
 
-    &--background {
-        background-color: $grayscale-1;
-    }
+  &--background {
+    background-color: $grayscale-1;
+  }
 
-    &__legend {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: 12px;
-        color: $grayscale-6;
-        transition: color $default-transition ease;
-        text-align: left;
-        padding: 0 4px;
-    }
+  &__legend {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    color: $grayscale-6;
+    transition: color $default-transition ease;
+    text-align: left;
+    padding: 0 4px;
+  }
 }

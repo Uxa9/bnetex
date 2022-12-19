@@ -65,19 +65,19 @@ const CryptoTransactionItemModal = (props: CryptoTransactionItemModalProps & Bas
                 <span className={styles['data-line__label']}>Сеть</span>
                 <p>TRON (TRC20)</p>
             </div>
-            <div className={styles['data-line']}>
+            <div className={clsx(styles['data-line'], styles['item-destination'])}>
                 <span className={styles['data-line__label']}>Адрес</span>
-                <p className={itemStyles['item-destination']}>
-                    <span>
+                <div className={itemStyles['item-destination']}>
+                    <p>
                         {item.destination}
-                    </span>
-                    <CopyButton 
+                    </p>
+                    <CopyButton
                         textToCopy={item.destination}
                         successText={'Кошелек успешно скопирован в ваш буфер обмена'}
                     />
-                </p>
+                </div>
             </div>
-            <div className={styles['data-line']}>
+            <div className={clsx(styles['data-line'], styles['wallet'])}>
                 <span className={styles['data-line__label']}>Кошелек получатель</span>
                 <p>{item.wallet}</p>
             </div>

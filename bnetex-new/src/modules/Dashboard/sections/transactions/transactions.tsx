@@ -131,7 +131,6 @@ const blankTransactions: CryptoTransactionItemType[] = [
 
 const Transactions = () => {
 
-    const { promiseWithLoading, isLoading } = usePromiseWithLoading();
     const [rows, setRows] = useState<CryptoTransactionItemType[]>([]);
 
     useEffect(() => {

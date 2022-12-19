@@ -2,56 +2,55 @@
 @import 'styles/mixins';
 
 .item-type {
-    &--withdraw {
-        color: $red-3;
-    }
+  &--withdraw {
+    color: $red-3;
+  }
 
-    &--income {
-        color: $green-3;
-    }
+  &--income {
+    color: $green-3;
+  }
 }
 
 .item-status {
-    width: 90px;
-    padding: 4px;
-    border-radius: 10px;
-    display: grid;
-    place-items: center;
-    height: fit-content;
-    
-    &--processing {
-        color: $orange-3;
-        background-color: $orange-6;
-    }
+  width: 90px;
+  padding: 4px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  height: fit-content;
 
-    &--confirmed {
-        color: $green-3;
-        background-color: $green-6;
-    }
+  &--processing {
+    color: $orange-3;
+    background-color: $orange-6;
+  }
 
-    &--unpayed {
-        color: $red-3;
-        background-color: $red-6;
-    }
+  &--confirmed {
+    color: $green-3;
+    background-color: $green-6;
+  }
+
+  &--unpayed {
+    color: $red-3;
+    background-color: $red-6;
+  }
 }
 
 .item-destination {
-    display: flex;
-    height: fit-content;
-    align-items: center;
-    column-gap: 8px;
+  display: flex;
+  height: fit-content;
+  align-items: center;
+  column-gap: 8px;
 
-    &--fill {
-        width: 100%;
-    }
+  &--fill {
+    width: 100%;
+  }
 
-    p {
-        @include nowrap-overflow;
-        max-width: 80%;
-    }
+  p {
+    @include nowrap-overflow;
+  }
 }
 
 .item-expand-modal {
-    transform: rotate(-90deg);
-    justify-self: flex-end;
+  transform: rotate(-90deg);
+  justify-self: flex-end;
 }
