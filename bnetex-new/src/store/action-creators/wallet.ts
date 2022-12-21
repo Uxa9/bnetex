@@ -5,23 +5,22 @@ import { WalletCategoryType } from 'lib/types/wallet';
 import { getUserInfo } from 'lib/utils/getUserInfo';
 
 const { protectedApi } = useApi();
-    
+
 export const getWallets = () => {
     return (dispatch: Dispatch<WalletAction>) => {
         dispatch({ type: WalletActionTypes.SEND_WALLET_REQUEST});
 
         return protectedApi
-            .get(`/users/getWallets/${getUserInfo().userId}`) 
+            .get(`/users/getWallets/${getUserInfo().userId}`)
             .then((res) => {
-                dispatch({ 
-                    type: WalletActionTypes.GET_WALLETS, 
-                    mainWallet: res.data.mainWallet, 
+                dispatch({
+                    type: WalletActionTypes.GET_WALLETS,
+                    mainWallet: res.data.mainWallet,
                     investorWallet: res.data.investWallet,
                 });
             })
             .catch((err) => {
                 dispatch({ type: WalletActionTypes.WALLET_REQUEST_RETURNED});
-                throw new Error(err.response.data.message);
             });
     };
 };
@@ -37,7 +36,7 @@ export const transferBetweenWallets = (sender: WalletCategoryType, reciever: Wal
             amount: amount,
             userId: getUserInfo().userId,
         };
-    
+
         return protectedApi.post('/users/transfer-money', requestBody)
             .then(() => {
                 dispatch({ type: WalletActionTypes.WALLET_REQUEST_RETURNED});
@@ -48,14 +47,14 @@ export const transferBetweenWallets = (sender: WalletCategoryType, reciever: Wal
             });
     };
 };
-    
+
 export const withdrawConfirm = (confirmCode: string) => {
 
     return (dispatch: Dispatch<WalletAction>) => {
         dispatch({ type: WalletActionTypes.SEND_WALLET_REQUEST});
 
         return protectedApi.post('/request/fulfill', {
-            confirmCode, 
+            confirmCode,
             requestId: Number(localStorage.getItem('requestId')),
         })
             .then(() => {
@@ -67,7 +66,7 @@ export const withdrawConfirm = (confirmCode: string) => {
             });
     };
 };
-    
+
 export const withdrawRequest = (walletAddress: string, amount: number, type: string) => {
     return (dispatch: Dispatch<WalletAction>) => {
         dispatch({ type: WalletActionTypes.SEND_WALLET_REQUEST});
@@ -87,5 +86,3 @@ export const withdrawRequest = (walletAddress: string, amount: number, type: str
             });
     };
 };
-
-    

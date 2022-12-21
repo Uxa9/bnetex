@@ -1,0 +1,41 @@
+@import 'styles/colors/colors';
+@import 'styles/mixins';
+
+.container {
+  @include column-flex(16px);
+
+  padding: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+.active-algotrade {
+  @include column-flex(16px);
+
+  width: 100%;
+
+  &__stat-item {
+    @include align-center-row-flex(8px);
+
+    justify-content: space-between;
+
+    .label {
+      color: $grayscale-6;
+    }
+  }
+}
+
+.inactive-algotrade {
+  display: flex;
+  column-gap: 16px;
+  align-items: center;
+
+  &__image-wrapper {
+    @include size-svg(40px);
+    @include color-svg($grayscale-6);
+
+    background-color: $grayscale-2;
+    padding: 10px;
+    border-radius: 8px;
+  }
+}

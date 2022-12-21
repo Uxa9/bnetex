@@ -2,6 +2,7 @@ import { Exchange } from 'assets/images/icons';
 import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { BaseModalProps } from 'lib/hooks/useModal';
+import { useCurrentPlatform } from 'lib/hooks/usePlatform';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
@@ -25,9 +26,9 @@ interface TransferFormData {
 
 const TransferModal = (props: BaseModalProps) => {
 
-    const [ senderWalletValue, setSenderWalletValue ] = useState<WalletCategoryType>('main'); 
-    const [ recieverWalletValue, setRecieverWalletValue ] = useState<WalletCategoryType>('investor'); 
-    const isWalletSelectionValid = useMemo(() => senderWalletValue !== recieverWalletValue, 
+    const [ senderWalletValue, setSenderWalletValue ] = useState<WalletCategoryType>('main');
+    const [ recieverWalletValue, setRecieverWalletValue ] = useState<WalletCategoryType>('investor');
+    const isWalletSelectionValid = useMemo(() => senderWalletValue !== recieverWalletValue,
         [ senderWalletValue, recieverWalletValue ]);
 
     const { isLoading, promiseWithLoading } = usePromiseWithLoading();
@@ -36,15 +37,16 @@ const TransferModal = (props: BaseModalProps) => {
     const { goToState } = useGoToState();
     const dispath = useAppDispatch();
     const { mainWallet, investWallet } = useTypedSelector(state => state.wallet);
-   
+    const { isCurrentPlatformMobile } = useCurrentPlatform();
+
     useEffect(() => {
         dispath(getWallets());
     }, []);
-    
+
     const swapSelectorValues = () => {
         const senderWallet = senderWalletValue;
         setSenderWalletValue(recieverWalletValue);
-        setRecieverWalletValue(senderWallet); 
+        setRecieverWalletValue(senderWallet);
     };
 
     const {
@@ -84,61 +86,61 @@ const TransferModal = (props: BaseModalProps) => {
             title={'Перевод средств'}
             onClose={props.onClose}
         >
-            <form 
+            <form
                 onSubmit={handleSubmit(onSubmit)}
                 className={styles['transfer-modal']}
             >
                 <div className={styles['transfer-modal__wallet-selectors']}>
-                    <Select 
+                    <Select
                         value={senderWalletValue}
                         onChange={setSenderWalletValue}
                         label={'Кошелек-отправитель'}
                     >
-                        <SelectOption 
+                        <SelectOption
                             value={WalletCategoryEnum.main}
                             option={
                                 <p className={styles['wallet-category']}>
-                                    Основной кошелек
+                                    {`${isCurrentPlatformMobile ? 'Осн.' : 'Основной'} кошелек`}
                                     <span>{mainWallet}</span>
                                 </p>
                             }
                         />
-                        <SelectOption 
+                        <SelectOption
                             value={WalletCategoryEnum.investor}
                             option={
                                 <p className={styles['wallet-category']}>
-                                    Инвестиционный кошелек
+                                    {`${isCurrentPlatformMobile ? 'Инвест.' : 'Инвестиционный'} кошелек`}
                                     <span>{investWallet}</span>
                                 </p>
                             }
                         />
                     </Select>
-                    <Button 
+                    <Button
                         buttonStyle={'flat'}
                         Icon={Exchange}
                         onClick={swapSelectorValues}
                         className={styles['exchange-button']}
                         type={'button'}
                     />
-                    <Select 
+                    <Select
                         value={recieverWalletValue}
                         onChange={setRecieverWalletValue}
                         label={'Кошелек-получатель'}
                     >
-                        <SelectOption 
+                        <SelectOption
                             value={WalletCategoryEnum.main}
                             option={
                                 <p className={styles['wallet-category']}>
-                                    Основной кошелек
+                                    {`${isCurrentPlatformMobile ? 'Осн.' : 'Основной'} кошелек`}
                                     <span>{mainWallet}</span>
                                 </p>
                             }
                         />
-                        <SelectOption 
+                        <SelectOption
                             value={WalletCategoryEnum.investor}
                             option={
                                 <p className={styles['wallet-category']}>
-                                    Инвестиционный кошелек
+                                    {`${isCurrentPlatformMobile ? 'Инвест.' : 'Инвестиционный'} кошелек`}
                                     <span>{investWallet}</span>
                                 </p>
                             }
@@ -148,9 +150,9 @@ const TransferModal = (props: BaseModalProps) => {
                 <Input
                     label={'Сумма перевода'}
                     inputControl={register('amount', {
-                        ...numberValidation, 
+                        ...numberValidation,
                         validate: {
-                            inputValueIsLesserThanSenderWalletBalance: 
+                            inputValueIsLesserThanSenderWalletBalance:
                                 (value) => value <= (senderWalletValue === 'main' ? mainWallet : investWallet),
                         },
                     })}
@@ -158,7 +160,7 @@ const TransferModal = (props: BaseModalProps) => {
                     type={'number'}
                     onKeyPress={blockEAndDashKey}
                 />
-                <Button 
+                <Button
                     buttonStyle={'primary'}
                     type={'submit'}
                     text={'Подтвердить'}

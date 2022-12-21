@@ -27,7 +27,7 @@ const Header = () => {
 
     useEffect(() => {
         mobileMediaQuery
-            .addEventListener('change', 
+            .addEventListener('change',
                 (event: MediaQueryListEvent) => closeMenuOnResize(event.matches)
             );
     }, []);
@@ -58,7 +58,7 @@ const Header = () => {
                         />
                     </div>
                     <div className={styles['links__user']}>
-                        <HeaderUserLinks 
+                        <HeaderUserLinks
                             withLogoutButton
                         />
                         <Button
@@ -68,16 +68,16 @@ const Header = () => {
                         />
                     </div>
                 </nav>
-                <div                     
+                <div
                     className={styles['header__burger']}
                 >
-                    <Burger 
+                    <Burger
                         isOpened={isMenuOpened}
                         onClick={toggleIsMenuOpenedMenu}
                     />
                 </div>
             </header>
-            <BurgerMenu 
+            <BurgerMenu
                 isOpened={isMenuOpened}
                 onClose={() => setIsMenuOpened(false)}
             />

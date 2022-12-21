@@ -34,3 +34,4 @@ export {ReactComponent as Wrench} from './uil_wrench.svg';
 export {ReactComponent as History} from './uil_history.svg';
 export {ReactComponent as Coins} from './uil_coins.svg';
 export {ReactComponent as Bitcoin} from './uil_bitcoin.svg';
+export {ReactComponent as Power} from './uil_power.svg';

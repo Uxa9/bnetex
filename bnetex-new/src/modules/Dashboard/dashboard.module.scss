@@ -2,7 +2,6 @@
 @import 'styles/variables';
 @import 'styles/mixins';
 
-
 .dashboard {
   display: grid;
   grid-template-columns: $dashboard-control-menu-width 1fr;
@@ -40,7 +39,6 @@
     &--active {
       background-color: $accent-6;
     }
-
   }
 
   @include mobile {
@@ -64,8 +62,7 @@
   margin: 20px 0px;
   background-color: $grayscale-2;
 }
-
-@media screen and (max-width: 1200px) {
+@include max-width($early-laptop-bp) {
   .dashboard {
     grid-template-columns: 1fr;
   }

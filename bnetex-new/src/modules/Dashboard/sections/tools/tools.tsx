@@ -13,16 +13,7 @@ import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { getRoeAndPnl } from 'store/action-creators/roepnl';
 import { getWallets } from 'store/action-creators/wallet';
-import Skeleton from 'lib/ui-kit/skeleton/skeleton';
-
-interface RowData {
-    currency: string,
-    date: Date | string,
-    type: string,
-    amount: number
-}
-
-//toDo: все переделать к хуям)) В стилях грязь, в tsx выделить стейты в redux store и навести порядок
+import { MiniTransaction } from 'lib/types/transaction';
 
 const Tools = () => {
 
@@ -32,7 +23,7 @@ const Tools = () => {
     const { dates, pnl, roe, loading } = useTypedSelector(state => state.roePnl);
     const { mainWallet, investWallet, loading: walletsLoading } = useTypedSelector(state => state.wallet);
 
-    const [rows, setRows] = useState<RowData[]>([]);
+    const [rows, setRows] = useState<MiniTransaction[]>([]);
 
     useEffect(() => {
         dispath(getRoeAndPnl());
@@ -40,7 +31,7 @@ const Tools = () => {
             .then(res => {
                 let data = res.map((item: any) => {
                     return ({
-                        currency : 'usdt',
+                        coin : 'usdt',
                         date : new Date(item.createdAt),
                         type : item.type === '1' ? 'withdraw' : 'deposit',
                         amount : item.amount,
@@ -52,12 +43,12 @@ const Tools = () => {
     }, []);
 
     return (
-        <div className={styles['tools']}>
-            <div className={styles['tools-header']}>
+        <div className={styles['container']}>
+            <div className={styles['header']}>
                 <h3>
                     Панель инструментов
                 </h3>
-                <div className={styles['tools-header-buttons']}>
+                <div className={styles['header__buttons']}>
                     <Button
                         buttonStyle={'primary'}
                         text={'Ввод'}
@@ -70,28 +61,12 @@ const Tools = () => {
                     />
                 </div>
             </div>
-            <div
-                className={styles['balance-and-transactions']}
-            >
-                <div
-                    className={clsx(styles['balance'], 'card')}
-                >
-                    <p
-                        className={styles['balance-header']}
-                    >
+            <div className={styles['cards']}>
+                <div className={clsx(styles['balance'], 'card')} >
+                    <p className={clsx(styles['card-header'], 'caption')}>
                         Баланс
                     </p>
-                    <h6>
-                        {
-                            walletsLoading ?
-                                <Skeleton 
-                                    height={'24px'}
-                                    width={'40%'}
-                                /> :
-                                `${mainWallet + investWallet} USDT` 
-                        }
-                    </h6>
-                    <LineChart 
+                    <LineChart
                         values={[
                             {
                                 name: 'Основной кошелек',
@@ -102,40 +77,27 @@ const Tools = () => {
                                 value: investWallet,
                             },
                         ]}
+                        valuePostfix={'USDT'}
                         loading={walletsLoading}
                     />
                 </div>
-                <div
-                    className={clsx(styles['transactions'], 'card')}
-                >
-                    <p
-                        className={styles['transactions-header']}
-                    >
-                        <span
-                            className={styles['header-balance']}
-                        >
+                <div className={clsx(styles['transactions'], 'card')}>
+                    <div className={styles['transactions__header']}>
+                        <span className={clsx(styles['header-balance'], styles['card-header'])}>
                             Транзакции
                         </span>
-                        <span
-                            className={styles['header-show-all']} 
+                        <Button
+                            text='Посмотреть все'
+                            buttonStyle={'flat'}
                             onClick={() => goToState(`${DASHBOARD}/${TRANSACTIONS}`)}
-                        >
-                            Посмотреть все
-                        </span>
-                    </p>
-                    <div
-                        className={clsx(styles['transaction-table-wrapper'], 'scroll')}
-                    >
-                        <TransactionTable
-                            rows={rows}
+                            mini
                         />
                     </div>
+                    <TransactionTable
+                        rows={rows}
+                    />
                 </div>
-            </div>
-            <div
-                className={styles['charts']}
-            >
-                <Chart 
+                <Chart
                     data={
                         dates.map((date, index) => {
                             return {
@@ -148,7 +110,7 @@ const Tools = () => {
                     className={styles['chart']}
                     loading={loading}
                 />
-                <Chart 
+                <Chart
                     data={
                         dates.map((date, index) => {
                             return {

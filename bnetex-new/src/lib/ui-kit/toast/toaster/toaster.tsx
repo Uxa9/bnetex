@@ -9,21 +9,20 @@ const Toaster = () => {
     return (
         <>
             {
-                !!toaster.size &&
-                    <div className={styles['toaster']}>
-                        {
-                            Array.from(toaster).map(([id, toast]) => 
-                                <Toast 
-                                    key={id.toString()}
-                                    deleteToast={deleteToast}
-                                    {...toast}
-                                />
-                            )
-                        }
-                    </div>
+                <div className={styles['toaster']}>
+                    {
+                        Array.from(toaster).map(([id, toast]) =>
+                            <Toast
+                                key={id.toString()}
+                                deleteToast={deleteToast}
+                                {...toast}
+                            />
+                        )
+                    }
+                </div>
             }
         </>
-    ); 
+    );
 };
 
 export default Toaster;
