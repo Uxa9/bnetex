@@ -42,7 +42,7 @@ const TradeView = () => {
     // const [orderBook, setOrderBook] = useState<any[]>([]);
     const [orderBook, setOrderBook] = useState<any>([]);
     // const [orderBookSnapshot, setOrderBookSnapshot] = useState<any[]>([]);
-    const [orderBookStep, setOrderBook] = useState<number>(0.1);
+    const [orderBookStep, setOrderBookStep] = useState<number>(1);
     
     let orderBookSnapshot: any[] = [];
 
@@ -123,15 +123,15 @@ const TradeView = () => {
 
             // console.log(tempArr[0]);
 
-            console.log(orderBookSnapshot);      
+            // console.log(orderBookSnapshot);      
             
             if ( orderBookSnapshot.length === 0 ) {
                 orderBookSnapshot = tempArr;
             }
             
             // console.log(orderBookSnapshot[0]);
-            console.log(tempArr[0]);
-            console.log(orderBookSnapshot[0]);
+            // console.log(tempArr[0]);
+            // console.log(orderBookSnapshot[0]);
             
 
             tempArr.map((item, index) => {        
@@ -190,8 +190,38 @@ const TradeView = () => {
 
             // console.log(res.data);   
             console.log([...res.data.asks.reverse(), ...res.data.bids]);
+
+            const tick = parseInt((orderBookStep / 0.1).toFixed(0));
+
+            const a = res.data.asks.reverse();
+            const b = res.data.bids;
+
+            let snapShotArr = [];
+
+            for (let i = 0; i < a.length; i+=tick) {
+                console.log(a);
+                
+                const piece = a.slice(i, tick);
+
+                // const sum = piece.reduce()
+                const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);                
+                console.log(sum);
+                console.log(piece);
+                
+console.log(piece.pop()[0]);
+
+                snapShotArr.push([Math.ceil(piece.pop()[0]), sum]);
+            }
+
+            for (let i = 0; i < b.length; i+=tick) {
+                const piece = b.slice(i, tick);
+
+                const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);
+                snapShotArr.push([Math.ceil(piece.pop()[0]), sum]);
+            }
+            console.log(snapShotArr);
             
-            orderBookSnapshot = [...res.data.asks.reverse(), ...res.data.bids];
+            orderBookSnapshot = snapShotArr;
 
             // setOrderBookSnapshot([...res.data.asks.reverse(), ...res.data.bids]);
         }
