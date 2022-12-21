@@ -1,7 +1,7 @@
-@import '../baseTable.module.scss';
+@import 'styles/extendables/baseTable.module.scss';
 
 .order-history {
-  @extend %base-terminal-table;
+  @include base-table(700);
 
   .action {
     grid-row: 1;

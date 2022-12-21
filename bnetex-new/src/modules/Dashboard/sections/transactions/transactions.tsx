@@ -1,14 +1,14 @@
-import { USDT } from 'assets/images/icons';
 import clsx from 'clsx';
 import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
-import { Transaction, TransactionStatusMap } from 'lib/types/transaction';
-import { formatDate } from 'lib/utils/formatDate';
-import { useEffect, useState } from 'react';
-import getUserTransactions from 'services/getUserTransactions';
+import { Transaction } from 'lib/types/transaction';
+import TableSkeletonRows from 'modules/terminal/components/tableSkeletorRows/tableSkeletonRows';
+import { useEffect } from 'react';
 import { getTransactions } from 'store/action-creators/transactions';
 import CryptoTransactionItem from '../../components/cryptoTransactionItem/cryptoTransactionItem';
 import styles from './transactions.module.scss';
+
+const TABLE_COLUMNS = 7;
 
 const Transactions = () => {
 
@@ -22,40 +22,48 @@ const Transactions = () => {
     return (
         <div className={styles.transactions}>
             <h3>Транзакции</h3>
-            <table className={clsx(styles['transactions-table'], 'card')}>
-                <thead>
-                    <tr className={clsx(styles['transactions-table__row'],
-                        styles['transactions-table__header-row'],
-                        'caption',
-                    )}
-                    >
-                        <th>Время</th>
-                        <th>Перевод</th>
-                        <th>Кошелек для вывода</th>
-                        <th>Актив</th>
-                        <th>Сумма</th>
-                        <th>Адресат</th>
-                        <th>Статус</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        transactions.map((transaction: Transaction, index: number) => {
-                            return (
-                                <tr
-                                    className={styles['transactions-table__row']}
-                                    key={transaction.id}
-                                >
-                                    <CryptoTransactionItem
-                                        item={transaction}
-                                    />
-                                </tr>
-                            );
-                        })
-                    }
-                </tbody>
-            </table>
+            <div className={styles['transactions-table__wrapper']}>
+                <table className={styles['transactions-table']}>
+                    <thead>
+                        <tr className={clsx(
+                            styles['transactions-table__row'],
+                            'caption',
+                        )}
+                        >
+                            <th>Время</th>
+                            <th>Перевод</th>
+                            <th>Кошелек</th>
+                            <th>Актив</th>
+                            <th>Сумма</th>
+                            <th>Адресат</th>
+                            <th>Статус</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            loading ?
+                                <TableSkeletonRows
+                                    columnCount={TABLE_COLUMNS}
+                                    skeletonClassname={styles['skeleton']}
+                                />
+                                :
+                                transactions.map((transaction: Transaction) => {
+                                    return (
+                                        <tr
+                                            className={styles['transactions-table__row']}
+                                            key={transaction.id}
+                                        >
+                                            <CryptoTransactionItem
+                                                item={transaction}
+                                            />
+                                        </tr>
+                                    );
+                                })
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

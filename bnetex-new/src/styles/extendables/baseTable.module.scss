@@ -2,11 +2,11 @@
 @import 'styles/mixins';
 @import 'styles/shadows';
 
-%base-terminal-table {
+@mixin base-table($breakpoint: 700) {
   width: 100%;
   border-collapse: collapse;
 
-  @include max-width(700) {
+  @include max-width($breakpoint) {
     tbody {
       @include column-flex(8px);
     }
@@ -21,7 +21,7 @@
       font-weight: inherit;
     }
 
-    @include max-width(700) {
+    @include max-width($breakpoint) {
       display: none;
     }
   }
@@ -38,11 +38,11 @@
       height: 100%;
     }
 
-    @include max-width(700) {
+    @include max-width($breakpoint) {
       @include card-shadow;
 
       display: grid;
-      grid-template-columns: auto auto;
+      grid-template-columns: repeat(2, 1fr);
       justify-content: space-between;
       row-gap: 12px;
       padding: 8px;
@@ -61,7 +61,7 @@
   .body-label {
     color: $grayscale-6;
 
-    @include min-width(701) {
+    @include min-width(calc($breakpoint + 1)) {
       display: none;
     }
   }
