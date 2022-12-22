@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import TradingViewWidget, { Themes } from 'react-tradingview-widget';
+// import TradingViewWidget, { Themes } from 'react-tradingview-widget';
 import styles from './chartView.module.scss';
 import { useTheme } from 'lib/hooks/useTheme';
 import { useEffect } from 'react';
@@ -29,11 +29,11 @@ const ChartView = ({className}: {className?: string}) => {
                 className
             )}
         >
-            <TradingViewWidget 
+            {/* <TradingViewWidget 
                 symbol="BINANCE:BTCUSDT"
                 autosize
                 theme={Themes[theme.toUpperCase()]}
-            />
+            /> */}
         </div>
     );
 };

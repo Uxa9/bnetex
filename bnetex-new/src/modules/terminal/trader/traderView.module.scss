@@ -32,6 +32,24 @@
     margin-bottom: 16px;
 }
 
+.cup-small {
+    .cup-position:nth-child(10) {
+        background-color: green;
+    }
+    .cup-position:nth-child(11) {
+        background-color: red;
+    }
+}
+
+.cup-big {
+    .cup-position:nth-child(20) {
+        background-color: green;
+    }
+    .cup-position:nth-child(21) {
+        background-color: red;
+    }
+}
+
 .cup-position {
     display: flex;
     justify-content: space-between;
@@ -39,14 +57,7 @@
     
     span {
         padding: 2px;
-    }
-
-    // &:nth-child(51) {
-    //     background-color: green;
-    // }
-    // &:nth-child(52) {
-    //     background-color: red;
-    // }
+    }   
 }
 
 .trader-view-trade-type {

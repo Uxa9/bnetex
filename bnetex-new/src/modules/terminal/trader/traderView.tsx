@@ -1,4 +1,4 @@
-import { ReactChild, ReactFragment, ReactPortal, useEffect, useState } from 'react';
+import { ReactChild, ReactFragment, ReactPortal, useEffect, useRef, useState } from 'react';
 import {Button, Input, ToggleButton, ToggleButtonGroup} from 'lib/ui-kit';
 import clsx from 'clsx';
 import styles from './traderView.module.scss';
@@ -41,10 +41,12 @@ const TradeView = () => {
     const [limitPrice, setLimitPrice] = useState(0);
     // const [orderBook, setOrderBook] = useState<any[]>([]);
     const [orderBook, setOrderBook] = useState<any>([]);
-    // const [orderBookSnapshot, setOrderBookSnapshot] = useState<any[]>([]);
+    const [wsOrderBook, setWsOrderBook] = useState<any>([]);
+    const [orderBookSnapshot, setOrderBookSnapshot] = useState<any[]>([]);
     const [orderBookStep, setOrderBookStep] = useState<number>(1);
+    const refSnapshot = useRef<NodeJS.Timeout | null>(null);
     
-    let orderBookSnapshot: any[] = [];
+    // let orderBookSnapshot: any[] = [];
 
     const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
 
@@ -87,6 +89,55 @@ const TradeView = () => {
         });
     }
 
+    const getOrderBookSnapshot = async () => {
+        const res = await axios.get('https://fapi.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=1000');
+
+        // console.log(res.data);   
+        // console.log([...res.data.asks.reverse(), ...res.data.bids]);
+// console.log(orderBookStep);
+
+        const tick = parseInt((orderBookStep / 0.1).toFixed(2));
+
+        const a = res.data.asks.reverse();
+        const b = res.data.bids;
+
+        let snapShotArr = [];
+
+        if (orderBookStep >= 1) {
+            // console.log(a);
+            for (let i = 0; i < a.length; i+=tick) {
+                
+                const piece = a.slice(i, tick+i);
+
+                // const sum = piece.reduce()
+                const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);                
+                // console.log(sum);
+                // console.log(piece);
+                // console.log(i);
+                
+                // console.log(piece.pop()[0]);
+
+                snapShotArr.push([(Math.ceil(piece.pop()[0] / orderBookStep) * orderBookStep).toFixed(2), sum.toString()]);
+            }
+
+            for (let i = 0; i < b.length; i+=tick) {
+                const piece = b.slice(i, tick+i);
+
+                const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);
+                snapShotArr.push([(Math.ceil(piece.pop()[0] / orderBookStep) * orderBookStep).toFixed(2), sum.toString()]);
+            }
+        } else {
+            snapShotArr = [ ...a, ...b ];
+        }
+        console.log(snapShotArr);
+        
+        setOrderBookSnapshot(snapShotArr);
+        // orderBookSnapshot = snapShotArr;
+// console.log(orderBookSnapshot);
+
+        // setOrderBookSnapshot([...res.data.asks.reverse(), ...res.data.bids]);
+    }
+
     useEffect(() => {
         getUserFuturesWallet()
             .then((res) => {
@@ -108,58 +159,106 @@ const TradeView = () => {
             // console.log(data);
 
             const spread = data.b[0];
+// console.log(spread);
 
             let tempArr = [];
             // tempArr.push(spread);
 
-            tempArr = [
-                ...Array.from({length: 50}, (x, i) => [parseFloat((spread[0] - 50 + i * orderBookStep).toString()).toFixed(2), '0']),
-                spread,
-                ...Array.from({length: 50}, (x, i) => [
-                    parseFloat(
+            if (orderBookStep >= 1) {
+                tempArr = [
+                    ...Array.from({length: 50}, (x, i) => [parseFloat((Math.ceil(spread[0] / orderBookStep) * orderBookStep - 50 * orderBookStep + i * orderBookStep).toString()).toFixed(2), '0']),
+                    [(Math.ceil(spread[0] / orderBookStep) * orderBookStep).toFixed(2), spread[1]],
+                    ...Array.from({length: 50}, (x, i) => [
+                        parseFloat(
+                            (parseFloat( Math.ceil(spread[0] / orderBookStep) * orderBookStep) + i * orderBookStep + orderBookStep).toString()
+                        ).toFixed(2), '0'])
+                ]
+            } else {
+                tempArr = [
+                    ...Array.from({length: 50}, (x, i) => [parseFloat((spread[0] - 50 * orderBookStep + i * orderBookStep).toString()).toFixed(2), '0']),
+                    spread,
+                    ...Array.from({length: 50}, (x, i) => [
+                        parseFloat(
                             (parseFloat( spread[0]) + i * orderBookStep + orderBookStep).toString()
-                    ).toFixed(2), '0'])
-            ]
-
-            // console.log(tempArr[0]);
-
-            // console.log(orderBookSnapshot);      
-            
-            if ( orderBookSnapshot.length === 0 ) {
-                orderBookSnapshot = tempArr;
+                        ).toFixed(2), '0'])
+                ]
             }
+
+            // console.log(tempArr[0]);
+
+            console.log(orderBookSnapshot);      
+            
+            // if ( orderBookSnapshot.length === 0 ) {
+                // orderBookSnapshot = tempArr;
+                // setOrderBookSnapshot(tempArr)
+            // }
             
             // console.log(orderBookSnapshot[0]);
             // console.log(tempArr[0]);
             // console.log(orderBookSnapshot[0]);
-            
+            // console.log(tempArr);
 
             tempArr.map((item, index) => {        
                 const obsItem = orderBookSnapshot.find(snap_item => snap_item[0] === item[0]);
+                // console.log(obsItem);
                 
 
                 if (obsItem !== undefined) {
                     tempArr[index] = obsItem;
                 }
             });
+            // console.log(tempArr);
+
             
-            const wsArr = [...data.a, ...data.b]
-// console.log(wsArr);
-// console.log(tempArr);
+            
+            const wsArr = [...data.a, ...data.b];
 
-            tempArr.map((item, index) => {            
-                const wsItem = wsArr.find(ws_item => ws_item[0] === item[0]);
-                // console.log(wsItem);
-                
-                if (wsItem !== undefined) {
-                    tempArr[index] = wsItem;
+            if (orderBookStep >= 1) {
+                let steppedWsArr: any[][] = [];
+
+                const tick = parseInt((orderBookStep / 0.1).toFixed(2));
+                for (let i = 0; i < wsArr.length; i+=tick) {
+                    
+                    const piece = wsArr.slice(i, tick+i);
+    
+                    // const sum = piece.reduce()
+                    const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);                
+                    // console.log(sum);
+                    // console.log(piece);
+                    // console.log(i);
+                    
+                    // console.log(piece.pop()[0]);
+    
+                    steppedWsArr.push([(Math.ceil(piece.pop()[0] / orderBookStep) * orderBookStep).toFixed(2), sum.toString()]);
                 }
+    // console.log(steppedWsArr);
+    
+                tempArr.map((item, index) => {            
+                    const wsItem = steppedWsArr.find(ws_item => ws_item[0] === item[0]);
+                    // console.log(wsItem);
+                    
+                    if (wsItem !== undefined) {
+                        tempArr[index] = wsItem;
+                    }
+    
+                    // tempArr[index] = wsItem !== undefined && wsItem;
+                });
+            } else {
+                tempArr.map((item, index) => {            
+                    const wsItem = wsArr.find(ws_item => ws_item[0] === item[0]);
+                    // console.log(wsItem);
+                    
+                    if (wsItem !== undefined) {
+                        tempArr[index] = wsItem;
+                    }
+    
+                    // tempArr[index] = wsItem !== undefined && wsItem;
+                });
+            }
+            
+console.log(tempArr);
 
-                // tempArr[index] = wsItem !== undefined && wsItem;
-            });
-// console.log(tempArr);
-
-            setOrderBook(tempArr);
+setWsOrderBook(tempArr);
 
             // const temp = [ orderBookSnapshot.filter(data.a[0]) ]
             
@@ -183,50 +282,16 @@ const TradeView = () => {
             setIsolated(res.data.isolated);            
         }
 
-        setInterval(getUserLever, 1000);
+        const interval = setInterval(getUserLever, 1000);
+        // const snapshot = setInterval(getOrderBookSnapshot, 2000); 
+        refSnapshot.current = setInterval(getOrderBookSnapshot, 2000);
 
-        const getOrderBookSnapshot = async () => {
-            const res = await axios.get('https://fapi.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=1000');
-
-            // console.log(res.data);   
-            console.log([...res.data.asks.reverse(), ...res.data.bids]);
-
-            const tick = parseInt((orderBookStep / 0.1).toFixed(0));
-
-            const a = res.data.asks.reverse();
-            const b = res.data.bids;
-
-            let snapShotArr = [];
-
-            for (let i = 0; i < a.length; i+=tick) {
-                console.log(a);
-                
-                const piece = a.slice(i, tick);
-
-                // const sum = piece.reduce()
-                const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);                
-                console.log(sum);
-                console.log(piece);
-                
-console.log(piece.pop()[0]);
-
-                snapShotArr.push([Math.ceil(piece.pop()[0]), sum]);
-            }
-
-            for (let i = 0; i < b.length; i+=tick) {
-                const piece = b.slice(i, tick);
-
-                const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);
-                snapShotArr.push([Math.ceil(piece.pop()[0]), sum]);
-            }
-            console.log(snapShotArr);
-            
-            orderBookSnapshot = snapShotArr;
-
-            // setOrderBookSnapshot([...res.data.asks.reverse(), ...res.data.bids]);
+        return () => {
+            clearInterval(interval);
+            if (!refSnapshot.current ) return;
+            clearInterval(refSnapshot.current);
+            // clearInterval(snapshot);
         }
-
-        setInterval(getOrderBookSnapshot, 2000); 
     }, []);
 
     useEffect(() => {
@@ -258,7 +323,35 @@ console.log(piece.pop()[0]);
         console.log(shortPrice);
         
         
-    }, [amount])
+    }, [amount]);
+
+    useEffect(() => {
+        if (refSnapshot.current ) clearInterval(refSnapshot.current);
+        // clearInterval(refSnapshot.current);
+        refSnapshot.current = setInterval(getOrderBookSnapshot, 2000);
+        
+    }, [orderBookStep]);
+
+    useEffect(() => {
+        const bigData = orderBookSnapshot;
+        const smallData = wsOrderBook;
+        console.log(bigData);
+        console.log(smallData);
+        
+        
+
+        smallData.map((item: any[]) => {
+            const i = bigData.indexOf((bigDataItem: any[]) => bigDataItem[0] === item[0])
+            
+            if (i !== -1) {
+                console.log(item);
+                
+                bigData[i] = item;
+            }
+        });
+
+        setOrderBook(bigData);
+    }, [orderBookSnapshot, setWsOrderBook])
 
     return (
         <div
@@ -267,6 +360,31 @@ console.log(piece.pop()[0]);
             <div
                 className={clsx('card', styles['cup'])}
             >
+                <ToggleButtonGroup
+                    title={''}
+                    name={'cup_step'}
+                    onChange={(value: number) => {
+                        console.log(value);
+                        
+                        setOrderBookStep(Number(value))
+                        console.log(orderBookStep);
+                        
+                    }}
+                    value={orderBookStep.toString()}
+                >
+                    <ToggleButton
+                        text={'0.1'}
+                        value={'0.1'}
+                    />
+                    <ToggleButton
+                        text={'1'}
+                        value={'1'}
+                    />
+                    <ToggleButton
+                        text={'10'}
+                        value={'10'}
+                    />
+                </ToggleButtonGroup>
                 <div
                     className={clsx(styles['cup-head'])}
                 >
@@ -278,23 +396,49 @@ console.log(piece.pop()[0]);
                     </span>
                 </div>
                 {
-                    orderBook.map((item: any[]) => {
-                        return (
-                            <div
-                                className={clsx(styles['cup-position'])}
-                                onClick={() => {
-                                    sendLimitOrder(Number(item[0]), "FOK");
-                                }}
-                            >
-                                <span>
-                                    {item[1]}
-                                </span>
-                                <span>
-                                    {item[0]}
-                                </span>
-                            </div>
-                        )
-                    })
+                    orderBookStep >= 10 ?
+                        <div
+                            className={clsx(styles['cup-small'])}
+                        >
+                            {orderBook.slice(orderBook.length/2 - 10, orderBook.length/2 + 10).reverse().map((item: any[]) => {
+                                return (
+                                        <div
+                                            className={clsx(styles['cup-position'])}
+                                            onClick={() => {
+                                                sendLimitOrder(Number(item[0]), "FOK");
+                                            }}
+                                        >
+                                            <span>
+                                                {Number(item[1]).toFixed(4)}
+                                            </span>
+                                            <span>
+                                                {item[0]}
+                                            </span>
+                                        </div>
+                                )
+                            })}
+                        </div> :
+                        <div
+                            className={clsx(styles['cup-big'])}
+                        >
+                            {orderBook.slice(orderBook.length/2 - 19, orderBook.length/2 + 21).reverse().map((item: any[]) => {
+                                return (
+                                        <div
+                                            className={clsx(styles['cup-position'])}
+                                            onClick={() => {
+                                                sendLimitOrder(Number(item[0]), "FOK");
+                                            }}
+                                        >
+                                            <span>
+                                                {Number(item[1]).toFixed(4)}
+                                            </span>
+                                            <span>
+                                                {item[0]}
+                                            </span>
+                                        </div>
+                                )
+                            })}
+                        </div>
                 }
             </div>
             <form
