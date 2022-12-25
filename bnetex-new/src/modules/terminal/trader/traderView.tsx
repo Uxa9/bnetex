@@ -117,6 +117,55 @@ const TradeView = () => {
             setWsOrderBook(a.concat(b));
         };
 
+    //     const getOrderBookSnapshot = async () => {
+    //         const res = await axios.get('https://fapi.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=1000');
+    
+    //         // console.log(res.data);   
+    //         // console.log([...res.data.asks.reverse(), ...res.data.bids]);
+    // // console.log(orderBookStep);
+    
+    //         const tick = parseInt((orderBookStep / 0.1).toFixed(2));
+    
+    //         const a = res.data.asks.reverse();
+    //         const b = res.data.bids;
+    
+    //         let snapShotArr = [];
+    
+    //         if (orderBookStep >= 1) {
+    //             // console.log(a);
+    //             for (let i = 0; i < a.length; i+=tick) {
+                    
+    //                 const piece = a.slice(i, tick+i);
+    
+    //                 // const sum = piece.reduce()
+    //                 const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);                
+    //                 // console.log(sum);
+    //                 // console.log(piece);
+    //                 // console.log(i);
+                    
+    //                 // console.log(piece.pop()[0]);
+    
+    //                 snapShotArr.push([(Math.ceil(piece.pop()[0] / orderBookStep) * orderBookStep).toFixed(2), sum.toString()]);
+    //             }
+    
+    //             for (let i = 0; i < b.length; i+=tick) {
+    //                 const piece = b.slice(i, tick+i);
+    
+    //                 const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);
+    //                 snapShotArr.push([(Math.ceil(piece.pop()[0] / orderBookStep) * orderBookStep).toFixed(2), sum.toString()]);
+    //             }
+    //         } else {
+    //             snapShotArr = [ ...a, ...b ];
+    //         }
+    //         console.log(snapShotArr);
+            
+    //         setOrderBookSnapshot(snapShotArr);
+    //         // orderBookSnapshot = snapShotArr;
+    // // console.log(orderBookSnapshot);
+    
+    //         // setOrderBookSnapshot([...res.data.asks.reverse(), ...res.data.bids]);
+    //     }
+
         btcPrice.onmessage = (event) => {
             // console.log(JSON.parse(event.data));
 
@@ -200,6 +249,7 @@ const TradeView = () => {
 
         setOrderBook(bigData);
     }, [orderBookSnapshot, wsOrderBook, orderBookStep]);
+    // }, [orderBookSnapshot, wsOrderBook])
 
     return (
         <div
@@ -208,7 +258,7 @@ const TradeView = () => {
             <div
                 className={clsx('card', styles['cup'])}
             >
-                <ToggleButtonGroup
+                {/* <ToggleButtonGroup
                     title={''}
                     name={'cup_step'}
                     onChange={(value: number) => {
@@ -228,7 +278,7 @@ const TradeView = () => {
                         text={'10'}
                         value={'10'}
                     />
-                </ToggleButtonGroup>
+                </ToggleButtonGroup> */}
                 <div
                     className={clsx(styles['cup-head'])}
                 >
@@ -244,7 +294,7 @@ const TradeView = () => {
                         <div
                             className={clsx(styles['cup-small'])}
                         >
-                            {orderBook.slice(orderBook.length/2 - 10, orderBook.length/2 + 10).reverse().map((item: any[]) => {
+                            {wsOrderBook.slice(orderBook.length/2 - 10, orderBook.length/2 + 10).reverse().map((item: any[]) => {
                                 return (
                                     <div
                                         className={clsx(styles['cup-position'])}
