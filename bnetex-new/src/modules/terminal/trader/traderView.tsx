@@ -251,6 +251,33 @@ const TradeView = () => {
     }, [orderBookSnapshot, wsOrderBook, orderBookStep]);
     // }, [orderBookSnapshot, wsOrderBook])
 
+    const renderTradeCup = (length: number) => {
+        const tradeCupArr = wsOrderBook.slice(wsOrderBook.length/2 - length, wsOrderBook.length/2 + length).reverse();
+        console.log(tradeCupArr)
+
+        const maxVolume = Math.max(...tradeCupArr.map((item: string[]) => parseFloat(item[1])));
+
+        console.log(maxVolume);
+
+        return tradeCupArr.map((item: any[]) => {
+            return (
+                <div
+                    className={clsx(styles['cup-position'])}
+                    onClick={() => {
+                        sendLimitOrder(Number(item[0]), 'FOK');
+                    }}
+                >
+                    <span>
+                        {Number(item[1]).toFixed(4)}
+                    </span>
+                    <span>
+                        {item[0]}
+                    </span>
+                </div>
+            );
+        })
+    }
+
     return (
         <div
             className={clsx(styles['trade-layout'])}
@@ -294,44 +321,12 @@ const TradeView = () => {
                         <div
                             className={clsx(styles['cup-small'])}
                         >
-                            {wsOrderBook.slice(orderBook.length/2 - 10, orderBook.length/2 + 10).reverse().map((item: any[]) => {
-                                return (
-                                    <div
-                                        className={clsx(styles['cup-position'])}
-                                        onClick={() => {
-                                            sendLimitOrder(Number(item[0]), 'FOK');
-                                        }}
-                                    >
-                                        <span>
-                                            {Number(item[1]).toFixed(4)}
-                                        </span>
-                                        <span>
-                                            {item[0]}
-                                        </span>
-                                    </div>
-                                );
-                            })}
+                            {renderTradeCup(10)}
                         </div> :
                         <div
                             className={clsx(styles['cup-big'])}
                         >
-                            {orderBook.slice(orderBook.length/2 - 19, orderBook.length/2 + 21).reverse().map((item: any[]) => {
-                                return (
-                                    <div
-                                        className={clsx(styles['cup-position'])}
-                                        onClick={() => {
-                                            sendLimitOrder(Number(item[0]), 'FOK');
-                                        }}
-                                    >
-                                        <span>
-                                            {Number(item[1]).toFixed(4)}
-                                        </span>
-                                        <span>
-                                            {item[0]}
-                                        </span>
-                                    </div>
-                                );
-                            })}
+                            {renderTradeCup(20)}
                         </div>
                 }
             </div>
