@@ -76,7 +76,6 @@
 
         @include mobile {
             @include size-svg(20px);
-            min-height: 36px;
             width: 100%; // тестовая штука, может быть сломает все к хуям....
         }
     }
