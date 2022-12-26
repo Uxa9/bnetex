@@ -2,78 +2,78 @@
 @import 'styles/mixins';
 
 .container {
-    position: relative;
-    margin: 120px 0;
+  position: relative;
+  margin: 120px 0;
 }
 
 .contact-section {
-    @include align-center-row-flex(16px);
-    justify-content: space-between;
-    background-color: $grayscale-card;
-    padding: 48px;
-    border-radius: 16px;
-    position: relative;
-    z-index: 2;
+  @include align-center-row-flex(16px);
+  justify-content: space-between;
+  background-color: $grayscale-card;
+  padding: 48px;
+  border-radius: 16px;
+  position: relative;
+  z-index: 2;
 
-    @include max-width(900) {
-        padding: 24px;
+  @include max-width(900) {
+    padding: 24px;
+  }
+
+  @include max-width(700) {
+    flex-direction: column;
+    row-gap: 24px;
+    padding: 24px;
+
+    .title {
+      width: 100%;
     }
 
-    @include max-width(700) {
-        flex-direction: column;
-        row-gap: 24px;
-        padding: 24px;
-
-        .title{
-            width: 100%;
-        }
-
-        .links{
-            max-width: unset;
-            width: 100%;
-        }
+    .links {
+      max-width: unset;
+      width: 100%;
     }
+  }
 }
 
 .title {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 h2 > span {
-    color: $accent-3;
+  color: $accent-3;
 }
 
 .links {
-    max-width: 45ch;
+  max-width: 45ch;
 
-    &__buttons {
-        padding-top: 24px;
-        display: flex;
-        column-gap: 24px;
+  &__buttons {
+    padding-top: 24px;
+    display: flex;
+    column-gap: 24px;
 
-        @include max-width(400) {
-            flex-direction: column;
-            row-gap: 16px;
-        }
+    @include max-width(400) {
+      flex-direction: column;
+      row-gap: 16px;
     }
+  }
 }
 
 .contact-button {
-    width: 100%;
-    justify-content: center;
+  width: 100%;
+  justify-content: center;
 }
 
 .abstract-grid--L {
-    fill: $accent-3;
-    position: absolute;
-    top: -70px;
-    left: -30px;
+  fill: $accent-3;
+  position: absolute;
+  top: -70px;
+  left: -30px;
 }
 
 .abstract-grid--M {
-    fill: $green-3;
-    position: absolute;
-    bottom: -50px;
-    right: -30px;
+  fill: $green-3;
+  position: absolute;
+  bottom: -50px;
+  right: -30px;
 }
