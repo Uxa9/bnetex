@@ -3,7 +3,7 @@ import variablesMap from 'styles/exportedVariables.module.scss';
 import { throwError } from 'lib/utils/errorThrower';
 
 export interface CurrentPlatformContext {
-    isCurrentPlatformMobile: boolean;
+isCurrentPlatformMobile: boolean;
 }
 
 const currentPlatformContext = createContext<CurrentPlatformContext | null>(null);
@@ -27,11 +27,11 @@ export function CurrentPlatformProvider({children}: {children: ReactNode}) {
     return (
         <currentPlatformContext.Provider
             value={{
-                isCurrentPlatformMobile,  
+                isCurrentPlatformMobile,
             }}
         >
             {children}
         </currentPlatformContext.Provider>
     );
-    
+
 }
