@@ -5,7 +5,12 @@ import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { Button } from 'lib/ui-kit';
 import { AppLinksEnum } from 'routes/appLinks';
 
-const HeaderUserLinks = ({withLogoutButton}: {withLogoutButton?: boolean}) => {
+interface HeaderUserLinksProps {
+    closeMenu?: () => void;
+    withLogoutButton?: boolean;
+}
+
+const HeaderUserLinks = ({withLogoutButton, closeMenu}: HeaderUserLinksProps) => {
 
     const isAuth = useTypedSelector(state => state.auth.isAuth);
     const { goToState } = useGoToState();
@@ -18,20 +23,26 @@ const HeaderUserLinks = ({withLogoutButton}: {withLogoutButton?: boolean}) => {
     };
 
     return(
-        isAuth ? 
+        isAuth ?
             <>
                 <Button
                     text={'Кошельки'}
                     buttonStyle={'thin'}
                     Icon={Wallet}
-                    onClick={() => goToState(`${DASHBOARD}/${MAIN_WALLET}`)}
+                    onClick={() => {
+                        goToState(`${DASHBOARD}/${MAIN_WALLET}`);
+                        closeMenu && closeMenu();
+                    }}
                     mini
                 />
                 <Button
                     text={'Профиль'}
                     buttonStyle={'thin'}
                     Icon={User}
-                    onClick={() => goToState(DASHBOARD)}
+                    onClick={() => {
+                        goToState(DASHBOARD);
+                        closeMenu && closeMenu();
+                    }}
                     mini
                 />
                 {
@@ -40,7 +51,10 @@ const HeaderUserLinks = ({withLogoutButton}: {withLogoutButton?: boolean}) => {
                             text={'Выйти'}
                             buttonStyle={'thin'}
                             Icon={Logout}
-                            onClick={logout}
+                            onClick={() => {
+                                logout();
+                                closeMenu && closeMenu();
+                            }}
                             mini
                         />
                 }
@@ -51,12 +65,18 @@ const HeaderUserLinks = ({withLogoutButton}: {withLogoutButton?: boolean}) => {
                     text={'Войти'}
                     buttonStyle={'thin'}
                     Icon={Login}
-                    onClick={() => goToState(`${AUTH}/${LOGIN}`)}
+                    onClick={() => {
+                        goToState(`${AUTH}/${LOGIN}`);
+                        closeMenu && closeMenu();
+                    }}
                     mini
                 />
                 <Button
                     text={'Регистрация'}
-                    onClick={() => goToState(`${AUTH}/${REGISTRATION}`)}
+                    onClick={() => {
+                        goToState(`${AUTH}/${REGISTRATION}`);
+                        closeMenu && closeMenu();
+                    }}
                     mini
                 />
             </>

@@ -19,7 +19,7 @@ export const getWallets = () => {
                     investorWallet: res.data.investWallet,
                 });
             })
-            .catch((err) => {
+            .catch(() => {
                 dispatch({ type: WalletActionTypes.WALLET_REQUEST_RETURNED});
             });
     };

@@ -19,7 +19,7 @@ const Header = () => {
     const { theme, toggleTheme } = useTheme();
 
     const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
-    const toggleIsMenuOpenedMenu = () =>  setIsMenuOpened(prevState => !prevState);
+    const toggleIsMenuOpened = () =>  setIsMenuOpened(prevState => !prevState);
 
     const closeMenuOnResize = (isMatched: boolean) => {
         isMatched && setIsMenuOpened(false);
@@ -53,7 +53,10 @@ const Header = () => {
                             className={styles['trading-link']}
                             text={'Алготрейдинг'}
                             buttonStyle={'thin'}
-                            onClick={() => goToState(`${TERMINAL}/investor`)}
+                            onClick={() => {
+                                setIsMenuOpened(false);
+                                goToState(`${TERMINAL}/investor`);
+                            }}
                             mini
                         />
                     </div>
@@ -73,7 +76,7 @@ const Header = () => {
                 >
                     <Burger
                         isOpened={isMenuOpened}
-                        onClick={toggleIsMenuOpenedMenu}
+                        onClick={toggleIsMenuOpened}
                     />
                 </div>
             </header>

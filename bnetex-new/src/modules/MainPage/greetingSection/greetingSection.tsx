@@ -7,53 +7,55 @@ import { DynamicImg } from 'lib/utils/DynamicImg';
 import { AppLinksEnum } from 'routes/appLinks';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import Blur from 'modules/Global/components/blurredBackgroundItem';
+import { useCurrentPlatform } from 'lib/hooks/usePlatform';
 
 const GreetingSection = () => {
-    
+
     const { DASHBOARD, INVESTOR_WALLET } = AppLinksEnum;
     const { goToState } = useGoToState();
+    const { isCurrentPlatformMobile } = useCurrentPlatform();
 
     return(
         <section className={styles['greeting-block']}>
-            <Blur 
+            <Blur
                 color={'purple'}
-                top={'-10%'}
-                left={'-10%'} 
+                top={isCurrentPlatformMobile ? '5%' : '-10%'}
+                left={'-10%'}
                 type={'ellipse'}
                 rotate={165}
             />
-            <Blur 
+            <Blur
                 color={'blue'}
-                top={'-20%'}
-                left={'45%'} 
+                top={isCurrentPlatformMobile ? '15%' : '-20%'}
+                left={'45%'}
                 type={'circle'}
             />
-            <Blur 
+            <Blur
                 color={'green'}
                 top={'30%'}
-                left={'50%'} 
+                left={'50%'}
                 type={'circle'}
             />
             <div className={styles['greeting-text']}>
                 <h1>Инновационный статистический <span>алгоритм</span></h1>
-                <p 
+                <p
                     className={clsx('text-bold', styles['extra-text'])}
                 >
                     Интерактивный сигнальный индикатор выведет вашу торговлю на совершенно новый уровень.
                     Торгуйте как профессионал. Это просто.
                 </p>
-                <Button 
+                <Button
                     text={'Начать работу'}
                     buttonStyle={'outlined'}
                     onClick={() =>  goToState(`${DASHBOARD}/${INVESTOR_WALLET}`)}
                 />
             </div>
-            <div 
+            <div
                 className={styles['greeting-img']}
             >
                 <div className={clsx(styles['greeting-card'], styles['token-card'])}>
                     <div className={styles['token']}>
-                        <DynamicImg 
+                        <DynamicImg
                             path={'logo_BTC.png'}
                         />
                         <div className={styles['token__skeletons']}>
