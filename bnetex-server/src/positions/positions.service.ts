@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { GetDataDto } from './dto/get-data.dto';
-import { Position, PositionDocument } from './shemas/position.schema';
+import { Position, PositionDocument } from './shemas/_position.schema';
 
 @Injectable()
 export class PositionsService {

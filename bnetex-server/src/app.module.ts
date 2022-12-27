@@ -27,13 +27,23 @@ import { InvestTradingModule } from './invest-trading/invest-trading.module';
             envFilePath : `.${process.env.NODE_ENV}.env`
         }),
         SequelizeModule.forRoot({
-            dialect: 'postgres',
-            host: process.env.POSTGRES_HOST,
-            port: Number(process.env.POSTGRES_PORT),
-            username: process.env.POSTGRES_USER,
-            password: process.env.POSTGRES_PASSWORD,
-            database: process.env.POSTGRES_DB,
+            dialect: "postgres",
+            host: process.env.DB_HOST,
+            port: Number(process.env.DB_PORT),
+            username: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME,
             models: [User, Role, UserRoles, Request, InvestSession],
+            autoLoadModels: true
+        }),
+        SequelizeModule.forRoot({
+            dialect: "postgres",
+            host: process.env.EX_HOST,
+            port: Number(process.env.EX_PORT),
+            username: process.env.EX_USER,
+            password: process.env.EX_PASSWORD,
+            database: process.env.EX_NAME,
+            models: [],
             autoLoadModels: true
         }),
         MongooseModule.forRoot(`mongodb://127.0.0.1:27017/exchange`),
