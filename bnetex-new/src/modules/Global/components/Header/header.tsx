@@ -8,10 +8,10 @@ import Burger from './Burger/burger';
 import { useEffect, useState } from 'react';
 import HeaderUserLinks from './headerUserLinks';
 import BurgerMenu from './BurgerMenu/burgerMenu';
-import variablesMap from 'styles/exportedVariables.module.scss';
 import clsx from 'clsx';
+import getCssVariable from 'lib/utils/getCssVariable';
 
-const mobileMediaQuery = window.matchMedia(`(min-width: ${Number(variablesMap.earlyMobileBp) + 1}px)`);
+const mobileMediaQuery = window.matchMedia(`(min-width: ${getCssVariable('MOBILE_BP') + 1}px)`);
 
 const Header = () => {
     const { HOME, TERMINAL } = AppLinksEnum;

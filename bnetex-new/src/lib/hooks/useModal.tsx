@@ -1,6 +1,6 @@
 import { throwError } from 'lib/utils/errorThrower';
+import getCssVariable from 'lib/utils/getCssVariable';
 import { createContext, JSXElementConstructor, ReactNode, useContext, useMemo, useState } from 'react';
-import variablesMap from 'styles/exportedVariables.module.scss';
 
 const modalSpawnerContext = createContext<ModalSpawnerContext | null>(null);
 
@@ -27,7 +27,7 @@ type ModalControl<E> = {
     close(): void;
 }
 
-const default_transition = Number(variablesMap['defaultTransition'].replace(/ms/, ''));
+const DEFAULT_TRANSITION = getCssVariable('DEFAULT_TRANSITION');
 
 export function ModalSpawnerProvider({ children }: {children: ReactNode}) {
     const [ activeModal, setActiveModal ] = useState<JSX.Element | null>(null);
@@ -39,12 +39,12 @@ export function ModalSpawnerProvider({ children }: {children: ReactNode}) {
             setActiveModal(<Element onClose={close} {...props} />);
             setIsModalVisible(true);
         };
-        
+
         const close = () => {
             setIsModalVisible(false);
             setTimeout(() => {
                 setActiveModal(null);
-            }, default_transition);
+            }, DEFAULT_TRANSITION);
         };
 
         return {

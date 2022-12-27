@@ -34,7 +34,6 @@ const ResendCodeAction = ({ userEmail }: {userEmail: string}) => {
 
     useEffect(() => {
         userEmail && checkTime();
-
         return () => {
             timer.current && clearInterval(timer.current);
         };
