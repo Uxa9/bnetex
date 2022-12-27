@@ -7,8 +7,7 @@
   @include toast-shadow;
 
   display: grid;
-  grid-template-columns: repeat(2, auto);
-  grid-template-rows: repeat(2, auto);
+  grid-template-columns: 1fr 60px;
   column-gap: 16px;
   background-color: $grayscale-1;
   border-radius: 8px;
@@ -64,10 +63,10 @@
   &__close {
     @include column-flex-center;
 
-    color: $grayscale-4;
+    color: $grayscale-6;
+    width: 60px;
     height: 100%;
     padding: 0 16px;
-    width: fit-content;
     border-left: 1px solid $grayscale-4;
     transition: background-color $default-transition ease,
       color $default-transition ease;

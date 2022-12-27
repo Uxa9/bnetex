@@ -39,7 +39,7 @@ export const getUserOpenPosition = async () => {
 };
 
 export const resendActivationCode = async (email: string) => {
-    return await api.post(
+    return await api.post<string>(
         '/auth/resend-activation-link', {
             email: email,
         });
