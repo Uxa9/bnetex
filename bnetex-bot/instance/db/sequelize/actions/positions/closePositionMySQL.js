@@ -7,6 +7,7 @@ const getPosition = require("./getPosition");
 
 const config = require('../../../../../config/config')()
 
+const moment = require('moment');
 
 module.exports = async (pair, kline, profit) => {
     
@@ -37,7 +38,7 @@ module.exports = async (pair, kline, profit) => {
 
     if(ActualProfit >= profit){
         
-        await changePositionStepMySQL(position.id, {status: false, percentProfit: ActualProfit, closePrice: parseFloat(kline.close), sumProfit: ((position.volumeUSDT*10) / 100) * ActualProfit });
+        await changePositionStepMySQL(position.id, {status: false, closeTime: moment(kline.endTime, 'x').toDate(), percentProfit: ActualProfit, closePrice: parseFloat(kline.close), sumProfit: ((position.volumeUSDT*10) / 100) * ActualProfit });
         await marketSell(pair, parseFloat(POSITION_ACTIVE.positionAmt))
     }
 

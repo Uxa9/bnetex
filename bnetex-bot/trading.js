@@ -3,27 +3,49 @@ const InstanceClass = require("./instance/instanceMainClass");
 
 const config = require("./config/config")();
 
+const bodyParser = require('body-parser');
+
+const express = require('express')
+const app = express()
+const port = config.serverPort;
+
 // Тут хранятся все экземпляры торговых классов
 let pairInstances = [];
 
+const frontRoutes = require('./server/routes/front-routes');
+const paramsConverter = require("./server/routes/middlewares/paramsConverter");
+
 (async () => {
+
     await db.setup();
+
+    app.use(bodyParser.urlencoded({ extended: true }));
+
+    app.use(paramsConverter);
+
+    app.listen(port, () => {
+        console.log(`Server is listening port ${port}`)
+    })
+
+    app.use('/front', frontRoutes)
+
+
 })()
 
 
 
 
-config.tradingPairs.map(pair => {
+// config.tradingPairs.map(pair => {
 
-    // Создаем экземпляр класса торговой пары
-    let instalceClass = new InstanceClass(pair);
+//     // Создаем экземпляр класса торговой пары
+//     let instalceClass = new InstanceClass(pair);
 
-    // Инициализация класса
-    instalceClass.initializing();
+//     // Инициализация класса
+//     instalceClass.initializing();
 
-    // Сохранение класса
-    pairInstances.push(instalceClass);
-})
+//     // Сохранение класса
+//     pairInstances.push(instalceClass);
+// })
 
 
 

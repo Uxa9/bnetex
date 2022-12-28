@@ -42,6 +42,8 @@ const TickerClassSimulate = require("./tickeClassSimulate");
 const config = require("../config/config")();
 
 module.exports = class InstanceClass {
+
+  
   constructor(pair) {
 
 
@@ -416,25 +418,8 @@ module.exports = class InstanceClass {
 
       }
 
-
-      
-      
-
-
-
-      
-
-      
-
-      
-
       
     }
-
-    
-
-
-
 
 
     this.candlesticks = candlesticks;
@@ -446,8 +431,6 @@ module.exports = class InstanceClass {
     this.candlesticks = compareCandlesticks(this.candlesticks, this.candlesticks_15m, true);
 
 
-    //console.log(this.candlesticks[this.candlesticks.length-1]['259200']['2'])
-    //console.log(this.candlesticks_15m[this.candlesticks_15m.length-1])
     
 
 
@@ -486,10 +469,10 @@ module.exports = class InstanceClass {
         
         
         // Если свеча часовая
-        //console.log(e['1m'].startTime % 3600000)
+        
         if(e['1m'].startTime % 3600000 == 0){
             console.log('Доабвляем 1час'.green)
-            //console.log(e['1m'])
+            
             this.candlesticks_15m.push(e['1m'])
             this.candlesticks_15m.shift();
             if(this.startHourDate === undefined){
@@ -514,9 +497,11 @@ module.exports = class InstanceClass {
     }
     
 
+    if(config.initTelgram){
+      this.tgClass = new TelegramBotClass(config.tgBotKey,this.candlesticks);
+      this.tgClass.init();   
+    }
     
-    this.tgClass = new TelegramBotClass(config.tgBotKey,this.candlesticks);
-    this.tgClass.init();   
 
   }
 
