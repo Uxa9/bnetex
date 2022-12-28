@@ -23,6 +23,10 @@
   }
 }
 
+.trader-view {
+    grid-template-columns: 1fr 700px;
+}
+
 .chart {
   grid-row: 1/4;
   width: 100%; 

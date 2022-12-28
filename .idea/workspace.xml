@@ -2,15 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="acdce120-48f5-415e-8258-3978cfedca6a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/bnetex-server/src/auth/dto/reset-password.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bnetex-server/src/positions/position.model.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bnetex-server/src/positions/positionEnters.model.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bnetex-new/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-new/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bnetex-server/src/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bnetex-server/src/auth/auth.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/auth/auth.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bnetex-server/src/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/auth/auth.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bnetex-server/src/mailSender/mailTemplates/dropPassword.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/mailSender/mailTemplates/dropPassword.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bnetex-server/src/mailSender/mailTemplates/newPassword.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/mailSender/mailTemplates/newPassword.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bnetex-server/src/services/generateAuthCode.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/services/generateAuthCode.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bnetex-server/src/positions/positions.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/positions/positions.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bnetex-server/src/positions/positions.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/positions/positions.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bnetex-server/src/positions/shemas/position.schema.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bnetex-server/src/positions/shemas/_position.schema.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,20 +26,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Uxa/Documents/GitHub/bnetex",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
-    "ts.external.directory.path": "C:\\Users\\Uxa\\Documents\\GitHub\\bnetex\\bnetex-new\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Uxa/Documents/GitHub/bnetex&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Uxa\\Documents\\GitHub\\bnetex\\bnetex-new\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Uxa\Documents\GitHub\bnetex\bnetex-server\src\positions" />
+      <recent name="C:\Users\Uxa\Documents\GitHub\bnetex\bnetex-new\src\services\invest-trading" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Start dev backend" type="js.build_tools.npm">
       <package-json value="$PROJECT_DIR$/bnetex-server/package.json" />
@@ -66,6 +70,10 @@
       <workItem from="1668043089935" duration="934000" />
       <workItem from="1668666714561" duration="1556000" />
       <workItem from="1669264767543" duration="3339000" />
+      <workItem from="1669868479648" duration="11563000" />
+      <workItem from="1670463566529" duration="6295000" />
+      <workItem from="1671001998266" duration="477000" />
+      <workItem from="1672014090214" duration="18695000" />
     </task>
     <servers />
   </component>
@@ -82,6 +90,17 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bnetex-server/node_modules/binance/lib/util/requestUtils.d.ts</url>
+          <line>16</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

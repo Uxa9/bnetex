@@ -16,6 +16,9 @@ import { PositionsModule } from './positions/positions.module';
 import { InvestSessionsModule } from './invest-sessions/invest-sessions.module';
 import { Request } from "./request/request.model";
 import { InvestSession } from "./invest-sessions/invest-sessions.model";
+import { InvestTradingModule } from './invest-trading/invest-trading.module';
+import { Position } from "./positions/position.model";
+import { PositionEnters } from "./positions/positionEnters.model";
 
 
 @Module({
@@ -26,16 +29,16 @@ import { InvestSession } from "./invest-sessions/invest-sessions.model";
             envFilePath : `.${process.env.NODE_ENV}.env`
         }),
         SequelizeModule.forRoot({
-            dialect: 'postgres',
-            host: process.env.POSTGRES_HOST,
-            port: Number(process.env.POSTGRES_PORT),
-            username: process.env.POSTGRES_USER,
-            password: process.env.POSTGRES_PASSWORD,
-            database: process.env.POSTGRES_DB,
-            models: [User, Role, UserRoles, Request, InvestSession],
+            dialect: "mysql",
+            host: process.env.DB_HOST,
+            port: Number(process.env.DB_PORT),
+            username: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME,
+            models: [User, Role, UserRoles, Request, InvestSession, Position, PositionEnters],
             autoLoadModels: true
         }),
-        MongooseModule.forRoot(`mongodb://localhost:27017/exchange`),
+        MongooseModule.forRoot(`mongodb://127.0.0.1:27017/exchange`),
         UsersModule,
         RolesModule,
         AuthModule,
@@ -43,7 +46,8 @@ import { InvestSession } from "./invest-sessions/invest-sessions.model";
         RequestModule,
         MailSenderModule,
         PositionsModule,
-        InvestSessionsModule
+        InvestSessionsModule,
+        InvestTradingModule
     ]
 })
 export class AppModule{};

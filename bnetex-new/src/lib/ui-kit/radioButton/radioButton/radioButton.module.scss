@@ -1,4 +1,6 @@
-@import '../../../../styles/variables.scss';
+@import 'styles/variables';
+@import 'styles/mixins';
+@import 'styles/colors/colors';
 
 .container {
     display: flex;
@@ -7,21 +9,21 @@
     cursor: pointer;
 
     &:hover .custom-toggle {
-        border-color: $activeBorder;
+        // border-color: $grayscale-card;
     }
 }
 
 input:checked + .custom-toggle {
-    border-color: $activeBorder;
+    // border-color: $activeBorder;
 
     .centerpiece {
-        background-color: $activeBorder;
+        // background-color: $activeBorder;
     }
 }
 
 .custom-toggle {
     border-radius: 50%;
-    border: 1px solid $grayBorder;
+    // border: 1px solid $grayBorder;
     padding: 4px;
     transition: 0.25s border;
 

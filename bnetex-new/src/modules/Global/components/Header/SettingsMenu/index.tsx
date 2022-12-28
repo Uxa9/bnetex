@@ -28,7 +28,7 @@ const SettingsMenu = () => {
 
     return (
         <div className={styles.menu}>
-            <RadioButtonGroup
+            {/* <RadioButtonGroup
                 title='Тип терминала'
                 onChange={handleTerminalTypeChange}
                 name={'terminalType'}
@@ -46,7 +46,7 @@ const SettingsMenu = () => {
                     label='Инвестор'
                     value={'investor'}
                 />
-            </RadioButtonGroup>
+            </RadioButtonGroup> */}
 
             <ToggleButtonGroup
                 title='Шаг цены в стакане'
@@ -68,8 +68,9 @@ const SettingsMenu = () => {
                 <ToggleButton 
                     text='10'
                     value={10}
+                    location='right'
                 />
-                <ToggleButton 
+                {/* <ToggleButton 
                     text='50'
                     value={50}
                 />
@@ -77,7 +78,7 @@ const SettingsMenu = () => {
                     text='100'
                     value={100}
                     location='right'
-                />
+                /> */}
             </ToggleButtonGroup>
         </div>
     );

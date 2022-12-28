@@ -10,6 +10,7 @@ import HeaderUserLinks from './headerUserLinks';
 import BurgerMenu from './BurgerMenu/burgerMenu';
 import variablesMap from 'styles/exportedVariables.module.scss';
 import clsx from 'clsx';
+import SettingsMenu from './SettingsMenu';
 
 const mobileMediaQuery = window.matchMedia(`(min-width: ${Number(variablesMap.earlyMobileBp) + 1}px)`);
 
@@ -64,6 +65,7 @@ const Header = () => {
                         <HeaderUserLinks
                             withLogoutButton
                         />
+                        <SettingsMenu />
                         <Button
                             buttonStyle={'thin'}
                             Icon={theme === 'dark' ? Moon : Brightness}

@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectModel } from '@nestjs/sequelize';
+// import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Op } from 'sequelize';
 import { GetDataDto } from './dto/get-data.dto';
-import { Position, PositionDocument } from './shemas/position.schema';
+// import { Position, PositionDocument } from './shemas/_position.schema';
+import { Position } from './position.model';
+import { PositionEnters } from './positionEnters.model';
 
 @Injectable()
 export class PositionsService {
 
     constructor(
-        @InjectModel(Position.name) private PositionModel: Model<PositionDocument>
+        // @InjectModel(Position.name) private PositionModel: Model<PositionDocument>
+        @InjectModel(Position) private positionRepository: typeof Position,
+        @InjectModel(PositionEnters) private positionEntersRepository: typeof PositionEnters,
     ) { }
 
     async getPnlAndRoe(dto: GetDataDto) {
         const date = new Date().setMonth(new Date().getMonth() - dto.period);
 
-        const positions = await this.PositionModel.find({
-            enterTime: { $gte: date },
-            closeTime: { $exists: true }
-        },
-            {},
-            { sort: { 'enterTime': 1 } }
-        );
+        const positions = await this.positionRepository.findAll({
+            where: {
+                // enterTime: { $gte: date },
+                closeTime: { [Op.ne]: null }
+            },
+            order: [['enterTime', "ASC"]]
+        });
+
+        console.log(positions[0]);
+        
+
 
         const result = await this.getHistoricalData(positions, dto.amount);
 
@@ -75,9 +85,12 @@ export class PositionsService {
     async getHistoricalDataOrders(period: number) {
         const date = new Date().setMonth(new Date().getMonth() - period);
 
-        const positions = await this.PositionModel.find({
-            enterTime: { $gte: date },
-            closeTime: { $exists: true }
+        const positions = await this.positionRepository.findAll({
+            where: {
+                enterTime: { $gte: date },
+                closeTime: { [Op.ne]: null }
+            }
+            // include posEnters
         });
 
         let res = [];
@@ -90,10 +103,10 @@ export class PositionsService {
 
             const enters = positionEnters.map(enter => {
                 return {
-                    date: enter.time,
+                    date: enter.createdAt,
                     action: "purchase",
                     amount: enter.volumeUSDT * lever,
-                    price: enter.buyPrice,
+                    price: enter.close,
                     PNL: 0
                 }
             });
@@ -110,16 +123,17 @@ export class PositionsService {
         });
 
         return res;
+        return {};
     }
 
     async getCurrentOpenPosition() {
-        const position = await this.PositionModel.findOne(
-            {
-                closeTime: { $exists: false }
+
+        const position = await this.positionRepository.findOne({
+            where: {
+                closeTime: null
             },
-            {},
-            { sort: { 'enterTime': -1 } }
-        );
+            order: [['enterTime', "DESC"]]
+        });
 
         if (position) {
             return position;
@@ -129,12 +143,11 @@ export class PositionsService {
     }
 
     async getLastClosedPosition() {
-        return await this.PositionModel.findOne(
-            {
-                closeTime: { $exists: true }
+        return await this.positionRepository.findOne({
+            where: {
+                closeTime: { [Op.ne]: null }
             },
-            {},
-            { sort: { 'closeTime': -1 } }
-        );
+            order: [['closeTime', "DESC"]]
+        });
     }
 }

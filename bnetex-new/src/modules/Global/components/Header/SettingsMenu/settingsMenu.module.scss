@@ -1,8 +1,12 @@
+@import 'styles/variables';
+@import 'styles/mixins';
+@import 'styles/colors/colors';
+
 .menu {
     position: absolute;
     top: calc(100% + 1px);
     right: 0;
-    background-color: rgb(255, 255, 255);
+    background-color: $grayscale-card;
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.1);
     border-radius: 0px 0px 10px 10px;
     padding: 20px;
