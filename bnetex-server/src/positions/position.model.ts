@@ -1,11 +1,12 @@
-import {Column, DataType, Model, Table} from "sequelize-typescript";
+import {BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
+import { PositionEnters } from "./positionEnters.model";
 
 interface PositionCreationAttrs {
 
 }
 
 @Table({
-    tableName : 'POSITION'
+    tableName : 'POSITIONS'
 })
 export class Position extends Model<Position, PositionCreationAttrs> {
 
@@ -89,5 +90,8 @@ export class Position extends Model<Position, PositionCreationAttrs> {
         type : DataType.DOUBLE
     })
     minPrice : number;
+
+    @HasMany(() => PositionEnters)
+    positionEnters: PositionEnters[]
 
 }

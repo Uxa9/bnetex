@@ -333,12 +333,12 @@ export class UsersService {
         }
 
         const userShare = position.volumeUSDT / position.deposit * userSession.tradeBalance;
-        const pnl = position.avegarePrice / position.enterPrice;
+        const pnl = position.averagePrice / position.enterPrice;
 
         return [{
             amount: userShare,
             entryPrice: position.enterPrice,
-            markedPrice: position.avegarePrice,
+            markedPrice: position.averagePrice,
             margin: {
                 value: 1,
                 type: 'cross'

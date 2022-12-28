@@ -73,7 +73,8 @@ const TradeView = () => {
         const res = await axios.get('https://fapi.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=1000');
 
         const asks: string[][] = res.data.asks.reverse();
-        const bids: string[][] = res.data.bids;
+        const bids: string[][] = res.data.bids.reverse();
+console.log(bids);
 
         if (orderBookStep === 0.1) {
             setOrderBookSnapshot(asks.concat(bids));
@@ -259,13 +260,57 @@ const TradeView = () => {
 
         console.log(maxVolume);
 
-        return tradeCupArr.map((item: any[]) => {
+        return tradeCupArr.map((item: any[], index: any) => {
+
+            const parseBgColor = () => {
+
+                const percent = item[1]/ maxVolume * 100;
+
+                const greenColor = () => {
+
+                    if (percent < 25) return "#84E088";
+                    if (percent < 50) return "#5CD662";
+                    if (percent < 75) return "#17CE1F";
+
+                    return "#0B8D11"
+                }
+
+                const redColor = () => {
+
+                    if (percent < 25) return "#E08484";
+                    if (percent < 50) return "#D65C5C";
+                    if (percent < 75) return "#EC1313";
+
+                    return "#8D0B0B"
+                }
+
+                if (index < tradeCupArr.length / 2 - 1) {
+
+                    let color = greenColor();
+
+                    return {
+                        background: `linear-gradient(90deg, ${color} 0%, ${color} ${item[1]/ maxVolume * 100}%, #00000000 ${item[1]/ maxVolume * 100}%)`
+                    }
+                }
+                if (index > tradeCupArr.length / 2) {
+
+                    let color = redColor();
+
+                    return {
+                        background: `linear-gradient(90deg, ${color} 0%, ${color} ${item[1]/ maxVolume * 100}%, #00000000 ${item[1]/ maxVolume * 100}%)`
+                    }
+                }
+
+                return {};
+            }
+
             return (
                 <div
                     className={clsx(styles['cup-position'])}
                     onClick={() => {
                         sendLimitOrder(Number(item[0]), 'FOK');
                     }}
+                    style={parseBgColor()}
                 >
                     <span>
                         {Number(item[1]).toFixed(4)}

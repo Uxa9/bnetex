@@ -17,6 +17,8 @@ import { InvestSessionsModule } from './invest-sessions/invest-sessions.module';
 import { Request } from "./request/request.model";
 import { InvestSession } from "./invest-sessions/invest-sessions.model";
 import { InvestTradingModule } from './invest-trading/invest-trading.module';
+import { Position } from "./positions/position.model";
+import { PositionEnters } from "./positions/positionEnters.model";
 
 
 @Module({
@@ -27,7 +29,7 @@ import { InvestTradingModule } from './invest-trading/invest-trading.module';
             envFilePath : `.${process.env.NODE_ENV}.env`
         }),
         SequelizeModule.forRoot({
-            dialect: "postgres",
+            dialect: "mariadb",
             host: process.env.DB_HOST,
             port: Number(process.env.DB_PORT),
             username: process.env.DB_USER,
@@ -37,13 +39,13 @@ import { InvestTradingModule } from './invest-trading/invest-trading.module';
             autoLoadModels: true
         }),
         SequelizeModule.forRoot({
-            dialect: "postgres",
+            dialect: "mariadb",
             host: process.env.EX_HOST,
             port: Number(process.env.EX_PORT),
             username: process.env.EX_USER,
             password: process.env.EX_PASSWORD,
             database: process.env.EX_NAME,
-            models: [],
+            models: [Position, PositionEnters],
             autoLoadModels: true
         }),
         MongooseModule.forRoot(`mongodb://127.0.0.1:27017/exchange`),

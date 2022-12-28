@@ -1,4 +1,5 @@
-import {Column, DataType, Model, Table} from "sequelize-typescript";
+import {Column, DataType, ForeignKey, Model, Table} from "sequelize-typescript";
+import { Position } from "./position.model";
 
 interface PositionEntersCreationAttrs {
 
@@ -33,4 +34,10 @@ export class PositionEnters extends Model<PositionEnters, PositionEntersCreation
         type : DataType.STRING
     })
     unittimestamp : number;
+
+    @ForeignKey(() => Position)
+    @Column({
+        type: DataType.INTEGER
+    })
+    POSITIONId : number;
 }
