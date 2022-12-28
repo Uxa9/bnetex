@@ -3,11 +3,15 @@ const InstanceClass = require("./instance/instanceMainClass");
 
 const config = require("./config/config")();
 
+const cors = require('cors')
+
 const bodyParser = require('body-parser');
 
 const express = require('express')
 const app = express()
 const port = config.serverPort;
+
+app.use(cors())
 
 // Тут хранятся все экземпляры торговых классов
 let pairInstances = [];
