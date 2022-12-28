@@ -22,13 +22,13 @@ export class PositionsService {
 
         const positions = await this.positionRepository.findAll({
             where: {
-                enterTime: { $gte: date },
+                // enterTime: { $gte: date },
                 closeTime: { [Op.ne]: null }
             },
             order: [['enterTime', "ASC"]]
         });
 
-        console.log(positions);
+        console.log(positions[0]);
         
 
 

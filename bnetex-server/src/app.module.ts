@@ -29,23 +29,13 @@ import { PositionEnters } from "./positions/positionEnters.model";
             envFilePath : `.${process.env.NODE_ENV}.env`
         }),
         SequelizeModule.forRoot({
-            dialect: "mariadb",
+            dialect: "mysql",
             host: process.env.DB_HOST,
             port: Number(process.env.DB_PORT),
             username: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
-            models: [User, Role, UserRoles, Request, InvestSession],
-            autoLoadModels: true
-        }),
-        SequelizeModule.forRoot({
-            dialect: "mariadb",
-            host: process.env.EX_HOST,
-            port: Number(process.env.EX_PORT),
-            username: process.env.EX_USER,
-            password: process.env.EX_PASSWORD,
-            database: process.env.EX_NAME,
-            models: [Position, PositionEnters],
+            models: [User, Role, UserRoles, Request, InvestSession, Position, PositionEnters],
             autoLoadModels: true
         }),
         MongooseModule.forRoot(`mongodb://127.0.0.1:27017/exchange`),

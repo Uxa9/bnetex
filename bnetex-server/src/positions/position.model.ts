@@ -23,7 +23,7 @@ export class Position extends Model<Position, PositionCreationAttrs> {
     @Column({
         type : DataType.DOUBLE
     })
-    averagePrice : number;
+    avegarePrice : number;
 
     @Column({
         type : DataType.DATE,
