@@ -39,17 +39,17 @@ const paramsConverter = require("./server/routes/middlewares/paramsConverter");
 
 
 
-// config.tradingPairs.map(pair => {
+!config.serverOnly && config.tradingPairs.map(pair => {
 
-//     // Создаем экземпляр класса торговой пары
-//     let instalceClass = new InstanceClass(pair);
+    // Создаем экземпляр класса торговой пары
+    let instalceClass = new InstanceClass(pair);
 
-//     // Инициализация класса
-//     instalceClass.initializing();
+    // Инициализация класса
+    instalceClass.initializing();
 
-//     // Сохранение класса
-//     pairInstances.push(instalceClass);
-// })
+    // Сохранение класса
+    pairInstances.push(instalceClass);
+})
 
 
 

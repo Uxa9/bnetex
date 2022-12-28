@@ -8,5 +8,10 @@
   "tradingPairs" : ["BTCUSDT"],
   "tradingTimeframes": ["1m", "5m", "15m", "30m", "1h", "2h", "8h", "12h", "1d"],
   "tgBotKey": "5694798604:AAFu6z12hkOrDZU-VrOHFeJKOnNTT6m_6Ok",
-  "tgGroupId": -673023135
+  "tgGroupId": -673023135,
+  "simulate": false,
+  "startTime": null,
+  "initTelgram": true,
+  "serverPort": 3009,
+  "serverOnly": false
 }

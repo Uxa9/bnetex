@@ -12,5 +12,6 @@
     "simulate": true,
     "startTime": 1652410440000,
     "initTelgram": false,
-    "serverPort": 3009
+    "serverPort": 3009,
+    "serverOnly": false
 }
