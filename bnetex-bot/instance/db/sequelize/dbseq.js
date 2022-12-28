@@ -33,13 +33,14 @@ module.exports.setup = async () => {
 
 const models = {
   Pattern: require("./models/pattern")(sequelize, DataTypes),
-  PatternTrigger: require("./models/patternTriggers")(sequelize, DataTypes),
-  //PatternConditions: require("./models/parrentConditions")(sequelize, DataTypes),
-  Position: require("./models/position")(sequelize, DataTypes),
+  PatternTrigger: require("./models/patternTriggers")(sequelize, DataTypes),    
   ActiveGroups: require("./models/activeGroups")(sequelize, DataTypes),
-  Rules: require("./models/rules")(sequelize, DataTypes),
   ActiveGroupTriggers: require("./models/activeGroupTriggers")(sequelize, DataTypes),
-  PositionEnters:require("./models/PositionEnters")(sequelize, DataTypes),
+  Rules: require("./models/rules")(sequelize, DataTypes),  
+  PositionEnters:require("./models/PositionEnters")(sequelize, DataTypes),  
+  Position: require("./models/position")(sequelize, DataTypes),
+  
+  
 };
 
 let syncAssotiations = () => {
@@ -47,24 +48,25 @@ let syncAssotiations = () => {
   //this.models.Pattern.hasMany(this.models.PatternConditions);
   //this.models.PatternConditions.belongsTo(this.models.Pattern)
 
-
-  this.models.ActiveGroups.hasMany(this.models.Position);
-  this.models.Position.belongsTo(this.models.ActiveGroups)
-
+  this.models.Pattern.hasMany(this.models.PatternTrigger);
+  this.models.PatternTrigger.belongsTo(this.models.Pattern)
 
   this.models.Pattern.hasMany(this.models.ActiveGroups);
   this.models.ActiveGroups.belongsTo(this.models.Pattern)
 
 
+  this.models.ActiveGroups.hasMany(this.models.Position);
+  this.models.Position.belongsTo(this.models.ActiveGroups)
+
   this.models.ActiveGroups.hasMany(this.models.ActiveGroupTriggers);
   this.models.ActiveGroupTriggers.belongsTo(this.models.ActiveGroups)
+  
   
   this.models.ActiveGroups.hasMany(this.models.Rules);
   this.models.Rules.belongsTo(this.models.ActiveGroups)
 
 
-  this.models.Pattern.hasMany(this.models.PatternTrigger);
-  this.models.PatternTrigger.belongsTo(this.models.Pattern)
+  
 
 
   this.models.Position.hasMany(this.models.PositionEnters);
