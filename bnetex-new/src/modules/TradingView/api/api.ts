@@ -2,6 +2,7 @@ import { HistoryCallback, LibrarySymbolInfo, ErrorCallback, PeriodParams, Resolu
     SearchSymbolsCallback, ServerTimeCallback, SubscribeBarsCallback,
     GetMarksCallback, Mark } from 'charting_library/charting_library';
 import { UUID } from 'lib/types/uuid';
+import getTVData from 'services/getTVData';
 import { getExchangeServerTime, getSymbols, getKlines, checkInterval } from './services';
 import { subscribeOnStream, unsubscribeFromStream } from './streaming';
 import { TVInterval } from './types';
@@ -120,27 +121,9 @@ export default {
         onDataCallback: GetMarksCallback<Mark>,
         _resolution: ResolutionString
     ) => {
-        const arr: Mark[] = [{
-            time: Number(new Date()) / 1000,
-            id: 1,
-            color: 'red',
-            text:'Продажа какого то актива',
-            label: 'S',
-            minSize: 14,
-            labelFontColor: '#ffffff',
-        },
-        {
-            time: Number(new Date()) / 1000,
-            id: 2,
-            color: 'green',
-            text:'Покупка какого то актива',
-            label: 'B',
-            minSize: 14,
-            labelFontColor: '#ffffff',
-        },
-        ];
 
-        onDataCallback(arr);
+        getTVData().then(data => onDataCallback(data));
+
         // console.log('[getMarks]: Method call');
         // console.log(symbolInfo);
         // console.log(resolution);

@@ -1,8 +1,8 @@
 import HistoryAndOrders from './historyAndOrders/historyAndOrders';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import styles from './terminalLayout.module.scss';
 import { useActions } from 'lib/hooks/useActionCreators';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import TradingViewWidget from 'modules/TradingView/TradingViewWidget';
 import clsx from 'clsx';
 

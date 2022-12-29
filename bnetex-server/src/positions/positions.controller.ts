@@ -16,4 +16,9 @@ export class PositionsController
     getHistoricalDataOrders(@Param('period') period: number) {
         return this.PositionService.getHistoricalDataOrders(period);
     }
+
+    @Post('/getTVDAta')
+    getTVDAta(@Body() dto: any) {
+        return this.PositionService.getTVdata(dto);
+    }
 }

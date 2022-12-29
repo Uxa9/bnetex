@@ -65,7 +65,7 @@ const Header = () => {
                         <HeaderUserLinks
                             withLogoutButton
                         />
-                        <SettingsMenu />
+                        {/* <SettingsMenu /> */}
                         <Button
                             buttonStyle={'thin'}
                             Icon={theme === 'dark' ? Moon : Brightness}
