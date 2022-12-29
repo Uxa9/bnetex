@@ -1,3 +1,4 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SequelizeModule } from '@nestjs/sequelize';
@@ -12,6 +13,7 @@ import { PositionsService } from './positions.service';
   providers: [PositionsService],
   imports: [
     SequelizeModule.forFeature([Position, PositionEnters]),
+    HttpModule
     // MongooseModule.forFeature([{ name: Position.name, schema: _positionSchema }])
   ],
   exports: [

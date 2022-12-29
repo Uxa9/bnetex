@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 // import { InjectModel } from '@nestjs/mongoose';
@@ -15,20 +16,35 @@ export class PositionsService {
         // @InjectModel(Position.name) private PositionModel: Model<PositionDocument>
         @InjectModel(Position) private positionRepository: typeof Position,
         @InjectModel(PositionEnters) private positionEntersRepository: typeof PositionEnters,
+        private readonly httpService: HttpService
     ) { }
 
     async getPnlAndRoe(dto: GetDataDto) {
         const date = new Date().setMonth(new Date().getMonth() - dto.period);
 
-        const positions = await this.positionRepository.findAll({
-            where: {
-                // enterTime: { $gte: date },
-                closeTime: { [Op.ne]: null }
-            },
-            order: [['enterTime', "ASC"]]
-        });
+        // const positions = await this.positionRepository.findAll({
+        //     where: {
+        //         // enterTime: { $gte: date },
+        //         closeTime: { [Op.ne]: null }
+        //     },
+        //     order: [['enterTime', "ASC"]]
+        // });
 
-        console.log(positions[0]);
+        // const positions = await Promise.resolve(() => {
+        //     this.httpService.post('http://localhost:3009/front/history', {
+        //         periodMonth: 12
+        //     }).subscribe((res) => {
+        //         console.log(res);
+        //         return res;
+        //     });
+        // }) 
+        const positions = await new Promise((resolve, rej) => this.httpService.post('http://localhost:3009/front/history', {
+                periodMonth: 12
+            }).subscribe((res) => {
+                resolve(res.data.response);
+            }))
+
+        // console.log(positions[0]);
         
 
 

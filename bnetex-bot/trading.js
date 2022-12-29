@@ -23,7 +23,9 @@ const paramsConverter = require("./server/routes/middlewares/paramsConverter");
 
     await db.setup();
 
-    app.use(bodyParser.urlencoded({ extended: true }));
+    // app.use(bodyParser.urlencoded({ extended: true }));
+
+    app.use(bodyParser.json());
 
     app.use(paramsConverter);
 

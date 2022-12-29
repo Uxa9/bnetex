@@ -6,7 +6,7 @@ var express = require("express"),
 
 
   router.use('/history', async (req,res) => {
-    
+    console.log(req)
 
     if(!req.requestParams.periodMonth){
         res.status(400);
