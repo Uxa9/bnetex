@@ -9,6 +9,12 @@ module.exports = function(sequelize, DataTypes) {
         avegarePrice: {
             type: DataTypes.DOUBLE
         },
+        averagePrice: {
+            type: DataTypes.DOUBLE,
+            get() {
+                return this.getDataValue('avegarePrice');
+            }
+        },
         enterTime: {
             type: 'TIMESTAMP',
             defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
