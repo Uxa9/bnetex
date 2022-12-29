@@ -31,6 +31,8 @@
   grid-row: 1/4;
   width: 100%; 
   min-height: 400px;
+  padding: 8px;
+  overflow: hidden;
 
   @include max-width(1200) {
     grid-column: 1/-1;

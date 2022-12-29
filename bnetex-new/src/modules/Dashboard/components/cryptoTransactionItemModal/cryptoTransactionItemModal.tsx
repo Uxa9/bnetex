@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { BaseModalProps } from 'lib/hooks/useModal';
-import { CryptoTransactionItemStatusMap, CryptoTransactionItemType } from 'lib/types/cryptoTransactionItem';
+import { Transaction, TransactionStatusMap } from 'lib/types/transaction';
 import styles from './cryptoTransactionItemModal.module.scss';
 import itemStyles from '../cryptoTransactionItem/cryptoTransactionItem.module.scss';
 import CopyButton from 'lib/ui-kit/copyButton/copyButton';
@@ -8,7 +8,7 @@ import { formatDate } from 'lib/utils/formatDate';
 import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
 
 interface CryptoTransactionItemModalProps{
-    item: CryptoTransactionItemType;
+    item: Transaction;
 }
 
 const CryptoTransactionItemModal = (props: CryptoTransactionItemModalProps & BaseModalProps) => {
@@ -32,12 +32,12 @@ const CryptoTransactionItemModal = (props: CryptoTransactionItemModalProps & Bas
                         'caption-mini',
                     )}
                 >
-                    {CryptoTransactionItemStatusMap[item.status]}
+                    {TransactionStatusMap[item.status]}
                 </p>
             </div>
             <div className={styles['data-line']}>
                 <span className={styles['data-line__label']}>Дата</span>
-                <p>{formatDate(item.date, true)}</p>
+                <p>{formatDate(new Date(item.date), true)}</p>
             </div>
             <div className={styles['data-line']}>
                 <span className={styles['data-line__label']}>Перевод</span>
@@ -65,19 +65,19 @@ const CryptoTransactionItemModal = (props: CryptoTransactionItemModalProps & Bas
                 <span className={styles['data-line__label']}>Сеть</span>
                 <p>TRON (TRC20)</p>
             </div>
-            <div className={styles['data-line']}>
+            <div className={clsx(styles['data-line'], styles['item-destination'])}>
                 <span className={styles['data-line__label']}>Адрес</span>
-                <p className={itemStyles['item-destination']}>
-                    <span>
+                <div className={itemStyles['item-destination']}>
+                    <p>
                         {item.destination}
-                    </span>
-                    <CopyButton 
+                    </p>
+                    <CopyButton
                         textToCopy={item.destination}
                         successText={'Кошелек успешно скопирован в ваш буфер обмена'}
                     />
-                </p>
+                </div>
             </div>
-            <div className={styles['data-line']}>
+            <div className={clsx(styles['data-line'], styles['wallet'])}>
                 <span className={styles['data-line__label']}>Кошелек получатель</span>
                 <p>{item.wallet}</p>
             </div>

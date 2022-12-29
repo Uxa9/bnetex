@@ -20,7 +20,7 @@ const Header = () => {
     const { theme, toggleTheme } = useTheme();
 
     const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
-    const toggleIsMenuOpenedMenu = () =>  setIsMenuOpened(prevState => !prevState);
+    const toggleIsMenuOpened = () =>  setIsMenuOpened(prevState => !prevState);
 
     const closeMenuOnResize = (isMatched: boolean) => {
         isMatched && setIsMenuOpened(false);
@@ -28,7 +28,7 @@ const Header = () => {
 
     useEffect(() => {
         mobileMediaQuery
-            .addEventListener('change', 
+            .addEventListener('change',
                 (event: MediaQueryListEvent) => closeMenuOnResize(event.matches)
             );
     }, []);
@@ -54,12 +54,15 @@ const Header = () => {
                             className={styles['trading-link']}
                             text={'Алготрейдинг'}
                             buttonStyle={'thin'}
-                            onClick={() => goToState(`${TERMINAL}/investor`)}
+                            onClick={() => {
+                                setIsMenuOpened(false);
+                                goToState(`${TERMINAL}/investor`);
+                            }}
                             mini
                         />
                     </div>
                     <div className={styles['links__user']}>
-                        <HeaderUserLinks 
+                        <HeaderUserLinks
                             withLogoutButton
                         />
                         <SettingsMenu />
@@ -70,16 +73,16 @@ const Header = () => {
                         />
                     </div>
                 </nav>
-                <div                     
+                <div
                     className={styles['header__burger']}
                 >
-                    <Burger 
+                    <Burger
                         isOpened={isMenuOpened}
-                        onClick={toggleIsMenuOpenedMenu}
+                        onClick={toggleIsMenuOpened}
                     />
                 </div>
             </header>
-            <BurgerMenu 
+            <BurgerMenu
                 isOpened={isMenuOpened}
                 onClose={() => setIsMenuOpened(false)}
             />

@@ -20,7 +20,7 @@ export const loginUser = (email: string, password: string) => {
             .post<LoginResponse>('/auth/login', {
                 email: email,
                 password: password,
-            }) 
+            })
             .then((res) => {
                 const userInfo = {
                     token: res.data.token,
@@ -52,7 +52,7 @@ export const signup = (email: string, password: string) => {
             .post('/auth/registration', {
                 email: email,
                 password: password,
-            }) 
+            })
             .then(() => {
                 const userInfo = {
                     token: null,
@@ -86,9 +86,9 @@ export const confirmEmail = (email: string, activationCode: string) => {
                 };
                 localStorage.setItem('userInfo-BNETEX', JSON.stringify(userInfo));
                 dispatch({ type: AuthActionTypes.LOGIN});
-                
+
                 // Костыль. Нужно добавить юзеру поле justRegistered. При успешной активации почты ставить
-                // его в true. Затем, при открытии страницы RegistrationFinalize отправлять запрос на 
+                // его в true. Затем, при открытии страницы RegistrationFinalize отправлять запрос на
                 // установку поля в true
                 localStorage.setItem('justRegistered', 'true');
             })

@@ -10,7 +10,7 @@ import { useGoToState } from 'lib/hooks/useGoToState';
 import Blur from 'modules/Global/components/blurredBackgroundItem';
 
 const Invest = () => {
-    
+
     const { DASHBOARD, INVESTOR_WALLET } = AppLinksEnum;
     const { goToState } = useGoToState();
     const { theme } = useTheme();
@@ -23,9 +23,10 @@ const Invest = () => {
                 left={'50%'}
                 type={'circle'}
             />
-            <DynamicImg 
+            <DynamicImg
                 path={`invest__${theme}.png`}
                 className={styles['invest-image']}
+                dynamicFormat
             />
             <div className={styles['invest__text']}>
                 <h2>Торгуйте как <span>профессионал</span></h2>
@@ -37,8 +38,8 @@ const Invest = () => {
 
                 <div className={styles['month-cards']}>
                     {
-                        roeCards.map((card: RoeCard) => 
-                            <div 
+                        roeCards.map((card: RoeCard) =>
+                            <div
                                 key={card.income}
                                 className={clsx(
                                     styles['ROE-card'],
@@ -51,7 +52,7 @@ const Invest = () => {
                                     <p className={styles['ROE-card__percent']}>от {card.income}%</p>
                                 </div>
                             </div>
-                        ) 
+                        )
                     }
                 </div>
                 <Button

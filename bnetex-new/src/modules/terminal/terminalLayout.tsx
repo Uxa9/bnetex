@@ -1,11 +1,10 @@
-import ChartView from './chartView/chartView';
 import HistoryAndOrders from './historyAndOrders/historyAndOrders';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import styles from './terminalLayout.module.scss';
 import { useActions } from 'lib/hooks/useActionCreators';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import TradingViewWidget from 'modules/TradingView/TradingViewWidget';
 import clsx from 'clsx';
-
 
 const TerminalLayout = () => {
 
@@ -34,8 +33,8 @@ const TerminalLayout = () => {
         <div
             className={layoutStyles}
         >
-            <ChartView
-                className={styles.chart}
+            <TradingViewWidget
+                className={clsx(styles.chart, 'card')}
             />
             <HistoryAndOrders
                 className={styles.history}

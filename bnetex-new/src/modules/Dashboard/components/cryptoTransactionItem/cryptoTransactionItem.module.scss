@@ -2,56 +2,88 @@
 @import 'styles/mixins';
 
 .item-type {
-    &--withdraw {
-        color: $red-3;
-    }
+  &--withdraw {
+    color: $red-3;
+  }
 
-    &--income {
-        color: $green-3;
-    }
+  &--income {
+    color: $green-3;
+  }
+}
+
+.body-label {
+  color: $grayscale-6;
+
+  @include min-width(901) {
+    display: none;
+  }
 }
 
 .item-status {
-    width: 90px;
-    padding: 4px;
-    border-radius: 10px;
-    display: grid;
-    place-items: center;
-    height: fit-content;
-    
-    &--processing {
-        color: $orange-3;
-        background-color: $orange-6;
-    }
+  width: 100px;
+  padding: 4px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  height: fit-content;
 
-    &--confirmed {
-        color: $green-3;
-        background-color: $green-6;
-    }
+  &--processing {
+    color: $orange-3;
+    background-color: $orange-6;
+  }
 
-    &--unpayed {
-        color: $red-3;
-        background-color: $red-6;
-    }
+  &--confirmed {
+    color: $green-3;
+    background-color: $green-6;
+  }
+
+  &--unpayed {
+    color: $red-3;
+    background-color: $red-6;
+  }
+}
+
+.destination {
+  max-width: 100%;
+
+  @include max-width(900) {
+    max-width: calc((100vw - 64px) / 2);
+  }
 }
 
 .item-destination {
-    display: flex;
-    height: fit-content;
-    align-items: center;
-    column-gap: 8px;
+  display: flex;
+  height: fit-content;
+  align-items: center;
+  column-gap: 8px;
+  width: 100%;
 
-    &--fill {
-        width: 100%;
-    }
-
-    p {
-        @include nowrap-overflow;
-        max-width: 80%;
-    }
+  p {
+    @include nowrap-overflow;
+  }
 }
 
 .item-expand-modal {
+  svg {
     transform: rotate(-90deg);
-    justify-self: flex-end;
+  }
+
+  @include max-width(901) {
+    display: none !important;
+  }
+
+  &--mobile {
+    svg {
+      transform: rotate(-90deg);
+    }
+
+    @include min-width(901) {
+      display: none !important;
+    }
+
+    //toDo: убрать после исправления палитры
+    button {
+      border: 1px solid $grayscale-4;
+    }
+  }
 }

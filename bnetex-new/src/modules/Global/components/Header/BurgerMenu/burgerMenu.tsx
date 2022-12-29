@@ -26,9 +26,9 @@ export default function BurgerMenu({isOpened, onClose}: BurgerMenuProps) {
     const { HOME } = AppLinksEnum;
 
     useEffect(() => {
-        // Таймаут вызывает сокрытие overlay через visibility: hidden только после завершения 
+        // Таймаут вызывает сокрытие overlay через visibility: hidden только после завершения
         // анимации снижения прозрачности overlay до нуля.
-        isOpened ? 
+        isOpened ?
             setIsOverlayVisible(true) :
             setTimeout(() => setIsOverlayVisible(false), Number(variablesMap.defaultTransition.replace('ms', '')));
     }, [ isOpened ]);
@@ -40,7 +40,7 @@ export default function BurgerMenu({isOpened, onClose}: BurgerMenuProps) {
 
     return (
         <>
-            <div 
+            <div
                 className={clsx(
                     styles['overlay'],
                     isOpened && styles['overlay--visible']
@@ -55,18 +55,23 @@ export default function BurgerMenu({isOpened, onClose}: BurgerMenuProps) {
                 )}
             >
                 <div className={styles['burger-menu__main']}>
-                    <HeaderUserLinks />
+                    <HeaderUserLinks
+                        closeMenu={onClose}
+                    />
                     <Button
                         className={styles['trading-link']}
                         text={'Алготрейдинг'}
                         buttonStyle={'thin'}
-                        onClick={() => goToState(`${AppLinksEnum.TERMINAL}/investor`)}
+                        onClick={() => {
+                            goToState(`${AppLinksEnum.TERMINAL}/investor`);
+                            onClose();
+                        }}
                         mini
                     />
                 </div>
                 <div className={styles['burger-menu__secondary']}>
                     {
-                        isAuth && 
+                        isAuth &&
                             <Button
                                 text={'Выйти'}
                                 buttonStyle={'thin'}
@@ -75,7 +80,7 @@ export default function BurgerMenu({isOpened, onClose}: BurgerMenuProps) {
                                 mini
                             />
                     }
-                    <Switch 
+                    <Switch
                         checked={theme === 'dark'}
                         onChange={toggleTheme}
                         label={'Темная тема'}

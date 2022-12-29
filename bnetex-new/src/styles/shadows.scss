@@ -1,8 +1,8 @@
 //toDo: переделать нейминг??
 
 @mixin card-shadow {
-  box-shadow: 0px 0px 60px rgba(161, 118, 193, 0.05),
-    0px 0px 20px rgba(161, 118, 193, 0.03);
+  box-shadow: 0px 0px 4px 1px rgba(146, 3, 255, 0.04),
+    0px 0px 10px 3px rgba(146, 3, 255, 0.03);
 }
 
 @mixin menu-shadow {

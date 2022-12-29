@@ -36,7 +36,7 @@ const TradeView = () => {
     }, []);
 
     useEffect(() => {
-        dispath(getWallets());
+        dispath(getWallets()).catch(() => {});
     }, [ isAlgorythmActive ]);
 
     const startInvestAlgorythm = (amount: number) => {
@@ -97,9 +97,9 @@ const TradeView = () => {
     const onStop = () => {
         openStopAlgorythmModal({
             onSubmit: stopInvestAlgorythm,
-        }); 
+        });
     };
- 
+
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
@@ -119,7 +119,7 @@ const TradeView = () => {
                     <p
                         className={'subtitle'}
                     >
-                        { investWallet } USDT 
+                        { investWallet } USDT
                     </p>
                 </div>
                 {
@@ -135,7 +135,7 @@ const TradeView = () => {
                         <p
                             className={'subtitle'}
                         >
-                            { operationalBalance } USDT 
+                            { operationalBalance } USDT
                         </p>
                     </div>
                 }
@@ -154,7 +154,7 @@ const TradeView = () => {
                     }}
                     postfix=
                         {
-                            <Button 
+                            <Button
                                 text={'Весь баланс'}
                                 buttonStyle={'flat'}
                                 className={clsx(
@@ -169,7 +169,7 @@ const TradeView = () => {
                 />
             }
             {
-                isAlgorythmActive ? 
+                isAlgorythmActive ?
                     <Button
                         disabled={!isValid && !isAlgorythmActive}
                         text={'Остановить работу'}

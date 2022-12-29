@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import styles from './changePasswordModal.module.scss';
 import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
 import { BaseModalProps } from 'lib/hooks/useModal';
@@ -8,9 +7,7 @@ import { newPasswordValidation } from 'lib/utils/hookFormValidation';
 import { changeUserPassword } from 'services/user';
 import { useToast } from 'lib/hooks/useToast';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
-
 
 interface PasswordFormData {
     newPassword: string,
@@ -18,7 +15,7 @@ interface PasswordFormData {
 }
 
 const ChangePasswordModal = (props: BaseModalProps) => {
-    
+
     const { onClose } = props;
     const { isLoading } = usePromiseWithLoading();
     const { bakeToast } = useToast();
@@ -47,16 +44,16 @@ const ChangePasswordModal = (props: BaseModalProps) => {
             });
     };
 
-    return(
+    return (
         <Modal
             title={'Смена пароля'}
             onClose={onClose}
             className={'text'}
         >
-            <FormCard 
+            <FormCard
                 className={styles['form-card']}
                 title={''}
-                subtitle={'Подтвердите, что вы являетесь владельцем данного аккаунта, введя текущий пароль, а затем введите новый'}
+                subtitle={'Подтвердите, что вы являетесь владельцем данного аккаунта, введя текущий пароль, а затем введите новый.'}
                 onSubmit={handleSubmit(onSubmit)}
                 inputs={[
                     <Input
@@ -71,9 +68,9 @@ const ChangePasswordModal = (props: BaseModalProps) => {
                         errorText={errors.newPassword?.message}
                         key={'newPassword'}
                     />,
-                ]} 
+                ]}
                 button={
-                    <Button 
+                    <Button
                         text={'Подтвердить'}
                         type={'submit'}
                         disabled={!isValid}

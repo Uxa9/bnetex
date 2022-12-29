@@ -7,7 +7,6 @@ interface TableSkeletonRowsProps {
     skeletonClassname?: string,
 }
 
-// eslint-disable-next-line no-magic-numbers
 const TableSkeletonRows = ({rowCount = 3, columnCount, skeletonClassname}: TableSkeletonRowsProps) => {
     const rows = createDummyArray(rowCount);
     const columns = createDummyArray(columnCount);
@@ -15,16 +14,16 @@ const TableSkeletonRows = ({rowCount = 3, columnCount, skeletonClassname}: Table
     return(
         <>
             {
-                rows.map((_, index) => 
+                rows.map((_, index) =>
                     <tr key={index}>
                         {
-                            columns.map((_, index) => 
+                            columns.map((_, index) =>
                                 <td key={index}>
-                                    <Skeleton 
-                                        height={'12px'} 
+                                    <Skeleton
+                                        height={'12px'}
                                         className={skeletonClassname}
                                     />
-                                </td>  
+                                </td>
                             )
                         }
                     </tr>

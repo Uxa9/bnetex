@@ -54,47 +54,45 @@ const Dashboard = () => {
         }
     }, [ pathname ]);
 
-    return(
-        <>
-            <div className={'wrapper'}>
-                <main className={clsx('container', styles.dashboard)}>
-                    <aside className={clsx(styles['control-menu'], 'card', 'scroll')}>
-                        {
-                            dashboardSections.map((section: DashboardSection, index: number) => 
-                                !isCurrentPlatformMobile ? 
-                                    <Link 
-                                        key={section.link}
-                                        to={section.link}
-                                        className={clsx(
-                                            styles['link'],
-                                            { [styles['link--active']] : activeSection === section.link},
-                                            'text',
-                                        )}
-                                        onClick={() => setActiveSection(section.link)}
-                                    >
-                                        {section.title}
-                                    </Link> :
-                                    <IconLinkButton 
-                                        key={section.link}
-                                        label={section.title} 
-                                        color={AppColorsArray[index]} 
-                                        Icon={section.icon}     
-                                        active={activeSection === section.link}    
-                                        className={styles['link-icon']}  
-                                        onClick={() => {
-                                            setActiveSection(section.link);
-                                            goToState(section.link, null, true);
-                                        }}
-                                    />
-                            )
-                        }
-                    </aside>
-                    <Suspense fallback={<Skeleton height={'50px'} />}>
-                        { loadSection() }
-                    </Suspense>
-                </main>
-            </div>
-        </>
+    return (
+        <div className={'wrapper'}>
+            <main className={clsx('container', styles.dashboard)}>
+                <aside className={clsx(styles['control-menu'], 'card', 'scroll')}>
+                    {
+                        dashboardSections.map((section: DashboardSection, index: number) =>
+                            !isCurrentPlatformMobile ?
+                                <Link
+                                    key={section.link}
+                                    to={section.link}
+                                    className={clsx(
+                                        styles['link'],
+                                        { [styles['link--active']] : activeSection === section.link},
+                                        'text',
+                                    )}
+                                    onClick={() => setActiveSection(section.link)}
+                                >
+                                    {section.title}
+                                </Link> :
+                                <IconLinkButton
+                                    key={section.link}
+                                    label={section.title}
+                                    color={AppColorsArray[index]}
+                                    Icon={section.icon}
+                                    active={activeSection === section.link}
+                                    className={styles['link-icon']}
+                                    onClick={() => {
+                                        setActiveSection(section.link);
+                                        goToState(section.link, null, true);
+                                    }}
+                                />
+                        )
+                    }
+                </aside>
+                <Suspense fallback={<Skeleton height={'50px'} />}>
+                    { loadSection() }
+                </Suspense>
+            </main>
+        </div>
     );
 };
 

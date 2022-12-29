@@ -1,149 +1,55 @@
 @import 'styles/colors/colors';
 @import 'styles/mixins';
 
-.wallet {
-  width: 100%;
+$one-column-bp: 800;
+
+.container {
+  @include column-flex(16px);
 }
 
-.wallet-header {
-  display: flex;
+.header {
+  @include align-center-row-flex(8px);
+
   justify-content: space-between;
-  height: fit-content;
-  grid-column: 1/-1;
 
-  align-items: center;
-}
-.wallet-data {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  row-gap: 20px;
-  column-gap: 20px;
-  padding-top: 20px;
-}
-
-.wallet-card {
-  padding: 15px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.balance-item {
-  display: flex;
-  flex-direction: column;
-
-  &__values {
-    display: flex;
-    align-items: center;
-    column-gap: 0.5ch;
+  @include mobile {
+    flex-direction: column;
+    row-gap: 12px;
+    align-items: baseline;
   }
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+
+  @include max-width($one-column-bp) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.balance-card {
+  @include column-flex(16px);
+
+  padding: 16px;
 
   &__label {
     color: $grayscale-6;
   }
-
-  &__value {
-    &::after {
-      content: ' USDT';
-    }
-  }
 }
 
-.header-transfer {
-  font-size: 16px;
-  font-weight: bold;
-  color: $accent-3;
-
-  cursor: pointer;
-}
-
-.charts {
-  display: flex;
-  align-items: flex-start;
-}
-
-.balance,
-.invest-info,
 .chart {
-  flex-grow: 1;
-  width: 50%;
-  padding: 16px;
-  margin: 8px;
-}
+  width: 100%;
+  max-width: calc($dashboard-max-width / 2);
 
-.balance-and-info {
-  display: flex;
-
-  .balance {
-    box-sizing: border-box;
-    max-height: 210px;
-
-    .balance-header {
-      color: $grayscale-6;
-      margin-bottom: 12px;
-    }
-
-    .user-balance {
-      margin-bottom: 20px;
-
-      font-weight: 500;
-      font-size: 20px;
-      line-height: 24px;
-
-      span {
-        color: $grayscale-6;
-      }
-    }
+  // left/right pad (16px) + gap / 2
+  @include max-width($early-laptop-bp) {
+    max-width: calc(50vw - 24px);
   }
 
-  .invest-info {
-    @include column-flex-center(16px);
-
-    p {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-
-      span {
-        &:first-child {
-          color: $grayscale-6;
-        }
-      }
-
-      .positive {
-        color: $green-4;
-      }
-
-      .negative {
-        color: $red-4;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 800px) {
-  .wallet-header {
-    flex-direction: column;
-    align-items: flex-start;
-
-    > div {
-      margin: 8px 0;
-    }
-  }
-
-  .balance-and-info,
-  .charts {
-    flex-direction: column;
-  }
-
-  .balance,
-  .invest-info,
-  .chart {
-    width: 100%;
-    margin: 8px 0;
-  }
-
-  .balance {
-    height: 180px;
+  // left/right pad (16px) * 2
+  @include max-width($one-column-bp) {
+    max-width: calc(100vw - 32px);
   }
 }

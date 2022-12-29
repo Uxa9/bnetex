@@ -1,106 +1,66 @@
 @import 'styles/colors/colors';
 @import 'styles/mixins';
 
-.tools {
-  width: 100%;
+$one-column-bp: 800;
+$header-bp: 420;
+
+.container {
+  @include column-flex(16px);
 }
 
-.tools-header {
+.header {
   display: flex;
+  column-gap: 16px;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
+
+  @include max-width($header-bp) {
+    flex-direction: column;
+    row-gap: 16px;
+  }
+
+  &__buttons {
+    @include align-center-row-flex(16px);
+  }
 }
 
-.tools-header-buttons {
-  @include align-center-row-flex(16px);
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+
+  @include max-width($one-column-bp) {
+    grid-template-columns: 1fr;
+  }
 }
 
-.charts {
-  display: flex;
-  align-items: flex-start;
+.card-header {
+  color: $grayscale-6;
 }
 
 .balance,
-.transactions,
-.chart {
-  flex-grow: 1;
-  width: 50%;
+.transactions {
+  @include column-flex(16px);
+
   padding: 16px;
-  margin: 8px;
 }
 
-.balance-and-transactions {
+.transactions__header {
   display: flex;
-
-  .balance {
-    @include column-flex(16px);
-
-    .balance-header {
-      color: $grayscale-6;
-    }
-  }
-
-  .transaction-table-wrapper {
-    height: 90%;
-    overflow-y: scroll;
-
-    &::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background-color: $grayscale-4;
-      border-radius: 2px;
-    }
-  }
-
-  .transactions {
-    max-height: 210px;
-
-    .transactions-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-
-    .header-show-all {
-      color: $accent-3;
-
-      cursor: pointer;
-    }
-  }
+  justify-content: space-between;
 }
 
-@media screen and (max-width: 800px) {
-  .tools-header {
-    flex-direction: column;
-    align-items: flex-start;
+.chart {
+  width: 100%;
+  max-width: calc($dashboard-max-width / 2);
 
-    .tools-header-buttons {
-      margin: 8px 0 0;
-    }
+  // left/right pad (16px) + gap / 2
+  @include max-width($early-laptop-bp) {
+    max-width: calc(50vw - 24px);
   }
 
-  .charts,
-  .balance-and-transactions {
-    flex-direction: column;
-  }
-
-  .balance,
-  .transactions,
-  .chart {
-    width: 100%;
-    margin: 8px 0;
-  }
-
-  .transactions {
-    .transaction-table-wrapper {
-      height: 135px;
-    }
+  // left/right pad (16px) * 2
+  @include max-width($one-column-bp) {
+    max-width: calc(100vw - 32px);
   }
 }

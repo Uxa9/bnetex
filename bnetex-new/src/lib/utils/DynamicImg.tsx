@@ -7,28 +7,39 @@ export interface DynamicImgProps {
     className?: string;
     alt?: string;
     notLazy?: boolean;
+    dynamicFormat?: boolean;
 }
 
 export function DynamicImg(props: DynamicImgProps) {
+
+    const { path, className, alt, notLazy, dynamicFormat } = props;
+
     const [isLoading, setIsLoading] = useState(true);
     const imgRef = useRef<string | null>(null);
 
     useEffect(() => {
         setIsLoading(true);
-        evaluateFormat(props.path)
+        evaluateFormat(path)
             .then((item) => {
                 imgRef.current = item.default;
             })
             .catch(() => throwError('There has been some kind of DynamicImage error'))
             .finally(() => setIsLoading(false));
-    }, [props.path]);
+    }, [path]);
 
     const evaluateFormat = (path: string) => {
         const [ mainPath, extension ] = path.split('\.');
+        const prefferedFormat = dynamicFormat ? localStorage.getItem('availableImageFormat') : null;
 
-        switch (extension) {
+        switch (prefferedFormat ?? extension) {
             case 'png': {
                 return import(`../../assets/images/${mainPath}.png`);
+            }
+            case 'webp': {
+                return import(`../../assets/images/${mainPath}.webp`);
+            }
+            case 'avif': {
+                return import(`../../assets/images/${mainPath}.avif`);
             }
             case 'svg': {
                 return import(`../../assets/images/${mainPath}.svg`);
@@ -43,10 +54,10 @@ export function DynamicImg(props: DynamicImgProps) {
 
     return imgRef.current ? (
         <img
-            loading={props.notLazy ? undefined : 'lazy'}
+            loading={notLazy ? undefined : 'lazy'}
             src={imgRef.current}
-            className={props.className}
-            alt={props.alt}
+            className={className}
+            alt={alt}
         />
     ) : (
         <></>

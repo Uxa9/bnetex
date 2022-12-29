@@ -2,120 +2,119 @@
 @import 'styles/mixins';
 
 .start-earning {
-    @include align-center-row-flex(32px);
-    justify-content: space-between;
-    position: relative;
+  @include align-center-row-flex(32px);
+  justify-content: space-between;
+  position: relative;
+
+  @include mobile {
+    flex-direction: column-reverse;
+    row-gap: 32px;
+    padding-top: 500px;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    row-gap: 50px;
+    z-index: 2;
+    max-width: 50ch;
+
+    h2 > span {
+      color: $accent-3;
+    }
+  }
+
+  &__image {
+    @include column-flex(32px);
+
+    background-color: $grayscale-card;
+    border-radius: 24px;
+    padding: 32px;
+    transform: matrix(0.96, 0, -0.3, 1, 0, 0);
+    border: 2px solid $accent-6;
+    min-width: 460px;
+
+    @include max-width(900) {
+      position: absolute;
+      top: 0;
+      left: calc(100vw - 25vw);
+    }
+
+    &--light {
+      box-shadow: 7px 7px 0px #edd4ff;
+    }
+
+    &--dark {
+      box-shadow: 7px 7px 0px #261b2f;
+    }
+
+    .header {
+      @include align-center-row-flex(16px);
+
+      justify-content: space-between;
+
+      &__column {
+        @include column-flex(2px);
+      }
+
+      &__text--gray {
+        color: $grayscale-6;
+      }
+
+      &__coin {
+        @include align-center-row-flex(8px);
+      }
+
+      &__data {
+        @include align-center-row-flex(16px);
+      }
+    }
+
+    .candles {
+      width: 100%;
+    }
+
+    .buttons {
+      @include align-center-row-flex(32px);
+
+      .button-red {
+        box-shadow: 3px 4px 0px 2px $red-4;
+      }
+
+      .button-green {
+        box-shadow: 3px 4px 0px 2px $green-4;
+      }
+
+      .button-green,
+      .button-red {
+        user-select: none;
+        transition: box-shadow 350ms ease, transform 150ms ease;
+
+        &:active {
+          box-shadow: none;
+          transform: translateY(4px);
+        }
+      }
+    }
 
     @include mobile {
-        flex-direction: column-reverse;
-        row-gap: 32px;
-        padding-top: 500px ;
-    }
+      left: 20vw;
+      min-width: none;
 
-    &__text {
-        display: flex;
+      .header {
+        align-items: flex-start;
+        row-gap: 16px;
+
+        &__coin img {
+          width: 32px;
+          height: auto;
+        }
+      }
+
+      .buttons {
         flex-direction: column;
-        row-gap: 50px;
-        z-index: 2;
-        max-width: 50ch;
-
-        h2 > span {
-            color: $accent-3;
-        }
+        row-gap: 16px;
+      }
     }
-
-    &__image {
-        @include column-flex(32px);
-
-        background-color: $grayscale-card;
-        border-radius: 24px;
-        padding: 32px;
-        transform: matrix(0.96, 0, -0.3, 1, 0, 0);
-        border: 2px solid $accent-6;
-        min-width: 460px;
-
-        @include max-width(900) {
-            position: absolute;
-            top: 0;
-            left: calc(100vw - 25vw);
-        }
-
-        &--light {
-            box-shadow: 7px 7px 0px #edd4ff;
-        }
-
-        &--dark {
-            box-shadow: 7px 7px 0px #261b2f;
-        }
-
-        .header {
-            @include align-center-row-flex(16px);
-
-            justify-content: space-between;
-
-            &__column {
-                @include column-flex(2px);
-            }
-
-            &__text--gray {
-                color: $grayscale-6;
-            }
-
-            &__coin {
-                @include align-center-row-flex(8px);
-            }
-
-            &__data {
-                @include align-center-row-flex(16px);
-            }
-        }
-
-        .candles {
-            width: 100%;
-        }
-
-        .buttons {
-            @include align-center-row-flex(32px);
-
-            .button-red {
-                box-shadow: 3px 4px 0px 2px $red-4;
-            }
-
-            .button-green {
-                box-shadow: 3px 4px 0px 2px $green-4;
-            }
-
-            .button-green,
-            .button-red {
-                user-select: none;
-                transition: box-shadow 350ms ease, transform 150ms ease;
-
-                &:active {
-                    box-shadow: none;
-                    transform: translateY(4px);
-                }
-            }
-        }
-
-        @include mobile {
-            left: 20vw;
-            min-width: none;
-
-            .header {
-                align-items: flex-start;
-                row-gap: 16px;
-
-                &__coin img {
-                    width: 32px;
-                    height: auto;
-                }
-
-            }
-
-            .buttons {
-                flex-direction: column;
-                row-gap: 16px;
-            }
-        }
-    }
+  }
 }
