@@ -6,13 +6,11 @@ import { TradeHistoryAction, TradeHistoryActionTypes } from 'store/actions/trade
 
 const { api } = useApi();
 
-export const getTradeHistory = (period: number, amount: number) => {
+export const getTradeHistory = (period: number, _amount: number) => {
     return async (dispatch: Dispatch<TradeHistoryAction>) => {
         try {
             dispatch({ type: TradeHistoryActionTypes.FETCH_HISTORY });
-            const response: AxiosResponse<TradeHistoryItem[]> = await api.get(`positions/${period}`,
-                {params: {period, amount}}
-            );
+            const response: AxiosResponse<TradeHistoryItem[]> = await api.get(`positions/${period}`);
             dispatch({ type: TradeHistoryActionTypes.FETCH_HISTORY_SUCCESS, tradeHistory: response.data  });
         } catch (e) {
             dispatch({

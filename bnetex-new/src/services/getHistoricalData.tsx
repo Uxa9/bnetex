@@ -22,6 +22,6 @@ export const getHistoricalData = async (period: number, amount: number): Promise
     };
 };
 
-export const getHistoricalDataOrders = async (period: number) => {
+export const getHistoricalDataOrders = async (period: number) => {    
     return await api.get(`/positions/${period}`);
 };
