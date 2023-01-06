@@ -18,6 +18,9 @@ let pairInstances = [];
 
 const frontRoutes = require('./server/routes/front-routes');
 const paramsConverter = require("./server/routes/middlewares/paramsConverter");
+const socket = require("./server/socket/socket");
+
+const server = require('http').createServer(app);
 
 (async () => {
 
@@ -29,11 +32,17 @@ const paramsConverter = require("./server/routes/middlewares/paramsConverter");
 
     app.use(paramsConverter);
 
-    app.listen(port, () => {
+    // Запускам сокет
+    socket(server);
+
+    server.listen(port, () => {
         console.log(`Server is listening port ${port}`)
     })
 
     app.use('/front', frontRoutes)
+
+
+    
 
 
 })()
