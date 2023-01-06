@@ -27,7 +27,7 @@ module.exports = (server)  => {
 
         io.emit("PNL_UPDATE", {
             pair: e.symbol,
-            pnl: percent.toFixed(2),
+            roe: percent.toFixed(2),
             position: currentPosition
         });
 
