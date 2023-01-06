@@ -1,4 +1,6 @@
 import HistoryAndOrders from './historyAndOrders/historyAndOrders';
+import TradingViewWidget from 'modules/TradingView/TradingViewWidget';
+import ChartView from './chartView/chartView';
 import { Outlet, useLocation } from 'react-router-dom';
 import styles from './terminalLayout.module.scss';
 import { useActions } from 'lib/hooks/useActionCreators';
