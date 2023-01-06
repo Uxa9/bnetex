@@ -1,6 +1,6 @@
 const { pnlTIcker$ } = require('../events/events');
 
-const { debounceTime } = require("rxjs");
+
 const getCurrentPositionMySQL = require('../../instance/db/sequelize/actions/positions/getCurrentPositionMySQL');
 
 
@@ -23,13 +23,12 @@ module.exports = (server)  => {
 
         let averagePrice = currentPosition.averagePrice;
 
-        
-
         let percent = (close * 100 / averagePrice) - 100;
 
-        io.in(users.map((i) => i.id)).emit("PNL_UPDATE", {
+        io.emit("PNL_UPDATE", {
             pair: e.symbol,
-            pnl: percent.toFixed(2)
+            pnl: percent.toFixed(2),
+            position: currentPosition
         });
 
 
@@ -38,11 +37,6 @@ module.exports = (server)  => {
     console.log("Запуск сокета")
 
     io.on('connection', (socket) => {
-        socket.on('ticker', (data) => {
-            socket.join(data.id);    
-            users.push({
-                id: data.id
-            })        
-        })
+        console.log('Client is connected')
     })
 }
