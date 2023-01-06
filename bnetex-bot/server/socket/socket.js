@@ -25,7 +25,7 @@ module.exports = (server)  => {
 
         let percent = (close * 100 / averagePrice) - 100;
 
-        io.emit("PNL_UPDATE", {
+        io.emit("ROE_UPDATE", {
             pair: e.symbol,
             roe: percent.toFixed(2),
             position: currentPosition
