@@ -1,8 +1,10 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { AxiosError } from 'axios';
 // import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { catchError, firstValueFrom } from 'rxjs';
 import { Op } from 'sequelize';
 import { GetDataDto } from './dto/get-data.dto';
 // import { Position, PositionDocument } from './shemas/_position.schema';
@@ -20,29 +22,10 @@ export class PositionsService {
     ) { }
 
     async getPnlAndRoe(dto: GetDataDto) {
-        const date = new Date().setMonth(new Date().getMonth() - dto.period);
-
-        // const positions = await this.positionRepository.findAll({
-        //     where: {
-        //         // enterTime: { $gte: date },
-        //         closeTime: { [Op.ne]: null }
-        //     },
-        //     order: [['enterTime', "ASC"]]
-        // });
-
-        // const positions = await Promise.resolve(() => {
-        //     this.httpService.post('http://localhost:3009/front/history', {
-        //         periodMonth: 12
-        //     }).subscribe((res) => {
-        //         console.log(res);
-        //         return res;
-        //     });
-        // })
-
         const positions = await new Promise((resolve, rej) =>
             this.httpService
                 .post('http://localhost:3009/front/history', {
-                    periodMonth: dto.period,
+                    periodMonth: 12,
                 })
                 .subscribe((res) => {
                     resolve(res.data.response);
@@ -139,45 +122,63 @@ export class PositionsService {
 
     async getTVdata(dto: any) {
 
-        const positions: any[] = await new Promise((resolve, rej) => this.httpService.post('http://localhost:3009/front/history', {
-            periodMonth: 12
-        }).subscribe((res) => {
-            resolve(res.data.response);
-        }))
+        try {
+            const { data } = await firstValueFrom(this.httpService.post<any>(
+                'http://localhost:3009/front/history', {
+                 periodMonth: 12
+            }).pipe(
+                catchError((error: AxiosError) => {
+                    throw new HttpException(
+                        {
+                            status: "ERROR",
+                            message: "ERROR_ON_DATA_REQUEST"
+                        },
+                        HttpStatus.BAD_REQUEST
+                    );
+                }),
+            ));
+            let res = [];
 
-        let res = [];
+            data.response.map((position) => {
+                const positionEnters = position.POSITION_ENTERs;
 
-        positions.map((position) => {
-            const positionEnters = position.POSITION_ENTERs;
+                const lever = 10;
 
-            const lever = 10;
+                const enters = positionEnters.map((enter) => {
+                    return {
+                        time: Number(new Date(enter.createdAt)) / 1000,
+                        id: enter.id,
+                        color: 'green',
+                        text: 'Покупка BTC',
+                        label: 'B',
+                        minSize: 14,
+                        labelFontColor: '#ffffff',
+                    };
+                });
 
-            const enters = positionEnters.map((enter) => {
-                return {
-                    time: Number(new Date(enter.createdAt)) / 1000,
-                    id: enter.id,
-                    color: 'green',
-                    text:'Покупка BTC',
-                    label: 'B',
+                res = [...res, ...enters];
+
+                res.push({
+                    time: Number(new Date(position.closeTime)) / 1000,
+                    id: position.id,
+                    color: 'red',
+                    text: 'Продажа BTC',
+                    label: 'S',
                     minSize: 14,
                     labelFontColor: '#ffffff',
-                };
+                });
             });
 
-            res = [...res, ...enters];
-
-            res.push({
-                time: Number(new Date(position.closeTime)) / 1000,
-                id: position.id,
-                color: 'red',
-                text:'Продажа BTC',
-                label: 'S',
-                minSize: 14,
-                labelFontColor: '#ffffff',
-            });
-        });
-
-        return res;
+            return res;
+        } catch (error) {
+            throw new HttpException(
+                {
+                    status: "ERROR",
+                    message: "ERROR_ON_DATA_REQUEST"
+                },
+                HttpStatus.BAD_REQUEST
+            );
+        }
     }
 
     async getCurrentOpenPosition() {

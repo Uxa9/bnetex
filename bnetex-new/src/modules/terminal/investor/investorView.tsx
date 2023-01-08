@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
 import TradeView from './tradeView/tradeView';
 import HistoryView from './historyView/historyView';
@@ -65,25 +65,43 @@ const InvestorView = () => {
                 <div
                     className={styles['data-card__row']}
                 >
-                    <span
-                        className={'subtitle'}
-                    >
-                        { pnl.reduce((acc, it) => acc + it, 0) }
-                    </span>
-                    <SignedNumber 
-                        value={roe.at(-1) ?? 0}
-                        postfix={'%'}
-                    />
+                    {
+                        viewType === "trade" ?
+                            <>
+                                <span
+                                    className={'subtitle'}
+                                >
+                                    0
+                                </span>
+                                <SignedNumber
+                                    value={0}
+                                    postfix={'%'}
+                                />
+                            </> :
+                            <>
+                                <span
+                                    className={'subtitle'}
+                                >
+                                    {pnl.reduce((acc, it) => acc + it, 0)}
+                                </span>
+                                <SignedNumber
+                                    value={roe.at(-1) ?? 0}
+                                    postfix={'%'}
+                                />
+                            </>
+                    }
                 </div>
             </div>
-            <Chart 
+            <Chart
                 data={
+                    viewType === "history" ?
                     dates.map((date, index) => {
                         return {
                             time: date,
                             value: pnl[index],
                         };
-                    })
+                    }) :
+                    []
                 }
                 type={'PNL'}
                 className={clsx(
@@ -92,14 +110,16 @@ const InvestorView = () => {
                 )}
                 loading={loading}
             />
-            <Chart 
+            <Chart
                 data={
+                    viewType === "history" ?
                     dates.map((date, index) => {
                         return {
                             time: date,
                             value: roe[index],
                         };
-                    })
+                    }) : 
+                    []
                 }
                 type={'ROE'}
                 className={clsx(

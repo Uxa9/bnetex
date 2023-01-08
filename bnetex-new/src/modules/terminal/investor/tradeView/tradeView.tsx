@@ -23,30 +23,43 @@ const TradeView = () => {
     const { open: openStartAlgorythmModal } = useModal(StartAlgorythmModal);
     const { open: openStopAlgorythmModal } = useModal(StopAlgorythmModal);
     const dispath = useAppDispatch();
-    const { investWallet } = useTypedSelector(state => state.wallet);
+
+    const useWallet = useTypedSelector(state => state.wallet);
 
     const [operationalBalance, setOperationalBalance] = useState<number>(0);
     const [ isAlgorythmActive, setIsAlgorythmActive ] = useState<boolean>(false);
+    
+    const [investWallet, setInvestWallet] = useState<number>(useWallet.investWallet);
 
     useEffect(() => {
         getUser()
             .then(res => {
                 setIsAlgorythmActive(res.data.openTrade);
+
+                if (res.data.openTrade) {
+                    setOperationalBalance(res.data.tradeBalance);
+                }
             });
     }, []);
 
-    useEffect(() => {
-        dispath(getWallets()).catch(() => {});
+    useEffect(() => { 
+        dispath(getWallets()).catch(() => {});        
     }, [ isAlgorythmActive ]);
 
-    const startInvestAlgorythm = (amount: number) => {
+    useEffect(() => {
+        setInvestWallet(useWallet.investWallet);
+    }, [useWallet])
+
+    const startInvestAlgorythm = async (amount: number) => {
+        await startInvestTrading(amount);
         setIsAlgorythmActive(true);
-        startInvestTrading(amount);
+        setOperationalBalance(amount);
     };
 
-    const stopInvestAlgorythm = () => {
+    const stopInvestAlgorythm = async () => {
+        await stopInvestTrading();
         setIsAlgorythmActive(false);
-        stopInvestTrading();
+        setOperationalBalance(0);
     };
 
     const {
