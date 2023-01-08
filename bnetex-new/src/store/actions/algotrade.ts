@@ -1,6 +1,7 @@
 export interface AlgotradeState {
     loading: boolean;
     startTime: Date | null;
+    startSessionTime: Date | null;
     pnl: number;
     roe: number;
     balance: number;
