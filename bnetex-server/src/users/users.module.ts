@@ -11,6 +11,7 @@ import { UsersService } from './users.service';
 import { Request } from '../request/request.model';
 import { InvestSession } from '../invest-sessions/invest-sessions.model';
 import { PositionsModule } from '../positions/positions.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
     controllers: [UsersController],
@@ -20,7 +21,8 @@ import { PositionsModule } from '../positions/positions.module';
         RolesModule,
         forwardRef(() => AuthModule),
         forwardRef(() => InvestSessionsModule),
-        PositionsModule
+        PositionsModule,
+        HttpModule
     ],
     exports: [
         UsersService,

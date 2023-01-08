@@ -20,6 +20,18 @@ module.exports = {
                 }
             ]
         });
+    },
+
+    getByStartTime: async (startTime) => {
+
+        return await db.models.Position.findAll({
+            where: {
+                enterTime: { [Op.gte]: moment(startTime, 'x').toDate() },
+                closeTime: { [Op.not]: null }
+            },
+        })
+
+        
     }
 
 }

@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { PositionsService } from '../positions/positions.service';
@@ -12,6 +13,7 @@ export class InvestSessionsService {
         @InjectModel(InvestSession) private investSessionRepository: typeof InvestSession,
         private userService: UsersService,
         private positionService: PositionsService,
+        private readonly httpService: HttpService,
     ) { }
 
     async createSession(dto: CreateTradeSessionDto) {
@@ -94,11 +96,50 @@ export class InvestSessionsService {
                 HttpStatus.NO_CONTENT
             );
         }
+        
+        // Если позиция в профите, забираем 50%;
+        const sessionPnL = session.lastPnl > 0 ? session.lastPnl / 2 : session.lastPnl;
 
+        // Получает актуальные позиции
+        let actualPositions: any[] = await new Promise((resolve, reject) => {
+
+            // Время начала сессии торговой
+            let sessionStart = new Date(session.startSessionTime).getTime();
+            
+            this.httpService.get(`http://localhost:3009/front/activePositions/${sessionStart}`).subscribe((res) => resolve(res.data))
+        })
+        
+        
+
+        
+
+        // Считаем объемы которые надо продать
+        let volumeToClose = actualPositions.map(i => {
+            return {
+                volumeToMarketSellBuy: i.volumeACTIVE * session.tradeBalance / i.deposit,
+                pair: i.pair,
+                type: i.positionType == 'LONG' ? 'SELL' : 'BUY'
+            }
+        })
+
+        
+
+        
+        // Закрываем обьемы
+        if(volumeToClose.length > 0){
+            await new Promise((resolve, reject) => {
+                this.httpService.post('http://localhost:3009/front/closeVolumeMarket', {volumeToClose, user: {email: user.email, tradeBalance: user.tradeBalance}}).subscribe((res) => resolve(res.data))
+            })
+        }
+        
+
+        
+        
         await Promise.all([
+
             user.update({
                 openTrade: false,
-                investWallet: user.investWallet + user.tradeBalance,
+                investWallet: user.investWallet + user.tradeBalance + (sessionPnL),
                 tradeBalance: 0
             }),
             session.update({

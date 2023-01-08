@@ -43,7 +43,7 @@ const StopAlgorythmModal = (props: StopAlgorythmModalProps & BaseModalProps) => 
                     closingPNL : res.data.pnl,
                     totalPNL : res.data.pnl,
                     totalROE : res.data.roe,
-                    totalDays : (new Date().getTime() - res.data.startSessionTime.getTime()) / 1000 / 60 / 60,
+                    totalDays : ((new Date().getTime() - new Date(res.data.startSessionTime).getTime()) / 1000 / 60 / 60).toFixed(2),
                 })
             });
     }, [])

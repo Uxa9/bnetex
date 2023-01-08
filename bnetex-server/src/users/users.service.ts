@@ -297,10 +297,15 @@ export class UsersService {
             }
         }
 
+        // Если позиция в профите, забираем 50%
+        const sessionPnL = session.lastPnl > 0 ? session.lastPnl / 2 : session.lastPnl;
+
+        const sessionRoE = session.lastRoe > 0 ? session.lastRoe / 2 : session.lastRoe;
+
         return {
             startSessionTime : session.startSessionTime,
-            pnl : session.lastPnl,
-            roe : session.lastRoe,
+            pnl : sessionPnL,
+            roe : sessionRoE,
             balance : session.tradeBalance
         }
     }

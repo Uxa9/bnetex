@@ -36,7 +36,8 @@ import { PositionEnters } from "./positions/positionEnters.model";
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
             models: [User, Role, UserRoles, Request, InvestSession, Position, PositionEnters],
-            autoLoadModels: true
+            autoLoadModels: true,
+            logging: false
         }),
         MongooseModule.forRoot(`mongodb://127.0.0.1:27017/exchange`),
         UsersModule,
