@@ -26,15 +26,9 @@ module.exports = async (pair, kline, profit) => {
 
     let ActualProfit = undefined;
 
+    ActualProfit = 100 - ((position.avegarePrice / parseFloat(kline.close)) * 100);      
 
-    if(config.simulate){
-        console.log(position.avegarePrice, kline.close)
-        ActualProfit = 100 - ((position.avegarePrice / parseFloat(kline.close)) * 100);      
-    }else{
-        ActualProfit = parseFloat(POSITION_ACTIVE.unrealizedProfit);
-    }
 
-    console.log({ActualProfit, profit})
 
     if(ActualProfit >= profit){
         

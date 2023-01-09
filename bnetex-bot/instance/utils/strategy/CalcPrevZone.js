@@ -54,6 +54,10 @@ module.exports.CalcPrevZone = (rule, candlesticks) => {
     if(currentZone == 2 && backPattern.includes(0) && prevZone == 1){
         backPattern = [0,1,3];
     }
+
+    if(currentZone == 5 && prevZone == 3){
+        backPattern = [2,3,4];
+    }
     
 
     candlesticks[candlesticks.length-1][rule.intervals][rule.sigma]['backPattern'] = backPattern.sort((a,b) => a-b);

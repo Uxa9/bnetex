@@ -71,7 +71,7 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
             container: widgetRef.current,
             library_path: props.libraryPath as string,
 
-            locale: getLanguageFromURL() || 'en',
+            locale: getLanguageFromURL() || 'ru',
             disabled_features: ['use_localstorage_for_settings'],
             enabled_features: ['study_templates'],
             charts_storage_url: props.chartsStorageUrl,
