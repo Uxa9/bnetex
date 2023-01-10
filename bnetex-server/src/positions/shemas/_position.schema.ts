@@ -60,4 +60,4 @@ export class Position{
     positionEnters: any
 }
 
-export const PositionSchema = SchemaFactory.createForClass(Position);
+export const _positionSchema = SchemaFactory.createForClass(Position);

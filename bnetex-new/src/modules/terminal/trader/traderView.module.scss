@@ -1,0 +1,110 @@
+.trade-layout {
+    display: flex;
+}
+
+.trade-panel {
+    padding: 16px;
+    margin-left: 16px;
+
+    flex-grow: 2;
+}
+
+.trader-view-wrapper__header {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 16px;
+
+    width: 100%;
+
+    >* {
+        width: 50%;
+    }
+}
+
+.cup {
+    padding: 16px;
+    width: 260px;
+}
+
+.cup-head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.cup-small {
+    .cup-position:nth-child(10) {
+        background-color: green;
+    }
+    .cup-position:nth-child(11) {
+        background-color: red;
+    }
+}
+
+.cup-big {
+    .cup-position:nth-child(20) {
+        background-color: green;
+    }
+    .cup-position:nth-child(21) {
+        background-color: red;
+    }
+}
+
+.cup-position {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    
+    span {
+        padding: 2px;
+    }   
+}
+
+.trader-view-trade-type {
+    margin: 16px 0 32px;
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+
+    span:last-child {
+        margin-top: 8px;
+    }
+}
+
+.balance-and-max {
+    display: flex;
+    justify-content: space-between;
+}
+
+.input-fields {
+    >* {
+        margin-top: 16px;
+    }
+
+    margin-bottom: 32px;
+}
+
+.trade-sum-type {
+    width: 80px;
+}
+
+.trade-sum-selector {
+    margin: 16px 0 32px;
+}
+
+.submit-form-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-buttons-text {
+    p:first-child {
+        margin-top: 32px;
+    }
+
+    p:not(:first-child) {
+        margin-top: 16px;
+    }
+}

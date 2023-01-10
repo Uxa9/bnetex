@@ -75,7 +75,7 @@ const OrderHistory = () => {
                                     >
                                     Время сделки
                                     </span>
-                                    {formatDate(position.date, true)}
+                                    {formatDate(new Date(position.date), true)}
                                 </td>
                                 <td className={styles['action']}>
                                     <span

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import styles from './historyAndOrders.module.scss';
 import { ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';

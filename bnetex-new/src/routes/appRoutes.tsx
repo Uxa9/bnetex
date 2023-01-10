@@ -6,7 +6,7 @@ import AppLoader from 'modules/Global/components/appLoader/appLoader';
 import { ProtectedRoute } from './protectedRoute';
 import Page404 from 'modules/Global/pages/404/page404';
 import EmailValidation from 'modules/Auth/sections/emailValidation';
-import RegistrationFinalize from 'modules/Auth/sections/registrationFinalize';
+import RegistrationFinalize from 'modules/Auth/sections/RegistrationFinalize';
 import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { verifyToken } from 'store/action-creators/auth';
 
@@ -18,6 +18,7 @@ const Withdraw = lazy(() => import('modules/Payments/Withdraw/withdraw'));
 const WithdrawConfirm = lazy(() => import('modules/Payments/Withdraw/confirm'));
 const TerminalLayout = lazy(() => import('modules/terminal/terminalLayout'));
 const InvestorView = lazy(() => import('modules/terminal/investor/investorView'));
+const TradeView = lazy(() => import('modules/terminal/trader/traderView'));
 
 const AppRoutes = () => {
 
@@ -36,6 +37,7 @@ const AppRoutes = () => {
                     <Route path={HOME} element={<MainPage />}></Route>
                     <Route path={TERMINAL} element={<TerminalLayout />}>
                         <Route path="investor" element={<InvestorView />} />
+                        <Route path="trader" element={<TradeView />} />
                     </Route>
                     <Route 
                         path={`${DASHBOARD}/*`} 
