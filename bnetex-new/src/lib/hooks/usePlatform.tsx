@@ -1,16 +1,16 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import variablesMap from 'styles/exportedVariables.module.scss';
 import { throwError } from 'lib/utils/errorThrower';
+import getCssVariable from 'lib/utils/getCssVariable';
 
 export interface CurrentPlatformContext {
-isCurrentPlatformMobile: boolean;
+    isCurrentPlatformMobile: boolean;
 }
 
 const currentPlatformContext = createContext<CurrentPlatformContext | null>(null);
 
 export const useCurrentPlatform = () => useContext(currentPlatformContext) ?? throwError('useCurrentPlatform can be used only inside CurrentPlatformProvider');
 
-const mobileMediaQuery = window.matchMedia(`(max-width: ${variablesMap.mobileBp}px)`);
+const mobileMediaQuery = window.matchMedia(`(max-width: ${getCssVariable('MOBILE_BP')}px)`);
 
 export function CurrentPlatformProvider({children}: {children: ReactNode}) {
 

@@ -2,14 +2,14 @@ import { CircledCheck, CircledCross, Info } from 'assets/images/icons';
 import clsx from 'clsx';
 import { ToastInterface } from 'lib/types/toast';
 import { delay } from 'lib/utils/delay';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './toast.module.scss';
-import variablesMap from 'styles/exportedVariables.module.scss';
 import { ToastContext } from 'lib/hooks/useToast';
 import { useTheme } from 'lib/hooks/useTheme';
+import getCssVariable from 'lib/utils/getCssVariable';
 
 const TOAST_LIFESPAN: number = 3000;
-const TOAST_ANIMATION_TIME = Number(variablesMap['defaultTransition'].replace(/ms/, ''));
+const TOAST_ANIMATION_TIME = getCssVariable('DEFAULT_TRANSITION');
 
 const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
 
@@ -34,7 +34,7 @@ const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
             .then(() => deleteToast(id));
     };
 
-    const evaluateToastIcon = useCallback(() => {
+    const evaluateToastIcon = () => {
         switch (type) {
             case 'success': {
                 return <CircledCheck />;
@@ -46,7 +46,7 @@ const Toast = (props: ToastInterface & Pick<ToastContext, 'deleteToast'>) => {
                 return <Info />;
             }
         }
-    }, [ type ]);
+    };
 
     return (
         <div
