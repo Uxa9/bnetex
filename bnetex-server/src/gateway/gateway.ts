@@ -54,6 +54,7 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
                             userRoe: roe,
                             pair: payload.pair,
                             volume: payload.position.volumeUSDT,
+                            entryPrice: payload.position.averagePrice,
                             markPrice: payload.position.averagePrice,
                             margin: "я бля хуй знает что сюда надо"
                         })
