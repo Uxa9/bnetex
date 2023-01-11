@@ -199,6 +199,7 @@ module.exports = class InstanceClass {
     let signalToOpen = await checkPatternToOpen(lastKline, this.pair, false);
 
     if (signalToOpen.signal) {      
+      
       this.waitingForFirstGreen.pattern = signalToOpen.pattern;
       this.waitingForFirstGreen.wait = true;
       
@@ -206,6 +207,7 @@ module.exports = class InstanceClass {
 
     // Если мы ждем первую зеленую и она первая, то не ждем
     if (this.waitingForFirstGreen.wait && CLEAN__SIGNAL) {      
+      
       this.waitingForFirstGreen.wait = false;
       await buySignalHandler(
         this.waitingForFirstGreen.pattern,
@@ -228,7 +230,7 @@ module.exports = class InstanceClass {
     console.log(`Initializing trading pair: ${this.pair}`);
 
     // Получаем максимальное количество интервалов
-    let maxInterval = getMaxIntervals() * 2;
+    let maxInterval = getMaxIntervals() * 4;
 
     // Весь просчет по новой стратегии идет по 1m
     // Максимальное количество нужных свечей

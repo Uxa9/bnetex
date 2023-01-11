@@ -10,7 +10,7 @@ var moment = require("moment");
 module.exports = async (pair, timeframe, limit, startTimeFrom = false, lastTime = false) => {
 
 
-
+  
 
   // Рассчитываем время - откуда считать
   let startTime =
@@ -28,6 +28,8 @@ module.exports = async (pair, timeframe, limit, startTimeFrom = false, lastTime 
   // Отнимаем одну свечу на всякий случай
   startTime = startTime - timeframeRules(timeframe).singleMilliseconds;
 
+  
+
 
   if(startTimeFrom !== false){
     startTime = startTimeFrom;
@@ -37,7 +39,7 @@ module.exports = async (pair, timeframe, limit, startTimeFrom = false, lastTime 
   let data = [];
 
 
-
+  
 
   // binance дает только 1000 свечей за раз, поэтому приходится несколько раз забирать
   do {
@@ -55,11 +57,12 @@ module.exports = async (pair, timeframe, limit, startTimeFrom = false, lastTime 
 
     data = data.concat(dataFromExhange);
 
-    startTime =
-      data[data.length - 1].startTime +
-      timeframeRules(timeframe).singleMilliseconds;
-
     
+
+    startTime =
+      data[data.length - 1].startTime
+
+      
 
   } while (data.length < limit);
   
