@@ -164,7 +164,7 @@ const OpenedPositions = () => {
                                     {/* <SignedNumber
                                         value={position.amount}
                                     /> */}
-                                    {position.amount}
+                                    {(position.amount * 10).toFixed(2)}
                                 </td>
                                 <td className={styles['entry-price']}>
                                     <span className={clsx(
@@ -212,7 +212,7 @@ const OpenedPositions = () => {
                                         Маржа
                                     </span>
                                     <div className={styles['margin']}>
-                                        <span>{position.margin.value}</span>
+                                        <span>{position.amount}</span>
                                         <span>({evaluateMarginType(position.margin.type)})</span>
                                     </div>
                                 </td>

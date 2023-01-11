@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev-local": "concurrently \"cd bnetex-server && npm run start:dev\" \"cd bnetex-new && npm run dev\"  \"cd bnetex-bot && npm run dev\""
+    "dev-local": "concurrently \"cd bnetex-server && npm run start:dev\" \"cd bnetex-new && npm run dev\"  \"cd bnetex-bot && npm run dev\"",
+    "dev-localy": "concurrently \"cd bnetex-server && npm run start:dev\" \"cd bnetex-new && npm run dev\""
   },
   "repository": {
     "type": "git",
