@@ -1,6 +1,5 @@
 import HistoryAndOrders from './historyAndOrders/historyAndOrders';
 import TradingViewWidget from 'modules/TradingView/TradingViewWidget';
-import ChartView from './chartView/chartView';
 import { Outlet, useLocation } from 'react-router-dom';
 import styles from './terminalLayout.module.scss';
 import { useActions } from 'lib/hooks/useActionCreators';
@@ -10,17 +9,7 @@ import clsx from 'clsx';
 
 const TerminalLayout = () => {
 
-    const [layoutStyles, setLayoutStyles] = useState(clsx(styles['content-wrapper']));
-    const location = useLocation();
-
-    useEffect(() => {
-        if (location.pathname.split('/').pop() === 'trader') {
-            setLayoutStyles(clsx(styles['content-wrapper'], styles['trader-view']));
-        } else {
-            setLayoutStyles(clsx(styles['content-wrapper']));
-        }
-    }, [location]);
-
+    const { pathname } = useLocation();
     const { setIsTerminalOpen } = useActions();
 
     useEffect(() => {
@@ -33,7 +22,10 @@ const TerminalLayout = () => {
 
     return (
         <div
-            className={layoutStyles}
+            className={clsx(
+                styles['content-wrapper'],
+                /trader/.test(pathname) && styles['trader-view']
+            )}
         >
             <TradingViewWidget
                 className={clsx(styles.chart, 'card')}

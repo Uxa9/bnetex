@@ -1,11 +1,13 @@
 import { HistoryCallback, LibrarySymbolInfo, ErrorCallback, PeriodParams, ResolutionString,
     SearchSymbolsCallback, ServerTimeCallback, SubscribeBarsCallback,
-    GetMarksCallback, Mark } from 'charting_library/charting_library';
+    GetMarksCallback, Mark, Bar } from 'charting_library/charting_library';
+import { format } from 'date-fns';
 import { UUID } from 'lib/types/uuid';
 import getTVData from 'services/getTVData';
 import { getExchangeServerTime, getSymbols, getKlines, checkInterval } from './services';
 import { subscribeOnStream, unsubscribeFromStream } from './streaming';
 import { TVInterval } from './types';
+import { separateKlineRequestInterval } from './utils';
 
 const configurationData = {
     supports_marks: true,
@@ -65,21 +67,39 @@ export default {
         });
     },
 
-    getBars: async (symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, periodParams: PeriodParams, onResult: HistoryCallback, onError: ErrorCallback) => {
+    getBars: async function (
+        symbolInfo: LibrarySymbolInfo,
+        resolution: ResolutionString,
+        periodParams: PeriodParams,
+        onResult: HistoryCallback,
+        onError: ErrorCallback
+    ) {
         if (!checkInterval(resolution)) {
             return onError('[getBars] Invalid interval');
         }
 
-        const klines = await getKlines({
+        const klinesRequestProps = {
             symbol: symbolInfo.name,
             interval: resolution,
-            from: periodParams.from,
-            to: periodParams.to,
+            from: periodParams.from * 1000,
+            to: periodParams.to * 1000,
+        };
+
+        const separatedIntervals = separateKlineRequestInterval(
+            {
+                from: klinesRequestProps.from,
+                to: klinesRequestProps.to,
+            },
+            resolution
+        );
+
+        const data = await Promise.all(
+            separatedIntervals.map(it => getKlines({...klinesRequestProps, from: it.from, to: it.to}))
+        ).then(data => {
+            return data.reduce((acc, it) => acc.concat(it), []);
         });
 
-        if (klines.length > 0) return onResult(klines);
-
-        onError('[getBars] Klines Data error');
+        if (data.length > 0) return onResult(data);
     },
 
     // подписать на сокет со свечками
