@@ -1,8 +1,8 @@
 {
     "port": 4800,
     "binance": {
-      "APIKEY": "7a7990dc45aa7061da5be8800247c2e5e42b1104aa3373b1d65e467e054455b5",
-      "APISECRET": "7dbfd1b2c4e52283816be0f4e2315bfae565b66ab11dab3936cda46c58401c42",
+      "APIKEY": "ce20169f838d9f9e580098308a90cc04e0c5b7dbe32e4e20a634e17908f22315",
+      "APISECRET": "dfee29014d2acca6bcfa2b917a3829af0dd005445f570811d875f5cc345fa9a9",
       "TEST": true
     },
     "tradingPairs" : ["BTCUSDT"],    
@@ -11,7 +11,7 @@
     "tgGroupId": -861751435,
     "simulate": false,
     "startTime": 1652410440000,
-    "initTelgram": false,
+    "initTelgram": true,
     "serverPort": 3009,
-    "serverOnly": true
+    "serverOnly": false
 }
