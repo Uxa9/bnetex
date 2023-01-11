@@ -13,7 +13,7 @@ module.exports = (server)  => {
     const io = require('socket.io')(server);
 
     pnlTIcker$.subscribe(async e => {
-
+    
 
         let currentPosition = await getCurrentPositionMySQL({status: true, pair: e.symbol});
 
@@ -24,6 +24,8 @@ module.exports = (server)  => {
         let averagePrice = currentPosition.averagePrice;
 
         let percent = (close * 100 / averagePrice) - 100;
+
+        console.log('huita')
 
         io.emit("ROE_UPDATE", {
             pair: e.symbol,

@@ -3,18 +3,20 @@ import { useTheme } from 'lib/hooks/useTheme';
 import { Button, Switch } from 'lib/ui-kit';
 import { useEffect, useState } from 'react';
 import styles from './burgerMenu.module.scss';
-import variablesMap from 'styles/exportedVariables.module.scss';
 import HeaderUserLinks from '../headerUserLinks';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { Logout } from 'assets/images/icons';
 import { useGoToState } from 'lib/hooks/useGoToState';
 import { useActions } from 'lib/hooks/useActionCreators';
 import { AppLinksEnum } from 'routes/appLinks';
+import getCssVariable from 'lib/utils/getCssVariable';
 
 interface BurgerMenuProps {
     isOpened: boolean;
     onClose: () => void;
 }
+
+const DEFAULT_TRANSITION = getCssVariable('DEFAULT_TRANSITION');
 
 export default function BurgerMenu({isOpened, onClose}: BurgerMenuProps) {
 
@@ -30,7 +32,7 @@ export default function BurgerMenu({isOpened, onClose}: BurgerMenuProps) {
         // анимации снижения прозрачности overlay до нуля.
         isOpened ?
             setIsOverlayVisible(true) :
-            setTimeout(() => setIsOverlayVisible(false), Number(variablesMap.defaultTransition.replace('ms', '')));
+            setTimeout(() => setIsOverlayVisible(false), DEFAULT_TRANSITION);
     }, [ isOpened ]);
 
     const logout = () => {

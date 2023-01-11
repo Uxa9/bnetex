@@ -19,6 +19,8 @@ import { InvestSession } from "./invest-sessions/invest-sessions.model";
 import { InvestTradingModule } from './invest-trading/invest-trading.module';
 import { Position } from "./positions/position.model";
 import { PositionEnters } from "./positions/positionEnters.model";
+import { GatewayModule } from "./gateway/gateway.module";
+import { SocketModule } from "./socket/socket.module";
 
 
 @Module({
@@ -48,7 +50,9 @@ import { PositionEnters } from "./positions/positionEnters.model";
         MailSenderModule,
         PositionsModule,
         InvestSessionsModule,
-        InvestTradingModule
+        InvestTradingModule,
+        GatewayModule,
+        SocketModule
     ]
 })
 export class AppModule{};
