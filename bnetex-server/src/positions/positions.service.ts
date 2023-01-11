@@ -62,7 +62,7 @@ export class PositionsService {
             ) {
                 const date = new Date(position.closeTime);
                 dates.push(
-                    `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
+                    `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`,
                 );
                 roeValues.push((roeValues[roeValues.length - 1] || 0) + percent);
                 pnlValues.push(pnl);

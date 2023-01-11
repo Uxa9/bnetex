@@ -6,21 +6,23 @@ import { Server, Socket } from "socket.io";
 import { io } from "socket.io-client";
 import { UsersService } from "../users/users.service";
 import { SocketClientService } from "../socket/socket-client.service";
+import moment from "moment";
+import { InvestSessionsService } from "../invest-sessions/invest-sessions.service";
 
 @WebSocketGateway({
-
+    cors: true
 })
 export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDisconnect {
 
     constructor(
         private socketClient: SocketClientService,
-        private userService: UsersService
+        private userService: UsersService,
+        private investSessionService: InvestSessionsService
     ) { 
         
     }
 
     onModuleInit() {
-        console.log('aboba');
         this.socketClient.emitForcer.subscribe( async (payload: any) => {
             
             
@@ -35,13 +37,32 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
                 
 
                 if (user.openTrade) {
-                    
-                    const totalDeposit = payload.position.deposit;
-                    const { roe } = payload;
-                     
 
+                    const userSession = await this.investSessionService.getUserActiveSession(id);                    
 
-                    s[1].emit('currentPosition', playload)
+                    if (
+                        new Date(payload.position.enterTime).getTime() > 
+                        new Date(userSession.startSessionTime).getTime()) {
+                        const totalDeposit = payload.position.deposit;
+                        const { roe } = payload;
+                        
+                        const userPartition = user.tradeBalance / totalDeposit * 100;
+                        const userPnl = userPartition * (1 + Number(roe) / 100) - userPartition;
+                        
+                        s[1].emit('currentPosition', {
+                            userPnl,
+                            userRoe: roe,
+                            pair: payload.pair,
+                            volume: payload.position.volumeUSDT,
+                            entryPrice: payload.position.averagePrice,
+                            markPrice: payload.position.averagePrice,
+                            margin: "я бля хуй знает что сюда надо"
+                        })
+                    } else {                        
+                        s[1].emit('currentPosition', {
+                            msg: "no active positions"
+                        })
+                    }
                 } else {
                     s[1].emit('currentPosition', {
                         msg: "user not trading"
@@ -87,10 +108,7 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
         
     }
 
-    handleDisconnect(client: any) {
-
-        console.log(client);
-        
+    handleDisconnect(client: any) {        
         console.log('Client disconnected');
     }
 

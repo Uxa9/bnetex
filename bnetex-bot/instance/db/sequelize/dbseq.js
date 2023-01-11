@@ -28,7 +28,7 @@ var sequelize = new Sequelize(
 module.exports.setup = async () => {
   syncAssotiations();
 
-  await sequelize.sync({ alter: true });
+  await sequelize.sync();
 };
 
 const models = {

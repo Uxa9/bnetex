@@ -7,9 +7,9 @@ import FormCardSkeleton from './components/FormCard/formCardSkeleton';
 import { AppLinksEnum } from 'routes/appLinks';
 import Blur, { BlurProps } from 'modules/Global/components/blurredBackgroundItem';
 
-const Login = lazy(() => import('modules/Auth/sections/Login'));
-const Registration = lazy(() => import('modules/Auth/sections/Registration'));
-const RegistrationFinalize = lazy(() => import('modules/Auth/sections/RegistrationFinalize'));
+const Login = lazy(() => import('modules/Auth/sections/login'));
+const Registration = lazy(() => import('modules/Auth/sections/registration'));
+const RegistrationFinalize = lazy(() => import('modules/Auth/sections/registrationFinalize'));
 const EmailValidation = lazy(() => import('modules/Auth/sections/emailValidation'));
 
 const AuthLayout = () => {

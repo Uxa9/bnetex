@@ -18,7 +18,7 @@ export class SocketClientService implements OnModuleInit {
     }
 
     constructor() {
-        this.socketClient = io('ws://localhost:3009');
+        this.socketClient = io('ws://bnetex.com:3009');
     }
 
     onModuleInit() {

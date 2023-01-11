@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
 import TradeView from './tradeView/tradeView';
 import HistoryView from './historyView/historyView';
@@ -8,13 +8,59 @@ import clsx from 'clsx';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import Chart from 'modules/Global/components/lightChart/chart';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
+import { getUserInfo } from 'lib/utils/getUserInfo';
+import { WebsocketContext } from '../../../context/WebsocketContext';
+// import { io, Socket } from 'socket.io-client';
 
 type InvestorViewType = 'trade' | 'history';
+
+interface tradeSessionInfoInterface {
+    margin: any,
+    markPrice: number,
+    pair: string,
+    userPnl: number,
+    userRoe: number,
+    volume: number
+}
 
 const InvestorView = () => {
 
     const [viewType, setViewType] = useState<InvestorViewType>('trade');
+    // const [investorPnl, setInvestorPnl] = useState<Number>(0);
+    // const [invesotrRoe, setInvestorRoe] = useState<Number>(0);
+
     const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
+
+    // const tradeSession = io(`http://localhost:5000?id=${getUserInfo().userId}`);
+
+    // tradeSession.on('connect', () => {
+    //     console.log('connected'); 
+    // });
+
+    // tradeSession.on('currentPosition', (newMessage: any) => {
+    //     console.log(newMessage);
+    // });
+    
+    const socket = useContext(WebsocketContext);
+    const [userTradeInfo, setUserTradeInfo] = useState<tradeSessionInfoInterface>();
+
+    useEffect(() => {
+        socket.on('connect', () => {
+            console.log('Connected!');
+        });
+
+        socket.on('currentPosition', (tradeInfo: any) => {
+            console.log('onMessage event received!');
+            console.log(tradeInfo);
+            setUserTradeInfo(tradeInfo);
+        });
+
+        return () => {
+            console.log('Unregistering Events...');
+            socket.off('connect');
+            socket.off('onMessage');
+        };
+    }, []);
 
     return (
         <>
@@ -71,10 +117,10 @@ const InvestorView = () => {
                                 <span
                                     className={'subtitle'}
                                 >
-                                    0
+                                    {userTradeInfo?.userPnl.toFixed(2)}
                                 </span>
                                 <SignedNumber
-                                    value={0}
+                                    value={userTradeInfo?.userRoe.toFixed(2) || 0}
                                     postfix={'%'}
                                 />
                             </> :
@@ -95,13 +141,13 @@ const InvestorView = () => {
             <Chart
                 data={
                     viewType === "history" ?
-                    dates.map((date, index) => {
-                        return {
-                            time: date,
-                            value: pnl[index],
-                        };
-                    }) :
-                    []
+                        dates.map((date, index) => {
+                            return {
+                                time: date,
+                                value: pnl[index],
+                            };
+                        }) :
+                        []
                 }
                 type={'PNL'}
                 className={clsx(
@@ -113,13 +159,13 @@ const InvestorView = () => {
             <Chart
                 data={
                     viewType === "history" ?
-                    dates.map((date, index) => {
-                        return {
-                            time: date,
-                            value: roe[index],
-                        };
-                    }) : 
-                    []
+                        dates.map((date, index) => {
+                            return {
+                                time: date,
+                                value: roe[index],
+                            };
+                        }) :
+                        []
                 }
                 type={'ROE'}
                 className={clsx(
