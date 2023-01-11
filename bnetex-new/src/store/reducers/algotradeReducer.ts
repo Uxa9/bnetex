@@ -4,6 +4,7 @@ const initialState: AlgotradeState = {
     loading: false,
     balance: 0,
     startTime: null,
+    startSessionTime: null,
     pnl: 0,
     roe: 0,
 };
