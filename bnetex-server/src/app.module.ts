@@ -20,6 +20,7 @@ import { InvestTradingModule } from './invest-trading/invest-trading.module';
 import { Position } from "./positions/position.model";
 import { PositionEnters } from "./positions/positionEnters.model";
 import { GatewayModule } from "./gateway/gateway.module";
+import { SocketModule } from "./socket/socket.module";
 
 
 @Module({
@@ -49,7 +50,8 @@ import { GatewayModule } from "./gateway/gateway.module";
         PositionsModule,
         InvestSessionsModule,
         InvestTradingModule,
-        GatewayModule
+        GatewayModule,
+        SocketModule
     ]
 })
 export class AppModule{};
