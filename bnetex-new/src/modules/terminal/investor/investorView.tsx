@@ -8,13 +8,28 @@ import clsx from 'clsx';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import Chart from 'modules/Global/components/lightChart/chart';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
+import { getUserInfo } from 'lib/utils/getUserInfo';
+// import { io, Socket } from 'socket.io-client';
 
 type InvestorViewType = 'trade' | 'history';
 
 const InvestorView = () => {
 
     const [viewType, setViewType] = useState<InvestorViewType>('trade');
+    // const [investorPnl, setInvestorPnl] = useState<Number>(0);
+    // const [invesotrRoe, setInvestorRoe] = useState<Number>(0);
+
     const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
+
+    // const tradeSession = io(`http://localhost:5000?id=${getUserInfo().userId}`);
+
+    // tradeSession.on('connect', () => {
+    //     console.log('connected'); 
+    // });
+
+    // tradeSession.on('currentPosition', (newMessage: any) => {
+    //     console.log(newMessage);
+    // });       
 
     return (
         <>

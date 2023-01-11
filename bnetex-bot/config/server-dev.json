@@ -13,5 +13,5 @@
     "startTime": 1652410440000,
     "initTelgram": false,
     "serverPort": 3009,
-    "serverOnly": true
+    "serverOnly": false
 }
