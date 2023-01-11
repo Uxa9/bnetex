@@ -25,11 +25,12 @@ module.exports = (server)  => {
 
         let percent = (close * 100 / averagePrice) - 100;
 
-        console.log('huita')
+        console.log({close, averagePrice, percent})
+        
 
         io.emit("ROE_UPDATE", {
             pair: e.symbol,
-            roe: percent.toFixed(2),
+            roe: percent * 10,
             position: currentPosition
         });
 
