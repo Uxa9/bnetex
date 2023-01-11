@@ -1,3 +1,4 @@
+import { PeriodParams } from 'charting_library/charting_library';
 import { UUID } from 'lib/types/uuid';
 
 interface TVAvailableIntervals {
@@ -29,8 +30,10 @@ export type TVInterval = keyof typeof availableIntervals;
 
 export interface KLine {
     symbol: string;
-    interval: keyof typeof availableIntervals; 
+    interval: keyof typeof availableIntervals;
     from?: number;
     to?: number;
     uniqueID?: UUID;
 }
+
+export type PeriodScope = Pick<PeriodParams, 'from' | 'to'>

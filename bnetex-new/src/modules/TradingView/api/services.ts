@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Bar } from 'charting_library/charting_library';
 import { availableIntervals, KLine, TVInterval } from './types';
 
 export const getExchangeServerTime = () => binanceRequest('/time').then(res => res.serverTime);
@@ -6,14 +7,14 @@ export const getExchangeServerTime = () => binanceRequest('/time').then(res => r
 export const getSymbols = () => binanceRequest('/exchangeInfo').then(res => res.symbols);
 
 // получить исторические данные свечек
-export const getKlines = ({ symbol, interval, from, to }: KLine) => {
+export const getKlines = ({ symbol, interval, from, to }: KLine): Promise<Bar[]> => {
     const parsedInterval = availableIntervals[interval]; // set interval
 
     return binanceRequest('/klines', {
         symbol: symbol.toUpperCase(),
         interval: parsedInterval,
-        startTime: from ? from * 1000 : undefined,
-        endTime: to ? to * 1000 : undefined,
+        startTime: from,
+        endTime: to,
     })
         .then(res => {
             return res.map((i: any[]) => ({
@@ -25,8 +26,7 @@ export const getKlines = ({ symbol, interval, from, to }: KLine) => {
                 volume: parseFloat(i[5]),
             }));
         })
-        .catch(err => console.log(err)
-        );
+        .catch(err => console.log(err));
 };
 
 
