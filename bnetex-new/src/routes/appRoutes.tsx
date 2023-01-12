@@ -6,7 +6,7 @@ import AppLoader from 'modules/Global/components/appLoader/appLoader';
 import { ProtectedRoute } from './protectedRoute';
 import Page404 from 'modules/Global/pages/404/page404';
 import EmailValidation from 'modules/Auth/sections/emailValidation';
-import RegistrationFinalize from 'modules/Auth/sections/registrationFinalize';
+import RegistrationFinalize from 'modules/Auth/sections/RegistrationFinalize';
 import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { verifyToken } from 'store/action-creators/auth';
 

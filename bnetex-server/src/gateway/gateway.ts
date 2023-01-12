@@ -9,7 +9,9 @@ import { SocketClientService } from "../socket/socket-client.service";
 import moment from "moment";
 import { InvestSessionsService } from "../invest-sessions/invest-sessions.service";
 
-@WebSocketGateway({
+const PORT = Number(process.env.SOCKET_PORT) || 5001;
+
+@WebSocketGateway(PORT, {
     cors: true
 })
 export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDisconnect {

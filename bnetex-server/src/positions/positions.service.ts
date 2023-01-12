@@ -25,7 +25,7 @@ export class PositionsService {
         const positions = await new Promise((resolve, rej) =>
             this.httpService
                 .post('http://localhost:3009/front/history', {
-                    periodMonth: 12,
+                    periodMonth: dto.period,
                 })
                 .subscribe((res) => {
                     resolve(res.data.response);
