@@ -32,46 +32,67 @@ export class PositionsService {
                 }),
         );
 
-        const result = await this.getHistoricalData(positions, dto.amount);
+        const result = await this.getHistoricalData(positions, dto.amount, dto.period);
 
         return result;
     }
 
-    async getHistoricalData(data: any, amount: number) {
+    async getHistoricalData(data: any, amount: number, period: number = 1) {
         let dates = [];
-        let pnlValues = [];
-        let roeValues = [];
-        let acc = amount;
+        let acc = 0;
 
-        data.map((position) => {
+        const curDate = new Date();
+        let startDate = new Date(new Date().setMonth(curDate.getMonth() - period));
 
+        while (startDate.getMonth() !== curDate.getMonth() ||
+            startDate.getDate() !== curDate.getDate() ||
+            startDate.getFullYear() !== curDate.getFullYear()
+        ) {
+            dates.push(
+                // `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
+                startDate.toISOString().split('T')[0]
+            );
 
-            let customAmount = amount / position.deposit;
+            startDate = new Date(startDate.setDate(startDate.getDate() + 1));
+        }
+
+        let pnlValues = Array(dates.length).fill(0);
+        let roeValues = Array(dates.length).fill(0);
+
+        data.map((position) => {           
+            
+            let customAmountPercent = amount / position.deposit;
 
             const lever = 10;
 
-            const percent = position.percentProfit;
+            const pnl = position.sumProfit * customAmountPercent * lever;     
+            const percent = position.sumProfit / position.deposit * 100 * lever;
 
-            const pnl = position.sumProfit * customAmount * lever;
+            const posCloseTime = new Date(position.closeTime);
 
-            if (
-                new Date(position.closeTime).getDate() !==
-                new Date(dates[dates.length - 1]).getDate() &&
-                new Date(position.closeTime).getMonth() !==
-                new Date(dates[dates.length - 1]).getMonth()
-            ) {
-                const date = new Date(position.closeTime);
-                dates.push(
-                    `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`,
-                );
-                roeValues.push((roeValues[roeValues.length - 1] || 0) + percent);
-                pnlValues.push(pnl);
+            // const index = dates.findIndex(item => item === `${posCloseTime.getFullYear()}-${posCloseTime.getMonth() + 1}-${posCloseTime.getDate()}`);
+            const index = dates.findIndex(item => item === posCloseTime.toISOString().split('T')[0]);
+
+            // if (index === 45) return
+            // if (index === 46) return
+            // if (index === 47) return
+            // if (index === 48) return
+
+            if (index !== -1) {            
+                acc += percent;
+
+                pnlValues[index] += pnl;
+                roeValues[index] = acc;
             } else {
-                roeValues[roeValues.length - 1] += percent;
-                pnlValues[pnlValues.length - 1] += pnl;
+                // бля, ну вообще странно
             }
 
-            acc += pnl;
+        });
+
+        roeValues.slice(1).map((item, index) => {   
+            if (item === 0) {
+                roeValues[index+1] = roeValues[index];
+            }
         });
 
         return {
@@ -125,7 +146,7 @@ export class PositionsService {
         try {
             const { data } = await firstValueFrom(this.httpService.post<any>(
                 'http://localhost:3009/front/history', {
-                 periodMonth: 12
+                periodMonth: dto.period || 6
             }).pipe(
                 catchError((error: AxiosError) => {
                     throw new HttpException(
@@ -149,7 +170,7 @@ export class PositionsService {
                         time: Number(new Date(enter.createdAt)) / 1000,
                         id: enter.id,
                         color: 'green',
-                        text: 'Покупка BTC',
+                        text: `Покупка BTC\nОбъём: ${enter.volumeUSDT}\nПо цене ${enter.close}`,
                         label: 'B',
                         minSize: 14,
                         labelFontColor: '#ffffff',
@@ -162,7 +183,7 @@ export class PositionsService {
                     time: Number(new Date(position.closeTime)) / 1000,
                     id: position.id,
                     color: 'red',
-                    text: 'Продажа BTC',
+                    text: `Продажа BTC\nОбъём: ${position.volumeUSDT}\nПо цене ${position.closePrice}`,
                     label: 'S',
                     minSize: 14,
                     labelFontColor: '#ffffff',
