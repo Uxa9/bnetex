@@ -139,10 +139,10 @@ const InvestorView = () => {
                                 <span
                                     className={'subtitle'}
                                 >
-                                    { pnl.reduce((acc, it) => acc + it, 0).toFixed(2) }
+                                    {(pnl.reduce((acc, it) => acc + it, 0) / 2).toFixed(2)}
                                 </span>
                                 <SignedNumber
-                                    value={roe.at(-1) ?? 0}
+                                    value={(Number(roe.at(-1)) / 2).toFixed(2) ?? 0}
                                     postfix={'%'}
                                 />
                             </>

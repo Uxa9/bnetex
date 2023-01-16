@@ -19,10 +19,20 @@ let pairInstances = [];
 const frontRoutes = require('./server/routes/front-routes');
 const paramsConverter = require("./server/routes/middlewares/paramsConverter");
 const socket = require("./server/socket/socket");
+const binance = require("./instance/utils/binance");
 
 const server = require('http').createServer(app);
 
+
+
+
+
 (async () => {
+
+
+    // binance.futuresSubscribe('btcusdt@kline_1m', e => {
+    //     console.log(e)
+    // })
 
     await db.setup();
 
