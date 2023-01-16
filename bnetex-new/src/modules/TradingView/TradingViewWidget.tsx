@@ -1,7 +1,7 @@
 import { useTheme } from 'lib/hooks/useTheme';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { capitalizeFirstLetter } from 'lib/utils/capitalizeString';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
     widget,
     ChartingLibraryWidgetOptions,
@@ -9,14 +9,10 @@ import {
     IChartingLibraryWidget,
     ResolutionString,
     ThemeName,
-    LibrarySymbolInfo,
-    GetMarksCallback,
-    Mark,
 } from '../../charting_library';
 import api from './api/api';
 import { getOverrides } from './colorOverrides';
-import getTVData from 'services/getTVData';
-import { HistoryPeriod } from 'store/actions/algotrade';
+import { forbiddenMarkResolutions } from './api/types';
 
 
 export interface ChartContainerProps {
@@ -65,7 +61,7 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
     const [tvWidget, setTvWidget] = useState<IChartingLibraryWidget | null>(null);
     const { theme } = useTheme();
     const props = {...defaultProps, ...componentProps};
-    const { historyPeriod } = useTypedSelector(state => state.algotrade);
+    const { markRefreshFlag } = useTypedSelector(state => state.algotrade);
 
     useEffect(() => {
         if (!widgetRef.current) {
@@ -93,25 +89,39 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
             overrides: getOverrides(),
         };
 
-        setTvWidget(new widget(widgetOptions));
+        const _widget = new widget(widgetOptions);
+
+        // навешиваем слушаетель события на смену resolution
+        // если выбран 1d или 3d - очистить маркеры
+        _widget?.onChartReady(() => {
+            _widget.activeChart().onIntervalChanged().subscribe(null,
+                (interval) => {
+                    const isResolutionForbidden = !!forbiddenMarkResolutions.find(it => it === interval);
+
+                    if (isResolutionForbidden) _widget.activeChart().clearMarks();
+                });
+        });
+
+        setTvWidget(_widget);
 
         return () => {
             if (tvWidget !== null) {
                 tvWidget.remove();
+                localStorage.removeItem('history');
             }
         };
 
     }, [ theme ]);
 
+    // при изменении интервала времени в истории торгов запрашивать marks
     useEffect(() => {
-        localStorage.setItem('history', historyPeriod ? String(historyPeriod) : '');
 
         tvWidget?.onChartReady(() => {
-            historyPeriod
-                ? tvWidget.activeChart().refreshMarks()
-                : tvWidget.activeChart().clearMarks();
+            tvWidget.activeChart().clearMarks();
+            tvWidget.activeChart().refreshMarks();
         });
-    }, [historyPeriod, tvWidget]);
+
+    }, [markRefreshFlag, tvWidget]);
 
     return (
         <div

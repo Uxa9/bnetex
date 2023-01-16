@@ -1,7 +1,7 @@
 import useApi from 'lib/hooks/useApi';
 import { getUserInfo } from 'lib/utils/getUserInfo';
 import { Dispatch } from 'redux';
-import { AlgotradeAction, AlgotradeActionTypes, AlgotradeDataResponse, HistoryPeriod } from 'store/actions/algotrade';
+import { AlgotradeAction, AlgotradeActionTypes, AlgotradeDataResponse } from 'store/actions/algotrade';
 
 const { protectedApi } = useApi();
 
@@ -21,8 +21,8 @@ export const getAlgotradeData = () => {
     };
 };
 
-export const changeAlgotradeHistoryPeriod = (historyPeriod: HistoryPeriod) => {
+export const triggerTVMarkRefresh = () => {
     return (dispatch: Dispatch<AlgotradeAction>) => {
-        dispatch({ type: AlgotradeActionTypes.CHANGE_ALGOTRADE_MODE, historyPeriod: historyPeriod});
+        dispatch({ type: AlgotradeActionTypes.REFRESH_TV_MARKS});
     };
 };
