@@ -38,7 +38,7 @@ function getLanguageFromURL(): LanguageCode | null {
 
 const defaultProps: Omit<ChartContainerProps, 'container'> = {
     symbol: 'BTCUSDT',
-    interval: 'D' as ResolutionString,
+    interval: '5' as ResolutionString,
     datafeedUrl: 'https://demo_feed.tradingview.com',
     libraryPath: '/charting_library/',
     chartsStorageUrl: 'https://saveload.tradingview.com',
