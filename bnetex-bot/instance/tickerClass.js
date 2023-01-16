@@ -35,9 +35,7 @@ module.exports = class TickerClass {
         this.nextKlinTime
       );
 
-      binance.websockets.candlesticks(
-        [this.pair],
-        "1h",
+      binance.futuresSubscribe(`${this.pair.toLowerCase()}@kline_1h`, 
         async (candlesticks) => {  
           
           
@@ -53,11 +51,12 @@ module.exports = class TickerClass {
       );
 
       this.timeframes.map((interval) => {
-        binance.websockets.candlesticks(
-          [this.pair],
-          interval,
+        binance.futuresSubscribe(`${this.pair.toLowerCase()}@kline_${interval.toLowerCase()}`,          
+          
           async (candlesticks) => {
             let tick = formatCandlesTick(candlesticks);
+
+            
 
             if (tick.isFinal) {
               this.klinesToForce[tick.interval] = tick;
