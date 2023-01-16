@@ -3,10 +3,9 @@ import { HistoryCallback, LibrarySymbolInfo, ErrorCallback, PeriodParams, Resolu
     GetMarksCallback, Mark } from 'charting_library/charting_library';
 import { UUID } from 'lib/types/uuid';
 import getTVData from 'services/getTVData';
-import { HistoryPeriod } from 'store/actions/algotrade';
 import { getExchangeServerTime, getSymbols, getKlines, checkInterval } from './services';
 import { subscribeOnStream, unsubscribeFromStream } from './streaming';
-import { TVInterval, forbiddenMarkResolutions } from './types';
+import { TVInterval, forbiddenMarkResolutions, HistoryPeriod } from './types';
 import { separateKlineRequestInterval } from './utils';
 
 const configurationData = {

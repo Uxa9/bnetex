@@ -39,4 +39,6 @@ export interface KLine {
     uniqueID?: UUID;
 }
 
+export type HistoryPeriod = 1 | 3 | 6;
+
 export type PeriodScope = Pick<PeriodParams, 'from' | 'to'>

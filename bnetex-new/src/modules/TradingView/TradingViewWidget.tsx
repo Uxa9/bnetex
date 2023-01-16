@@ -61,7 +61,7 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
     const [tvWidget, setTvWidget] = useState<IChartingLibraryWidget | null>(null);
     const { theme } = useTheme();
     const props = {...defaultProps, ...componentProps};
-    const { historyPeriod } = useTypedSelector(state => state.algotrade);
+    const { markRefreshFlag } = useTypedSelector(state => state.algotrade);
 
     useEffect(() => {
         if (!widgetRef.current) {
@@ -115,14 +115,13 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
 
     // при изменении интервала времени в истории торгов запрашивать marks
     useEffect(() => {
-        localStorage.setItem('history', historyPeriod ? String(historyPeriod) : '');
 
         tvWidget?.onChartReady(() => {
             tvWidget.activeChart().clearMarks();
             tvWidget.activeChart().refreshMarks();
         });
 
-    }, [historyPeriod, tvWidget]);
+    }, [markRefreshFlag, tvWidget]);
 
     return (
         <div
