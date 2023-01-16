@@ -23,7 +23,7 @@ export const getKlines = ({ symbol, interval, from, to }: KLine): Promise<Bar[]>
                 high: parseFloat(i[2]),
                 low: parseFloat(i[3]),
                 close: parseFloat(i[4]),
-                volume: parseFloat(i[5]),
+                // volume: parseFloat(i[5]),
             }));
         })
         .catch(err => console.log(err));

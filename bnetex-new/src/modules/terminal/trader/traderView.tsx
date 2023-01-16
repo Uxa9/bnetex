@@ -74,7 +74,6 @@ const TradeView = () => {
 
         const asks: string[][] = res.data.asks.reverse();
         const bids: string[][] = res.data.bids.reverse();
-console.log(bids);
 
         if (orderBookStep === 0.1) {
             setOrderBookSnapshot(asks.concat(bids));
@@ -118,54 +117,54 @@ console.log(bids);
             setWsOrderBook(a.concat(b));
         };
 
-    //     const getOrderBookSnapshot = async () => {
-    //         const res = await axios.get('https://fapi.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=1000');
-    
-    //         // console.log(res.data);   
-    //         // console.log([...res.data.asks.reverse(), ...res.data.bids]);
-    // // console.log(orderBookStep);
-    
-    //         const tick = parseInt((orderBookStep / 0.1).toFixed(2));
-    
-    //         const a = res.data.asks.reverse();
-    //         const b = res.data.bids;
-    
-    //         let snapShotArr = [];
-    
-    //         if (orderBookStep >= 1) {
-    //             // console.log(a);
-    //             for (let i = 0; i < a.length; i+=tick) {
-                    
-    //                 const piece = a.slice(i, tick+i);
-    
-    //                 // const sum = piece.reduce()
-    //                 const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);                
-    //                 // console.log(sum);
-    //                 // console.log(piece);
-    //                 // console.log(i);
-                    
-    //                 // console.log(piece.pop()[0]);
-    
-    //                 snapShotArr.push([(Math.ceil(piece.pop()[0] / orderBookStep) * orderBookStep).toFixed(2), sum.toString()]);
-    //             }
-    
-    //             for (let i = 0; i < b.length; i+=tick) {
-    //                 const piece = b.slice(i, tick+i);
-    
-    //                 const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);
-    //                 snapShotArr.push([(Math.ceil(piece.pop()[0] / orderBookStep) * orderBookStep).toFixed(2), sum.toString()]);
-    //             }
-    //         } else {
-    //             snapShotArr = [ ...a, ...b ];
-    //         }
-    //         console.log(snapShotArr);
-            
-    //         setOrderBookSnapshot(snapShotArr);
-    //         // orderBookSnapshot = snapShotArr;
-    // // console.log(orderBookSnapshot);
-    
-    //         // setOrderBookSnapshot([...res.data.asks.reverse(), ...res.data.bids]);
-    //     }
+        //     const getOrderBookSnapshot = async () => {
+        //         const res = await axios.get('https://fapi.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=1000');
+
+        //         // console.log(res.data);
+        //         // console.log([...res.data.asks.reverse(), ...res.data.bids]);
+        // // console.log(orderBookStep);
+
+        //         const tick = parseInt((orderBookStep / 0.1).toFixed(2));
+
+        //         const a = res.data.asks.reverse();
+        //         const b = res.data.bids;
+
+        //         let snapShotArr = [];
+
+        //         if (orderBookStep >= 1) {
+        //             // console.log(a);
+        //             for (let i = 0; i < a.length; i+=tick) {
+
+        //                 const piece = a.slice(i, tick+i);
+
+        //                 // const sum = piece.reduce()
+        //                 const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);
+        //                 // console.log(sum);
+        //                 // console.log(piece);
+        //                 // console.log(i);
+
+        //                 // console.log(piece.pop()[0]);
+
+        //                 snapShotArr.push([(Math.ceil(piece.pop()[0] / orderBookStep) * orderBookStep).toFixed(2), sum.toString()]);
+        //             }
+
+        //             for (let i = 0; i < b.length; i+=tick) {
+        //                 const piece = b.slice(i, tick+i);
+
+        //                 const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);
+        //                 snapShotArr.push([(Math.ceil(piece.pop()[0] / orderBookStep) * orderBookStep).toFixed(2), sum.toString()]);
+        //             }
+        //         } else {
+        //             snapShotArr = [ ...a, ...b ];
+        //         }
+        //         console.log(snapShotArr);
+
+        //         setOrderBookSnapshot(snapShotArr);
+        //         // orderBookSnapshot = snapShotArr;
+        // // console.log(orderBookSnapshot);
+
+        //         // setOrderBookSnapshot([...res.data.asks.reverse(), ...res.data.bids]);
+        //     }
 
         btcPrice.onmessage = (event) => {
             // console.log(JSON.parse(event.data));
@@ -254,7 +253,7 @@ console.log(bids);
 
     const renderTradeCup = (length: number) => {
         const tradeCupArr = wsOrderBook.slice(wsOrderBook.length/2 - length, wsOrderBook.length/2 + length).reverse();
-        console.log(tradeCupArr)
+        console.log(tradeCupArr);
 
         const maxVolume = Math.max(...tradeCupArr.map((item: string[]) => parseFloat(item[1])));
 
@@ -268,41 +267,41 @@ console.log(bids);
 
                 const greenColor = () => {
 
-                    if (percent < 25) return "#84E088";
-                    if (percent < 50) return "#5CD662";
-                    if (percent < 75) return "#17CE1F";
+                    if (percent < 25) return '#84E088';
+                    if (percent < 50) return '#5CD662';
+                    if (percent < 75) return '#17CE1F';
 
-                    return "#0B8D11"
-                }
+                    return '#0B8D11';
+                };
 
                 const redColor = () => {
 
-                    if (percent < 25) return "#E08484";
-                    if (percent < 50) return "#D65C5C";
-                    if (percent < 75) return "#EC1313";
+                    if (percent < 25) return '#E08484';
+                    if (percent < 50) return '#D65C5C';
+                    if (percent < 75) return '#EC1313';
 
-                    return "#8D0B0B"
-                }
+                    return '#8D0B0B';
+                };
 
                 if (index < tradeCupArr.length / 2 - 1) {
 
                     let color = greenColor();
 
                     return {
-                        background: `linear-gradient(90deg, ${color} 0%, ${color} ${item[1]/ maxVolume * 100}%, #00000000 ${item[1]/ maxVolume * 100}%)`
-                    }
+                        background: `linear-gradient(90deg, ${color} 0%, ${color} ${item[1]/ maxVolume * 100}%, #00000000 ${item[1]/ maxVolume * 100}%)`,
+                    };
                 }
                 if (index > tradeCupArr.length / 2) {
 
                     let color = redColor();
 
                     return {
-                        background: `linear-gradient(90deg, ${color} 0%, ${color} ${item[1]/ maxVolume * 100}%, #00000000 ${item[1]/ maxVolume * 100}%)`
-                    }
+                        background: `linear-gradient(90deg, ${color} 0%, ${color} ${item[1]/ maxVolume * 100}%, #00000000 ${item[1]/ maxVolume * 100}%)`,
+                    };
                 }
 
                 return {};
-            }
+            };
 
             return (
                 <div
@@ -320,8 +319,8 @@ console.log(bids);
                     </span>
                 </div>
             );
-        })
-    }
+        });
+    };
 
     return (
         <div
