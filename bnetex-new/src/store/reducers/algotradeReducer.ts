@@ -7,6 +7,7 @@ const initialState: AlgotradeState = {
     startSessionTime: null,
     pnl: 0,
     roe: 0,
+    historyPeriod: null,
 };
 
 export const algotradeReducer = (state = initialState, action: AlgotradeAction): AlgotradeState => {
@@ -15,6 +16,8 @@ export const algotradeReducer = (state = initialState, action: AlgotradeAction):
             return { ...state, loading: true };
         case AlgotradeActionTypes.GET_ALGOTRADE_DATA:
             return { ...state, loading: false, ...action.data};
+        case AlgotradeActionTypes.CHANGE_ALGOTRADE_MODE:
+            return {...state, historyPeriod: action.historyPeriod};
         case AlgotradeActionTypes.REQUEST_ERROR:
             return { ...state, loading: false };
         default:

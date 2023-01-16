@@ -1,7 +1,7 @@
 import useApi from 'lib/hooks/useApi';
 import { getUserInfo } from 'lib/utils/getUserInfo';
 import { Dispatch } from 'redux';
-import { AlgotradeAction, AlgotradeActionTypes, AlgotradeDataResponse } from 'store/actions/algotrade';
+import { AlgotradeAction, AlgotradeActionTypes, AlgotradeDataResponse, HistoryPeriod } from 'store/actions/algotrade';
 
 const { protectedApi } = useApi();
 
@@ -18,5 +18,11 @@ export const getAlgotradeData = () => {
                 dispatch({ type: AlgotradeActionTypes.REQUEST_ERROR});
                 throw new Error(err.response.data.message);
             });
+    };
+};
+
+export const changeAlgotradeHistoryPeriod = (historyPeriod: HistoryPeriod) => {
+    return (dispatch: Dispatch<AlgotradeAction>) => {
+        dispatch({ type: AlgotradeActionTypes.CHANGE_ALGOTRADE_MODE, historyPeriod: historyPeriod});
     };
 };
