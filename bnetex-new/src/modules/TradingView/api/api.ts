@@ -6,7 +6,7 @@ import getTVData from 'services/getTVData';
 import { HistoryPeriod } from 'store/actions/algotrade';
 import { getExchangeServerTime, getSymbols, getKlines, checkInterval } from './services';
 import { subscribeOnStream, unsubscribeFromStream } from './streaming';
-import { TVInterval } from './types';
+import { TVInterval, forbiddenMarkResolutions } from './types';
 import { separateKlineRequestInterval } from './utils';
 
 const configurationData = {
@@ -139,12 +139,12 @@ export default {
         _from: number,
         _to: number,
         onDataCallback: GetMarksCallback<Mark>,
-        _resolution: ResolutionString
+        resolution: ResolutionString
     ) => {
         const lsHistoryPeriod = Number(localStorage.getItem('history')) as HistoryPeriod;
+        const isResolutionForbidden = !!forbiddenMarkResolutions.find(it => it === resolution);
 
-        if (!lsHistoryPeriod) return onDataCallback([]);
-        console.log('asking for marks on period: ', lsHistoryPeriod);
+        if (!lsHistoryPeriod || isResolutionForbidden) return onDataCallback([]);
 
         getTVData(lsHistoryPeriod).then(data => onDataCallback(data));
     },

@@ -7,7 +7,7 @@ const getTVData = async (historyPeriod: HistoryPeriod) => {
 
     return await api.post('/positions/getTVData',
         {
-            periodMonth: historyPeriod,
+            period: historyPeriod,
         }
     )
         .then((response) => {

@@ -1,7 +1,7 @@
 import { PeriodParams } from 'charting_library/charting_library';
 import { UUID } from 'lib/types/uuid';
 
-interface TVAvailableIntervals {
+export interface TVAvailableIntervals {
     [key: string]: string;
 }
 
@@ -25,6 +25,9 @@ export const availableIntervals: TVAvailableIntervals = {
     'M': '1M',
     '1M': '1M',
 };
+
+// данные интервалы не должны вызывать getMarks()
+export const forbiddenMarkResolutions: (keyof TVAvailableIntervals)[] = ['1D', '3D'];
 
 export type TVInterval = keyof typeof availableIntervals;
 
