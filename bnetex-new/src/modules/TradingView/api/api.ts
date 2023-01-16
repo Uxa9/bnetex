@@ -1,9 +1,9 @@
 import { HistoryCallback, LibrarySymbolInfo, ErrorCallback, PeriodParams, ResolutionString,
     SearchSymbolsCallback, ServerTimeCallback, SubscribeBarsCallback,
-    GetMarksCallback, Mark, Bar } from 'charting_library/charting_library';
-import { format } from 'date-fns';
+    GetMarksCallback, Mark } from 'charting_library/charting_library';
 import { UUID } from 'lib/types/uuid';
 import getTVData from 'services/getTVData';
+import { HistoryPeriod } from 'store/actions/algotrade';
 import { getExchangeServerTime, getSymbols, getKlines, checkInterval } from './services';
 import { subscribeOnStream, unsubscribeFromStream } from './streaming';
 import { TVInterval } from './types';
@@ -141,12 +141,11 @@ export default {
         onDataCallback: GetMarksCallback<Mark>,
         _resolution: ResolutionString
     ) => {
+        const lsHistoryPeriod = Number(localStorage.getItem('history')) as HistoryPeriod;
 
-        getTVData().then(data => onDataCallback(data));
+        if (!lsHistoryPeriod) return onDataCallback([]);
+        console.log('asking for marks on period: ', lsHistoryPeriod);
 
-        // console.log('[getMarks]: Method call');
-        // console.log(symbolInfo);
-        // console.log(resolution);
-        // console.log(onDataCallback);
+        getTVData(lsHistoryPeriod).then(data => onDataCallback(data));
     },
 };

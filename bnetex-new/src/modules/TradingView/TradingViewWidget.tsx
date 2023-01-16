@@ -1,6 +1,7 @@
 import { useTheme } from 'lib/hooks/useTheme';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { capitalizeFirstLetter } from 'lib/utils/capitalizeString';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
     widget,
     ChartingLibraryWidgetOptions,
@@ -8,9 +9,14 @@ import {
     IChartingLibraryWidget,
     ResolutionString,
     ThemeName,
+    LibrarySymbolInfo,
+    GetMarksCallback,
+    Mark,
 } from '../../charting_library';
 import api from './api/api';
 import { getOverrides } from './colorOverrides';
+import getTVData from 'services/getTVData';
+import { HistoryPeriod } from 'store/actions/algotrade';
 
 
 export interface ChartContainerProps {
@@ -38,7 +44,7 @@ function getLanguageFromURL(): LanguageCode | null {
 
 const defaultProps: Omit<ChartContainerProps, 'container'> = {
     symbol: 'BTCUSDT',
-    interval: 'D' as ResolutionString,
+    interval: '5' as ResolutionString,
     datafeedUrl: 'https://demo_feed.tradingview.com',
     libraryPath: '/charting_library/',
     chartsStorageUrl: 'https://saveload.tradingview.com',
@@ -59,6 +65,7 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
     const [tvWidget, setTvWidget] = useState<IChartingLibraryWidget | null>(null);
     const { theme } = useTheme();
     const props = {...defaultProps, ...componentProps};
+    const { historyPeriod } = useTypedSelector(state => state.algotrade);
 
     useEffect(() => {
         if (!widgetRef.current) {
@@ -95,6 +102,16 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
         };
 
     }, [ theme ]);
+
+    useEffect(() => {
+        localStorage.setItem('history', historyPeriod ? String(historyPeriod) : '');
+
+        tvWidget?.onChartReady(() => {
+            historyPeriod
+                ? tvWidget.activeChart().refreshMarks()
+                : tvWidget.activeChart().clearMarks();
+        });
+    }, [historyPeriod, tvWidget]);
 
     return (
         <div

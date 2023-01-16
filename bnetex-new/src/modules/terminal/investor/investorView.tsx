@@ -11,6 +11,8 @@ import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { getUserInfo } from 'lib/utils/getUserInfo';
 import { WebsocketContext } from '../../../context/WebsocketContext';
 import { io, Socket } from 'socket.io-client';
+import { useAppDispatch } from 'lib/hooks/useAppDispatch';
+import { changeAlgotradeHistoryPeriod } from 'store/action-creators/algotrade';
 
 type InvestorViewType = 'trade' | 'history';
 
@@ -23,24 +25,27 @@ interface tradeSessionInfoInterface {
     volume: number
 }
 
+//toDo: убрать это блядство с сокетами отсюда
 const InvestorView = () => {
 
     const [viewType, setViewType] = useState<InvestorViewType>('trade');
     const [investorPnl, setInvestorPnl] = useState<Number>(0);
     const [invesotrRoe, setInvestorRoe] = useState<Number>(0);
 
+    const dispatch = useAppDispatch();
+
     const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
 
     const tradeSession = io(`https://socket.bnetex.com?id=${getUserInfo().userId}`);
 
     tradeSession.on('connect', () => {
-        console.log('connected'); 
+        console.log('connected');
     });
 
     tradeSession.on('currentPosition', (newMessage: any) => {
         console.log(newMessage);
     });
-    
+
     const socket = useContext(WebsocketContext);
     const [userTradeInfo, setUserTradeInfo] = useState<tradeSessionInfoInterface>();
 
@@ -73,6 +78,7 @@ const InvestorView = () => {
                         name={'investor_terminal'}
                         onChange={(value: InvestorViewType) => {
                             setViewType(value);
+                            dispatch(changeAlgotradeHistoryPeriod(value === 'history' ? 6 : null));
                         }}
                         value={viewType}
                     >
@@ -87,7 +93,7 @@ const InvestorView = () => {
                     </ToggleButtonGroup>
                     <ToolTip
                         title='Что такое история?'
-                        infoText='История или история сделок - это исторические записи фактических транзакций по позициям. 
+                        infoText='История или история сделок - это исторические записи фактических транзакций по позициям.
                         В раздел попадают только исполненные ордера.'
                     />
                 </div>
@@ -112,7 +118,7 @@ const InvestorView = () => {
                     className={styles['data-card__row']}
                 >
                     {
-                        viewType === "trade" ?
+                        viewType === 'trade' ?
                             <>
                                 <span
                                     className={'subtitle'}
@@ -128,10 +134,10 @@ const InvestorView = () => {
                                 <span
                                     className={'subtitle'}
                                 >
-                                    {pnl.reduce((acc, it) => acc + it, 0)}
+                                    {(pnl.reduce((acc, it) => acc + it, 0) / 2).toFixed(2)}
                                 </span>
                                 <SignedNumber
-                                    value={roe.at(-1) ?? 0}
+                                    value={(Number(roe.at(-1)) / 2).toFixed(2) ?? 0}
                                     postfix={'%'}
                                 />
                             </>
@@ -140,7 +146,7 @@ const InvestorView = () => {
             </div>
             <Chart
                 data={
-                    viewType === "history" ?
+                    viewType === 'history' ?
                         dates.map((date, index) => {
                             return {
                                 time: date,
@@ -158,7 +164,7 @@ const InvestorView = () => {
             />
             <Chart
                 data={
-                    viewType === "history" ?
+                    viewType === 'history' ?
                         dates.map((date, index) => {
                             return {
                                 time: date,

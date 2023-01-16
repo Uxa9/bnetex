@@ -96,3 +96,10 @@ html {
         border-radius: 2px;
     }
 }
+
+// trading view костыль (ну или не костыль, надо будет изучить)
+
+.bar-mark-tooltip,
+html.theme-dark .bar-mark-tooltip {
+    white-space: break-spaces !important;
+}
