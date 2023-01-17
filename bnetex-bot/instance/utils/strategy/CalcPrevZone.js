@@ -27,7 +27,7 @@ module.exports.CalcPrevZone = (rule, candlesticks) => {
         
     }
 
-    candlesticks[candlesticks.length-1][rule.intervals][rule.sigma]['prevZone'] = prevZone;
+    
 
     // Поиск backPattern
     let backPattern = [];
@@ -61,6 +61,8 @@ module.exports.CalcPrevZone = (rule, candlesticks) => {
     
 
     candlesticks[candlesticks.length-1][rule.intervals][rule.sigma]['backPattern'] = backPattern.sort((a,b) => a-b);
+
+    candlesticks[candlesticks.length-1][rule.intervals][rule.sigma]['prevZone'] = prevZone;
 
     
     return candlesticks;
