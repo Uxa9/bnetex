@@ -1,20 +1,14 @@
 import useApi from 'lib/hooks/useApi';
-import { HistoryPeriod } from 'store/actions/algotrade';
+import { HistoryPeriod } from 'modules/TradingView/api/types';
+
+const { api } = useApi();
 
 const getTVData = async (historyPeriod: HistoryPeriod) => {
-
-    const { api } = useApi();
-
-    return await api.post('/positions/getTVData',
-        {
-            periodMonth: historyPeriod,
-        }
-    )
-        .then((response) => {
-            console.log(response.data);
-
-            return response.data;
-        });
+    return await api
+        .post('/positions/getTVData',{
+            period: historyPeriod,
+        })
+        .then((response) =>  response.data);
 };
 
 export default getTVData;

@@ -12,7 +12,7 @@ import { getUserInfo } from 'lib/utils/getUserInfo';
 import { WebsocketContext } from '../../../context/WebsocketContext';
 import { io, Socket } from 'socket.io-client';
 import { useAppDispatch } from 'lib/hooks/useAppDispatch';
-import { changeAlgotradeHistoryPeriod } from 'store/action-creators/algotrade';
+import { triggerTVMarkRefresh } from 'store/action-creators/algotrade';
 
 type InvestorViewType = 'trade' | 'history';
 
@@ -67,6 +67,14 @@ const InvestorView = () => {
         };
     }, []);
 
+    const handleViewTypeChange = (value: InvestorViewType) => {
+        if (viewType === 'history' && value === 'trade') {
+            localStorage.setItem('history', '0');
+            dispatch(triggerTVMarkRefresh());
+        }
+        setViewType(value);
+    };
+
     return (
         <>
             <div
@@ -76,10 +84,7 @@ const InvestorView = () => {
                     <ToggleButtonGroup
                         title={''}
                         name={'investor_terminal'}
-                        onChange={(value: InvestorViewType) => {
-                            setViewType(value);
-                            dispatch(changeAlgotradeHistoryPeriod(value === 'history' ? 6 : null));
-                        }}
+                        onChange={handleViewTypeChange}
                         value={viewType}
                     >
                         <ToggleButton
@@ -123,7 +128,7 @@ const InvestorView = () => {
                                 <span
                                     className={'subtitle'}
                                 >
-                                    {userTradeInfo?.userPnl.toFixed(2)}
+                                    {userTradeInfo?.userPnl.toFixed(2) ?? '0.00'}
                                 </span>
                                 <SignedNumber
                                     value={userTradeInfo?.userRoe.toFixed(2) || 0}

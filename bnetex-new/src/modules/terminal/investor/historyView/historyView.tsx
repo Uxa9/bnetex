@@ -6,18 +6,17 @@ import clsx from 'clsx';
 import { useActions } from 'lib/hooks/useActionCreators';
 import { getHistoricalData } from 'store/action-creators/roepnl';
 import { useAppDispatch } from 'lib/hooks/useAppDispatch';
-import { useTypedSelector } from 'lib/hooks/useTypedSelector';
-import { changeAlgotradeHistoryPeriod } from 'store/action-creators/algotrade';
-import { HistoryPeriod } from 'store/actions/algotrade';
+import { HistoryPeriod } from 'modules/TradingView/api/types';
+import { triggerTVMarkRefresh } from 'store/action-creators/algotrade';
 
 // toDo: тут говно на говне, костыль на костыле)
 
 const HistoryView = () => {
 
+    const [historyPeriod, setHistoryPeriod] = useState<HistoryPeriod>(6);
     const [inputValue, setInputValue] = useState<number>(NaN);
     const { getTradeHistory } = useActions();
     const dispatch = useAppDispatch();
-    const { historyPeriod } = useTypedSelector(state => state.algotrade);
 
     // toDo: помойка! переделать через hook-form
     const validateInputChange = (event: React.ChangeEvent<HTMLInputElement> ) => {
@@ -30,9 +29,9 @@ const HistoryView = () => {
 
         getTradeHistory(historyPeriod, inputValue);
         dispatch(getHistoricalData(historyPeriod, inputValue));
+        localStorage.setItem('history', historyPeriod ? String(historyPeriod) : '');
+        dispatch(triggerTVMarkRefresh());
     };
-
-    const handlePeriodChange = (value: HistoryPeriod) => dispatch(changeAlgotradeHistoryPeriod(value));
 
     return (
         <>
@@ -40,7 +39,7 @@ const HistoryView = () => {
                 label={'Объем инвестиций (USDT)'}
                 type={'number'}
                 required
-                value={inputValue}
+                value={isNaN(inputValue) ? '' : inputValue}
                 onChange={validateInputChange}
                 onKeyPress={blockEAndDashKey}
             />
@@ -58,8 +57,8 @@ const HistoryView = () => {
                 <ToggleButtonGroup
                     title={''}
                     name={'historyPeriod'}
-                    onChange={handlePeriodChange}
-                    value={historyPeriod ?? undefined}
+                    onChange={setHistoryPeriod}
+                    value={historyPeriod}
                     asNumber
                     exclusive
                 >

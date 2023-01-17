@@ -1,5 +1,3 @@
-export type HistoryPeriod = 1 | 3 | 6 | null;
-
 export interface AlgotradeState {
     loading: boolean;
     startTime: Date | null;
@@ -7,7 +5,7 @@ export interface AlgotradeState {
     pnl: number;
     roe: number;
     balance: number;
-    historyPeriod: HistoryPeriod;
+    markRefreshFlag: boolean;
 }
 
 export type AlgotradeDataResponse = Omit<AlgotradeState, 'loading'>;
@@ -16,7 +14,7 @@ export enum AlgotradeActionTypes {
     SEND_REQUEST = 'SEND_REQUEST',
     GET_ALGOTRADE_DATA = 'GET_ALGOTRADE_DATA',
     REQUEST_ERROR = 'REQUEST_ERROR',
-    CHANGE_ALGOTRADE_MODE = 'CHANGE_ALGOTRADE_MODE',
+    REFRESH_TV_MARKS = 'REFRESH_TV_MARKS',
 }
 
 interface SendRequestAction {
@@ -28,9 +26,8 @@ interface GetAlgotradeDataAction {
     data: AlgotradeDataResponse;
 }
 
-interface ChangeAlgotradeModeAction {
-    type: AlgotradeActionTypes.CHANGE_ALGOTRADE_MODE;
-    historyPeriod: HistoryPeriod;
+interface TriggerTVMarkRefreshAction {
+    type: AlgotradeActionTypes.REFRESH_TV_MARKS;
 }
 
 interface RequestErrorAction {
@@ -41,4 +38,4 @@ export type AlgotradeAction =
     SendRequestAction
     | GetAlgotradeDataAction
     | RequestErrorAction
-    | ChangeAlgotradeModeAction;
+    | TriggerTVMarkRefreshAction;
