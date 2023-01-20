@@ -12,7 +12,7 @@ import { getUserInfo } from 'lib/utils/getUserInfo';
 import { WebsocketContext } from '../../../context/WebsocketContext';
 import { io, Socket } from 'socket.io-client';
 import { useAppDispatch } from 'lib/hooks/useAppDispatch';
-import { triggerTVMarkRefresh } from 'store/action-creators/algotrade';
+import {changeViewType, triggerTVMarkRefresh} from 'store/action-creators/algotrade';
 
 type InvestorViewType = 'trade' | 'history';
 
@@ -72,6 +72,7 @@ const InvestorView = () => {
             localStorage.setItem('history', '0');
             dispatch(triggerTVMarkRefresh());
         }
+        dispatch(changeViewType(value));
         setViewType(value);
     };
 

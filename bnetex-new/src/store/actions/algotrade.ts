@@ -6,6 +6,7 @@ export interface AlgotradeState {
     roe: number;
     balance: number;
     markRefreshFlag: boolean;
+    viewType: string;
 }
 
 export type AlgotradeDataResponse = Omit<AlgotradeState, 'loading'>;
@@ -15,6 +16,7 @@ export enum AlgotradeActionTypes {
     GET_ALGOTRADE_DATA = 'GET_ALGOTRADE_DATA',
     REQUEST_ERROR = 'REQUEST_ERROR',
     REFRESH_TV_MARKS = 'REFRESH_TV_MARKS',
+    CHANGE_VIEW_TYPE = 'CHANGE_VIEW_TYPE',
 }
 
 interface SendRequestAction {
@@ -34,8 +36,14 @@ interface RequestErrorAction {
     type: AlgotradeActionTypes.REQUEST_ERROR;
 }
 
+interface ChangeViewType {
+    type: AlgotradeActionTypes.CHANGE_VIEW_TYPE;
+    payload: string;
+}
+
 export type AlgotradeAction =
     SendRequestAction
     | GetAlgotradeDataAction
     | RequestErrorAction
-    | TriggerTVMarkRefreshAction;
+    | TriggerTVMarkRefreshAction
+    | ChangeViewType;

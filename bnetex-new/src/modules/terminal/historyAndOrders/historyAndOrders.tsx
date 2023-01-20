@@ -5,6 +5,7 @@ import { ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
 import OpenedPositions from './sections/openedPositions/openedPositions';
 // import OpenedOrders from './sections/openedOrders/openedOrders';
 import OrderHistory from './sections/orderHistory/orderHistory';
+import {useTypedSelector} from "../../../lib/hooks/useTypedSelector";
 
 type SectionType = 'openedPositions' | 'openedOrders' | 'tradeHistory';
 
@@ -22,15 +23,33 @@ const historyAndOrdersSections: HistoryAndOrdersSection[] = [
     //     section: 'openedOrders',
     //     title: 'Открытые ордера',
     // },
-    {
-        section: 'tradeHistory',
-        title: 'История сделок',
-    },
+    // {
+    //     section: 'tradeHistory',
+    //     title: 'История сделок',
+    // },
 ];
 
 const HistoryAndOrders = ({className}: {className: string}) => {
 
-    const [activeSection, setActiveSection] = useState<SectionType>('tradeHistory');
+    const [activeSection, setActiveSection] = useState<SectionType>('openedPositions');
+    const { viewType } = useTypedSelector(state => state.algotrade);
+    const [availableSections, setAvailableSections] = useState<HistoryAndOrdersSection[]>(historyAndOrdersSections);
+
+    useEffect(() => {
+        if (viewType === "history") {
+            let sections = availableSections;
+            sections.pop();
+            setAvailableSections(sections);
+        } else {
+            let sections = availableSections;
+            sections.push({
+                section: 'tradeHistory',
+                title: 'История сделок',
+            });
+            setAvailableSections(sections);
+        }
+
+    }, [viewType]);
 
     const sectionComponent = useMemo(() => {
         switch(activeSection) {
@@ -64,7 +83,7 @@ const HistoryAndOrders = ({className}: {className: string}) => {
                     )}
                 >
                     {
-                        historyAndOrdersSections.map((section: HistoryAndOrdersSection) => 
+                        availableSections.map((section: HistoryAndOrdersSection) =>
                             <ToggleButton 
                                 text={section.title}
                                 value={section.section}
