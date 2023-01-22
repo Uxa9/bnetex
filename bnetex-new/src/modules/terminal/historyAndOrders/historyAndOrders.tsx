@@ -5,6 +5,7 @@ import { ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
 import OpenedPositions from './sections/openedPositions/openedPositions';
 // import OpenedOrders from './sections/openedOrders/openedOrders';
 import OrderHistory from './sections/orderHistory/orderHistory';
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 
 type SectionType = 'openedPositions' | 'openedOrders' | 'tradeHistory';
 
@@ -30,7 +31,27 @@ const historyAndOrdersSections: HistoryAndOrdersSection[] = [
 
 const HistoryAndOrders = ({className}: {className: string}) => {
 
-    const [activeSection, setActiveSection] = useState<SectionType>('tradeHistory');
+    const [activeSection, setActiveSection] = useState<SectionType>('openedPositions');
+    const { viewType } = useTypedSelector(state => state.algotrade);
+    const [availableSections, setAvailableSections] = useState<HistoryAndOrdersSection[]>(historyAndOrdersSections);
+
+    useEffect(() => {      
+
+        if (viewType === "trade") {
+            
+            setAvailableSections([{
+                section: 'openedPositions',
+                title: 'Позиции',
+            }]);
+
+            setActiveSection('openedPositions');
+        } else {
+            setAvailableSections(historyAndOrdersSections);    
+            
+            setActiveSection('tradeHistory');
+        }
+
+    }, [viewType]);
 
     const sectionComponent = useMemo(() => {
         switch(activeSection) {
