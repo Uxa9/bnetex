@@ -23,10 +23,10 @@ const historyAndOrdersSections: HistoryAndOrdersSection[] = [
     //     section: 'openedOrders',
     //     title: 'Открытые ордера',
     // },
-    {
-        section: 'tradeHistory',
-        title: 'История сделок',
-    },
+    // {
+    //     section: 'tradeHistory',
+    //     title: 'История сделок',
+    // },
 ];
 
 const HistoryAndOrders = ({className}: {className: string}) => {
@@ -85,7 +85,7 @@ const HistoryAndOrders = ({className}: {className: string}) => {
                     )}
                 >
                     {
-                        historyAndOrdersSections.map((section: HistoryAndOrdersSection) => 
+                        availableSections.map((section: HistoryAndOrdersSection) =>
                             <ToggleButton 
                                 text={section.title}
                                 value={section.section}

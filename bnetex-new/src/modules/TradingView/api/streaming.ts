@@ -36,13 +36,14 @@ export function subscribeOnStream (
 // распарсить свечку из данных бинанса
 const parseCandle = (data: any): Bar => {
     const kline = data.k;
+
     return {
         time: data.E,
         open: parseFloat(kline.o),
         high: parseFloat(kline.h),
         low: parseFloat(kline.l),
         close: parseFloat(kline.c),
-        volume: parseFloat(kline.v),
+        // volume: parseFloat(kline.v),
     };
 };
 

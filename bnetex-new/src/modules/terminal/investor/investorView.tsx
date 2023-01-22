@@ -11,6 +11,8 @@ import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { getUserInfo } from 'lib/utils/getUserInfo';
 import { WebsocketContext } from '../../../context/WebsocketContext';
 import { io, Socket } from 'socket.io-client';
+import { useAppDispatch } from 'lib/hooks/useAppDispatch';
+import {changeViewType, triggerTVMarkRefresh} from 'store/action-creators/algotrade';
 
 type InvestorViewType = 'trade' | 'history';
 
@@ -23,24 +25,27 @@ interface tradeSessionInfoInterface {
     volume: number
 }
 
+//toDo: убрать это блядство с сокетами отсюда
 const InvestorView = () => {
 
     const [viewType, setViewType] = useState<InvestorViewType>('trade');
     const [investorPnl, setInvestorPnl] = useState<Number>(0);
     const [invesotrRoe, setInvestorRoe] = useState<Number>(0);
 
+    const dispatch = useAppDispatch();
+
     const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
 
     const tradeSession = io(`http://localhost:5001?id=${getUserInfo().userId}`);
 
     tradeSession.on('connect', () => {
-        console.log('connected'); 
+        console.log('connected');
     });
 
     tradeSession.on('currentPosition', (newMessage: any) => {
         console.log(newMessage);
     });
-    
+
     const socket = useContext(WebsocketContext);
     const [userTradeInfo, setUserTradeInfo] = useState<tradeSessionInfoInterface>();
 
@@ -62,6 +67,15 @@ const InvestorView = () => {
         };
     }, []);
 
+    const handleViewTypeChange = (value: InvestorViewType) => {
+        if (viewType === 'history' && value === 'trade') {
+            localStorage.setItem('history', '0');
+            dispatch(triggerTVMarkRefresh());
+        }
+        dispatch(changeViewType(value));
+        setViewType(value);
+    };
+
     return (
         <>
             <div
@@ -71,9 +85,7 @@ const InvestorView = () => {
                     <ToggleButtonGroup
                         title={''}
                         name={'investor_terminal'}
-                        onChange={(value: InvestorViewType) => {
-                            setViewType(value);
-                        }}
+                        onChange={handleViewTypeChange}
                         value={viewType}
                     >
                         <ToggleButton
@@ -87,7 +99,7 @@ const InvestorView = () => {
                     </ToggleButtonGroup>
                     <ToolTip
                         title='Что такое история?'
-                        infoText='История или история сделок - это исторические записи фактических транзакций по позициям. 
+                        infoText='История или история сделок - это исторические записи фактических транзакций по позициям.
                         В раздел попадают только исполненные ордера.'
                     />
                 </div>
@@ -112,12 +124,12 @@ const InvestorView = () => {
                     className={styles['data-card__row']}
                 >
                     {
-                        viewType === "trade" ?
+                        viewType === 'trade' ?
                             <>
                                 <span
                                     className={'subtitle'}
                                 >
-                                    {userTradeInfo?.userPnl.toFixed(2)}
+                                    {userTradeInfo?.userPnl.toFixed(2) ?? '0.00'}
                                 </span>
                                 <SignedNumber
                                     value={userTradeInfo?.userRoe.toFixed(2) || 0}
@@ -140,7 +152,7 @@ const InvestorView = () => {
             </div>
             <Chart
                 data={
-                    viewType === "history" ?
+                    viewType === 'history' ?
                         dates.map((date, index) => {
                             return {
                                 time: date,
@@ -158,7 +170,7 @@ const InvestorView = () => {
             />
             <Chart
                 data={
-                    viewType === "history" ?
+                    viewType === 'history' ?
                         dates.map((date, index) => {
                             return {
                                 time: date,
