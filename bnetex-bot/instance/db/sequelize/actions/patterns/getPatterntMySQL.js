@@ -15,11 +15,14 @@ module.exports = async (where) => {
             },
             {
                 model: db.models.PatternTrigger
+            },
+            {
+                model: db.models.Pairs
             }
         ]
     , where, order: [
         [
-            {model: db.models.ActiveGroups}, 'id', 'DESC'
+            'id', 'DESC'
         ]
     ]})
 }

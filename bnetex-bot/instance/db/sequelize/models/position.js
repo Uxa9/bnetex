@@ -41,7 +41,9 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.DOUBLE
         },
         closeTime: {
-            type: 'TIMESTAMP',            
+            type: 'TIMESTAMP', 
+            defaultValue: null,
+            allowNull: true         
         },
         percentProfit: {
             type: DataTypes.DOUBLE

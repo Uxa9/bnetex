@@ -205,6 +205,9 @@ module.exports = class InstanceClass {
       
     }
 
+
+    console.log({signalToOpen})
+
     // Если мы ждем первую зеленую и она первая, то не ждем
     if (this.waitingForFirstGreen.wait && CLEAN__SIGNAL) {      
       
@@ -215,6 +218,8 @@ module.exports = class InstanceClass {
         lastKline
       );
     }
+
+    //if(lastKline.startTime > 1668070800000) return;
 
     // Если симулятор. говорим об оконцамии обработки свечи
     if (config.simulate) {
