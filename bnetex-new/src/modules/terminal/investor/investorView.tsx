@@ -126,6 +126,26 @@ const InvestorView = () => {
                     {
                         viewType === 'trade' ?
                             <>
+                                <span
+                                    className={'subtitle'}
+                                >
+                                    {userTradeInfo?.userPnl.toFixed(2) ?? '0.00'}
+                                </span>
+                                <SignedNumber
+                                    value={userTradeInfo?.userRoe.toFixed(2) || 0}
+                                    postfix={'%'}
+                                />
+                            </> :
+                            <>
+                                <span
+                                    className={'subtitle'}
+                                >
+                                    {(pnl.reduce((acc, it) => acc + it, 0) / 2).toFixed(2)}
+                                </span>
+                                <SignedNumber
+                                    value={(Number(roe.at(-1)) / 2).toFixed(2) ?? 0}
+                                    postfix={'%'}
+                                />
                             </>
                     }
                 </div>
