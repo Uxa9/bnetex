@@ -8,6 +8,7 @@ const getPosition = require("./getPosition");
 const config = require('../../../../../config/config')()
 
 const moment = require('moment');
+const { api } = require("../../../../utils/telegram/axios");
 
 module.exports = async (pair, kline, profit) => {
     
@@ -40,6 +41,7 @@ module.exports = async (pair, kline, profit) => {
         
         await changePositionStepMySQL(position.id, {status: false, closeTime: moment(kline.endTime, 'x').toDate(), percentProfit: ActualProfit, closePrice: parseFloat(kline.close), sumProfit: ((position.volumeUSDT*10) / 100) * ActualProfit });
         await marketSell(pair, parseFloat(POSITION_ACTIVE.positionAmt))
+        await api.post('/invest-sessions', position);
     }
 
     

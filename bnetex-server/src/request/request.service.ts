@@ -104,7 +104,7 @@ export class RequestService {
             request.update({fulfilled: true});
 
             await this.mailerService.sendMail({
-                to: 'kirill.yu99@gmail.com',
+                to: 'Valeriy.1.93@mail.ru',
                 from: 'infobnetex@internet.ru',
                 subject: 'Вывод',
                 template: 'withdraw',

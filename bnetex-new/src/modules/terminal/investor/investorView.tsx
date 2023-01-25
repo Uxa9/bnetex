@@ -71,10 +71,17 @@ const InvestorView = () => {
                                 <span
                                     className={'subtitle'}
                                 >
+<<<<<<< Updated upstream
                                     0
                                 </span>
                                 <SignedNumber
                                     value={0}
+=======
+                                    {userTradeInfo?.userPnl?.toFixed(2) ?? '0.00'}
+                                </span>
+                                <SignedNumber
+                                    value={userTradeInfo?.userRoe?.toFixed(2) || 0}
+>>>>>>> Stashed changes
                                     postfix={'%'}
                                 />
                             </> :

@@ -198,7 +198,7 @@ const OpenedPositions = () => {
                                         PNL
                                     </span>
                                     <SignedNumber
-                                        value={(position.PNL).toFixed(2)}
+                                        value={(position.PNL)?.toFixed(2)}
                                     />
                                 </td>
                             </tr>
