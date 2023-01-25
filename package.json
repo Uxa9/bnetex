@@ -1,0 +1,23 @@
+{
+  "name": "bnetex-cloud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev-local": "concurrently \"cd bnetex-server && npm run start:dev\" \"cd bnetex-new && npm run dev\"  \"cd bnetex-bot && npm run dev\"",
+    "dev-localy": "concurrently \"cd bnetex-server && npm run start:dev\" \"cd bnetex-new && npm run dev\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Uxa9/bnetex.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Uxa9/bnetex/issues"
+  },
+  "homepage": "https://github.com/Uxa9/bnetex#readme",
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  }
+}

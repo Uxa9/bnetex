@@ -24,22 +24,25 @@ module.exports = async (pair, kline, profit) => {
     let POSITION_ACTIVE = await account.getOpenPositions(pair);
 
 
+    
+
+
 
     let ActualProfit = undefined;
 
+    ActualProfit = 100 - ((position.avegarePrice / parseFloat(kline.close)) * 100);      
 
-    if(config.simulate){
-        console.log(position.avegarePrice, kline.close)
-        ActualProfit = 100 - ((position.avegarePrice / parseFloat(kline.close)) * 100);      
-    }else{
-        ActualProfit = parseFloat(POSITION_ACTIVE.unrealizedProfit);
+    let sumProfit = ((position.volumeUSDT*10) / 100) * ActualProfit;
+
+
+    // Если реальная торговля - умножать на 10 не надо
+    if(!config.simulate){
+        sumProfit = (position.volumeUSDT / 100) * ActualProfit;
     }
-
-    console.log({ActualProfit, profit})
 
     if(ActualProfit >= profit){
         
-        await changePositionStepMySQL(position.id, {status: false, closeTime: moment(kline.endTime, 'x').toDate(), percentProfit: ActualProfit, closePrice: parseFloat(kline.close), sumProfit: ((position.volumeUSDT*10) / 100) * ActualProfit });
+        await changePositionStepMySQL(position.id, {status: false, closeTime: moment(kline.endTime, 'x').toDate(), percentProfit: ActualProfit, closePrice: parseFloat(kline.close), sumProfit});
         await marketSell(pair, parseFloat(POSITION_ACTIVE.positionAmt))
         await api.post('/invest-sessions', position);
     }

@@ -42,11 +42,13 @@ export class InvestSession extends Model<InvestSession, InvestSessionCreationAtt
 
     @Column({
         type: DataType.DOUBLE,
+        defaultValue: 0
     })
     lastPnl: number;
 
     @Column({
         type: DataType.DOUBLE,
+        defaultValue: 0
     })
     lastRoe: number;
 

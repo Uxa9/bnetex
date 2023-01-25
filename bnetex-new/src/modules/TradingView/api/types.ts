@@ -1,6 +1,7 @@
+import { PeriodParams } from 'charting_library/charting_library';
 import { UUID } from 'lib/types/uuid';
 
-interface TVAvailableIntervals {
+export interface TVAvailableIntervals {
     [key: string]: string;
 }
 
@@ -25,12 +26,19 @@ export const availableIntervals: TVAvailableIntervals = {
     '1M': '1M',
 };
 
+// данные интервалы не должны вызывать getMarks()
+export const forbiddenMarkResolutions: (keyof TVAvailableIntervals)[] = ['1D', '3D'];
+
 export type TVInterval = keyof typeof availableIntervals;
 
 export interface KLine {
     symbol: string;
-    interval: keyof typeof availableIntervals; 
+    interval: keyof typeof availableIntervals;
     from?: number;
     to?: number;
     uniqueID?: UUID;
 }
+
+export type HistoryPeriod = 1 | 3 | 6;
+
+export type PeriodScope = Pick<PeriodParams, 'from' | 'to'>

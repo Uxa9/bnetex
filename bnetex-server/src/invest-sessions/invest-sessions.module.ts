@@ -6,6 +6,7 @@ import { InvestSessionsController } from './invest-sessions.controller';
 import { InvestSessionsService } from './invest-sessions.service';
 import { InvestSession } from './invest-sessions.model';
 import { PositionsModule } from '../positions/positions.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
     controllers: [InvestSessionsController],
@@ -14,6 +15,7 @@ import { PositionsModule } from '../positions/positions.module';
         forwardRef(() => UsersModule),
         PositionsModule,
         SequelizeModule.forFeature([User, InvestSession]),
+        HttpModule,
     ],
     exports: [
         InvestSessionsService

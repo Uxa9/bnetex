@@ -5,6 +5,7 @@ const formatCandlesTick = require("./utils/formatCandlesTick");
 
 const moment = require("moment");
 const tickerHelper = require("./utils/tickerHelper");
+const { pnlTIcker$ } = require("../server/events/events");
 
 // В этом классе порисходит подписка на тики бинанс, происходит просчет ожиданий какие таймфреймы закроются следущие
 module.exports = class TickerClass {
@@ -34,11 +35,14 @@ module.exports = class TickerClass {
         this.nextKlinTime
       );
 
-      binance.websockets.candlesticks(
-        [this.pair],
-        "1h",
-        async (candlesticks) => {
+      binance.futuresSubscribe(`${this.pair.toLowerCase()}@kline_1h`, 
+        async (candlesticks) => {  
+          
+          
+
           let tick = formatCandlesTick(candlesticks);
+
+          pnlTIcker$.next(tick);
           
           if (tick.isFinal) {            
             subject.next(tick);
@@ -47,11 +51,12 @@ module.exports = class TickerClass {
       );
 
       this.timeframes.map((interval) => {
-        binance.websockets.candlesticks(
-          [this.pair],
-          interval,
+        binance.futuresSubscribe(`${this.pair.toLowerCase()}@kline_${interval.toLowerCase()}`,          
+          
           async (candlesticks) => {
             let tick = formatCandlesTick(candlesticks);
+
+            
 
             if (tick.isFinal) {
               this.klinesToForce[tick.interval] = tick;

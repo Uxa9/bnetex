@@ -46,7 +46,7 @@ module.exports = async (PATTERN__SIGNAL, PAIR, intervalsData) => {
             totalDeposit = depoServer;
         }
 
-        totalDeposit = 1000;
+        totalDeposit = 500;
 
         let currentStep = undefined;
         let currentGroup = undefined;

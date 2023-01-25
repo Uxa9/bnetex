@@ -1,4 +1,5 @@
 import { Info } from 'assets/images/icons';
+import { AxiosResponse } from 'axios';
 import { differenceInSeconds } from 'date-fns';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 import { useToast } from 'lib/hooks/useToast';
@@ -9,7 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import { checkActivationCodeTime, resendActivationCode } from 'services/user';
 import styles from './resendCodeAction.module.scss';
 
-const DEFAULT_DELAY_BETWEEN_REQUESTS = 30; 
+const DEFAULT_DELAY_BETWEEN_REQUESTS = 30;
 const TIMER_INTERVAL = 1000;
 
 const ResendCodeAction = ({ userEmail }: {userEmail: string}) => {
@@ -30,10 +31,9 @@ const ResendCodeAction = ({ userEmail }: {userEmail: string}) => {
             }
         });
     };
-    
+
     useEffect(() => {
         userEmail && checkTime();
-
         return () => {
             timer.current && clearInterval(timer.current);
         };
@@ -41,7 +41,7 @@ const ResendCodeAction = ({ userEmail }: {userEmail: string}) => {
     }, [ userEmail ]);
 
     const checkTime = () => {
-        promiseWithLoading(checkActivationCodeTime(userEmail))
+        promiseWithLoading<AxiosResponse<string>>(checkActivationCodeTime(userEmail))
             .then(response => {
                 const prevCodeSendTime = new Date(response.data);
                 const timeElapsed = differenceInSeconds(new Date(), prevCodeSendTime);
@@ -65,23 +65,23 @@ const ResendCodeAction = ({ userEmail }: {userEmail: string}) => {
         <>
             {
                 timeToNextCodeSending === -1 ?
-                    <Skeleton 
+                    <Skeleton
                         height={'12px'}
                     />
                     :
                     <>
                         {
-                            timeToNextCodeSending !== 0 ? 
+                            timeToNextCodeSending !== 0 ?
                                 <div className={styles['helper-timer']}>
                                     <Info />
-                                    <span 
+                                    <span
                                         className={'caption-mini'}
                                     >
                                         {`Отправить код повторно через 00:${pad(timeToNextCodeSending, 2)}`}
                                     </span>
                                 </div>
                                 :
-                                <Button 
+                                <Button
                                     buttonStyle={'flat'}
                                     text={'Отправить код повторно'}
                                     className={'caption-mini'}

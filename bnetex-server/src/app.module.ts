@@ -19,6 +19,8 @@ import { InvestSession } from "./invest-sessions/invest-sessions.model";
 import { InvestTradingModule } from './invest-trading/invest-trading.module';
 import { Position } from "./positions/position.model";
 import { PositionEnters } from "./positions/positionEnters.model";
+import { GatewayModule } from "./gateway/gateway.module";
+import { SocketModule } from "./socket/socket.module";
 
 
 @Module({
@@ -36,7 +38,8 @@ import { PositionEnters } from "./positions/positionEnters.model";
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
             models: [User, Role, UserRoles, Request, InvestSession, Position, PositionEnters],
-            autoLoadModels: true
+            autoLoadModels: true,
+            logging: false
         }),
         MongooseModule.forRoot(`mongodb://127.0.0.1:27017/exchange`),
         UsersModule,
@@ -47,7 +50,9 @@ import { PositionEnters } from "./positions/positionEnters.model";
         MailSenderModule,
         PositionsModule,
         InvestSessionsModule,
-        InvestTradingModule
+        InvestTradingModule,
+        GatewayModule,
+        SocketModule
     ]
 })
 export class AppModule{};

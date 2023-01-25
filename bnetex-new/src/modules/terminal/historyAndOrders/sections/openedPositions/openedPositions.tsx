@@ -1,9 +1,10 @@
 import clsx from 'clsx';
+import { WebsocketContext } from '../../../../../context/WebsocketContext';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import CoinSymbol from 'modules/terminal/components/coinSymbol/coinSymbol';
 import { CoinSymbolProps } from 'modules/terminal/types/coinSymbol';
 import { Margin } from 'modules/terminal/types/margin';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { closeAllPositions } from 'services/trading/closeAllPositions';
 import { getUserPositions } from 'services/trading/getUserPositions';
@@ -31,6 +32,33 @@ const OpenedPositions = () => {
     const [data, setData] = useState<OpenedPosition[]>([]);
 
     const location = useLocation();
+
+    const socket = useContext(WebsocketContext);
+
+    useEffect(() => {
+        socket.on('connect', () => {
+            console.log('Connected!');
+        });
+
+        socket.on('currentPosition', (tradeInfo: any) => {
+            setData([{
+                amount: tradeInfo.volume,
+                entryPrice: tradeInfo.entryPrice,
+                markedPrice: tradeInfo.markPrice,
+                margin: {
+                    value: 0,
+                    type: "cross"
+                },
+                PNL: tradeInfo.userPnl,
+            }]);
+        });
+
+        return () => {
+            console.log('Unregistering Events...');
+            socket.off('connect');
+            socket.off('onMessage');
+        };
+    }, []);
 
     useEffect(() => {        
         if (location.pathname.split('/').pop() === "trader") {
@@ -136,7 +164,7 @@ const OpenedPositions = () => {
                                     {/* <SignedNumber
                                         value={position.amount}
                                     /> */}
-                                    {position.amount}
+                                    {(position.amount * 10).toFixed(2)}
                                 </td>
                                 <td className={styles['entry-price']}>
                                     <span className={clsx(
@@ -184,7 +212,7 @@ const OpenedPositions = () => {
                                         Маржа
                                     </span>
                                     <div className={styles['margin']}>
-                                        <span>{position.margin.value}</span>
+                                        <span>{position.amount}</span>
                                         <span>({evaluateMarginType(position.margin.type)})</span>
                                     </div>
                                 </td>
