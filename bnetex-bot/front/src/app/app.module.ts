@@ -35,6 +35,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { ActiveGroupsComponent } from './pages/patterns/active-groups/active-groups.component';
+import { RuleModalComponent } from './pages/patterns/active-groups/rule-modal/rule-modal.component';
 
 
 
@@ -47,7 +48,8 @@ registerLocaleData(ru);
     AddPairFormComponent,
     PatternsComponent,
     AddConditionModalComponent,
-    ActiveGroupsComponent
+    ActiveGroupsComponent,
+    RuleModalComponent
   ],
   imports: [
     BrowserModule,

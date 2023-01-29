@@ -1,0 +1,25 @@
+<form nz-form [nzLayout]="'inline'" [formGroup]="addForm" (ngSubmit)="submit()">    
+
+    <div class="form-control">
+        <input formControlName="priceDifferencePercent" nz-input name="priceDifferencePercent" type="number" id="priceDifferencePercent" placeholder="Indent Percent">
+    </div>
+
+    <div class="form-control">
+        <input formControlName="positionIndex" nz-input name="positionIndex" type="number" id="positionIndex" placeholder="Position Index">
+    </div>
+
+    
+
+    <div class="form-control">
+        <input formControlName="depositPercent" nz-input name="depositPercent" type="number" id="depositPercent" placeholder="Deposit Percent">
+    </div>
+
+    
+    
+    <div class="form-actions">
+        <div class="form-control">
+            <button nz-button type="submit" [nzLoading]="isConfirmLoading" nzType="primary">Add new</button>
+        </div>
+    </div>
+    
+  </form>

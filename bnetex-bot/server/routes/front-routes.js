@@ -10,6 +10,8 @@ const createConditionMySQL = require('../../instance/db/sequelize/actions/patter
 const removeConditionMySQL = require('../../instance/db/sequelize/actions/patterns/removeConditionMySQL');
 const getPattenrGroupsMySQL = require('../../instance/db/sequelize/actions/patterns/getPattenrGroupsMySQL');
 const createConditionGroupMySQL = require('../../instance/db/sequelize/actions/patterns/createConditionGroupMySQL');
+const removeRule = require('../../instance/utils/patterns/removeRule');
+const createRuleMySQL = require('../../instance/db/sequelize/actions/patterns/createRuleMySQL');
 const config = require('../../config/config')();
 
 var express = require("express"),
@@ -48,6 +50,24 @@ var express = require("express"),
     getPattenrGroupsMySQL(req.params.pattern).then(_ => {
       res.json(_  )
     })
+  })
+
+  router.post('/addRule', (req,res) => {
+    
+      createRuleMySQL(req.requestParams).then(e => {
+        res.status(200)
+        res.json({status: 'ok'})
+      })
+
+      
+  })
+
+  router.post('/removeRule', (req,res) => {
+    
+    removeRule(req.requestParams.id).then(e => {
+      res.json(e);
+    })    
+    
   })
 
   router.post('/addPairCondition', (req,res) => {

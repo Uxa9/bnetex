@@ -22,7 +22,7 @@ export class RestService {
       }, '');
   }
 
-  public url = 'http://bnetex:3009/front';
+  public url = 'http://bnetex.com:3009/front';
   
 
   constructor(

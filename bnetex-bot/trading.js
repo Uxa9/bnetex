@@ -11,6 +11,9 @@ const express = require('express')
 const app = express()
 const port = config.serverPort;
 
+const events = require('./instance/utils/events');
+
+
 app.use(cors())
 
 // Тут хранятся все экземпляры торговых классов
@@ -19,6 +22,8 @@ let pairInstances = [];
 const frontRoutes = require('./server/routes/front-routes');
 const paramsConverter = require("./server/routes/middlewares/paramsConverter");
 const socket = require("./server/socket/socket");
+const getPairsListMySQL = require("./instance/db/sequelize/actions/pairs/getPairsListMySQL");
+const TelegramBotClass = require("./instance/utils/telegram/bot");
 
 const server = require('http').createServer(app);
 
@@ -42,6 +47,29 @@ const server = require('http').createServer(app);
     app.use('/front', frontRoutes)
 
 
+    let pairs = await getPairsListMySQL()
+
+    
+
+    !config.serverOnly && pairs.filter(i => i.Status).map(i => i.Name).map(pair => {        
+
+        // Создаем экземпляр класса торговой пары
+        let instalceClass = new InstanceClass(pair);
+    
+        // Инициализация класса
+        instalceClass.initializing();
+    
+        // Сохранение класса
+        pairInstances.push(instalceClass);
+    })
+    
+
+    if (config.initTelgram) {
+        this.tgClass = new TelegramBotClass(config.tgBotKey);
+        this.tgClass.init();
+      }
+
+
     
 
 
@@ -50,17 +78,7 @@ const server = require('http').createServer(app);
 
 
 
-!config.serverOnly && config.tradingPairs.map(pair => {
 
-    // Создаем экземпляр класса торговой пары
-    let instalceClass = new InstanceClass(pair);
-
-    // Инициализация класса
-    instalceClass.initializing();
-
-    // Сохранение класса
-    pairInstances.push(instalceClass);
-})
 
 
 

@@ -46,8 +46,48 @@
               ></a>
             </div>
           </nz-list-item>
+
+        <nz-list-item>
+
+          <nz-table #basicTable [nzData]="sortByIndex(item.POSITION_RULEs)" [nzFrontPagination]="false">
+            <thead>
+              <tr>
+                <th>Отсуп</th>
+                <th>Индекс</th>
+                <th>% объема</th>   
+                <th></th>             
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of basicTable.data">
+                <td>{{data.priceDifferencePercent}}%</td>
+                <td>{{data.positionIndex}}</td>
+                <td>{{data.depositPercent}}%</td>
+                <td>                  
+                  <a
+                    nz-popconfirm
+                    nzPopconfirmTitle="Are you sure delete this rule?"
+                    nzPopconfirmPlacement="bottom"
+                    class="hover-pointer"
+                    (nzOnConfirm)="removeRule(data.id)"                  
+                    ><span
+                      nz-icon
+                      nzType="delete"
+                      nzTheme="outline"                    
+                    ></span
+                  ></a>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </nz-list-item>
+          
+          
+          
           <nz-list-footer>
             <a (click)="openConditionModal(item.id)">Add Condition</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a (click)="openRuleModal(item.id)">Add Rule</a>
             
           </nz-list-footer>
       </nz-list>

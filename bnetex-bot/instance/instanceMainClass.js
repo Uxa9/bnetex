@@ -23,6 +23,10 @@ const { sendMessageToMainChanel } = require("./utils/telegram/tg");
 const TelegramBotClass = require("./utils/telegram/bot");
 const { tg } = require("./utils/telegram/axios");
 
+const tgEvents = require('./utils/events').tgEvents
+
+const { Observable } = require("rxjs");
+
 const { Telegraf } = require("telegraf");
 const binance = require("./utils/binance");
 const {
@@ -55,6 +59,7 @@ module.exports = class InstanceClass {
     this.candlesticks_15m = undefined;
 
     this.tradingTimeframes = config.tradingTimeframes;
+    
 
     this.klinesHandler = this.klinesHandler.bind(this);
 
@@ -172,20 +177,15 @@ module.exports = class InstanceClass {
       this.candlesticks.push(candlesticks[candlesticks.length - 1]);
     }
 
-    //console.log('Times \b'.red)
-
-    //console.log({CalcBollingerComplexTime, CalcPrevZoneTime, CalcZonesByBBTime, iteration})
-
-    //console.log({allTime: CalcBollingerComplexTime + CalcPrevZoneTime + CalcZonesByBBTime})
+    
 
     await this.ProbabilityAction();
-    //simulateEventer.emit('callNextCandle', this.candlesticks[this.candlesticks.length-1])
+    
   }
 
   // Метод для оценки текущей ситуации
   async ProbabilityAction() {
-    //console.log('Decide to trade');
-
+    
     let lastKline = this.candlesticks[this.candlesticks.length - 1];
 
     let CLEAN__SIGNAL = firstPositiveCandleAfterBollinger(this.candlesticks);
@@ -205,9 +205,6 @@ module.exports = class InstanceClass {
       
     }
 
-
-    console.log({signalToOpen})
-
     // Если мы ждем первую зеленую и она первая, то не ждем
     if (this.waitingForFirstGreen.wait && CLEAN__SIGNAL) {      
       
@@ -220,6 +217,8 @@ module.exports = class InstanceClass {
     }
 
     //if(lastKline.startTime > 1668070800000) return;
+    
+    tgEvents.emit('updateKline', lastKline);
 
     // Если симулятор. говорим об оконцамии обработки свечи
     if (config.simulate) {
@@ -358,9 +357,6 @@ module.exports = class InstanceClass {
       });
     }
 
-    if (config.initTelgram) {
-      this.tgClass = new TelegramBotClass(config.tgBotKey, this.candlesticks);
-      this.tgClass.init();
-    }
+    
   }
 };

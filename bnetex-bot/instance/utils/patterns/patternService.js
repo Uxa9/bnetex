@@ -16,7 +16,7 @@ const { sendMessageToMainChanel } = require("../telegram/tg");
 
 const log = require('log-to-file');
 
-let savedPatterns = undefined;
+let savedPatterns = {};
 
 module.exports = {
   tradingPatternsChecker: async (intervalsData, pair) => {
@@ -25,14 +25,14 @@ module.exports = {
 
 
     // Т.к паттерны всегда одинаковые, просто записываем их в память, а то MySQL 0.3 секунды их возвращает
-    if (savedPatterns === undefined) {
-      patterns = await getPatterntMySQL();
-      savedPatterns = patterns;
+    if (!savedPatterns[pair]) {
+      patterns = await getPatterntMySQL(null, pair);
+      savedPatterns[pair] = patterns;
     } else {
-      patterns = savedPatterns;
+      patterns = savedPatterns[pair];
     }
 
-    //console.log({intervalsData})
+    console.log('PL: ',patterns.length, ` PAIR: ${pair}`)
 
     for (let index = 0; index < patterns.length; index++) {
       const element = patterns[index];
@@ -95,13 +95,13 @@ module.exports = {
     }
   },
 
-  checkPatternToOpen: async (intervalsData, log = false) => {
+  checkPatternToOpen: async (intervalsData, pair) => {
     // return {
     //     signal: true,
     //     pattern: 70
     // }
 
-    let patterns = await getPatterntMySQL({ status: true });
+    let patterns = await getPatterntMySQL({ status: true }, pair);
 
     let patternsToOpen = [];
 

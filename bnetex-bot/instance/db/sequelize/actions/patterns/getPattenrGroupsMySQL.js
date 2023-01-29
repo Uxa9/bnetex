@@ -6,7 +6,11 @@ module.exports = async (pattern) => {
         PATTERNId : pattern
     }, include: [
         {
-            model: db.models.ActiveGroupTriggers
+            model: db.models.ActiveGroupTriggers,
+            
+        },
+        {
+            model: db.models.Rules
         }
     ]})
 }

@@ -33,9 +33,27 @@ export class ActiveGroupsComponent {
     })
   }
 
+  public openRuleModal(id: number){
+    this.pairs.addRuleModal(id).then(e => {
+      this.getPatternsGroups();
+    })
+  }
+
   public removeCondition(id:number){
     this.isLoading = true;
     this.pairs.removePairCondition(id, true).subscribe(_ => {
+      this.isLoading = false;
+      this.getPatternsGroups();
+    })
+  }
+
+  public sortByIndex(arr: any[]){
+    return arr;
+  }
+
+  public removeRule(id: number){
+    this.isLoading = true;
+    this.pairs.removeRule(id).subscribe(_ => {
       this.isLoading = false;
       this.getPatternsGroups();
     })

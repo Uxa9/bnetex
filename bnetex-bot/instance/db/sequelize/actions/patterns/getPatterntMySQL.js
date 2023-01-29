@@ -1,7 +1,21 @@
 const db = require("../../dbseq")
+const getPairsListMySQL = require("../pairs/getPairsListMySQL")
 
 
-module.exports = async (where) => {
+module.exports = async (where, pair) => {
+
+    if(!where) where = {};
+
+    if(pair){
+
+        let pairs = await getPairsListMySQL();
+
+        if(pairs.filter(i => i.Name == pair).length > 0){
+            where['TRADINGPAIRId'] = pairs.filter(i => i.Name == pair)[0].id
+        }
+
+        
+    }
     
     return await db.models.Pattern.findAll({
         include: [
