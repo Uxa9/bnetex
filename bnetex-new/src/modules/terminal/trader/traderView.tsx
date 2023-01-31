@@ -11,6 +11,7 @@ import { sendFuturesOrder } from 'services/trading/sendFuturesOrder';
 import {getCurrentLeverageAndIsolated} from '../../../services/trading/getCurrentLeverageAndIsolated';
 import axios from 'axios';
 import { convertPricesByTick } from './convertPricesByTick';
+import { getUserPositions } from 'services/trading/getUserPositions';
 
 type TraderViewType = 'limit' | 'tpsl';
 type TraderSumType  = 'exactSum' | 'percent';
@@ -34,6 +35,9 @@ const TradeView = () => {
     const [orderBookSnapshot, setOrderBookSnapshot] = useState<any[]>([]);
     const [orderBookStep, setOrderBookStep] = useState<number>(0.1);
     const refSnapshot = useRef<NodeJS.Timeout | null>(null);
+
+    const [currentPrice, setCurrentPrice] = useState<any>(0);
+    const [entryPrice, setEntryPrice] = useState<any>(0);
 
     const { open: OpenMarginModal } = useModal(MarginPopUp);
     const { open: OpenLeverModal } = useModal(LeverPopUp);
@@ -66,6 +70,9 @@ const TradeView = () => {
             price: price,
             amount: amount,
             tif: tif || 'GTC',
+        }).then((res) => {
+            console.log(res);
+            
         });
     };
 
@@ -108,14 +115,35 @@ const TradeView = () => {
                 setIsolated(true);
             });
 
+            const getUserP = async () => {
+                const res = await getUserPositions();
+                // console.log(res);
+                
+                // console.log(res.data);
+
+                // const btcPosition = res.data.inf.find((item: any) => item.symbol === "BTCUSDT");
+
+                const { inf } = res.data;
+
+                // console.log(inf);
+                
+                // if (Number(inf.positionAmt) === 0) return;
+
+                // console.log(data);
+                setEntryPrice(inf.entryPrice);                
+            }
+
+            setInterval(getUserP, 1000);
+
         const orderBookSocket = new WebSocket('wss://fstream.binance.com/stream?streams=btcusdt@depth20');
         const btcPrice = new WebSocket('wss://stream.binance.com/stream?streams=btcusdt@miniTicker');
 
         orderBookSocket.onmessage = (event) => {
             const { a, b } = JSON.parse(event.data).data;
 
-            setWsOrderBook(a.concat(b));
-        };
+            setWsOrderBook(a.reverse().concat(b));
+            
+        };        
 
         //     const getOrderBookSnapshot = async () => {
         //         const res = await axios.get('https://fapi.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=1000');
@@ -236,7 +264,7 @@ const TradeView = () => {
 
             smallData = convertPricesByTick(smallData, tick);
         }
-        console.log(smallData);
+        // console.log(smallData);
 
         smallData.map((item: any[]) => {
             const i = bigData.findIndex((bigDataItem: any[]) => bigDataItem[0] === item[0]);
@@ -246,24 +274,27 @@ const TradeView = () => {
             }
         });
 
+        if (smallData.length > 0) {
+            setCurrentPrice(Number(smallData[19][0]));        
+        }
 
         setOrderBook(bigData);
     }, [orderBookSnapshot, wsOrderBook, orderBookStep]);
     // }, [orderBookSnapshot, wsOrderBook])
 
     const renderTradeCup = (length: number) => {
-        const tradeCupArr = wsOrderBook.slice(wsOrderBook.length/2 - length, wsOrderBook.length/2 + length).reverse();
-        console.log(tradeCupArr);
+        const tradeCupArr = wsOrderBook.slice(wsOrderBook.length/2 - length, wsOrderBook.length/2 + length);
+        // console.log(tradeCupArr);
 
         const maxVolume = Math.max(...tradeCupArr.map((item: string[]) => parseFloat(item[1])));
 
-        console.log(maxVolume);
+        // console.log(maxVolume);
 
         return tradeCupArr.map((item: any[], index: any) => {
 
             const parseBgColor = () => {
 
-                const percent = item[1]/ maxVolume * 100;
+                const percent = item[1]/ maxVolume * 100;             
 
                 const greenColor = () => {
 
@@ -283,7 +314,7 @@ const TradeView = () => {
                     return '#8D0B0B';
                 };
 
-                if (index < tradeCupArr.length / 2 - 1) {
+                if (index > tradeCupArr.length / 2) {
 
                     let color = greenColor();
 
@@ -291,7 +322,7 @@ const TradeView = () => {
                         background: `linear-gradient(90deg, ${color} 0%, ${color} ${item[1]/ maxVolume * 100}%, #00000000 ${item[1]/ maxVolume * 100}%)`,
                     };
                 }
-                if (index > tradeCupArr.length / 2) {
+                if (index < tradeCupArr.length / 2 - 1) {
 
                     let color = redColor();
 
@@ -302,6 +333,48 @@ const TradeView = () => {
 
                 return {};
             };
+
+            
+            const greaterCheck = Number(entryPrice) > Number(item[0]);
+
+            const parsePrice = () => {
+                // console.log(entryPrice);
+                // console.log(Number(item[0]));                
+                // console.log(greaterCheck);
+
+                if (Number(entryPrice) !== 0) {
+                    if (greaterCheck) {
+                        if (index < tradeCupArr.length / 2) {
+                            return {
+                                // red
+                                background: '#EC1313',
+                                paddingLeft: '10px'
+                            }
+                        }
+                        return {}
+                    } else {
+                        if (index > tradeCupArr.length / 2 - 1) {
+                            return {
+                                // green
+                                background: '#17CE1F',
+                                paddingLeft: '10px'
+                            }
+                        }
+                        return {}
+                    }
+                    // else if (index > tradeCupArr.length / 2) {
+                    //     return {}
+                    // } else {
+                    //     return {
+                    //         // green
+                    //         background: '#17CE1F',
+                    //         paddingLeft: '10px'
+                    //     }
+                    // }
+                } else {
+                    return {}              
+                }                
+            }
 
             return (
                 <div
@@ -314,7 +387,9 @@ const TradeView = () => {
                     <span>
                         {Number(item[1]).toFixed(4)}
                     </span>
-                    <span>
+                    <span
+                        style={parsePrice()} 
+                    >
                         {item[0]}
                     </span>
                 </div>
@@ -329,6 +404,7 @@ const TradeView = () => {
             <div
                 className={clsx('card', styles['cup'])}
             >
+                {entryPrice}
                 {/* <ToggleButtonGroup
                     title={''}
                     name={'cup_step'}

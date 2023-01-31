@@ -40,7 +40,7 @@ const OpenedPositions = () => {
             console.log('Connected!');
         });
 
-        socket.on('currentPosition', (tradeInfo: any) => {
+        socket.on('currentPosition', (tradeInfo: any) => {  
             setData([{
                 amount: tradeInfo.volume,
                 entryPrice: tradeInfo.entryPrice,
@@ -64,7 +64,8 @@ const OpenedPositions = () => {
         if (location.pathname.split('/').pop() === "trader") {
             const getUserP = async () => {
                 const res = await getUserPositions();
-
+                // console.log(res);
+                
                 // console.log(res.data);
 
                 // const btcPosition = res.data.inf.find((item: any) => item.symbol === "BTCUSDT");
@@ -96,7 +97,7 @@ const OpenedPositions = () => {
 
     useEffect(() => {
         getUserOpenPosition()
-            .then((res) => {
+            .then((res) => {                
                 setData(res.data);
             });
     }, [ /* тут нада из стейта брать в работе или не в работе */]);

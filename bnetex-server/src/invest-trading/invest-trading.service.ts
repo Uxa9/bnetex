@@ -15,8 +15,8 @@ export class InvestTradingService {
         
         // get user keys
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
+            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
         });
 
         const result = await client.getBalance();
@@ -29,8 +29,8 @@ export class InvestTradingService {
 
         // get user keys
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
+            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
         });
 
         const info = await client.getAccountInformation();
@@ -46,8 +46,8 @@ export class InvestTradingService {
     async placeOrder(params: any) {
 
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
+            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
         });
 
         const assetPrices = await client.getMarkPrice({
@@ -81,14 +81,14 @@ export class InvestTradingService {
                     type: params.type,
                     price: params.price,
                     timeInForce: params.tif || "GTC",
-                    quantity: Number((params.amount / params.price).toFixed(3)),
+                    quantity: Number((params.amount / params.price).toFixed(3))
                 });
             }
 
             return;
         }
         catch (e) {
-            throw e;
+            return e;
         }
     }
 
@@ -96,8 +96,8 @@ export class InvestTradingService {
         // const user = this.userService.getUserById(id);
 
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
+            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
         });
 
         return await client.getNotionalAndLeverageBrackets({
@@ -109,8 +109,8 @@ export class InvestTradingService {
         // const user = this.userService.getUserById(params.id);
         
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
+            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
         });
 
         return await client.setLeverage({
@@ -121,8 +121,8 @@ export class InvestTradingService {
 
     async getUserPositions(id: number) {
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
+            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
         });
 
         // const a = await client.getAccountInformation()
@@ -151,8 +151,8 @@ export class InvestTradingService {
 
     async closeAllPositions(id: number) {
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
+            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
         });
 
         const positions = await client.getPositions();
@@ -179,8 +179,8 @@ export class InvestTradingService {
 
     async test() {
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
+            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
         });
 
         return Promise.all([
