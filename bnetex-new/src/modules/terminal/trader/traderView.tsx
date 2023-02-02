@@ -12,6 +12,7 @@ import {getCurrentLeverageAndIsolated} from '../../../services/trading/getCurren
 import axios from 'axios';
 import { convertPricesByTick } from './convertPricesByTick';
 import { getUserPositions } from 'services/trading/getUserPositions';
+import { useToast } from 'lib/hooks/useToast';
 
 type TraderViewType = 'limit' | 'tpsl';
 type TraderSumType  = 'exactSum' | 'percent';
@@ -45,6 +46,7 @@ const TradeView = () => {
     const [tradeType, setTradeType] = useState('BUY');
     const [amount, setAmount] = useState(0);
     const [btcprice, setBtcprice] = useState(0);
+    const { bakeToast } = useToast();
 
     const sendOrder = (type: string) => {
         if (limitPrice !== 0) {
@@ -63,16 +65,25 @@ const TradeView = () => {
         }
     };
 
-    const sendLimitOrder = (price: number, tif?: string) => {
+    const sendLimitOrder = (price: number, tradeType?: string, tif?: string) => {       
+
+        if (amount === 0) bakeToast.error("Объем должен быть больше 0");
+
         sendFuturesOrder({
-            side: tradeType,
-            type: 'LIMIT',
+            side: tradeType || "BUY",
+            type: 'MARKET',
             price: price,
             amount: amount,
             tif: tif || 'GTC',
         }).then((res) => {
-            console.log(res);
-            
+            if (res.data === "") {
+                tradeType === "BUY" ?
+                    bakeToast.success("Ордер на покупку выполнен") :
+                    bakeToast.success("Ордер на продажу выполнен");
+            } else {
+                console.log(res);
+                bakeToast.error("Ошибка");
+            }         
         });
     };
 
@@ -94,10 +105,6 @@ const TradeView = () => {
 
         setOrderBookSnapshot(convertedAsks.concat(convertedBids));
     };
-
-    const convertPricesByStep = useCallback(() => {
-        const tick = parseInt((orderBookStep / 0.1).toFixed(2), 10);
-    }, [orderBookStep]);
 
     useEffect(() => {
         getUserFuturesWallet()
@@ -143,56 +150,7 @@ const TradeView = () => {
 
             setWsOrderBook(a.reverse().concat(b));
             
-        };        
-
-        //     const getOrderBookSnapshot = async () => {
-        //         const res = await axios.get('https://fapi.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=1000');
-
-        //         // console.log(res.data);
-        //         // console.log([...res.data.asks.reverse(), ...res.data.bids]);
-        // // console.log(orderBookStep);
-
-        //         const tick = parseInt((orderBookStep / 0.1).toFixed(2));
-
-        //         const a = res.data.asks.reverse();
-        //         const b = res.data.bids;
-
-        //         let snapShotArr = [];
-
-        //         if (orderBookStep >= 1) {
-        //             // console.log(a);
-        //             for (let i = 0; i < a.length; i+=tick) {
-
-        //                 const piece = a.slice(i, tick+i);
-
-        //                 // const sum = piece.reduce()
-        //                 const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);
-        //                 // console.log(sum);
-        //                 // console.log(piece);
-        //                 // console.log(i);
-
-        //                 // console.log(piece.pop()[0]);
-
-        //                 snapShotArr.push([(Math.ceil(piece.pop()[0] / orderBookStep) * orderBookStep).toFixed(2), sum.toString()]);
-        //             }
-
-        //             for (let i = 0; i < b.length; i+=tick) {
-        //                 const piece = b.slice(i, tick+i);
-
-        //                 const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);
-        //                 snapShotArr.push([(Math.ceil(piece.pop()[0] / orderBookStep) * orderBookStep).toFixed(2), sum.toString()]);
-        //             }
-        //         } else {
-        //             snapShotArr = [ ...a, ...b ];
-        //         }
-        //         console.log(snapShotArr);
-
-        //         setOrderBookSnapshot(snapShotArr);
-        //         // orderBookSnapshot = snapShotArr;
-        // // console.log(orderBookSnapshot);
-
-        //         // setOrderBookSnapshot([...res.data.asks.reverse(), ...res.data.bids]);
-        //     }
+        };
 
         btcPrice.onmessage = (event) => {
             // console.log(JSON.parse(event.data));
@@ -204,14 +162,6 @@ const TradeView = () => {
             // setOrderBook([...data.b, ...data.a]);
         };
 
-        const getUserLever = async () => {
-            const res = await getCurrentLeverageAndIsolated();
-
-            setLeverage(res.data.leverage);
-            setIsolated(res.data.isolated);
-        };
-
-        // const interval = setInterval(getUserLever, 1000);
         refSnapshot.current = setInterval(getOrderBookSnapshot, 1000);
 
         return () => {
@@ -223,6 +173,7 @@ const TradeView = () => {
         };
     }, []);
 
+    // Расчет цены ликвидации
     useEffect(() => {
         const nominalMargin = btcprice / leverage;
 
@@ -259,12 +210,12 @@ const TradeView = () => {
         const bigData = orderBookSnapshot;
         let smallData = wsOrderBook;
 
+        console.log(smallData);
         if (orderBookStep !== 0.1) {
             const tick = parseInt((orderBookStep / 0.1).toFixed(2), 10);
 
             smallData = convertPricesByTick(smallData, tick);
         }
-        // console.log(smallData);
 
         smallData.map((item: any[]) => {
             const i = bigData.findIndex((bigDataItem: any[]) => bigDataItem[0] === item[0]);
@@ -380,7 +331,9 @@ const TradeView = () => {
                 <div
                     className={clsx(styles['cup-position'])}
                     onClick={() => {
-                        sendLimitOrder(Number(item[0]), 'FOK');
+                        index < tradeCupArr.length / 2 ?
+                            sendLimitOrder(Number(item[0]), "BUY" ,'FOK') :
+                            sendLimitOrder(Number(item[0]), "SELL" ,'FOK');
                     }}
                     style={parseBgColor()}
                 >

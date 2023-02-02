@@ -82,6 +82,8 @@ export class InvestTradingService {
                     price: params.price,
                     timeInForce: params.tif || "GTC",
                     quantity: Number((params.amount / params.price).toFixed(3))
+                }).catch((e) => {
+                    return e;
                 });
             }
 
