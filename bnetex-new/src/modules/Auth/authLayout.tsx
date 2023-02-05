@@ -7,15 +7,15 @@ import FormCardSkeleton from './components/FormCard/formCardSkeleton';
 import { AppLinksEnum } from 'routes/appLinks';
 import Blur, { BlurProps } from 'modules/Global/components/blurredBackgroundItem';
 
-const Login = lazy(() => import('modules/Auth/sections/login'));
-const Registration = lazy(() => import('modules/Auth/sections/registration'));
-const RegistrationFinalize = lazy(() => import('modules/Auth/sections/registrationFinalize'));
+const Login = lazy(() => import('modules/Auth/sections/Login'));
+const Registration = lazy(() => import('modules/Auth/sections/Registration'));
+const RegistrationFinalize = lazy(() => import('modules/Auth/sections/RegistrationFinalize'));
 const EmailValidation = lazy(() => import('modules/Auth/sections/emailValidation'));
 
 const AuthLayout = () => {
     const { pathname } = useLocation();
 
-    const { REGISTRATION, LOGIN, AUTH, REGISTRATION_FINALIZE, VERIFY_EMAIL, 
+    const { REGISTRATION, LOGIN, AUTH, REGISTRATION_FINALIZE, VERIFY_EMAIL,
         RECOVER_PASSWORD_REQUEST, CHANGE_PASSWORD } = AppLinksEnum;
 
     const loadSection = useCallback(() => {
@@ -44,10 +44,10 @@ const AuthLayout = () => {
         <main className={styles.layout}>
             <div className={styles.container}>
                 {
-                    authBlurItems.map((item: BlurProps, index: number) => 
-                        <Blur 
+                    authBlurItems.map((item: BlurProps, index: number) =>
+                        <Blur
                             key={index}
-                            {...item} 
+                            {...item}
                         />
                     )
                 }

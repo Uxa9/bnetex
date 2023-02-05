@@ -6,11 +6,11 @@ import AppLoader from 'modules/Global/components/appLoader/appLoader';
 import { ProtectedRoute } from './protectedRoute';
 import Page404 from 'modules/Global/pages/404/page404';
 import EmailValidation from 'modules/Auth/sections/emailValidation';
-import RegistrationFinalize from 'modules/Auth/sections/registrationFinalize';
+import RegistrationFinalize from 'modules/Auth/sections/RegistrationFinalize';
 import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import { verifyToken } from 'store/action-creators/auth';
 
-const MainPage = lazy(() => import('modules/MainPage/MainPage'));
+const LandingPage = lazy(() => import('modules/Landing/LandingPage'));
 const AuthLayout = lazy(() => import('modules/Auth/authLayout'));
 const Dashboard = lazy(() => import('modules/Dashboard/dashboard'));
 const Deposit = lazy(() => import('modules/Payments/Deposit/deposit'));
@@ -34,13 +34,13 @@ const AppRoutes = () => {
             <Routes>
                 <Route element={<PageLayout />}>
                     <Route index element={<Navigate to={HOME} />} />
-                    <Route path={HOME} element={<MainPage />}></Route>
+                    <Route path={HOME} element={<LandingPage />}></Route>
                     <Route path={TERMINAL} element={<TerminalLayout />}>
                         <Route path="investor" element={<InvestorView />} />
                         <Route path="trader" element={<TradeView />} />
                     </Route>
-                    <Route 
-                        path={`${DASHBOARD}/*`} 
+                    <Route
+                        path={`${DASHBOARD}/*`}
                         element={
                             <ProtectedRoute>
                                 <Dashboard />
