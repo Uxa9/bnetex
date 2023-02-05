@@ -4,15 +4,15 @@ import { useEffect, useState } from 'react';
 import DynamicColumn from './dynamicColumn';
 import styles from './dynamicGrid.module.scss';
 
-const MIN_COLUMN_WIDTH = 76;
-const MIN_DOT_SIZE = 76;
-
 const DynamicGrid = () => {
 
     const headerHeight = getCssVariable('HEADER_HEIGHT');
+    const laptopBp = getCssVariable('LAPTOP_BP');
+    const mobileBp = getCssVariable('MOBILE_BP');
 
     const [columnQuantity, setColumnQuantity] = useState<number>(0);
     const [dotQuantity, setDotQuantity] = useState<number>(0);
+    const [waveLength, setWaveLength] = useState<number>(getWaveProperties()[1]);
 
     useEffect(() => {
         window.addEventListener('resize', onWindowResize);
@@ -24,11 +24,28 @@ const DynamicGrid = () => {
     }, []);
 
     const onWindowResize = () => {
-        const maxColumns = Math.floor(window.innerWidth / MIN_COLUMN_WIDTH);
-        const maxDots = Math.floor((window.innerHeight - headerHeight) / MIN_DOT_SIZE);
+        const [ dotContainerSize, _waveLenght ] = getWaveProperties();
 
+        const maxColumns = Math.floor(window.innerWidth / dotContainerSize);
+        const maxDots = Math.floor((window.innerHeight - headerHeight) / dotContainerSize);
+
+        setWaveLength(_waveLenght);
         setColumnQuantity(maxColumns);
         setDotQuantity(maxDots);
+    };
+
+    function getWaveProperties() {
+        switch (true) {
+            case window.innerWidth <= mobileBp: {
+                return [30, 7];
+            }
+            case window.innerWidth <= laptopBp: {
+                return [40, 9];
+            }
+            default: {
+                return [76, 11];
+            }
+        }
     };
 
     return (
@@ -39,9 +56,8 @@ const DynamicGrid = () => {
                         dotQuantity={dotQuantity}
                         columnQuantity={columnQuantity}
                         columnIndex={index}
-                        waveScale={1.1}
-                        waveLenght={11}
-                        columnAnimationTime={220}
+                        waveScale={1.07}
+                        waveLenght={waveLength}
                     />
                 )
             }

@@ -10,10 +10,10 @@ interface DynamicColumnProps {
     columnIndex: number;
     waveScale?: number;
     waveLenght?: number;
-    columnAnimationTime?: number;
+    waveIteration?: number;
 }
 
-const DEFAULT_COLUMN_ANIMATION_TIME = 250;
+const DEFAULT_WAVE_ITERATION = 2000;
 const DEFAULT_WAVE_LENGHT = 5;
 
 const DynamicColumn = ({
@@ -22,7 +22,7 @@ const DynamicColumn = ({
     columnIndex,
     waveScale = 1.1,
     waveLenght = DEFAULT_WAVE_LENGHT,
-    columnAnimationTime = DEFAULT_COLUMN_ANIMATION_TIME,
+    waveIteration = DEFAULT_WAVE_ITERATION,
 }: DynamicColumnProps) => {
 
     const columnRef = useRef<HTMLDivElement | null>(null);
@@ -30,12 +30,13 @@ const DynamicColumn = ({
     const animationDelayRef = useRef<NodeJS.Timeout | null>(null);
 
     const animationProperties: ColumnAnimationProperties = useMemo(() => {
+        const columnAnimationTime = waveIteration / waveLenght;
         return {
-            waveIteration: waveLenght * columnAnimationTime,
+            waveIteration: waveIteration,
             totalAnimationTime: columnAnimationTime * columnQuantity,
             columnIterationDelay: columnAnimationTime * columnIndex,
         };
-    }, [ waveLenght, columnAnimationTime, columnQuantity, columnIndex ]);
+    }, [ waveLenght, waveIteration, columnQuantity, columnIndex ]);
 
     const { columnAnimation, dotAnimation } = useDynamicGridAnimation(waveScale);
 

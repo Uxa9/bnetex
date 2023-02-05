@@ -8,8 +8,3 @@ export type ColumnAnimationProperties = {
     totalAnimationTime: number;
     columnIterationDelay: number;
 }
-
-export type DynamicGridCellDimensions = {
-    width: number;
-    height: number;
-}
