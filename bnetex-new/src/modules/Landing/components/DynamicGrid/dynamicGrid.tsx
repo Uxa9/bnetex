@@ -34,6 +34,7 @@ const DynamicGrid = () => {
         setDotQuantity(maxDots);
     };
 
+    // toDo: typings
     function getWaveProperties() {
         switch (true) {
             case window.innerWidth <= mobileBp: {
@@ -53,6 +54,7 @@ const DynamicGrid = () => {
             {
                 createDummyArray(columnQuantity).map((_it, index) =>
                     <DynamicColumn
+                        key={index}
                         dotQuantity={dotQuantity}
                         columnQuantity={columnQuantity}
                         columnIndex={index}

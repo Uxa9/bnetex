@@ -77,7 +77,6 @@ const DynamicColumn = ({
     return (
         <div
             className={styles['column']}
-            key={columnIndex}
             ref={columnRef}
         >
             {

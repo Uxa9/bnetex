@@ -5,6 +5,8 @@ import { useTheme } from 'lib/hooks/useTheme';
 
 const useDynamicGridAnimation = (columnScaleCoefficient: number): DynamicGridAnimation => {
 
+    //toDo: разделить на два хука, чтобы избежать двойного обновления
+
     const { theme } = useTheme();
     const [dotAnimation, setDotAnimation] = useState<Keyframe[]>([]);
 

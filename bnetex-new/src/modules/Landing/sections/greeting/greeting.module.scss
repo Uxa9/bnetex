@@ -1,0 +1,54 @@
+@import 'styles/mixins';
+
+.container {
+  display: grid;
+  place-items: center;
+
+  .wrapper {
+    @include column-flex-center(72px);
+  }
+
+  h1 {
+    @include column-flex;
+
+    width: 100%;
+    font-size: clamp(24px, calc(4 * (1vw + 1vh)), 96px);
+
+    @include max-width($laptop-bp) {
+      font-size: clamp(24px, calc(2.85 * (1vw + 1vh)), 96px);
+    }
+
+    @include mobile {
+      font-size: clamp(24px, calc(2.3 * (1vw + 1vh)), 96px);
+    }
+
+    span {
+      &:nth-child(2) {
+        align-self: flex-end;
+      }
+      &:nth-child(3) {
+        background-image: linear-gradient(to right, $blue-3, 10%, $accent-3);
+        color: transparent;
+        background-clip: text;
+        padding-right: 64px;
+
+        @include mobile {
+          padding-right: 32px;
+        }
+      }
+    }
+  }
+
+  .actions {
+    @include align-center-row-flex(48px);
+
+    @include max-width($laptop-bp) {
+      column-gap: 32px;
+    }
+
+    @include mobile {
+      flex-direction: column;
+      row-gap: 24px;
+    }
+  }
+}

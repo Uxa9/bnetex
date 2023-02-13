@@ -35,3 +35,4 @@ export {ReactComponent as History} from './uil_history.svg';
 export {ReactComponent as Coins} from './uil_coins.svg';
 export {ReactComponent as Bitcoin} from './uil_bitcoin.svg';
 export {ReactComponent as Power} from './uil_power.svg';
+export {ReactComponent as Play} from './uil_play-circle.svg';
