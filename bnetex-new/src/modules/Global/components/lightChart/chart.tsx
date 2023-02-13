@@ -1,5 +1,5 @@
 import styles from './chart.module.scss';
-import { createChart, IChartApi, ISeriesApi, SingleValueData } from 'lightweight-charts';
+import { ColorType, createChart, IChartApi, ISeriesApi, SingleValueData } from 'lightweight-charts';
 import { useEffect, useRef, useState } from 'react';
 import { Switch, ToolTip } from 'lib/ui-kit';
 import { useTheme } from 'lib/hooks/useTheme';
@@ -12,11 +12,12 @@ interface ChartProps {
     type: 'ROE' | 'PNL';
     className?: string;
     loading: boolean;
+    comissionSwitch?: boolean;
 }
 
 const ALGORYTHM_COMISSION = 0.5;
 
-const Chart = ({ data, type, className, loading }: ChartProps) => {
+const Chart = ({ data, type, className, loading, comissionSwitch = true }: ChartProps) => {
 
     const chartRef = useRef<HTMLDivElement | null>(null);
     const [chartBase, setChartBase] = useState<IChartApi | null>(null);
@@ -78,7 +79,7 @@ const Chart = ({ data, type, className, loading }: ChartProps) => {
         chartBase?.applyOptions({
             layout: {
                 textColor: colors.grayscale[11],
-                backgroundColor: '#00000000',
+                background: {type: ColorType.Solid, color: '#00000000'},
             },
         });
 
@@ -95,6 +96,8 @@ const Chart = ({ data, type, className, loading }: ChartProps) => {
         lineChart.setData(withComission ?
             data.map(item => {return{...item, value: item.value * ALGORYTHM_COMISSION};}) :
             data);
+
+        chartBase?.timeScale().fitContent();
     }, [ data, withComission ]);
 
     // Ресайз
@@ -106,6 +109,7 @@ const Chart = ({ data, type, className, loading }: ChartProps) => {
                 const { width } = entry.contentRect;
 
                 chartBase?.applyOptions({width: width});
+                chartBase?.timeScale().fitContent();
             }
         });
 
@@ -131,7 +135,7 @@ const Chart = ({ data, type, className, loading }: ChartProps) => {
                         />
                 }
                 {
-                    !!data.length && !loading &&
+                    !!data.length && !loading && comissionSwitch &&
                     <div className={styles['comission-block']}>
                         <ToolTip
                             title={'С комиссией'}
