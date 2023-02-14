@@ -51,7 +51,7 @@ export class InvestTradingService {
         });
 
         const assetPrices = await client.getMarkPrice({
-            symbol: "BTCUSDT"
+            symbol: params.pair
         });
 
         let markPrice = 0;
@@ -67,7 +67,7 @@ export class InvestTradingService {
         try {
             if (params.type === "MARKET") {
                 await client.submitNewOrder({
-                    symbol: "BTCUSDT",
+                    symbol: params.pair,
                     side: params.side,
                     type: params.type,
                     quantity: Number(amount.toFixed(3)),
@@ -76,7 +76,7 @@ export class InvestTradingService {
 
             if (params.type === "LIMIT") {
                 await client.submitNewOrder({
-                    symbol: "BTCUSDT",
+                    symbol: params.pair,
                     side: params.side,
                     type: params.type,
                     price: params.price,
@@ -138,15 +138,15 @@ export class InvestTradingService {
             client.getAccountInformation()
         ]).then(([/*orders,*/ positions, info]) => {     
             // console.log(info);
-            const pos = positions.filter(item => item.symbol === "BTCUSDT");
-            const inf = info.positions.filter(item => item.symbol === "BTCUSDT");
+            const pos = positions.filter(item => item.entryPrice !== '0.0');
+            const inf = info.positions.filter(item => item.entryPrice !== '0.0');
             // console.log(pos);
             // console.log(inf);
             
             return {
                 // orders,
-                pos : pos[0],
-                inf : inf[0]
+                pos,
+                inf
             }
         });
     }
@@ -159,24 +159,27 @@ export class InvestTradingService {
 
         const positions = await client.getPositions();
 
-        const amount = Number(positions.find(item => item.symbol === "BTCUSDT").positionAmt);
+        positions.map(async (item) => {
+            const amount = Number(item.positionAmt);
 
-        if ( amount > 0) {
-            await client.submitNewOrder({
-                symbol: "BTCUSDT",
-                side: "SELL",
-                type: "MARKET",
-                quantity: amount,
-            });
-        } else {
-                        
-            await client.submitNewOrder({
-                symbol: "BTCUSDT",
-                side: "BUY",
-                type: "MARKET",
-                quantity: amount*-1,
-            });
-        }
+            if (amount === 0) return;
+
+            if (amount > 0) {
+                client.submitNewOrder({
+                    symbol: item.symbol,
+                    side: "SELL",
+                    type: "MARKET",
+                    quantity: amount
+                }).then().catch(err => console.log(err));
+            } else {
+                client.submitNewOrder({
+                    symbol: item.symbol,
+                    side: "BUY",
+                    type: "MARKET",
+                    quantity: amount*-1,
+                }).then().catch(err => console.log(err));
+            }
+        });
     }
 
     async test() {

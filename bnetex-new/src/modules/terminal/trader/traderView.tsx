@@ -10,18 +10,14 @@ import { getUserFuturesWallet } from 'services/getUserFuturesWallet';
 import { sendFuturesOrder } from 'services/trading/sendFuturesOrder';
 import {getCurrentLeverageAndIsolated} from '../../../services/trading/getCurrentLeverageAndIsolated';
 import axios from 'axios';
-import { convertPricesByTick } from './convertPricesByTick';
+import { convertPricesByTick } from './components/cup/services/convertPricesByTick';
 import { getUserPositions } from 'services/trading/getUserPositions';
 import { useToast } from 'lib/hooks/useToast';
+import { useParams, useRoutes,  } from 'react-router-dom';
+import TraderCup from './components/cup/cup';
 
 type TraderViewType = 'limit' | 'tpsl';
 type TraderSumType  = 'exactSum' | 'percent';
-
-interface TradeFormData {
-    side: string,
-    type: string,
-    amount: number
-}
 
 const TradeView = () => {
     const [futuresWallet, setFuturesWallet] = useState<number>(0);
@@ -36,9 +32,12 @@ const TradeView = () => {
     const [orderBookSnapshot, setOrderBookSnapshot] = useState<any[]>([]);
     const [orderBookStep, setOrderBookStep] = useState<number>(0.1);
     const refSnapshot = useRef<NodeJS.Timeout | null>(null);
+    const posSnapshot = useRef<NodeJS.Timeout | null>(null);
 
     const [currentPrice, setCurrentPrice] = useState<any>(0);
     const [entryPrice, setEntryPrice] = useState<any>(0);
+    const [posType, setPosType] = useState<string>("long");
+    const [lastPrice, setLastPrice] = useState<number>(0);
 
     const { open: OpenMarginModal } = useModal(MarginPopUp);
     const { open: OpenLeverModal } = useModal(LeverPopUp);
@@ -48,19 +47,26 @@ const TradeView = () => {
     const [btcprice, setBtcprice] = useState(0);
     const { bakeToast } = useToast();
 
-    const sendOrder = (type: string) => {
+    const refOrderBookSocket = useRef<WebSocket | null>(null)
+    const refBtcPrice = useRef<WebSocket | null>(null)
+
+    const { pair } = useParams();
+
+    const sendOrder = (type: string, side: string) => {
         if (limitPrice !== 0) {
             sendFuturesOrder({
-                side: tradeType,
+                side: side,
                 type: 'LIMIT',
                 price: limitPrice,
                 amount: amount,
+                pair: pair,
             });
         } else {
             sendFuturesOrder({
-                side: tradeType,
+                side: side,
                 type: type,
                 amount: amount,
+                pair: pair,
             });
         }
     };
@@ -71,10 +77,11 @@ const TradeView = () => {
 
         sendFuturesOrder({
             side: tradeType || "BUY",
-            type: 'MARKET',
+            type: 'LIMIT',
             price: price,
             amount: amount,
-            tif: tif || 'GTC',
+            tif: tif || 'GTX',
+            pair: pair
         }).then((res) => {
             if (res.data === "") {
                 tradeType === "BUY" ?
@@ -106,6 +113,23 @@ const TradeView = () => {
         setOrderBookSnapshot(convertedAsks.concat(convertedBids));
     };
 
+    const getUserP = async () => {
+        const res = await getUserPositions();
+        const { inf } = res.data;
+
+        if (inf.length > 0) {
+            const curPosition = inf.find((item: any) => item.symbol === pair);
+
+            Number(curPosition.positionAmt) > 0 ? 
+                setPosType("long") :
+                setPosType("short");
+
+            setEntryPrice(curPosition.entryPrice);     
+        } else {
+            setEntryPrice(0);
+        }       
+    }
+
     useEffect(() => {
         getUserFuturesWallet()
             .then((res) => {
@@ -122,54 +146,20 @@ const TradeView = () => {
                 setIsolated(true);
             });
 
-            const getUserP = async () => {
-                const res = await getUserPositions();
-                // console.log(res);
-                
-                // console.log(res.data);
-
-                // const btcPosition = res.data.inf.find((item: any) => item.symbol === "BTCUSDT");
-
-                const { inf } = res.data;
-
-                // console.log(inf);
-                
-                // if (Number(inf.positionAmt) === 0) return;
-
-                // console.log(data);
-                setEntryPrice(inf.entryPrice);                
-            }
-
-            setInterval(getUserP, 1000);
-
-        const orderBookSocket = new WebSocket('wss://fstream.binance.com/stream?streams=btcusdt@depth20');
-        const btcPrice = new WebSocket('wss://stream.binance.com/stream?streams=btcusdt@miniTicker');
-
-        orderBookSocket.onmessage = (event) => {
-            const { a, b } = JSON.parse(event.data).data;
-
-            setWsOrderBook(a.reverse().concat(b));
-            
-        };
-
-        btcPrice.onmessage = (event) => {
-            // console.log(JSON.parse(event.data));
-
-            let price = JSON.parse(event.data).data.c;
-            // console.log(price);
-            setBtcprice(price);
-
-            // setOrderBook([...data.b, ...data.a]);
-        };
+        
 
         refSnapshot.current = setInterval(getOrderBookSnapshot, 1000);
+        posSnapshot.current = setInterval(getUserP, 1000);
+
+        refOrderBookSocket.current = new WebSocket(`wss://fstream.binance.com/stream?streams=${pair?.toLocaleLowerCase()}@depth20`);
+        refBtcPrice.current = new WebSocket(`wss://stream.binance.com/stream?streams=${pair?.toLocaleLowerCase()}@miniTicker`);
 
         return () => {
-            orderBookSocket.close();
-            btcPrice.close();
-
             if (!refSnapshot.current ) return;
             clearInterval(refSnapshot.current);
+
+            if (!posSnapshot.current ) return;
+            clearInterval(posSnapshot.current);
         };
     }, []);
 
@@ -201,6 +191,35 @@ const TradeView = () => {
     }, [amount]);
 
     useEffect(() => {
+
+        refOrderBookSocket.current?.close();
+        refBtcPrice.current?.close();
+
+        refOrderBookSocket.current = new WebSocket(`wss://fstream.binance.com/stream?streams=${pair?.toLocaleLowerCase()}@depth20`);
+        refBtcPrice.current = new WebSocket(`wss://stream.binance.com/stream?streams=${pair?.toLocaleLowerCase()}@miniTicker`);
+
+        refOrderBookSocket.current.onmessage = (event) => {
+            const { a, b } = JSON.parse(event.data).data;
+
+            setWsOrderBook(a.reverse().concat(b));
+            
+        };
+
+        refBtcPrice.current.onmessage = (event) => {
+            // console.log(JSON.parse(event.data));
+
+            let price = JSON.parse(event.data).data.c;
+            // console.log(price);
+            setBtcprice(price);
+
+            // setOrderBook([...data.b, ...data.a]);
+        };
+
+        if (posSnapshot.current ) clearInterval(posSnapshot.current);
+        posSnapshot.current = setInterval(getUserP, 1000);
+    }, [pair]);
+
+    useEffect(() => {
         if (refSnapshot.current ) clearInterval(refSnapshot.current);
         refSnapshot.current = setInterval(getOrderBookSnapshot, 2000);
 
@@ -210,7 +229,7 @@ const TradeView = () => {
         const bigData = orderBookSnapshot;
         let smallData = wsOrderBook;
 
-        console.log(smallData);
+        // console.log(smallData);
         if (orderBookStep !== 0.1) {
             const tick = parseInt((orderBookStep / 0.1).toFixed(2), 10);
 
@@ -287,6 +306,10 @@ const TradeView = () => {
 
             
             const greaterCheck = Number(entryPrice) > Number(item[0]);
+console.log(entryPrice);
+console.log(greaterCheck);
+console.log(posType);
+
 
             const parsePrice = () => {
                 // console.log(entryPrice);
@@ -296,19 +319,35 @@ const TradeView = () => {
                 if (Number(entryPrice) !== 0) {
                     if (greaterCheck) {
                         if (index < tradeCupArr.length / 2) {
-                            return {
-                                // red
-                                background: '#EC1313',
-                                paddingLeft: '10px'
+                            if (posType === "long") {
+                                return {
+                                    // red
+                                    background: '#EC1313',
+                                    paddingLeft: '10px'
+                                }
+                            } else {
+                                return {
+                                    // green
+                                    background: '#17CE1F',
+                                    paddingLeft: '10px'
+                                }
                             }
                         }
                         return {}
                     } else {
                         if (index > tradeCupArr.length / 2 - 1) {
-                            return {
-                                // green
-                                background: '#17CE1F',
-                                paddingLeft: '10px'
+                            if (posType === "long") {
+                                return {
+                                    // green
+                                    background: '#17CE1F',
+                                    paddingLeft: '10px'
+                                }
+                            } else {
+                                return {
+                                    // red
+                                    background: '#EC1313',
+                                    paddingLeft: '10px'
+                                }
                             }
                         }
                         return {}
@@ -332,8 +371,8 @@ const TradeView = () => {
                     className={clsx(styles['cup-position'])}
                     onClick={() => {
                         index < tradeCupArr.length / 2 ?
-                            sendLimitOrder(Number(item[0]), "BUY" ,'FOK') :
-                            sendLimitOrder(Number(item[0]), "SELL" ,'FOK');
+                            sendLimitOrder(Number(item[0]), "SELL" ,'GTC') :
+                            sendLimitOrder(Number(item[0]), "BUY" ,'GTC');
                     }}
                     style={parseBgColor()}
                 >
@@ -355,57 +394,12 @@ const TradeView = () => {
             className={clsx(styles['trade-layout'])}
         >
             <div
-                className={clsx('card', styles['cup'])}
+                className={clsx('card')}
             >
-                {entryPrice}
-                {/* <ToggleButtonGroup
-                    title={''}
-                    name={'cup_step'}
-                    onChange={(value: number) => {
-                        setOrderBookStep(Number(value));
-                    }}
-                    value={orderBookStep.toString()}
-                >
-                    <ToggleButton
-                        text={'0.1'}
-                        value={'0.1'}
-                    />
-                    <ToggleButton
-                        text={'1'}
-                        value={'1'}
-                    />
-                    <ToggleButton
-                        text={'10'}
-                        value={'10'}
-                    />
-                </ToggleButtonGroup> */}
-                <div
-                    className={clsx(styles['cup-head'])}
-                >
-                    <span>
-                        Объем (USDT)
-                    </span>
-                    <span>
-                        Цена (USDT)
-                    </span>
-                </div>
-                {
-                    orderBookStep >= 10 ?
-                        <div
-                            className={clsx(styles['cup-small'])}
-                        >
-                            {renderTradeCup(10)}
-                        </div> :
-                        <div
-                            className={clsx(styles['cup-big'])}
-                        >
-                            {renderTradeCup(20)}
-                        </div>
-                }
+                {TraderCup()}
             </div>
             <form
                 className={clsx('card', styles['trade-panel'])}
-                // onSubmit={onSubmit}
             >
                 <div
                     className={styles['trader-view-wrapper__header']}
@@ -623,7 +617,7 @@ const TradeView = () => {
                             onClick={(e) => {
                                 e.preventDefault();
                                 setTradeType('BUY');
-                                sendOrder('MARKET');
+                                sendOrder('MARKET', 'BUY');
                             }}
                         />
                         <div
@@ -682,7 +676,7 @@ const TradeView = () => {
                             onClick={(e) => {
                                 e.preventDefault();
                                 setTradeType('SELL');
-                                sendOrder('MARKET');
+                                sendOrder('MARKET', 'SELL');
                             }}
                         />
                         <div

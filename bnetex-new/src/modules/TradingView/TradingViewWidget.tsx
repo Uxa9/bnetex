@@ -13,6 +13,7 @@ import {
 import api from './api/api';
 import { getOverrides } from './colorOverrides';
 import { forbiddenMarkResolutions } from './api/types';
+import { useParams } from 'react-router-dom';
 
 
 export interface ChartContainerProps {
@@ -60,6 +61,7 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
     const widgetRef = useRef<HTMLDivElement | null>(null);
     const [tvWidget, setTvWidget] = useState<IChartingLibraryWidget | null>(null);
     const { theme } = useTheme();
+    const {pair} = useParams();
     const props = {...defaultProps, ...componentProps};
     const { markRefreshFlag } = useTypedSelector(state => state.algotrade);
 
@@ -68,7 +70,7 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
             return;
         }
         const widgetOptions: ChartingLibraryWidgetOptions = {
-            symbol: props.symbol as string,
+            symbol: pair || props.symbol as string,
             datafeed: api,
             interval: props.interval as ChartingLibraryWidgetOptions['interval'],
             container: widgetRef.current,
@@ -111,7 +113,7 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
             }
         };
 
-    }, [ theme ]);
+    }, [ theme, pair ]);
 
     // при изменении интервала времени в истории торгов запрашивать marks
     useEffect(() => {

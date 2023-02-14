@@ -25,23 +25,15 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
     }
 
     onModuleInit() {
-        this.socketClient.emitForcer.subscribe( async (payload: any) => {
-
-            
-            
+        this.socketClient.emitForcer.subscribe( async (payload: any) => {           
             
             for (let s of this.server.of('/').sockets) {
                 
                 let id = Number(s[1].handshake.query.id);
 
-
                 if(!id) return;
 
-                let user = await this.userService.getUserById(id);
-
-
-                
-                
+                let user = await this.userService.getUserById(id);                
 
                 if (user.openTrade) {
 
@@ -64,17 +56,7 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
                             entryPrice: payload.position.averagePrice,
                             markPrice: payload.markPrice,
                             margin: "я бля хуй знает что сюда надо"
-                        })
-                        
-                        // console.log({
-                        //     userPnl,
-                        //     userRoe: roe,
-                        //     pair: payload.pair,
-                        //     volume: payload.position.volumeUSDT,
-                        //     entryPrice: payload.position.averagePrice,
-                        //     markPrice: payload.position.averagePrice,
-                        //     margin: "я бля хуй знает что сюда надо"
-                        // })
+                        });
 
                     } else {                        
                         s[1].emit('currentPosition', {
@@ -88,20 +70,8 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
                 }
                                 
             }
-
-            //socket.emit('currentPosition', socket.handshake.query.id);
-             
-            // this.server.emit('currentPosition', {
-            //     payload
-            // });
         });
     }
-
-    // init(){
-        
-    // }
-    
-
 
     @WebSocketServer()
     server: Server;
@@ -114,7 +84,7 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
     onJoin(
         @MessageBody() message: any,
         @ConnectedSocket() socket: Socket
-    ) {
+    ) {        
         socket.join(socket.handshake.query.id);
     }
 
@@ -129,17 +99,4 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
     handleDisconnect(client: any) {        
         console.log('Client disconnected');
     }
-
-    // @SubscribeMessage('currentPosition')
-    // onNewMessage(@MessageBody() body: unknown): Observable<WsResponse<any>> {
-    //     console.log(body);
-
-    //     this.server.emit('currentPosition', {
-    //         position: this.socketClient.currentPosition
-    //     });
-    //     console.log(this.socketClient.currentPosition);
-
-
-    //     return this.socketClient.currentPosition;
-    // }
 }
