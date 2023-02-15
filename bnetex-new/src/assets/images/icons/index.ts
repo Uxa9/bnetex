@@ -36,3 +36,4 @@ export {ReactComponent as Coins} from './uil_coins.svg';
 export {ReactComponent as Bitcoin} from './uil_bitcoin.svg';
 export {ReactComponent as Power} from './uil_power.svg';
 export {ReactComponent as Play} from './uil_play-circle.svg';
+export {ReactComponent as ArrowUpRight} from './uil_arrow-up-right.svg';

@@ -1,0 +1,17 @@
+@import 'styles/mixins';
+
+.container {
+  display: grid;
+  place-items: center;
+  position: relative;
+
+  .wrapper {
+    @include align-center-row-flex(72px);
+  }
+
+  .info {
+    @include column-flex(48px);
+
+    max-width: 512px;
+  }
+}
