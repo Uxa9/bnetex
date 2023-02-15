@@ -4,6 +4,7 @@ import { Request } from "../request/request.model";
 import { InvestSession } from "../invest-sessions/invest-sessions.model";
 import { Role } from "../roles/roles.model";
 import { UserRoles } from "../roles/user-roles.model";
+import { StringBoolean } from "binance";
 
 interface UserCreationAttrs {
     email : string,
@@ -109,6 +110,9 @@ export class User extends Model<User, UserCreationAttrs> {
         defaultValue  : 0
     })
     tradeBalance : number;
+
+    api_key : string;
+    api_secret : string;
 
     @BelongsToMany(() => Role, () => UserRoles)
     roles: Role[];

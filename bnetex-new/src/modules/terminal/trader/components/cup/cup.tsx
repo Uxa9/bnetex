@@ -6,9 +6,12 @@ import { useParams } from "react-router-dom";import { getUserPositions } from "s
 import { sendFuturesOrder } from "services/trading/sendFuturesOrder";
 import { convertPricesByTick } from "./services/convertPricesByTick";
 import styles from './cup.module.scss';
+import renderTradeCup from "./renderTradeCup";
+import RenderTradeCup from "./renderTradeCup";
 
-const TraderCup = () => {
+const TraderCup = (props: any) => {
 
+    const { amount } = props;
     // const [orderBook, setOrderBook] = useState<any>([]);
     // const [wsOrderBook, setWsOrderBook] = useState<any>([]);
     // const [orderBookSnapshot, setOrderBookSnapshot] = useState<any[]>([]);
@@ -279,19 +282,9 @@ const TraderCup = () => {
                     Цена (USDT)
                 </span>
             </div>
-            {
-                // orderBookStep >= 10 ?
-                //     <div
-                //         className={clsx(styles['cup-small'])}
-                //     >
-                //         {renderTradeCup(10)}
-                //     </div> :
-                //     <div
-                //         className={clsx(styles['cup-big'])}
-                //     >
-                //         {renderTradeCup(20)}
-                //     </div>
-            }
+            <RenderTradeCup
+                amount={amount}
+            />
         </div>
     );
 }

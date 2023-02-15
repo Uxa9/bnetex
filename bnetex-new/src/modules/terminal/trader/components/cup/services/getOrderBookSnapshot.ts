@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const convertPricesByTick = (array: string[][], tick: number): string[][] => {
+export const convertPricesByTick = (array: string[][], tick: number): string[][] => {
     const convertedArray: string[][] = [];
     const orderBookStep = tick * 0.01;
 
@@ -18,13 +18,13 @@ const convertPricesByTick = (array: string[][], tick: number): string[][] => {
     return convertedArray;
 };
 
-const getOrderBookSnapshot = async (pair: string | undefined = "BTCUSDT", step: number | undefined = 0.1) => {
+export const getOrderBookSnapshot = async (pair: string | undefined = "BTCUSDT", step: number | undefined = 0.1) => {
     const res = await axios.get(`https://fapi.binance.com/fapi/v1/depth?symbol=${pair?.toLocaleLowerCase()}&limit=1000`);
 
     const asks: string[][] = res.data.asks.reverse();
     const bids: string[][] = res.data.bids.reverse();
 
-    const orderBook = asks.concat(bids);
+    const orderBook = asks.concat(bids.reverse());
 
     if (step === 0.1) return orderBook;
 
@@ -32,5 +32,3 @@ const getOrderBookSnapshot = async (pair: string | undefined = "BTCUSDT", step: 
 
     return convertPricesByTick(orderBook, tick);
 };
-
-export default getOrderBookSnapshot();

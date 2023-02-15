@@ -114,20 +114,20 @@ const TradeView = () => {
     };
 
     const getUserP = async () => {
-        const res = await getUserPositions();
-        const { inf } = res.data;
+        // const res = await getUserPositions();
+        // const { inf } = res.data;
 
-        if (inf.length > 0) {
-            const curPosition = inf.find((item: any) => item.symbol === pair);
+        // if (inf.length > 0) {
+        //     const curPosition = inf.find((item: any) => item.symbol === pair);
 
-            Number(curPosition.positionAmt) > 0 ? 
-                setPosType("long") :
-                setPosType("short");
+        //     Number(curPosition.positionAmt) > 0 ? 
+        //         setPosType("long") :
+        //         setPosType("short");
 
-            setEntryPrice(curPosition.entryPrice);     
-        } else {
-            setEntryPrice(0);
-        }       
+        //     setEntryPrice(curPosition.entryPrice);     
+        // } else {
+        //     setEntryPrice(0);
+        // }       
     }
 
     useEffect(() => {
@@ -396,7 +396,9 @@ console.log(posType);
             <div
                 className={clsx('card')}
             >
-                {TraderCup()}
+                <TraderCup
+                    amount={amount}
+                />
             </div>
             <form
                 className={clsx('card', styles['trade-panel'])}
