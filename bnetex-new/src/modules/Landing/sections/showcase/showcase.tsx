@@ -47,7 +47,7 @@ const Showcase = () => {
                 />
                 <Blur
                     color={'purple'}
-                    top={'-50%'}
+                    top={'20%'}
                     left={'0'}
                     type={'circle'}
                 />

@@ -2,6 +2,7 @@ import DynamicGrid from './components/DynamicGrid/dynamicGrid';
 import styles from './LandingPage.module.scss';
 import Earn from './sections/earn/earn';
 import Greeting from './sections/greeting/greeting';
+import Questions from './sections/questions/questions';
 import Showcase from './sections/showcase/showcase';
 import Trade from './sections/trade/trade';
 
@@ -16,6 +17,7 @@ const LandingPage = () => {
                 <Showcase />
                 <Earn />
                 {/* <Trade /> */}
+                <Questions />
             </div>
         </main>
     );
