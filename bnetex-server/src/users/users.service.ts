@@ -354,7 +354,7 @@ export class UsersService {
 
     async setApiKey(dto: any) {
         const user = await this.getUserById(dto.id);
-
+        
         const api = {
             api_key : dto.api_key,
             api_secret : dto.api_secret

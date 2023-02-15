@@ -111,7 +111,16 @@ export class User extends Model<User, UserCreationAttrs> {
     })
     tradeBalance : number;
 
+    @Column({
+        type          : DataType.STRING,
+        allowNull     : true
+    })
     api_key : string;
+    
+    @Column({
+        type          : DataType.STRING,
+        allowNull     : true
+    })
     api_secret : string;
 
     @BelongsToMany(() => Role, () => UserRoles)

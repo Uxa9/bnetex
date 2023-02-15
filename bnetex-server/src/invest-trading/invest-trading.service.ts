@@ -11,12 +11,12 @@ export class InvestTradingService {
 
     async getUserBalance(id: number) {
 
-        const user = this.userService.getUserById(id);
+        const user = await this.userService.getUserById(id);
         
         // get user keys
         const client = new USDMClient({
-            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
-            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
+            api_key: user.api_key,
+            api_secret: user.api_secret,
         });
 
         const result = await client.getBalance();
@@ -25,12 +25,12 @@ export class InvestTradingService {
     }
 
     async getLeverageAndIsolated(id: number) {
-        // const user = this.userService.getUserById(id);
+        const user = await this.userService.getUserById(id);
 
         // get user keys
         const client = new USDMClient({
-            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
-            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
+            api_key: user.api_key,
+            api_secret: user.api_secret,
         });
 
         const info = await client.getAccountInformation();
@@ -44,10 +44,11 @@ export class InvestTradingService {
     }
 
     async placeOrder(params: any) {
+        const user = await this.userService.getUserById(params.id);
 
         const client = new USDMClient({
-            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
-            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
+            api_key: user.api_key,
+            api_secret: user.api_secret,
         });
 
         const assetPrices = await client.getMarkPrice({
@@ -95,11 +96,11 @@ export class InvestTradingService {
     }
 
     async getMaxLeverage(id: number) {
-        // const user = this.userService.getUserById(id);
+        const user = await this.userService.getUserById(id);
 
         const client = new USDMClient({
-            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
-            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
+            api_key: user.api_key,
+            api_secret: user.api_secret,
         });
 
         return await client.getNotionalAndLeverageBrackets({
@@ -108,11 +109,11 @@ export class InvestTradingService {
     }
 
     async setUserLeverage(params: any) {
-        // const user = this.userService.getUserById(params.id);
+       const user = await this.userService.getUserById(params.id);
         
         const client = new USDMClient({
-            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
-            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
+            api_key: user.api_key,
+            api_secret: user.api_secret,
         });
 
         return await client.setLeverage({
@@ -122,9 +123,11 @@ export class InvestTradingService {
     }
 
     async getUserPositions(id: number) {
+        const user = await this.userService.getUserById(id);
+
         const client = new USDMClient({
-            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
-            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
+            api_key: user.api_key,
+            api_secret: user.api_secret,
         });
 
         // const a = await client.getAccountInformation()
@@ -152,9 +155,11 @@ export class InvestTradingService {
     }
 
     async closeAllPositions(id: number) {
+        const user = await this.userService.getUserById(id);
+
         const client = new USDMClient({
-            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
-            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
+            api_key: user.api_key,
+            api_secret: user.api_secret,
         });
 
         const positions = await client.getPositions();

@@ -4,17 +4,17 @@ import { BaseModalProps } from 'lib/hooks/useModal';
 import { Button, Input } from 'lib/ui-kit';
 import FormCard from 'modules/Auth/components/FormCard/formCard';
 import { newPasswordValidation } from 'lib/utils/hookFormValidation';
-import { changeUserPassword } from 'services/user';
+import { changeApiKey, changeUserPassword } from 'services/user';
 import { useToast } from 'lib/hooks/useToast';
 import { useForm } from 'react-hook-form';
 import { usePromiseWithLoading } from 'lib/hooks/usePromiseWithLoading';
 
 interface PasswordFormData {
-    newPassword: string,
-    prevPassword: string
+    api_key: string,
+    api_secret: string
 }
 
-const ChangePasswordModal = (props: BaseModalProps) => {
+const ChangeApiKey = (props: BaseModalProps) => {
 
     const { onClose } = props;
     const { isLoading } = usePromiseWithLoading();
@@ -33,10 +33,10 @@ const ChangePasswordModal = (props: BaseModalProps) => {
         reValidateMode: 'onChange',
     });
 
-    const onSubmit = async (data: PasswordFormData) => {
-        changeUserPassword(data.prevPassword, data.newPassword)
+    const onSubmit = async (data: PasswordFormData) => {        
+        changeApiKey(data.api_key, data.api_secret)
             .then(() => {
-                bakeToast.success('Пароль изменен!');
+                bakeToast.success('Ключ изменен!');
                 onClose();
             })
             .catch((error) => {
@@ -46,27 +46,25 @@ const ChangePasswordModal = (props: BaseModalProps) => {
 
     return (
         <Modal
-            title={'Смена пароля'}
+            title={'Смена API ключа'}
             onClose={onClose}
             className={'text'}
         >
             <FormCard
                 className={styles['form-card']}
                 title={''}
-                subtitle={'Подтвердите, что вы являетесь владельцем данного аккаунта, введя текущий пароль, а затем введите новый.'}
+                subtitle={'Введите API ключ и секретную строку'}
                 onSubmit={handleSubmit(onSubmit)}
                 inputs={[
                     <Input
-                        label={'Текущий пароль'}
-                        inputControl={register('prevPassword', newPasswordValidation)}
-                        errorText={errors.prevPassword?.message}
-                        key={'prevPassword'}
+                        label={'API ключ'}
+                        inputControl={register('api_key')}
+                        key={'api_key'}
                     />,
                     <Input
-                        label={'Новый пароль'}
-                        inputControl={register('newPassword', newPasswordValidation)}
-                        errorText={errors.newPassword?.message}
-                        key={'newPassword'}
+                        label={'API secret'}
+                        inputControl={register('api_secret')}
+                        key={'api_secret'}
                     />,
                 ]}
                 button={
@@ -82,4 +80,4 @@ const ChangePasswordModal = (props: BaseModalProps) => {
     );
 };
 
-export default ChangePasswordModal;
+export default ChangeApiKey;
