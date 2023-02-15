@@ -1,70 +1,75 @@
 @import 'styles/mixins';
 
-$main-breakpoint: 850;
-
 .container {
   display: grid;
   place-items: center;
+  position: relative;
 
   .wrapper {
+    @include column-flex-center(48px);
+
+    @include mobile {
+      row-gap: 24px;
+    }
+  }
+
+  h2 span {
+    color: $accent-3;
+  }
+
+  .slider {
     display: grid;
-    width: 100%;
-    max-width: 1280px;
-    column-gap: 48px;
-    grid-template-columns: minmax(250px, 1fr) 1fr;
-    position: relative;
+    grid-template-columns: repeat(5, 1fr);
+    column-gap: 16px;
+    align-items: end;
 
-    h2 {
-      @include max-width($main-breakpoint) {
-        text-align: center;
+    @include max-width($laptop-bp) {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      row-gap: 16px;
+
+      > div {
+        height: 100%;
       }
 
-      span {
-        color: $accent-3;
-      }
-    }
+      .primary-card {
+        grid-column: 2/4;
+        grid-row: 1/3;
 
-    .info {
-      @include column-flex(48px);
+        > div {
+          height: 100%;
+          justify-content: center;
+          margin-bottom: 0;
 
-      .description {
-        @include column-flex(1em);
-
-        max-width: 50ch;
-      }
-
-      .action-button {
-        width: fit-content;
-      }
-
-      @include max-width($main-breakpoint) {
-        align-items: center;
-        row-gap: 24px;
-
-        .description {
-          text-align: center;
-          max-width: unset;
+          div {
+            transform: scale(1.5);
+          }
         }
       }
     }
 
-    .chart-container {
-      @include column-flex(16px);
+    @include max-width($early-mobile-bp) {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      row-gap: 16px;
 
-      .chart {
-        width: 100%;
-        max-width: calc(min(1280px, 100vw) / 2);
-        min-height: 360px;
+      .primary-card {
+        grid-column: 1/3;
+        grid-row: 1/2;
 
-        @include max-width($main-breakpoint) {
-          max-width: calc(100vw - 32px);
+        > div {
+          height: 100%;
+
+          div {
+            transform: scale(1);
+          }
         }
       }
     }
 
-    @include max-width($main-breakpoint) {
-      grid-template-columns: 1fr;
-      row-gap: 48px;
+    @include mobile {
+      row-gap: 8px;
+      column-gap: 8px;
     }
   }
 }
