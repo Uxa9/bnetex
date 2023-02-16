@@ -48,6 +48,17 @@
 }
 
 .pair-price {
+    font-weight: bolder;
+    padding: 3px 0;
+
+    span:nth-child(2) {
+        font-weight: bolder !important;
+        color: white;
+        margin-right: 15px !important;
+
+        padding: 2px !important;
+        background-color: transparent !important;
+    }
     // background-color: blue;
 }
 
@@ -57,6 +68,33 @@
 
 .price-negative {
     background-color: $red-3;
+}
+
+.pos-red {
+    font-weight: bolder;
+    background-color: red;
+
+    margin-left: 5px;
+    margin-right: 0px !important;
+}
+
+.pos-green {
+    color: black;
+    font-weight: bolder;
+    background-color: #47D14D;
+
+    margin-left: 5px;
+    margin-right: 0px  !important;
+}
+
+.entry-price {
+    background-color: #E9CCFF !important;
+    color: black;
+
+    span:nth-child(2) {
+        font-weight: bold;
+        background-color: transparent !important;
+    }
 }
 
 // .quater-bg-green {

@@ -105,21 +105,30 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
     ) {     
         try {
             for (let s of this.server.of('/').sockets) {
-                    
+  
                 let id = Number(s[1].handshake.query.id);
     
                 if(!id) return;         
                 
                 const callbackFunc = async () => {
-                    const result = await this.investTradingService.getUserPositions(id);
+                    try {
+                        const result = await this.investTradingService.getUserPositions(id);
+                        
+                        s[1].emit('currentUserTradePosition', result);
+                    } catch (error) {
+                        console.log(error);
+                        
+                    }
     
-                    s[1].emit('currentUserTradePosition', result);
                 }
     
                 setInterval(callbackFunc, 1000);                            
             }
         }
-        catch {}
+        catch (err) {
+            console.log(err);
+            
+        }
     }
 
     handleDisconnect(client: any) {        

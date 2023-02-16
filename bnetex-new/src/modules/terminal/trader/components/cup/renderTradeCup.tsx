@@ -258,6 +258,7 @@ const RenderTradeCup = (props: any) => {
             const pricePicker = () => {
 
                 if (Number(posPrice) !== 0) {
+
                     if (greaterCheck) {
                         if (index < tradeCupArr.length / 2) {
                             if (posType === "long") return styles['pos-red']
@@ -300,8 +301,9 @@ const RenderTradeCup = (props: any) => {
 
             //     return cls;
             // }
-
+            
             const classPicker = () => {
+                if (Number(posPrice) === Number(item[0])) return [styles["cup-position"], styles['entry-price']];
                 if (index === tradeCupArr.length / 2) {
                     if (pairPrice[1] === "increase") {
                         return [styles["cup-position"], styles["pair-price"], styles["price-positive"]]
@@ -326,7 +328,7 @@ const RenderTradeCup = (props: any) => {
                     <span>
                         {Number(item[1]).toFixed(4)}
                     </span>
-                    <span style={parsePrice()}>
+                    <span className={pricePicker()}>
                         {item[0]}
                     </span>
                 </div>
