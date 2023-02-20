@@ -73,6 +73,7 @@
     &--secondary,
     &--outlined {
         min-height: 40px;
+        max-height: 40px;
 
         @include mobile {
             @include size-svg(20px);

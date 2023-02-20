@@ -3,6 +3,7 @@
 .container {
   display: grid;
   place-items: center;
+  min-height: 400px;
 
   .wrapper {
     @include column-flex(32px);
@@ -37,6 +38,11 @@
 
     @include max-width($early-mobile-bp) {
         max-width: unset;
+    }
+
+    @include max-width(350) {
+      grid-template-columns: 1fr;
+      row-gap: 16px;
     }
   }
 }
