@@ -7,7 +7,7 @@ import styles from './tradeCoinCard.module.scss';
 
 export interface CoinMarketData {
     price: number;
-    volume: number;
+    volume: string;
     change24h: number;
     graphicData: SingleValueData[];
 }
@@ -49,7 +49,7 @@ const TradeCoinCard = ({ logo, ticker, market: { change24h, price, volume, graph
                     <p
                         className={clsx(styles['volume'], 'text-bold')}
                     >
-                        { volume }
+                        { `$ ${volume}` }
                     </p>
                 </div>
                 <Chart

@@ -11,8 +11,7 @@ const Trade = () => {
     const [coins, setCoins] = useState<TradeCoinCardProps[]>([]);
 
     useEffect(() => {
-        const tickers = tradeSectionCoins.map(it => it.ticker);
-        getTickerPriceStatistics(tickers)
+        getTickerPriceStatistics(tradeSectionCoins)
             .then((marketData) => {
                 const coinsWithMarketData: TradeCoinCardProps[] =
                     tradeSectionCoins.map((it, index) => {

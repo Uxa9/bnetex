@@ -1,17 +1,19 @@
 import axios from 'axios';
 import sub from 'date-fns/sub';
+import { reduceNumber } from 'lib/utils/reduceNumber';
 import { SingleValueData, Time } from 'lightweight-charts';
 import { CoinMarketData } from 'modules/Landing/components/tradeCoinCard/tradeCoinCard';
 import { getKlines } from 'modules/TradingView/api/services';
+import { TradeSectionCoin } from './coins';
 
 /**
  * Получить данные для карточек криптовалютных пар
  * @param tickerArray [BTCUSDT, SOLUSDT] и т.д.
  * @returns
  */
-const getTickerPriceStatistics = (tickerArray: string[]): Promise<CoinMarketData[]> => {
+const getTickerPriceStatistics = (tickerArray: TradeSectionCoin[]): Promise<CoinMarketData[]> => {
     return Promise.all(
-        tickerArray.map(it => fetchTickerPriceStatistics(it))
+        tickerArray.map(it => fetchTickerPriceStatistics(it.ticker, it.id))
     );
 };
 
@@ -20,14 +22,17 @@ const getTickerPriceStatistics = (tickerArray: string[]): Promise<CoinMarketData
  * @param ticker BTCUSDT, SOLUSDT и т.д.
  * @returns
  */
-const fetchTickerPriceStatistics = (ticker: string): Promise<CoinMarketData> => {
-    return axios.get(`https://api.binance.com/api/v1/ticker/24hr?symbol=${ticker}`)
+const fetchTickerPriceStatistics = (ticker: string, id: string): Promise<CoinMarketData> => {
+    return axios.get(`https://api.coincap.io/v2/assets/${id}`)
         .then(async (res): Promise<CoinMarketData> => {
-            const { quoteVolume, lastPrice, priceChangePercent } = res.data;
+            const { marketCapUsd, priceUsd, changePercent24Hr } = res.data.data;
+
+            const reducedVolume = reduceNumber(parseFloat(marketCapUsd), 2);
+
             return {
-                price: parseFloat(lastPrice),
-                volume: parseFloat(quoteVolume),
-                change24h: parseFloat(priceChangePercent),
+                price: parseFloat(priceUsd),
+                volume: reducedVolume,
+                change24h: parseFloat(changePercent24Hr),
                 graphicData: await fetchTickerKlines(ticker),
             };
         });
