@@ -1,5 +1,5 @@
 import styles from './chart.module.scss';
-import { ColorType, createChart, IChartApi, ISeriesApi, SingleValueData } from 'lightweight-charts';
+import { ChartOptions, ColorType, createChart, DeepPartial, IChartApi, ISeriesApi, SingleValueData } from 'lightweight-charts';
 import { useEffect, useRef, useState } from 'react';
 import { Switch, ToolTip } from 'lib/ui-kit';
 import { useTheme } from 'lib/hooks/useTheme';
@@ -13,11 +13,18 @@ interface ChartProps {
     className?: string;
     loading: boolean;
     comissionSwitch?: boolean;
+    header?: boolean;
+    options?: DeepPartial<ChartOptions>;
 }
 
 const ALGORYTHM_COMISSION = 0.5;
 
-const Chart = ({ data, type, className, loading, comissionSwitch = true }: ChartProps) => {
+//toDo: выделить отдельно chart и отдельно chart с хедером roe/pnl
+
+const Chart = ({
+    data, type, className, loading, comissionSwitch = true,
+    header = true, options }: ChartProps
+) => {
 
     const chartRef = useRef<HTMLDivElement | null>(null);
     const [chartBase, setChartBase] = useState<IChartApi | null>(null);
@@ -32,15 +39,18 @@ const Chart = ({ data, type, className, loading, comissionSwitch = true }: Chart
         if (!chartRef.current) return;
 
         const chart = createChart(chartRef.current, {
+            ...options,
             rightPriceScale: {
                 scaleMargins: {
                     top: 0.3,
                     bottom: 0.3,
                 },
                 borderVisible: false,
+                ...options?.rightPriceScale,
             },
             timeScale: {
                 borderVisible: false,
+                ...options?.timeScale,
             },
             crosshair: {
                 vertLine: {
@@ -93,12 +103,13 @@ const Chart = ({ data, type, className, loading, comissionSwitch = true }: Chart
     // Вкл/выкл. комиссии
     useEffect(() => {
         if (!lineChart) return;
+
         lineChart.setData(withComission ?
             data.map(item => {return{...item, value: item.value * ALGORYTHM_COMISSION};}) :
             data);
 
         chartBase?.timeScale().fitContent();
-    }, [ data, withComission ]);
+    }, [ data, withComission, lineChart ]);
 
     // Ресайз
     useEffect(() => {
@@ -122,20 +133,22 @@ const Chart = ({ data, type, className, loading, comissionSwitch = true }: Chart
 
     return(
         <div className={clsx(styles['container'], 'card', className)}>
-            <div className={styles['header']}>
-                {
-                    type === 'PNL' ?
-                        <ToolTip
-                            title={'PnL'}
-                            infoText={'PNL (Profit and Loss) – это величина, которая показывает разницу между прибылью и убытками в трейдинге.'}
-                        /> :
-                        <ToolTip
-                            title={'ROE'}
-                            infoText={'ROE — это та процентная ставка, под которую в компании работают средства акционеров. Этот показатель является ключевым для определения эффективности деятельности компании. Например, показатель ROE = 20% говорит о том, что каждый рубль, вложенный в компанию, ежегодно приносит 20 копеек прибыли.'}
-                        />
-                }
-                {
-                    !!data.length && !loading && comissionSwitch &&
+            {
+                header &&
+                <div className={styles['header']}>
+                    {
+                        type === 'PNL' ?
+                            <ToolTip
+                                title={'PnL'}
+                                infoText={'PNL (Profit and Loss) – это величина, которая показывает разницу между прибылью и убытками в трейдинге.'}
+                            /> :
+                            <ToolTip
+                                title={'ROE'}
+                                infoText={'ROE — это та процентная ставка, под которую в компании работают средства акционеров. Этот показатель является ключевым для определения эффективности деятельности компании. Например, показатель ROE = 20% говорит о том, что каждый рубль, вложенный в компанию, ежегодно приносит 20 копеек прибыли.'}
+                            />
+                    }
+                    {
+                        !!data.length && !loading && comissionSwitch &&
                     <div className={styles['comission-block']}>
                         <ToolTip
                             title={'С комиссией'}
@@ -147,8 +160,9 @@ const Chart = ({ data, type, className, loading, comissionSwitch = true }: Chart
                             justify={'gap'}
                         />
                     </div>
-                }
-            </div>
+                    }
+                </div>
+            }
             <div
                 className={styles['wrapper']}
                 ref={chartRef}

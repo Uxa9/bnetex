@@ -25,17 +25,6 @@ const Showcase = () => {
         dispatch(getHistoricalData(selectedPeriod, 1));
     }, [selectedPeriod]);
 
-    const formatDates = (dates: string[]) => {
-        return dates.map(it => {
-            const [ year, month, day ] = it.split('-');
-            return {
-                year: Number(year),
-                month: Number(month),
-                day: Number(day),
-            };
-        });
-    };
-
     return(
         <section className={styles['container']}>
             <div className={styles['wrapper']}>
@@ -80,14 +69,8 @@ const Showcase = () => {
                         className={styles['chart']}
                         // toDo: вырезать в отдельную функцию
                         data={dates.map((date, index) => {
-                            const [ year, month, day ] = date.split('-');
-                            const time = {
-                                year: Number(year),
-                                month: Number(month),
-                                day: Number(day),
-                            };
                             return {
-                                time: time,
+                                time: date,
                                 value: roe[index],
                             };
                         })}

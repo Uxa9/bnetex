@@ -1,4 +1,5 @@
 import { Button } from 'lib/ui-kit';
+import { createDummyArray } from 'lib/utils/createDummyArray';
 import TradeCoinCard, { TradeCoinCardProps } from 'modules/Landing/components/tradeCoinCard/tradeCoinCard';
 import { useEffect, useState } from 'react';
 import { tradeSectionCoins } from './coins';
@@ -26,12 +27,14 @@ const Trade = () => {
             <div className={styles['wrapper']}>
                 <div className={styles['cards']}>
                     {
-                        coins.map(it =>
-                            <TradeCoinCard
-                                key={it.ticker}
-                                {...it}
-                            />
-                        )
+                        coins.length
+                            ? coins.map(it =>
+                                <TradeCoinCard
+                                    key={it.ticker}
+                                    {...it}
+                                />
+                            )
+                            : createDummyArray(4).map((_, index) => <div key={index}>loading...</div>)
                     }
                 </div>
                 <div className={styles['info']}>

@@ -23,8 +23,8 @@ const EarnCard = ({ percent, description, isPrimary, className }: EarnCardProps)
                 <div className={styles['card__title']}>
                     {
                         isPrimary
-                            ? <h3>{ percent }</h3>
-                            : <h5>{ percent }</h5>
+                            ? <h3>{ `${percent}%` }</h3>
+                            : <h5>{ `${percent}%` }</h5>
                     }
                     <span className={isPrimary ? 'text-bold' : 'text'}>годовых</span>
                 </div>

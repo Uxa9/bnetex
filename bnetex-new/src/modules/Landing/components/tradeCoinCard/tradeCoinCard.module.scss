@@ -1,0 +1,73 @@
+@import 'styles/mixins';
+
+.card {
+  @include column-flex(16px);
+
+  background-color: $grayscale-card;
+  border: 1px solid $grayscale-4;
+  border-radius: 6px;
+  padding: 16px;
+
+  .header {
+    @include align-center-row-flex(16px);
+
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 1px solid $grayscale-4;
+
+    &__coin-data {
+      @include align-center-row-flex(12px);
+
+      .coin-logo {
+        width: 40px;
+      }
+    }
+
+    &__change24h {
+      @include align-center-row-flex(4px);
+      @include size-svg(12px);
+
+      padding: 6px 8px;
+      border-radius: 50px;
+
+      &--positive {
+        @include color-svg($green-3);
+
+        background-color: $green-6;
+      }
+
+      &--negative {
+        @include color-svg($red-3);
+
+        background-color: $red-6;
+
+        .change-arrow {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+
+  .market-data {
+    @include align-center-row-flex(16px);
+
+    justify-content: space-between;
+
+    &__numbers {
+      @include column-flex(8px);
+
+      .volume {
+        color: $grayscale-9;
+      }
+    }
+
+    .chart {
+      padding: 0;
+      background-color: transparent;
+      box-shadow: none;
+      width: 100%;
+      max-height: 50px;
+      max-width: clamp(50px, 12vw, 200px);
+    }
+  }
+}

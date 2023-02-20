@@ -6,7 +6,24 @@
   position: relative;
 
   .wrapper {
-    @include align-center-row-flex(72px);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 48px;
+
+    @include max-width($laptop-bp) {
+      flex-direction: column-reverse;
+      row-gap: 32px;
+    }
+  }
+
+  .cards {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 16px;
+    column-gap: 16px;
   }
 
   .info {

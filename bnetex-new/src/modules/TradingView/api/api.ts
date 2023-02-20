@@ -119,7 +119,6 @@ export default {
     getServerTime: (callback: ServerTimeCallback) => {
         getExchangeServerTime()
             .then((time: number) => {
-                // не знаю почему, но у tv какие то блядские приколы со временем
                 callback(Math.floor(time / 1000));
             });
     },

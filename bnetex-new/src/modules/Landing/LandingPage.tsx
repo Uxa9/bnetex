@@ -16,7 +16,7 @@ const LandingPage = () => {
                 <Greeting />
                 <Showcase />
                 <Earn />
-                {/* <Trade /> */}
+                <Trade />
                 <Questions />
             </div>
         </main>
