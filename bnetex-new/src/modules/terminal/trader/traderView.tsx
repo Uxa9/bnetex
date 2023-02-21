@@ -62,7 +62,6 @@ const TradeView = () => {
         }
     };
 
-
     useEffect(() => {
         getUserFuturesWallet()
             .then((res) => {
