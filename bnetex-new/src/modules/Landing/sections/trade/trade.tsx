@@ -1,5 +1,6 @@
 import { Button } from 'lib/ui-kit';
 import { createDummyArray } from 'lib/utils/createDummyArray';
+import Blur from 'modules/Global/components/blurredBackgroundItem';
 import TradeCoinCard, { TradeCoinCardProps } from 'modules/Landing/components/tradeCoinCard/tradeCoinCard';
 import { useEffect, useState } from 'react';
 import { tradeSectionCoins } from './coins';
@@ -23,6 +24,18 @@ const Trade = () => {
 
     return (
         <section className={styles['container']}>
+            <Blur
+                color={'blue'}
+                type={'ellipse'}
+                top={'0%'}
+                left={'50%'}
+            />
+            <Blur
+                color={'purple'}
+                type={'ellipse'}
+                top={'30%'}
+                left={'0%'}
+            />
             <div className={styles['wrapper']}>
                 <div className={styles['cards']}>
                     {
