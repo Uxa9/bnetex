@@ -84,7 +84,8 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
             fullscreen: props.fullscreen,
             autosize: props.autosize,
             studies_overrides: props.studiesOverrides,
-            custom_css_url: '/src/modules/TradingView/tradingviewRecolor.scss',
+            // единственный рабочий вариант - подгрузка из папки public
+            custom_css_url: '/charting_library/tradingviewRecolor.scss',
             theme: capitalizeFirstLetter(theme) as ThemeName,
             overrides: getOverrides(),
         };

@@ -57,13 +57,13 @@ export function evaluateTheme(): Theme {
     }
 
     function populateColorsObject (colorsQuantity: number, colorGroup: string) {
-    
+
         const colors: IndexableStringType = {};
-        
+
         for (let i = 1; i <= colorsQuantity; i++) {
             colors[`${i}`] = getColor(colorsMapModule[`${colorGroup}-${i}`]);
         }
-    
+
         return colors;
     }
 
