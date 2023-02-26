@@ -42,6 +42,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         <div
             className={clsx(
                 'theme-wrapper',
+                'scrollbar',
                 theme === 'dark' ? 'dark-theme' : 'light-theme'
             )}
             id={THEME_ROOT_ID}
