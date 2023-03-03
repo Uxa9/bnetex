@@ -83,7 +83,7 @@ export class UsersController {
     }
 
     @ApiOperation({
-        summary : 'Transfer money between wallets'
+        summary : 'Transfer money between wallet'
     })
     @UseGuards(JwtAuthGuard)
     @Post('/transfer-money')

@@ -5,6 +5,7 @@ import { InvestSession } from "../invest-sessions/invest-sessions.model";
 import { Role } from "../roles/roles.model";
 import { UserRoles } from "../roles/user-roles.model";
 import { StringBoolean } from "binance";
+import {Wallets} from "../wallet/wallet.model";
 
 interface UserCreationAttrs {
     email : string,
@@ -131,5 +132,8 @@ export class User extends Model<User, UserCreationAttrs> {
 
     @HasMany(() => Request)
     requests: Request[];
+
+    @HasMany(() => Wallets)
+    wallets: Wallets[];
 
 }

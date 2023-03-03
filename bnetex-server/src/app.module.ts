@@ -21,6 +21,7 @@ import { Position } from "./positions/position.model";
 import { PositionEnters } from "./positions/positionEnters.model";
 import { GatewayModule } from "./gateway/gateway.module";
 import { SocketModule } from "./socket/socket.module";
+import { WalletModule } from './wallet/wallet.module';
 
 
 @Module({
@@ -52,7 +53,8 @@ import { SocketModule } from "./socket/socket.module";
         InvestSessionsModule,
         InvestTradingModule,
         GatewayModule,
-        SocketModule
+        SocketModule,
+        WalletModule
     ]
 })
 export class AppModule{};
