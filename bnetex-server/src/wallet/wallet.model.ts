@@ -11,7 +11,7 @@ interface WalletCreationAttrs {
 @Table({
     tableName : 'wallets'
 })
-export class Wallets extends Model<Wallets, WalletCreationAttrs> {
+export class Wallet extends Model<Wallet, WalletCreationAttrs> {
 
     @Column({
         type          : DataType.INTEGER,

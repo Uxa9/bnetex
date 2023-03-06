@@ -1,5 +1,5 @@
 import {Column, DataType, HasMany, Model, Table} from "sequelize-typescript";
-import {Wallets} from "./wallet.model";
+import {Wallet} from "./wallet.model";
 
 
 interface NetworkCreationAttrs {
@@ -25,7 +25,7 @@ export class WalletNetwork extends Model<WalletNetwork, NetworkCreationAttrs> {
     })
     name : string;
 
-    @HasMany(() => Wallets)
-    wallets: Wallets[];
+    @HasMany(() => Wallet)
+    wallets: Wallet[];
 
 }

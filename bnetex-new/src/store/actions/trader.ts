@@ -10,10 +10,13 @@ interface UserPosition {
 
 }
 
+// export interface TraderState {
+//     tickerPrice: number;
+//     tradeCup: TradeCupPosition[];
+// }
+
 export interface TraderState {
-    tickerPrice: number;
-    tradeCup: TradeCupPosition[];
-    
+    messages: Object[]
 }
 
 export enum TraderActionTypes {
