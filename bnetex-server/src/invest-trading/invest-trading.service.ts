@@ -11,12 +11,12 @@ export class InvestTradingService {
 
     async getUserBalance(id: number) {
 
-        const user = this.userService.getUserById(id);
+        const user = await this.userService.getUserById(id);
         
         // get user keys
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: user.api_key,
+            api_secret: user.api_secret,
         });
 
         const result = await client.getBalance();
@@ -25,12 +25,12 @@ export class InvestTradingService {
     }
 
     async getLeverageAndIsolated(id: number) {
-        // const user = this.userService.getUserById(id);
+        const user = await this.userService.getUserById(id);
 
         // get user keys
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: user.api_key,
+            api_secret: user.api_secret,
         });
 
         const info = await client.getAccountInformation();
@@ -44,14 +44,15 @@ export class InvestTradingService {
     }
 
     async placeOrder(params: any) {
+        const user = await this.userService.getUserById(params.id);
 
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: user.api_key,
+            api_secret: user.api_secret,
         });
 
         const assetPrices = await client.getMarkPrice({
-            symbol: "BTCUSDT"
+            symbol: params.pair
         });
 
         let markPrice = 0;
@@ -67,7 +68,7 @@ export class InvestTradingService {
         try {
             if (params.type === "MARKET") {
                 await client.submitNewOrder({
-                    symbol: "BTCUSDT",
+                    symbol: params.pair,
                     side: params.side,
                     type: params.type,
                     quantity: Number(amount.toFixed(3)),
@@ -76,28 +77,30 @@ export class InvestTradingService {
 
             if (params.type === "LIMIT") {
                 await client.submitNewOrder({
-                    symbol: "BTCUSDT",
+                    symbol: params.pair,
                     side: params.side,
                     type: params.type,
                     price: params.price,
                     timeInForce: params.tif || "GTC",
-                    quantity: Number((params.amount / params.price).toFixed(3)),
+                    quantity: Number((params.amount / params.price).toFixed(3))
+                }).catch((e) => {
+                    return e;
                 });
             }
 
             return;
         }
         catch (e) {
-            throw e;
+            return e;
         }
     }
 
     async getMaxLeverage(id: number) {
-        // const user = this.userService.getUserById(id);
+        const user = await this.userService.getUserById(id);
 
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: user.api_key,
+            api_secret: user.api_secret,
         });
 
         return await client.getNotionalAndLeverageBrackets({
@@ -106,11 +109,11 @@ export class InvestTradingService {
     }
 
     async setUserLeverage(params: any) {
-        // const user = this.userService.getUserById(params.id);
+       const user = await this.userService.getUserById(params.id);
         
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: user.api_key,
+            api_secret: user.api_secret,
         });
 
         return await client.setLeverage({
@@ -120,9 +123,11 @@ export class InvestTradingService {
     }
 
     async getUserPositions(id: number) {
+        const user = await this.userService.getUserById(id);
+
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: user.api_key,
+            api_secret: user.api_secret,
         });
 
         // const a = await client.getAccountInformation()
@@ -136,51 +141,56 @@ export class InvestTradingService {
             client.getAccountInformation()
         ]).then(([/*orders,*/ positions, info]) => {     
             // console.log(info);
-            const pos = positions.filter(item => item.symbol === "BTCUSDT");
-            const inf = info.positions.filter(item => item.symbol === "BTCUSDT");
+            const pos = positions.filter(item => item.entryPrice !== '0.0');
+            const inf = info.positions.filter(item => item.entryPrice !== '0.0');
             // console.log(pos);
             // console.log(inf);
             
             return {
                 // orders,
-                pos : pos[0],
-                inf : inf[0]
+                pos,
+                inf
             }
         });
     }
 
     async closeAllPositions(id: number) {
+        const user = await this.userService.getUserById(id);
+
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: user.api_key,
+            api_secret: user.api_secret,
         });
 
         const positions = await client.getPositions();
 
-        const amount = Number(positions.find(item => item.symbol === "BTCUSDT").positionAmt);
+        positions.map(async (item) => {
+            const amount = Number(item.positionAmt);
 
-        if ( amount > 0) {
-            await client.submitNewOrder({
-                symbol: "BTCUSDT",
-                side: "SELL",
-                type: "MARKET",
-                quantity: amount,
-            });
-        } else {
-                        
-            await client.submitNewOrder({
-                symbol: "BTCUSDT",
-                side: "BUY",
-                type: "MARKET",
-                quantity: amount*-1,
-            });
-        }
+            if (amount === 0) return;
+
+            if (amount > 0) {
+                client.submitNewOrder({
+                    symbol: item.symbol,
+                    side: "SELL",
+                    type: "MARKET",
+                    quantity: amount
+                }).then().catch(err => console.log(err));
+            } else {
+                client.submitNewOrder({
+                    symbol: item.symbol,
+                    side: "BUY",
+                    type: "MARKET",
+                    quantity: amount*-1,
+                }).then().catch(err => console.log(err));
+            }
+        });
     }
 
     async test() {
         const client = new USDMClient({
-            api_key: "qV8uFbOk1cvhNvAhuayRJ4HNMxjtfNX8rn0ucBQueV9zJ2bbMAHSbujR6hzbiZFS",
-            api_secret: "egMlLmKtMQSCnlveSMVDXBBaSkxWidZbpvfgKBbpAFojolBOK3Mi1nqWXw7bbGbA",
+            api_key: "ZJAPDwq3dn47W0syHdqkmpwJGuyLkAUZ7ORRK9TBEYcvtxB5AWySJLcPsjDIoE4d",
+            api_secret: "hJ3eYDeVepnpuVcNi7GHiXmym7BLltuFGvCiV71ya2p5HPbe863lF9aBybwz2YcA",
         });
 
         return Promise.all([

@@ -1,6 +1,6 @@
 import HistoryAndOrders from './historyAndOrders/historyAndOrders';
-import TradingViewWidget from 'modules/TradingView/TradingViewWidget';
-import { Outlet, useLocation } from 'react-router-dom';
+import TradingViewWidget, { ChartContainerProps } from 'modules/TradingView/TradingViewWidget';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
 import styles from './terminalLayout.module.scss';
 import { useActions } from 'lib/hooks/useActionCreators';
 import { useEffect } from 'react';
@@ -27,7 +27,7 @@ const TerminalLayout = () => {
             )}
         >
             <TradingViewWidget
-                className={clsx(styles.chart, 'card')}
+                className={clsx(styles.chart, 'card')} 
             />
             <HistoryAndOrders
                 className={styles.history}

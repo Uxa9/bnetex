@@ -37,7 +37,7 @@ const AppRoutes = () => {
                     <Route path={HOME} element={<LandingPage />}></Route>
                     <Route path={TERMINAL} element={<TerminalLayout />}>
                         <Route path="investor" element={<InvestorView />} />
-                        <Route path="trader" element={<TradeView />} />
+                        <Route path="trader/:pair" element={<TradeView />} />
                     </Route>
                     <Route
                         path={`${DASHBOARD}/*`}

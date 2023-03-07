@@ -21,7 +21,6 @@ interface GetWalletsAction {
     investorWallet: number;
 }
 
-
 interface WalletRequestReturnedAction {
     type: WalletActionTypes.WALLET_REQUEST_RETURNED;
 }

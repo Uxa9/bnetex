@@ -351,4 +351,31 @@ export class UsersService {
             PNL: userShare*(pnl - 1)
         }];
     }
+
+    async setApiKey(dto: any) {
+        const user = await this.getUserById(dto.id);
+        
+        const api = {
+            api_key : dto.api_key,
+            api_secret : dto.api_secret
+        };
+
+        try {
+            await user.update(api);
+
+            return {
+                status: "SUCCESS",
+                message: "API_CHANGED"
+            }
+        }
+        catch {
+            throw new HttpException(
+                {
+                    status: "ERROR",
+                    message: "INTERNAL_SERVER_ERROR"
+                },
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }

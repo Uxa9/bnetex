@@ -51,3 +51,13 @@ export const checkActivationCodeTime = async (email: string) => {
             email: email,
         });
 };
+
+export const changeApiKey = async (api_key: string, api_secret: string) => {
+    return await api.put(
+        '/users/set-api', {
+            id: getUserInfo().userId,
+            api_key,
+            api_secret
+        }
+    )
+}

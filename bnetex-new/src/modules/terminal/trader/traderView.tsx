@@ -10,16 +10,14 @@ import { getUserFuturesWallet } from 'services/getUserFuturesWallet';
 import { sendFuturesOrder } from 'services/trading/sendFuturesOrder';
 import {getCurrentLeverageAndIsolated} from '../../../services/trading/getCurrentLeverageAndIsolated';
 import axios from 'axios';
-import { convertPricesByTick } from './convertPricesByTick';
+import { convertPricesByTick } from './components/cup/services/convertPricesByTick';
+import { getUserPositions } from 'services/trading/getUserPositions';
+import { useToast } from 'lib/hooks/useToast';
+import { useParams, useRoutes,  } from 'react-router-dom';
+import TraderCup from './components/cup/cup';
 
 type TraderViewType = 'limit' | 'tpsl';
 type TraderSumType  = 'exactSum' | 'percent';
-
-interface TradeFormData {
-    side: string,
-    type: string,
-    amount: number
-}
 
 const TradeView = () => {
     const [futuresWallet, setFuturesWallet] = useState<number>(0);
@@ -30,10 +28,8 @@ const TradeView = () => {
     const [limitPrice, setLimitPrice] = useState(0);
 
     const [orderBook, setOrderBook] = useState<any>([]);
-    const [wsOrderBook, setWsOrderBook] = useState<any>([]);
-    const [orderBookSnapshot, setOrderBookSnapshot] = useState<any[]>([]);
-    const [orderBookStep, setOrderBookStep] = useState<number>(0.1);
     const refSnapshot = useRef<NodeJS.Timeout | null>(null);
+    const posSnapshot = useRef<NodeJS.Timeout | null>(null);
 
     const { open: OpenMarginModal } = useModal(MarginPopUp);
     const { open: OpenLeverModal } = useModal(LeverPopUp);
@@ -42,55 +38,29 @@ const TradeView = () => {
     const [amount, setAmount] = useState(0);
     const [btcprice, setBtcprice] = useState(0);
 
-    const sendOrder = (type: string) => {
+    const refOrderBookSocket = useRef<WebSocket | null>(null)
+    const refBtcPrice = useRef<WebSocket | null>(null)
+
+    const { pair } = useParams();
+
+    const sendOrder = (type: string, side: string) => {
         if (limitPrice !== 0) {
             sendFuturesOrder({
-                side: tradeType,
+                side: side,
                 type: 'LIMIT',
                 price: limitPrice,
                 amount: amount,
+                pair: pair,
             });
         } else {
             sendFuturesOrder({
-                side: tradeType,
+                side: side,
                 type: type,
                 amount: amount,
+                pair: pair,
             });
         }
     };
-
-    const sendLimitOrder = (price: number, tif?: string) => {
-        sendFuturesOrder({
-            side: tradeType,
-            type: 'LIMIT',
-            price: price,
-            amount: amount,
-            tif: tif || 'GTC',
-        });
-    };
-
-    const getOrderBookSnapshot = async () => {
-        const res = await axios.get('https://fapi.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=1000');
-
-        const asks: string[][] = res.data.asks.reverse();
-        const bids: string[][] = res.data.bids.reverse();
-
-        if (orderBookStep === 0.1) {
-            setOrderBookSnapshot(asks.concat(bids));
-            return;
-        }
-
-        const tick = parseInt((orderBookStep / 0.1).toFixed(2), 10);
-
-        const convertedAsks = convertPricesByTick(asks, tick);
-        const convertedBids = convertPricesByTick(bids, tick);
-
-        setOrderBookSnapshot(convertedAsks.concat(convertedBids));
-    };
-
-    const convertPricesByStep = useCallback(() => {
-        const tick = parseInt((orderBookStep / 0.1).toFixed(2), 10);
-    }, [orderBookStep]);
 
     useEffect(() => {
         getUserFuturesWallet()
@@ -108,93 +78,19 @@ const TradeView = () => {
                 setIsolated(true);
             });
 
-        const orderBookSocket = new WebSocket('wss://fstream.binance.com/stream?streams=btcusdt@depth20');
-        const btcPrice = new WebSocket('wss://stream.binance.com/stream?streams=btcusdt@miniTicker');
-
-        orderBookSocket.onmessage = (event) => {
-            const { a, b } = JSON.parse(event.data).data;
-
-            setWsOrderBook(a.concat(b));
-        };
-
-        //     const getOrderBookSnapshot = async () => {
-        //         const res = await axios.get('https://fapi.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=1000');
-
-        //         // console.log(res.data);
-        //         // console.log([...res.data.asks.reverse(), ...res.data.bids]);
-        // // console.log(orderBookStep);
-
-        //         const tick = parseInt((orderBookStep / 0.1).toFixed(2));
-
-        //         const a = res.data.asks.reverse();
-        //         const b = res.data.bids;
-
-        //         let snapShotArr = [];
-
-        //         if (orderBookStep >= 1) {
-        //             // console.log(a);
-        //             for (let i = 0; i < a.length; i+=tick) {
-
-        //                 const piece = a.slice(i, tick+i);
-
-        //                 // const sum = piece.reduce()
-        //                 const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);
-        //                 // console.log(sum);
-        //                 // console.log(piece);
-        //                 // console.log(i);
-
-        //                 // console.log(piece.pop()[0]);
-
-        //                 snapShotArr.push([(Math.ceil(piece.pop()[0] / orderBookStep) * orderBookStep).toFixed(2), sum.toString()]);
-        //             }
-
-        //             for (let i = 0; i < b.length; i+=tick) {
-        //                 const piece = b.slice(i, tick+i);
-
-        //                 const sum = piece.reduce((acc: any, cur: any[]) => acc + Number(cur[1]), 0);
-        //                 snapShotArr.push([(Math.ceil(piece.pop()[0] / orderBookStep) * orderBookStep).toFixed(2), sum.toString()]);
-        //             }
-        //         } else {
-        //             snapShotArr = [ ...a, ...b ];
-        //         }
-        //         console.log(snapShotArr);
-
-        //         setOrderBookSnapshot(snapShotArr);
-        //         // orderBookSnapshot = snapShotArr;
-        // // console.log(orderBookSnapshot);
-
-        //         // setOrderBookSnapshot([...res.data.asks.reverse(), ...res.data.bids]);
-        //     }
-
-        btcPrice.onmessage = (event) => {
-            // console.log(JSON.parse(event.data));
-
-            let price = JSON.parse(event.data).data.c;
-            // console.log(price);
-            setBtcprice(price);
-
-            // setOrderBook([...data.b, ...data.a]);
-        };
-
-        const getUserLever = async () => {
-            const res = await getCurrentLeverageAndIsolated();
-
-            setLeverage(res.data.leverage);
-            setIsolated(res.data.isolated);
-        };
-
-        // const interval = setInterval(getUserLever, 1000);
-        refSnapshot.current = setInterval(getOrderBookSnapshot, 1000);
+        refOrderBookSocket.current = new WebSocket(`wss://fstream.binance.com/stream?streams=${pair?.toLocaleLowerCase()}@depth20`);
+        refBtcPrice.current = new WebSocket(`wss://stream.binance.com/stream?streams=${pair?.toLocaleLowerCase()}@miniTicker`);
 
         return () => {
-            orderBookSocket.close();
-            btcPrice.close();
-
             if (!refSnapshot.current ) return;
             clearInterval(refSnapshot.current);
+
+            if (!posSnapshot.current ) return;
+            clearInterval(posSnapshot.current);
         };
     }, []);
 
+    // Расчет цены ликвидации
     useEffect(() => {
         const nominalMargin = btcprice / leverage;
 
@@ -221,162 +117,19 @@ const TradeView = () => {
         const shortPrice = shortMargin + openShortOrderLoss;
     }, [amount]);
 
-    useEffect(() => {
-        if (refSnapshot.current ) clearInterval(refSnapshot.current);
-        refSnapshot.current = setInterval(getOrderBookSnapshot, 2000);
-
-    }, [orderBookStep]);
-
-    useEffect(() => {
-        const bigData = orderBookSnapshot;
-        let smallData = wsOrderBook;
-
-        if (orderBookStep !== 0.1) {
-            const tick = parseInt((orderBookStep / 0.1).toFixed(2), 10);
-
-            smallData = convertPricesByTick(smallData, tick);
-        }
-        console.log(smallData);
-
-        smallData.map((item: any[]) => {
-            const i = bigData.findIndex((bigDataItem: any[]) => bigDataItem[0] === item[0]);
-
-            if (i !== -1) {
-                bigData[i] = item;
-            }
-        });
-
-
-        setOrderBook(bigData);
-    }, [orderBookSnapshot, wsOrderBook, orderBookStep]);
-    // }, [orderBookSnapshot, wsOrderBook])
-
-    const renderTradeCup = (length: number) => {
-        const tradeCupArr = wsOrderBook.slice(wsOrderBook.length/2 - length, wsOrderBook.length/2 + length).reverse();
-        console.log(tradeCupArr);
-
-        const maxVolume = Math.max(...tradeCupArr.map((item: string[]) => parseFloat(item[1])));
-
-        console.log(maxVolume);
-
-        return tradeCupArr.map((item: any[], index: any) => {
-
-            const parseBgColor = () => {
-
-                const percent = item[1]/ maxVolume * 100;
-
-                const greenColor = () => {
-
-                    if (percent < 25) return '#84E088';
-                    if (percent < 50) return '#5CD662';
-                    if (percent < 75) return '#17CE1F';
-
-                    return '#0B8D11';
-                };
-
-                const redColor = () => {
-
-                    if (percent < 25) return '#E08484';
-                    if (percent < 50) return '#D65C5C';
-                    if (percent < 75) return '#EC1313';
-
-                    return '#8D0B0B';
-                };
-
-                if (index < tradeCupArr.length / 2 - 1) {
-
-                    let color = greenColor();
-
-                    return {
-                        background: `linear-gradient(90deg, ${color} 0%, ${color} ${item[1]/ maxVolume * 100}%, #00000000 ${item[1]/ maxVolume * 100}%)`,
-                    };
-                }
-                if (index > tradeCupArr.length / 2) {
-
-                    let color = redColor();
-
-                    return {
-                        background: `linear-gradient(90deg, ${color} 0%, ${color} ${item[1]/ maxVolume * 100}%, #00000000 ${item[1]/ maxVolume * 100}%)`,
-                    };
-                }
-
-                return {};
-            };
-
-            return (
-                <div
-                    className={clsx(styles['cup-position'])}
-                    onClick={() => {
-                        sendLimitOrder(Number(item[0]), 'FOK');
-                    }}
-                    style={parseBgColor()}
-                >
-                    <span>
-                        {Number(item[1]).toFixed(4)}
-                    </span>
-                    <span>
-                        {item[0]}
-                    </span>
-                </div>
-            );
-        });
-    };
-
     return (
         <div
             className={clsx(styles['trade-layout'])}
         >
             <div
-                className={clsx('card', styles['cup'])}
+                className={clsx('card')}
             >
-                {/* <ToggleButtonGroup
-                    title={''}
-                    name={'cup_step'}
-                    onChange={(value: number) => {
-                        setOrderBookStep(Number(value));
-                    }}
-                    value={orderBookStep.toString()}
-                >
-                    <ToggleButton
-                        text={'0.1'}
-                        value={'0.1'}
-                    />
-                    <ToggleButton
-                        text={'1'}
-                        value={'1'}
-                    />
-                    <ToggleButton
-                        text={'10'}
-                        value={'10'}
-                    />
-                </ToggleButtonGroup> */}
-                <div
-                    className={clsx(styles['cup-head'])}
-                >
-                    <span>
-                        Объем (USDT)
-                    </span>
-                    <span>
-                        Цена (USDT)
-                    </span>
-                </div>
-                {
-                    orderBookStep >= 10 ?
-                        <div
-                            className={clsx(styles['cup-small'])}
-                        >
-                            {renderTradeCup(10)}
-                        </div> :
-                        <div
-                            className={clsx(styles['cup-big'])}
-                        >
-                            {renderTradeCup(20)}
-                        </div>
-                }
+                <TraderCup
+                    amount={amount}
+                />
             </div>
             <form
                 className={clsx('card', styles['trade-panel'])}
-                // onSubmit={onSubmit}
             >
                 <div
                     className={styles['trader-view-wrapper__header']}
@@ -594,7 +347,7 @@ const TradeView = () => {
                             onClick={(e) => {
                                 e.preventDefault();
                                 setTradeType('BUY');
-                                sendOrder('MARKET');
+                                sendOrder('MARKET', 'BUY');
                             }}
                         />
                         <div
@@ -653,7 +406,7 @@ const TradeView = () => {
                             onClick={(e) => {
                                 e.preventDefault();
                                 setTradeType('SELL');
-                                sendOrder('MARKET');
+                                sendOrder('MARKET', 'SELL');
                             }}
                         />
                         <div

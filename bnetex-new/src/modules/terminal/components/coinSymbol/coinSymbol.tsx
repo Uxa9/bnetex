@@ -2,10 +2,11 @@ import clsx from 'clsx';
 import { CoinSymbolProps } from 'modules/terminal/types/coinSymbol';
 import styles from './coinSymbol.module.scss';
 
-const CoinSymbol = ({firstCoin, secondCoin, lever, type}: CoinSymbolProps) => {
+const CoinSymbol = ({pair, lever, type, callbackFunc}: CoinSymbolProps) => {    
     return(
         <div 
             className={styles['coin-symbol']}
+            onClick={() => callbackFunc(pair)}
         >
             <div 
                 className={clsx(
@@ -14,7 +15,7 @@ const CoinSymbol = ({firstCoin, secondCoin, lever, type}: CoinSymbolProps) => {
                 )}
             >
                 <p>
-                    {`${firstCoin}/${secondCoin}`}
+                    {`${pair}`}
                 </p>
                 <p
                     className={styles['coin-symbol__lever']}

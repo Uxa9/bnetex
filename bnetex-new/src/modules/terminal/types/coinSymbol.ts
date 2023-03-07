@@ -1,6 +1,6 @@
 export interface CoinSymbolProps {
-    firstCoin: string;
-    secondCoin: string;
+    pair: string;
     lever: number;
     type: string;
+    callbackFunc?: any;
 }
