@@ -7,31 +7,12 @@ import {
     ChartingLibraryWidgetOptions,
     LanguageCode,
     IChartingLibraryWidget,
-    ResolutionString,
     ThemeName,
 } from '../../charting_library';
-import api from './api/api';
 import { getOverrides } from './colorOverrides';
 import { forbiddenMarkResolutions } from './api/types';
 import { useParams } from 'react-router-dom';
-
-
-export interface ChartContainerProps {
-	symbol: ChartingLibraryWidgetOptions['symbol'];
-	interval: ChartingLibraryWidgetOptions['interval'];
-
-	// BEWARE: no trailing slash is expected in feed URL
-	datafeedUrl: string;
-	libraryPath: ChartingLibraryWidgetOptions['library_path'];
-	chartsStorageUrl: ChartingLibraryWidgetOptions['charts_storage_url'];
-	chartsStorageApiVersion: ChartingLibraryWidgetOptions['charts_storage_api_version'];
-	clientId: ChartingLibraryWidgetOptions['client_id'];
-	userId: ChartingLibraryWidgetOptions['user_id'];
-	fullscreen: ChartingLibraryWidgetOptions['fullscreen'];
-	autosize: ChartingLibraryWidgetOptions['autosize'];
-	studiesOverrides: ChartingLibraryWidgetOptions['studies_overrides'];
-	container: ChartingLibraryWidgetOptions['container'];
-}
+import { defaultTradingWidgetProps } from './types';
 
 function getLanguageFromURL(): LanguageCode | null {
     const regex = new RegExp('[\\?&]lang=([^&#]*)');
@@ -39,60 +20,31 @@ function getLanguageFromURL(): LanguageCode | null {
     return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' ')) as LanguageCode;
 }
 
-const defaultProps: Omit<ChartContainerProps, 'container'> = {
-    symbol: 'BTCUSDT',
-    interval: '5' as ResolutionString,
-    datafeedUrl: 'https://demo_feed.tradingview.com',
-    libraryPath: '/charting_library/',
-    chartsStorageUrl: 'https://saveload.tradingview.com',
-    chartsStorageApiVersion: '1.1',
-    clientId: 'tradingview.com',
-    userId: 'public_user_id',
-    fullscreen: false,
-    autosize: true,
-    studiesOverrides: {},
-};
-
-interface TradingViewWidgetProps extends Partial<ChartContainerProps> {
+interface TradingViewWidgetProps {
     className?: string;
 }
 
-const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps) => {
+const TradingViewWidget = ({className }: TradingViewWidgetProps) => {
     const widgetRef = useRef<HTMLDivElement | null>(null);
     const [tvWidget, setTvWidget] = useState<IChartingLibraryWidget | null>(null);
     const { theme } = useTheme();
-    const {pair} = useParams();
-    const props = {...defaultProps, ...componentProps};
+    const { pair } = useParams();
     const { markRefreshFlag } = useTypedSelector(state => state.algotrade);
 
     useEffect(() => {
         if (!widgetRef.current) {
             return;
         }
-        const widgetOptions: ChartingLibraryWidgetOptions = {
-            symbol: pair || props.symbol as string,
-            datafeed: api,
-            interval: props.interval as ChartingLibraryWidgetOptions['interval'],
+        const options: ChartingLibraryWidgetOptions = {
+            ...defaultTradingWidgetProps,
+            symbol: pair ?? defaultTradingWidgetProps.symbol as string,
             container: widgetRef.current,
-            library_path: props.libraryPath as string,
-
-            locale: getLanguageFromURL() || 'ru',
-            disabled_features: ['use_localstorage_for_settings'],
-            enabled_features: ['study_templates'],
-            charts_storage_url: props.chartsStorageUrl,
-            charts_storage_api_version: props.chartsStorageApiVersion,
-            client_id: props.clientId,
-            user_id: props.userId,
-            fullscreen: props.fullscreen,
-            autosize: props.autosize,
-            studies_overrides: props.studiesOverrides,
-            // единственный рабочий вариант - подгрузка из папки public
-            custom_css_url: '/charting_library/tradingviewRecolor.scss',
+            locale: getLanguageFromURL() ?? 'ru',
             theme: capitalizeFirstLetter(theme) as ThemeName,
             overrides: getOverrides(),
         };
 
-        const _widget = new widget(widgetOptions);
+        const _widget = new widget(options);
 
         // навешиваем слушаетель события на смену resolution
         // если выбран 1d или 3d - очистить маркеры
@@ -118,7 +70,6 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
 
     // при изменении интервала времени в истории торгов запрашивать marks
     useEffect(() => {
-
         tvWidget?.onChartReady(() => {
             tvWidget.activeChart().clearMarks();
             tvWidget.activeChart().refreshMarks();
@@ -129,7 +80,7 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
     return (
         <div
             ref={widgetRef}
-            className={props.className}
+            className={className}
         />
     );
 };

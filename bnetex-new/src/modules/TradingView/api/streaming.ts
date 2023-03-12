@@ -49,5 +49,6 @@ const parseCandle = (data: any): Bar => {
 
 // закрыть сокет по его id
 export function unsubscribeFromStream(listenerGuid: UUID) {
+    socketMap.get(listenerGuid)?.addEventListener('close', () => socketMap.delete(listenerGuid));
     socketMap.get(listenerGuid)?.close();
 }
