@@ -5,7 +5,7 @@ import { InvestSession } from "../invest-sessions/invest-sessions.model";
 import { Role } from "../roles/roles.model";
 import { UserRoles } from "../roles/user-roles.model";
 import { StringBoolean } from "binance";
-import {Wallet} from "../wallet/wallet.model";
+import {Wallet} from "../wallet/models/wallet.model";
 
 interface UserCreationAttrs {
     email : string,

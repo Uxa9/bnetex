@@ -22,8 +22,8 @@ import { PositionEnters } from "./positions/positionEnters.model";
 import { GatewayModule } from "./gateway/gateway.module";
 import { SocketModule } from "./socket/socket.module";
 import { WalletModule } from './wallet/wallet.module';
-import {Wallet} from "./wallet/wallet.model";
-import {WalletNetwork} from "./wallet/network.model";
+import {Wallet} from "./wallet/models/wallet.model";
+import {WalletNetwork} from "./wallet/models/network.model";
 
 
 @Module({

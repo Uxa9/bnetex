@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
 import { User } from "../users/users.model";
-import {WalletNetwork} from "../wallet/network.model";
+import {WalletNetwork} from "../wallet/models/network.model";
 
 
 interface TransactionCreationAttrs {
