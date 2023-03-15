@@ -1,16 +1,16 @@
-import {BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
+import {BelongsTo, Column, DataType, ForeignKey, Model, Table} from "sequelize-typescript";
 import {User} from "../../users/users.model";
 import {Network} from "./network.model";
 
-interface WalletCreationAttrs {
+interface WalletNetworkCreationAttrs {
     userId  : number,
     walletId : string
 }
 
 @Table({
-    tableName : 'wallets'
+    tableName : 'walletsNetwork'
 })
-export class Wallet extends Model<Wallet, WalletCreationAttrs> {
+export class WalletNetwork extends Model<WalletNetwork, WalletNetworkCreationAttrs> {
 
     @Column({
         type          : DataType.INTEGER,
@@ -26,17 +26,13 @@ export class Wallet extends Model<Wallet, WalletCreationAttrs> {
     })
     walletId : number;
 
-    @ForeignKey(() => User)
+    @ForeignKey(() => Network)
     @Column({
         type          : DataType.INTEGER,
         allowNull     : false
     })
-    userId : number;
+    networkId : number;
 
-    @BelongsTo(() => User)
-    user : User;
 
-    @HasMany(() => Network)
-    networks: Network[];
 
 }

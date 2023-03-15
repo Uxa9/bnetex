@@ -7,9 +7,9 @@ interface NetworkCreationAttrs {
 }
 
 @Table({
-    tableName : 'walletNetwork'
+    tableName : 'network'
 })
-export class WalletNetwork extends Model<WalletNetwork, NetworkCreationAttrs> {
+export class Network extends Model<Network, NetworkCreationAttrs> {
 
     @Column({
         type          : DataType.INTEGER,
@@ -24,8 +24,5 @@ export class WalletNetwork extends Model<WalletNetwork, NetworkCreationAttrs> {
         unique        : true,
     })
     name : string;
-
-    @HasMany(() => Wallet)
-    wallets: Wallet[];
 
 }
