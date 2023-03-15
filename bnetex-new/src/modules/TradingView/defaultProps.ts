@@ -1,7 +1,13 @@
-import { ChartingLibraryWidgetOptions, ResolutionString } from 'charting_library/charting_library';
+import { ChartingLibraryWidgetOptions, LanguageCode, ResolutionString } from 'charting_library/charting_library';
 import api from './api/api';
 
 type DefaultTWOptions = Omit<ChartingLibraryWidgetOptions, 'container'>
+
+function getLanguageFromURL(): LanguageCode | null {
+    const regex = new RegExp('[\\?&]lang=([^&#]*)');
+    const results = regex.exec(location.search);
+    return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' ')) as LanguageCode;
+}
 
 export const defaultTradingWidgetProps: DefaultTWOptions = {
     datafeed: api,
@@ -17,6 +23,6 @@ export const defaultTradingWidgetProps: DefaultTWOptions = {
     studies_overrides: {},
     disabled_features: ['use_localstorage_for_settings'],
     enabled_features: ['study_templates'],
-    locale: 'ru',
+    locale: getLanguageFromURL() ?? 'ru',
     custom_css_url: '/charting_library/tradingviewRecolor.scss',
 };

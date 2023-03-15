@@ -126,7 +126,7 @@ const RenderTradeCup = (props: any) => {
     useEffect(() => {
         if (test >= pairPrice[0]) setPairPrice([test, 'increase']);
         else setPairPrice([test, 'decrease']);
-    }, test);
+    }, [test]);
 
     useEffect(() => {
         if (refSnapshot.current) clearInterval(refSnapshot.current);

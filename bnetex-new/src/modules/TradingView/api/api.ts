@@ -1,69 +1,33 @@
 import { HistoryCallback, LibrarySymbolInfo, ErrorCallback, PeriodParams, ResolutionString,
     SearchSymbolsCallback, ServerTimeCallback, SubscribeBarsCallback,
-    GetMarksCallback, Mark } from 'charting_library/charting_library';
+    GetMarksCallback, Mark, ResolveCallback } from 'charting_library/charting_library';
+import { OnReadyCallback } from 'charting_library/datafeed-api';
 import { UUID } from 'lib/types/uuid';
+import { debounce } from 'lib/utils/vanillaDebounce';
 import getTVData from 'services/getTVData';
-import { getExchangeServerTime, getSymbols, getKlines, checkInterval } from './services';
+import { getExchangeServerTime, getSymbols, getKlines, checkInterval, searchSymbols } from './services';
 import { subscribeOnStream, unsubscribeFromStream } from './streaming';
-import { TVInterval, forbiddenMarkResolutions, HistoryPeriod } from './types';
-import { separateKlineRequestInterval } from './utils';
-
-const configurationData = {
-    supports_marks: true,
-    supports_timescale_marks: false,
-    supports_time: true,
-    supported_resolutions: [
-        '1', '3', '5', '15', '30', '60', '120', '240', '1D', '3D',
-    ],
-};
+import { TVInterval, forbiddenMarkResolutions, HistoryPeriod, configurationData } from './types';
+import { createSymbolInfo, separateKlineRequestInterval } from './utils';
 
 export default {
     // get a configuration of your datafeed (e.g. supported resolutions, exchanges and so on)
-    onReady: (callback: any) => {
+    onReady: (callback: OnReadyCallback) => {
         setTimeout(() => callback(configurationData)); // callback must be called asynchronously.
     },
 
     // retrieve information about a specific symbol (exchange, price scale, full symbol etc.)
     // ResolveCallback
-    resolveSymbol: (symbolName: string, onResolve: any, onError: (reason: string) => void) => {
+    resolveSymbol: (symbolName: string, onResolve: ResolveCallback, onError: ErrorCallback) => {
 
-        const comps = symbolName.split(':');
-        symbolName = (comps.length > 1 ? comps[1] : symbolName).toUpperCase();
+        // ну я так понимаю что может придти что-то типа BTC: BTCUSDT или кто
+        const parsedSymbolName = symbolName.split(':').at(1)?.toUpperCase();
 
-        // need for pricescale()
-        function pricescale(symbol: any) {
-            for (let filter of symbol.filters) {
-                if (filter.filterType === 'PRICE_FILTER') {
-                    return Math.round(1 / parseFloat(filter.tickSize));
-                }
-            }
-            return 1;
-        }
-
-        const symbolInfo = (symbol: any) => ({
-            name: symbol.symbol,
-            format: 'volume',
-            full_name: symbol.full,
-            description: symbol.baseAsset + ' / ' + symbol.quoteAsset,
-            ticker: symbol.symbol,
-            exchange: 'Binance',
-            listed_exchange: 'Binance',
-            type: 'crypto',
-            session: '24x7',
-            minmov: 1,
-            pricescale: pricescale(symbol), // 	or 100
-            timezone: 'UTC',
-            has_intraday: true,
-            has_daily: true,
-            has_weekly_and_monthly: true,
-            currency_code: symbol.quoteAsset,
-        });
-
-        // Get symbols
-        getSymbols().then(symbols => {
-            const symbol = symbols.find((i: any) => i.symbol === symbolName);
-            return symbol ? onResolve(symbolInfo(symbol)) : onError('[resolveSymbol]: symbol not found');
-        });
+        getSymbols(parsedSymbolName ?? symbolName)
+            .then(res => {
+                const symbol = res.data.at(0);
+                return symbol ? onResolve(createSymbolInfo(symbol)) : onError('[resolveSymbol]: symbol not found');
+            });
     },
 
     getBars: async function (
@@ -92,11 +56,13 @@ export default {
             resolution
         );
 
-        const data = await Promise.all(
-            separatedIntervals.map(it => getKlines({...klinesRequestProps, from: it.from, to: it.to}))
-        ).then(data => {
-            return data.reduce((acc, it) => acc.concat(it), []);
-        });
+        const data = await Promise
+            .all(
+                separatedIntervals
+                    .map(it => getKlines({...klinesRequestProps, from: it.from, to: it.to}))
+            ).then(data => {
+                return data.reduce((acc, it) => acc.concat(it), []);
+            });
 
         if (data.length > 0) return onResult(data);
     },
@@ -124,12 +90,17 @@ export default {
     },
 
     searchSymbols: (
-        _userInput: string,
+        userInput: string,
         _exchange: string,
         _symbolType: string,
-        _onResult: SearchSymbolsCallback
+        onResult: SearchSymbolsCallback
     ) => {
+        const debouncedSearch = debounce(() => {
+            searchSymbols(userInput)
+                .then(res => onResult(res));
+        }, 500);
 
+        debouncedSearch();
     },
 
     getMarks: (

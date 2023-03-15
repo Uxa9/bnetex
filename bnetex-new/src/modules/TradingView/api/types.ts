@@ -1,4 +1,4 @@
-import { PeriodParams } from 'charting_library/charting_library';
+import { DatafeedConfiguration, PeriodParams, ResolutionString } from 'charting_library/charting_library';
 import { UUID } from 'lib/types/uuid';
 
 export interface TVAvailableIntervals {
@@ -42,3 +42,25 @@ export interface KLine {
 export type HistoryPeriod = 1 | 3 | 6;
 
 export type PeriodScope = Pick<PeriodParams, 'from' | 'to'>
+
+export type BinanceSymbol = {
+    symbol: string;
+    baseAsset: string;
+    quoteAsset: string;
+    priceFilter?: PriceFilter;
+}
+
+export type PriceFilter = {
+    maxPrice: string;
+    minPrice: string;
+    tickSize: string;
+};
+
+export const configurationData: DatafeedConfiguration = {
+    supports_marks: true,
+    supports_timescale_marks: false,
+    supports_time: true,
+    supported_resolutions: [
+        '1', '3', '5', '15', '30', '60', '120', '240', '1D', '3D',
+    ] as ResolutionString[],
+};

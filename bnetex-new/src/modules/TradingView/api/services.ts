@@ -1,10 +1,20 @@
 import axios from 'axios';
-import { Bar } from 'charting_library/charting_library';
-import { availableIntervals, KLine, TVInterval } from './types';
+import { Bar, SearchSymbolResultItem } from 'charting_library/charting_library';
+import useApi from 'lib/hooks/useApi';
+import { availableIntervals, BinanceSymbol, KLine, TVInterval } from './types';
+import { symbolToSearchSymbol } from './utils';
+
+const { api } = useApi();
 
 export const getExchangeServerTime = () => binanceRequest('/time').then(res => res.serverTime);
 
-export const getSymbols = () => binanceRequest('/exchangeInfo').then(res => res.symbols);
+export const getSymbols = (filterString: string) =>
+    api.post<BinanceSymbol[]>('/invest-trading/getBinanceSymbols', { filterString });
+
+export const searchSymbols = (filterString: string): Promise<SearchSymbolResultItem[]> => {
+    return getSymbols(filterString)
+        .then(res =>  res.data.map(it => symbolToSearchSymbol(it)));
+};
 
 // получить исторические данные свечек
 export const getKlines = ({ symbol, interval, from, to }: KLine): Promise<Bar[]> => {
@@ -23,12 +33,9 @@ export const getKlines = ({ symbol, interval, from, to }: KLine): Promise<Bar[]>
                 high: parseFloat(i[2]),
                 low: parseFloat(i[3]),
                 close: parseFloat(i[4]),
-                // volume: parseFloat(i[5]),
             }));
-        })
-        .catch(err => console.log(err));
+        });
 };
-
 
 export const checkInterval = (interval: TVInterval) => !!availableIntervals[interval];
 

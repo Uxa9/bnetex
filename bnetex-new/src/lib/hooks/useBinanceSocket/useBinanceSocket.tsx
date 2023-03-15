@@ -61,7 +61,7 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
         };
 
         socket.onmessage = (ev: MessageEvent<any>) => {
-            console.log(ev);
+            console.log(JSON.parse(ev.data));
         };
 
         socketMap.current.set(socketId, socket);
