@@ -1,5 +1,5 @@
 import {Column, DataType, HasMany, Model, Table} from "sequelize-typescript";
-import {Wallet} from "./wallet.model";
+// import {Wallet} from "./wallet.model";
 
 
 interface NetworkCreationAttrs {

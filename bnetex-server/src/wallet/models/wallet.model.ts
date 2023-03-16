@@ -36,7 +36,7 @@ export class Wallet extends Model<Wallet, WalletCreationAttrs> {
     @BelongsTo(() => User)
     user : User;
 
-    @HasMany(() => Network)
-    networks: Network[];
+    // @HasMany(() => Network)
+    // networks: Network[];
 
 }

@@ -23,7 +23,11 @@ import { GatewayModule } from "./gateway/gateway.module";
 import { SocketModule } from "./socket/socket.module";
 import { WalletModule } from './wallet/wallet.module';
 import {Wallet} from "./wallet/models/wallet.model";
-import {WalletNetwork} from "./wallet/models/network.model";
+import { WalletNetwork } from "./wallet/models/walletNetwork";
+import { Network } from "./wallet/models/network.model";
+import { Currency } from "./wallet/models/currency.model";
+import { BinanceSymbols } from "./invest-trading/models/binanceSymbols.model";
+import { PriceFilter } from "./invest-trading/models/priceFilter.model";
 
 
 @Module({
@@ -40,7 +44,22 @@ import {WalletNetwork} from "./wallet/models/network.model";
             username: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
-            models: [User, Role, UserRoles, Request, InvestSession, Position, PositionEnters, Wallet, WalletNetwork],
+            models: [
+                User, 
+                Role, 
+                UserRoles, 
+                Request, 
+                InvestSession, 
+                Position, 
+                PositionEnters, 
+                Wallet, 
+                WalletNetwork, 
+                Network, 
+                Currency,
+                WalletNetwork,
+                BinanceSymbols,
+                PriceFilter
+            ],
             autoLoadModels: true,
             logging: false
         }),
