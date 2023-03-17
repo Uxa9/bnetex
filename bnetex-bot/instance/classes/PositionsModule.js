@@ -46,6 +46,8 @@ module.exports = class PositionsModule {
    * @returns
    */
   async closePositions() {
+
+
     // Checking if there are actual positions
     let actualPosition = await this.getActualPositions();
     
@@ -75,30 +77,21 @@ module.exports = class PositionsModule {
 
     let patternCompare = StrategyRules(this.lastKline, groupped, true, true);
 
-    patternCompare = true;
-
-    console.log({ patternCompare });
-
     let POSITION_ACTIVE = await this.exchangeAccount.getOpenPositions(this.pair);
 
     // Volume of buy 
     let buyVolume = actualPosition.averagePrice * parseFloat(POSITION_ACTIVE.positionAmt)
     let sellVolume = this.actualPrice * parseFloat(POSITION_ACTIVE.positionAmt)
 
-    console.log({ap: actualPosition.averagePrice, papa: POSITION_ACTIVE.positionAmt, acprive: this.actualPrice})
-
     let profitVolume = sellVolume - buyVolume;
 
-    console.log({profitVolume})
-
-    
-
     if(!patternCompare) return null;
-    let mysqlPARAMS = {status: false, closeTime: moment(this.lastKline.endTime, 'x').toDate(), percentProfit, closePrice: parseFloat(this.lastKline.close), sumProfit: profitVolume}
-    console.log({mysqlPARAMS})
-    //await db.models.Position.update(params, {where: {id: actualPosition.id}})
 
-    //await this.futures.marketSell(actualPosition.volumeACTIVE);
+    let mysqlPARAMS = {status: false, closeTime: moment(this.lastKline.endTime, 'x').toDate(), percentProfit, closePrice: parseFloat(this.lastKline.close), sumProfit: profitVolume}
+    
+    await db.models.Position.update(mysqlPARAMS, {where: {id: actualPosition.id}})
+
+    await this.futures.marketSell(actualPosition.volumeACTIVE);
 
     return null;
   }
