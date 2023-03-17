@@ -72,7 +72,7 @@ module.exports = async (pair, timeframe, limit, startTimeFrom = false, lastTime 
   }
 
   await new Promise((res, rej) => {
-    setTimeout(() => {res()}, 700)
+    setTimeout(() => {res()}, 900)
   })
 
   return data;
@@ -100,7 +100,7 @@ let getFromExchange = async (limit, startTime, pair, timeframe) => {
           "Ignore",
         ];
 
-        console.log(a.length)
+        
 
         a.map((i, index) => {
           let obj = {};

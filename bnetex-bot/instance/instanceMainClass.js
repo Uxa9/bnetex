@@ -45,6 +45,10 @@ const checkPositionToCloseMySQL = require("./db/sequelize/actions/positions/chec
 const compareCandlesticks = require("./utils/compareCandlesticks");
 const { simulateEventer } = require("./utils/events");
 const TickerClassSimulate = require("./tickeClassSimulate");
+const ExchangeData = require("./classes/ExchangeData");
+const PositionsModule = require("./classes/PositionsModule");
+const AnalyzeModule = require("./classes/AnalyzeModules");
+const DecisionsModule = require("./classes/DecisionsModule");
 
 // Event Emmiter для симулятора
 
@@ -52,7 +56,18 @@ const config = require("../config/config")();
 
 module.exports = class InstanceClass {
   constructor(pair) {
+
+
+
     this.pair = pair;
+
+    this.exchangeData = new ExchangeData(this.pair)
+
+    this.positionsData = new PositionsModule(this.pair)
+
+    this.analyzeModule = new AnalyzeModule(this.pair);
+
+    this.DecisionsModule = new DecisionsModule(this.pair);
 
     this.candlesticks = undefined;
 
@@ -61,7 +76,7 @@ module.exports = class InstanceClass {
     this.tradingTimeframes = config.tradingTimeframes;
     
 
-    this.klinesHandler = this.klinesHandler.bind(this);
+    //this.klinesHandler = this.klinesHandler.bind(this);
 
     this.waitingForFirstGreen = {
       pattern: undefined,
@@ -75,113 +90,7 @@ module.exports = class InstanceClass {
     this.startHourDate = undefined;
   }
 
-  // Обработчик новых свечей
-  async klinesHandler(klines) {
-    //return;
-
-    let intervals = Object.keys(klines);
-
-    console.log("----------------------------------------");
-
-    let CalcBollingerComplexTime = 0;
-    let CalcZonesByBBTime = 0;
-    let CalcPrevZoneTime = 0;
-
-    let iteration = 0;
-
-    for (let index = 0; index < intervals.length; index++) {
-      const element = intervals[index];
-
-      let kline = klines[element];
-
-      // Список правил дл япостроения зон
-      let zoneRulesBB = getBBRulesIndexes();
-
-      let candlesticks = [...this.candlesticks, kline];
-
-      let candlesticks_15m = [...this.candlesticks_15m];
-
-      let calculateHour = false;
-
-      //console.log(this.candlesticks_15m[this.candlesticks_15m.length-1].startTime != this.lastHour)
-
-      if (
-        this.candlesticks_15m[this.candlesticks_15m.length - 1].startTime !=
-        this.lastHour
-      ) {
-        calculateHour = true;
-        this.lastHour =
-          this.candlesticks_15m[this.candlesticks_15m.length - 1].startTime;
-      }
-
-      //console.log({calculateHour})
-
-      for (let index = 0; index < zoneRulesBB.length; index++) {
-        const element = zoneRulesBB[index];
-        const rule = getBBRuleByIddex(element);
-
-        if (rule.intervals > 1440) {
-          if (calculateHour) {
-            candlesticks_15m = CalcBollingerComplex(
-              rule,
-              candlesticks_15m,
-              true
-            );
-
-            // Зоны
-            candlesticks_15m = CalcZonesByBB(
-              rule,
-              candlesticks_15m,
-              candlesticks[candlesticks.length - 1].close,
-              true
-            );
-
-            // Предыдущая зона
-            candlesticks_15m = CalcPrevZone(rule, candlesticks_15m, true);
-          }
-        } else {
-          let adate = new Date();
-
-          // Просчитываем цены границ отклонений для каждой свечи
-          candlesticks = CalcBollingerComplex(rule, candlesticks, true);
-
-          let bdate = new Date();
-
-          CalcBollingerComplexTime += (bdate - adate) / 1000;
-
-          iteration++;
-
-          adate = new Date();
-          // Зоны
-          candlesticks = CalcZonesByBB(rule, candlesticks);
-
-          bdate = new Date();
-
-          CalcZonesByBBTime += (bdate - adate) / 1000;
-
-          adate = new Date();
-          // Предыдущая зона
-          candlesticks = CalcPrevZone(rule, candlesticks);
-
-          bdate = new Date();
-
-          CalcPrevZoneTime += (bdate - adate) / 1000;
-        }
-      }
-
-      // Сращиваем 1ч и 1м
-      candlesticks = compareCandlesticks(candlesticks, candlesticks_15m, true);
-      //console.log(Object.keys(candlesticks_15m[candlesticks_15m.length-1]))
-
-      this.candlesticks_15m = candlesticks_15m;
-      this.candlesticks.push(candlesticks[candlesticks.length - 1]);
-    }
-
-    
-
-    await this.ProbabilityAction();
-    
-  }
+  
 
   // Метод для оценки текущей ситуации
   async ProbabilityAction() {
@@ -216,7 +125,7 @@ module.exports = class InstanceClass {
       );
     }
 
-    //if(lastKline.startTime > 1668070800000) return;
+    
     
     tgEvents.emit('updateKline', lastKline);
 
@@ -230,133 +139,38 @@ module.exports = class InstanceClass {
 
   }
 
-  async initializing(startTicker = true) {
-    console.log(`Initializing trading pair: ${this.pair}`);
-
-    // Получаем максимальное количество интервалов
-    let maxInterval = getMaxIntervals() * 4;
-
-    // Весь просчет по новой стратегии идет по 1m
-    // Максимальное количество нужных свечей
-    let candlesticks = [];
-
-    // Свечи 30м для просчета давних отклонений
-    let candlesticks_15m = [];
-
-    if (this.candlesticks == undefined || !this.candlesticks) {
-      // Для минутки оптимальное количество 4320
-      candlesticks = await getPairDataFromExchange(this.pair, "1m", 2880);
-
-      // Все остальное запихиваем в 30м
-      candlesticks_15m = await getPairDataFromExchange(
-        this.pair,
-        "1h",
-        maxInterval / 60,
-        false,
-        candlesticks[candlesticks.length - 1].startTime
-      );
-
-      this.lastHour = candlesticks_15m[candlesticks_15m.length - 1].startTime;
-    } else {
-      candlesticks = this.candlesticks;
-      candlesticks_15m = this.candlesticks_15m;
-    }
-
-    // Список правил дл япостроения зон
-    let zoneRulesBB = getBBRulesIndexes();
-
-    for (let index = 0; index < zoneRulesBB.length; index++) {
-      const element = zoneRulesBB[index];
-      const rule = getBBRuleByIddex(element);
-
-      if (rule.intervals > 1440) {
-        candlesticks_15m = CalcBollingerComplex(rule, candlesticks_15m);
-
-        // Зоны
-        candlesticks_15m = CalcZonesByBB(
-          rule,
-          candlesticks_15m,
-          candlesticks[candlesticks.length - 1].close
-        );
-
-        // Предыдущая зона
-        candlesticks_15m = CalcPrevZone(rule, candlesticks_15m);
-      } else {
-        // Просчитываем цены границ отклонений для каждой свечи
-        candlesticks = CalcBollingerComplex(rule, candlesticks);
-
-        // Зоны
-        candlesticks = CalcZonesByBB(rule, candlesticks);
-
-        // Предыдущая зона
-        candlesticks = CalcPrevZone(rule, candlesticks);
-      }
-    }
-
-    this.candlesticks = candlesticks;
-
-    this.candlesticks_15m = candlesticks_15m;
-
-    // Тут мы сращиваем данные 1м с 15м
-    this.candlesticks = compareCandlesticks(
-      this.candlesticks,
-      this.candlesticks_15m,
-      true
-    );
-
-    if (startTicker) {
-      this.startTicker();
-    }
-
-    simulateEventer.emit(
-      "callNextCandle",
-      this.candlesticks[this.candlesticks.length - 1]
-    );
-  }
-
-  startTicker() {
-    // Запускаем тикер и подписываемся на обновления
-    let ticketClass = new TickerClass(this.pair, this.tradingTimeframes);
-
-    let ticketClassSimulate = new TickerClassSimulate(
-      this.pair,
-      this.tradingTimeframes
-    );
-
-    if (!config.simulate) {
-      ticketClass.initializingSubscribtion().subscribe((e) => {
-        if (Object.keys(e).includes("1m")) {
-          setTimeout(() => {
-            this.klinesHandler(e);
-          }, 500);
-        } else {
-          this.candlesticks_15m.push(e);
-        }
-      });
-    } else {
-      
-      ticketClassSimulate.initializingSubscribtion().subscribe(async (e) => {
-        // Если свеча часовая
-
-        if (e["1m"].startTime % 3600000 == 0) {
-          console.log("Add 1 Hour".green);
-
-          this.candlesticks_15m.push(e["1m"]);
-          this.candlesticks_15m.shift();
-          if (this.startHourDate === undefined) {
-            this.startHourDate = new Date();
-          } else {
-            let bdate = new Date();            
-            this.startHourDate = new Date();
-          }
-        }
-
-        this.candlesticks.shift();
-
-        await this.klinesHandler(e);
-      });
-    }
-
+  async initializing() {
     
+
+    // Формирование данных с биржи
+    this.exchangeData.initializing().then(subscribtion => {      
+
+      subscribtion.subscribe(async (candlesData) => {        
+
+        
+        
+        this.positionsData.updateLastKline(candlesData.last)
+
+        // Updating TG BOT Actual Info
+        tgEvents.emit('updateKline', candlesData.last);
+
+        // Actual Position's Module | Trying to close actual positions      
+        await this.positionsData.closePositions();
+
+        // Updating actual market data for analyze module && Calling global analyze function
+        let analyzeResult = await this.analyzeModule.updateMarketData(candlesData.last).analyze(); if(!analyzeResult) return;
+
+        // Updating actual analyze Result in DesisionsModule && Calling function that decides whether to enter a position or average
+        await this.DecisionsModule.updateAnalyzeResponse(analyzeResult, candlesData.last_100).decisionAction();
+
+         
+        
+
+      })
+    })
+    
+ 
   }
+
+  
 };

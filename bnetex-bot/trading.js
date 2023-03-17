@@ -49,8 +49,9 @@ const server = require('http').createServer(app);
 
     let pairs = await getPairsListMySQL()
 
-    
 
+    // https://miro.com/welcomeonboard/ZjRmYnhVNTd2VXo4aXJpWGdKSXdZNTV6N2ZoMVZ6MXJpcUF3cHRpVkFncUliY1JSS2FsVTNXN2pYd3NGSXdZcHwzNDU4NzY0NTQ4NTg4NjQ2OTQzfDI=?share_link_id=783306334573
+    
     !config.serverOnly && pairs.filter(i => i.Status).map(i => i.Name).map(pair => {        
 
         // Создаем экземпляр класса торговой пары

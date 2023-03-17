@@ -34,6 +34,8 @@ module.exports = class TickerClassSimulate {
 
       initializingSubscribtion(){
         return Observable.create((subject) => {
+
+          
             simulateEventer.on('callNextCandle', async (e) => {
 
                 if(this.index > 1) return;
@@ -47,7 +49,7 @@ module.exports = class TickerClassSimulate {
                 tick = this.klines[1]
                 this.klines.shift();
 
-                console.log({ticktime: moment(tick.startTime, 'x').format('DD MM YYYY HH:mm'), st: tick.startTime})                
+                //console.log({ticktime: moment(tick.startTime, 'x').format('DD MM YYYY HH:mm'), st: tick.startTime})                
 
                 this.klinesToForce[tick.interval] = tick;
 

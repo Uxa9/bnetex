@@ -7,6 +7,8 @@ const { convertKlines } = require('../tickerHelper')
 const config = require("../../../config/config")();
 
 
+
+
 const moment = require('moment')
 
 const commandArgs = require('./commandsArgs');
@@ -60,10 +62,23 @@ module.exports = class TelegramBotClass {
 
             let txtFull = '';
 
+            let dataToLoop = Object.keys(this.candlesticks)
 
-            Object.keys(this.candlesticks).map(pair => {
 
+            if(ctx.state.command.args.length > 0){
+                
+                dataToLoop = Object.keys(this.candlesticks).filter(i => i.toUpperCase() == ctx.state.command.args[0].toUpperCase())
+                
+            }
+            
+
+
+            dataToLoop.map(pair => {
+
+                
                 let lastKline = this.candlesticks[pair];
+
+                
 
                 let txt = `${lastKline.symbol} | <b>Время свечи:</b> ${lastKline.startTime} | ${moment(lastKline.startTime, 'x').format('DD MM YYYY HH:mm')} \n`;              
                 

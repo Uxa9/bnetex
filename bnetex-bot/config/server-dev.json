@@ -1,8 +1,8 @@
 {
     "port": 4800,
     "binance": {
-      "APIKEY": "8f7b54d669216d815d2a9ec42700eecb5fd5e15b42fb3dfb598f7fb5355b39ea",
-      "APISECRET": "82edf111707a6332f5852483a3e4b2e5c0f844dc1dfca4bb3c2ef54d730533b5",
+      "APIKEY": "RyHU69NAD4CjD656AERc7YUo8GXJUDP9Z8ohdeY7n8cJUaHNcD3ZSPY40XxIan6F",
+      "APISECRET": "GGmoJSp343Ukslunn9pTLI2A2vk0TYf0PUH2GPMWWOKvcYeq2dG7uJtgemqgBfV8",
       "TEST": true
     },
     "tradingPairs" : ["BTCUSDT"],    
@@ -15,3 +15,4 @@
     "serverPort": 3009,
     "serverOnly": false
 }
+ 

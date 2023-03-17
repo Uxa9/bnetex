@@ -29,7 +29,7 @@ let calcOneGroupd = (triggers, intervalsData, log = false) => {
     if(intervalsData[element.intervals] && intervalsData[element.intervals][element.sigma]){
       
       let actual = intervalsData[element.intervals][element.sigma]
-
+      log && console.log(element.intervals, ':', element.sigma)
       log && console.log({ezone: element.zone, azone:  actual.zone, eback:  element.back, aback:  actual.backPattern.join(""), eprev: element.prev, aprev: actual.prevZone})
       if(element.zone == actual.zone && element.back == actual.backPattern.join("") && element.prev == actual.prevZone){
         signal = true;

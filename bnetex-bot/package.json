@@ -36,7 +36,7 @@
     "socket.io": "^4.5.4",
     "technicalindicators": "^3.1.0",
     "telegraf": "^4.10.0",
-    "telegraf-command-parts": "^1.0.3"
-  },
-  "devDependencies": {}
+    "telegraf-command-parts": "^1.0.3",
+    "telegraf-inline-menu": "^6.3.0"
+  }
 }
