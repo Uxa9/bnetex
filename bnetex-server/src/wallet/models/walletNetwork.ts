@@ -3,8 +3,8 @@ import {User} from "../../users/users.model";
 import {Network} from "./network.model";
 
 interface WalletNetworkCreationAttrs {
-    userId  : number,
-    walletId : string
+    networkId  : number,
+    walletId : number
 }
 
 @Table({
@@ -21,7 +21,7 @@ export class WalletNetwork extends Model<WalletNetwork, WalletNetworkCreationAtt
     id : number;
 
     @Column({
-        type          : DataType.STRING,
+        type          : DataType.INTEGER,
         allowNull     : false
     })
     walletId : number;
