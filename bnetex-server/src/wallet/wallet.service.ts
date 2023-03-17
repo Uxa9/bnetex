@@ -31,4 +31,12 @@ export class WalletService {
         });
     }
 
+    async acceptIncomingTransmitions(data: any) {
+        if (data.length === undefined) data = [data];
+
+        data.map(transmitionInfo => {
+            this.
+        });
+    }
+
 }
