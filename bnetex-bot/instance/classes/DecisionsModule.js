@@ -99,7 +99,14 @@ module.exports = class DecisionsModule {
 
     console.log('openedPatternToEnter: ', this.openedPatternToEnter)
     // Here 
-    if (ActialPosition){}
+    if (ActialPosition){
+      /**
+       * Если есть активные позции, надо определить - соответствует ли текущий активный паттернт минимальному отступу от средней цены
+       * If There are active position - determine matching offset of current active pattern from avegare price
+       * Если соотстветствует - дождаться первой зеленой и докупить
+       * If offset is matched - waiting of first green candle and buy
+       */
+    }
 
 
     // Clean Signal - First positive Candle after green

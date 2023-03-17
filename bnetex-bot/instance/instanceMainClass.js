@@ -146,8 +146,6 @@ module.exports = class InstanceClass {
     this.exchangeData.initializing().then(subscribtion => {      
 
       subscribtion.subscribe(async (candlesData) => {        
-
-        
         
         this.positionsData.updateLastKline(candlesData.last)
 
@@ -162,9 +160,6 @@ module.exports = class InstanceClass {
 
         // Updating actual analyze Result in DesisionsModule && Calling function that decides whether to enter a position or average
         await this.DecisionsModule.updateAnalyzeResponse(analyzeResult, candlesData.last_100).decisionAction();
-
-         
-        
 
       })
     })

@@ -82,15 +82,22 @@ module.exports = class PositionsModule {
     // Volume of buy 
     let buyVolume = actualPosition.averagePrice * parseFloat(POSITION_ACTIVE.positionAmt)
     let sellVolume = this.actualPrice * parseFloat(POSITION_ACTIVE.positionAmt)
-
+        
+    // Calculated Profit if positions will be closed now
     let profitVolume = sellVolume - buyVolume;
 
+    patternCompare = true;
+
+    // If Theres is not conditions for close position - break method
     if(!patternCompare) return null;
 
+    // Params to set into positions in DB
     let mysqlPARAMS = {status: false, closeTime: moment(this.lastKline.endTime, 'x').toDate(), percentProfit, closePrice: parseFloat(this.lastKline.close), sumProfit: profitVolume}
     
+    // Updating position in MYSQL
     await db.models.Position.update(mysqlPARAMS, {where: {id: actualPosition.id}})
 
+    // Close Postitons on Exhcnage
     await this.futures.marketSell(actualPosition.volumeACTIVE);
 
     return null;
