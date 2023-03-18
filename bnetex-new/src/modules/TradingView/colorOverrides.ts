@@ -5,6 +5,7 @@ export const getOverrides = () => {
 
     return {
         'paneProperties.background': colors.grayscale.card,
+        'paneProperties.backgroundType': 'solid',
         'paneProperties.backgroundGradientStartColor': colors.grayscale.card,
         'paneProperties.backgroundGradientEndColor' : colors.grayscale.card,
         'paneProperties.vertGridProperties.color': colors.grayscale[4],

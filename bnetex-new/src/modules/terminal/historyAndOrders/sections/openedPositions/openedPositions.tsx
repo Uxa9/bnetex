@@ -37,31 +37,31 @@ const OpenedPositions = () => {
     const socket = useContext(WebsocketContext);
 
     const changePair = (pair: any) => {
-        if (location.pathname.split('/')[2] === "trader") {
+        if (location.pathname.split('/')[2] === 'trader') {
             console.log(pair);
-            
+
             navigate(`/terminal/trader/${pair}`);
         }
-    }
+    };
 
     useEffect(() => {
         socket.on('connect', () => {
             console.log('Connected!');
         });
 
-        socket.on('currentPosition', (tradeInfo: any) => {  
+        socket.on('currentPosition', (tradeInfo: any) => {
             setData([{
                 coinSymbol: {
                     pair: tradeInfo.symbol,
                     lever: Number(tradeInfo.leverage),
-                    type: "Бессрочные",
+                    type: 'Бессрочные',
                 },
                 amount: tradeInfo.volume,
                 entryPrice: tradeInfo.entryPrice,
                 markedPrice: tradeInfo.markPrice,
                 margin: {
                     value: 0,
-                    type: "cross"
+                    type: 'cross',
                 },
                 PNL: tradeInfo.userPnl,
             }]);
@@ -74,64 +74,64 @@ const OpenedPositions = () => {
         };
     }, []);
 
-    useEffect(() => {         
-        if (location.pathname.split('/')[2] === "trader") {
-            const getUserP = async () => {
-                const res = await getUserPositions();
-                // console.log(res);
-                
-                // console.log(res.data);
+    useEffect(() => {
+        if (location.pathname.split('/')[2] === 'trader') {
+            // const getUserP = async () => {
+            //     const res = await getUserPositions();
+            //     // console.log(res);
 
-                // const btcPosition = res.data.inf.find((item: any) => item.symbol === "BTCUSDT");
+            //     // console.log(res.data);
 
-                const { inf, pos } = res.data;
+            //     // const btcPosition = res.data.inf.find((item: any) => item.symbol === "BTCUSDT");
 
-                // if (Number(inf.positionAmt) === 0) return;
-                // console.log(btcPosition);
-console.log(inf);
-console.log(pos);
+            //     const { inf, pos } = res.data;
 
-                setData(inf.map((item: any, index: number) => {                   
-                    return {
-                        coinSymbol: {
-                            pair: item.symbol,
-                            lever:  Number(item.leverage),
-                            type: "Бессрочные"
-                        },
-                        amount : Number(item.positionAmt),
-                        entryPrice : Number(Number(item.entryPrice).toFixed(2)),
-                        markedPrice : Number(Number(pos[index].markPrice).toFixed(2)),
-                        margin : {
-                            value: Number(Number(item.initialMargin).toFixed(2)),
-                            type: pos[index].marginType
-                        },
-                        PNL : Number(item.unrealizedProfit)
-                    }
-                }));
+            //     // if (Number(inf.positionAmt) === 0) return;
+            //     // console.log(btcPosition);
+            //     // console.log(inf);
+            //     // console.log(pos);
 
-                // console.log(data);
-                
-            }
+            //     setData(inf.map((item: any, index: number) => {
+            //         return {
+            //             coinSymbol: {
+            //                 pair: item.symbol,
+            //                 lever:  Number(item.leverage),
+            //                 type: 'Бессрочные',
+            //             },
+            //             amount : Number(item.positionAmt),
+            //             entryPrice : Number(Number(item.entryPrice).toFixed(2)),
+            //             markedPrice : Number(Number(pos[index].markPrice).toFixed(2)),
+            //             margin : {
+            //                 value: Number(Number(item.initialMargin).toFixed(2)),
+            //                 type: pos[index].marginType,
+            //             },
+            //             PNL : Number(item.unrealizedProfit),
+            //         };
+            //     }));
 
-            setInterval(getUserP, 1000);
+            //     // console.log(data);
+
+            // };
+
+            // setInterval(getUserP, 1000);
             // getUserP()
         }
-    }, [])
+    }, []);
 
     useEffect(() => {
         getUserOpenPosition()
-            .then((res) => {                
+            .then((res) => {
                 setData(res.data);
             });
     }, [ /* тут нада из стейта брать в работе или не в работе */]);
 
     return (
-        <>            
+        <>
             <div
                 style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    cursor: "pointer"
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    cursor: 'pointer',
                 }}
             >
                 <span
@@ -188,7 +188,7 @@ console.log(pos);
                                     </span>
                                     <SignedNumber
                                         value={(position.amount * 10).toFixed(2)}
-                                    />                                    
+                                    />
                                 </td>
                                 <td className={styles['entry-price']}>
                                     <span className={clsx(
@@ -221,7 +221,7 @@ console.log(pos);
                                             'caption',
                                         )}
                                     >
-                                        Цена входа / маркировки 
+                                        Цена входа / маркировки
                                     </span>
                                     {`${position.entryPrice} /
                                     ${position.markedPrice} /`}

@@ -13,8 +13,9 @@ import axios from 'axios';
 import { convertPricesByTick } from './components/cup/services/convertPricesByTick';
 import { getUserPositions } from 'services/trading/getUserPositions';
 import { useToast } from 'lib/hooks/useToast';
-import { useParams, useRoutes,  } from 'react-router-dom';
+import { useParams, useRoutes  } from 'react-router-dom';
 import TraderCup from './components/cup/cup';
+import { useBinanceSocket } from 'lib/hooks/useBinanceSocket/useBinanceSocket';
 
 type TraderViewType = 'limit' | 'tpsl';
 type TraderSumType  = 'exactSum' | 'percent';
@@ -38,10 +39,18 @@ const TradeView = () => {
     const [amount, setAmount] = useState(0);
     const [btcprice, setBtcprice] = useState(0);
 
-    const refOrderBookSocket = useRef<WebSocket | null>(null)
-    const refBtcPrice = useRef<WebSocket | null>(null)
+    const refOrderBookSocket = useRef<WebSocket | null>(null);
+    const refBtcPrice = useRef<WebSocket | null>(null);
 
     const { pair } = useParams();
+
+    const { setSocketType } = useBinanceSocket();
+
+    useEffect(() => {
+        setSocketType('trader');
+
+        return () => setSocketType(null);
+    }, []);
 
     const sendOrder = (type: string, side: string) => {
         if (limitPrice !== 0) {

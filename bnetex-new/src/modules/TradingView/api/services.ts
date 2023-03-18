@@ -13,7 +13,7 @@ export const getSymbols = (filterString: string) =>
 
 export const searchSymbols = (filterString: string): Promise<SearchSymbolResultItem[]> => {
     return getSymbols(filterString)
-        .then(res =>  res.data.map(it => symbolToSearchSymbol(it)));
+        .then(res => res.data.map(it => symbolToSearchSymbol(it)));
 };
 
 // получить исторические данные свечек

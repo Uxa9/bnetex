@@ -9,11 +9,13 @@ function getLanguageFromURL(): LanguageCode | null {
     return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' ')) as LanguageCode;
 }
 
+export const DEFAULT_TRADE_PAIR = 'BTCUSDT';
+
 export const defaultTradingWidgetProps: DefaultTWOptions = {
     datafeed: api,
-    symbol: 'BTCUSDT',
     interval: '5' as ResolutionString,
     library_path: '/charting_library/',
+    symbol: DEFAULT_TRADE_PAIR,
     charts_storage_url: 'https://saveload.tradingview.com',
     charts_storage_api_version: '1.1',
     client_id: 'tradingview.com',

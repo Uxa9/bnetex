@@ -36,8 +36,8 @@ const AppRoutes = () => {
                     <Route index element={<Navigate to={HOME} />} />
                     <Route path={HOME} element={<LandingPage />}></Route>
                     <Route path={TERMINAL} element={<TerminalLayout />}>
-                        <Route path="investor" element={<InvestorView />} />
-                        <Route path="trader/:pair" element={<TradeView />} />
+                        <Route path={'investor'} element={<InvestorView />} />
+                        <Route path={'trader'} element={<TradeView />} />
                     </Route>
                     <Route
                         path={`${DASHBOARD}/*`}

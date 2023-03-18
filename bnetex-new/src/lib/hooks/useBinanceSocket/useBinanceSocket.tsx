@@ -5,6 +5,7 @@ import { createCombinedStreamString, generateSocketId } from './utils';
 
 export interface BinanceSocketContext {
     loading: boolean;
+    tradePair: string | null;
 
     setTradePair: Dispatch<SetStateAction<string | null>>;
     setSocketType: Dispatch<SetStateAction<BinanceSocketType | null>>;
@@ -81,6 +82,7 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
         <binanceSocketContext.Provider
             value={{
                 loading,
+                tradePair,
                 setTradePair,
                 setSocketType,
             }}
@@ -88,5 +90,4 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
             {children}
         </binanceSocketContext.Provider>
     );
-
 }

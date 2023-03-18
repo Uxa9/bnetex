@@ -38,9 +38,9 @@
 }
 
 .theme-dark:root {
-  --tv-color-platform-background: var(--grayscale-card-dark);
-  --tv-color-pane-background: var(--grayscale-card-dark);
-  --tv-color-pane-background-secondary: var(--grayscale-2-dark);
+  --tv-color-platform-background: var(--grayscale-card-dark) !important;
+  --tv-color-pane-background: var(--grayscale-card-dark) !important;
+  --tv-color-pane-background-secondary:'#fff' !important;
   --tv-color-toolbar-button-background-hover: var(--accent-6-dark);
   --tv-color-toolbar-button-background-secondary-hover: var(--accent-6-dark);
   --tv-color-toolbar-button-background-expanded: var(--accent-6-dark);

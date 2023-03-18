@@ -10,9 +10,10 @@ import {
 } from '../../charting_library';
 import { getOverrides } from './colorOverrides';
 import { forbiddenMarkResolutions } from './api/types';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { defaultTradingWidgetProps } from './defaultProps';
 import { useBinanceSocket } from 'lib/hooks/useBinanceSocket/useBinanceSocket';
+import { validateTradePair } from './utils/validateTradePair';
 
 interface TradingViewWidgetProps {
     className?: string;
@@ -22,44 +23,15 @@ const TradingViewWidget = ({ className }: TradingViewWidgetProps) => {
     const widgetRef = useRef<HTMLDivElement | null>(null);
     const [tvWidget, setTvWidget] = useState<IChartingLibraryWidget | null>(null);
     const { theme } = useTheme();
-    const { pair } = useParams();
+    const [ searchParams, setSearchParams ] = useSearchParams();
     const { markRefreshFlag } = useTypedSelector(state => state.algotrade);
-    const { setSocketType, setTradePair } = useBinanceSocket();
+    const { setTradePair } = useBinanceSocket();
 
+    // Создание tv-виджета. Выполняется единожды при монтировании компонента
     useEffect(() => {
-        if (!widgetRef.current) {
-            return;
-        }
-        setTradePair('BTCUSDT');
-        setSocketType('trader');
+        if (!widgetRef.current) return;
 
-        const options: ChartingLibraryWidgetOptions = {
-            ...defaultTradingWidgetProps,
-            symbol: pair ?? defaultTradingWidgetProps.symbol as string,
-            container: widgetRef.current,
-            theme: capitalizeFirstLetter(theme) as ThemeName,
-            overrides: getOverrides(),
-        };
-
-        const constructedWidget = new widget(options);
-
-        // навешиваем слушаетель события на смену resolution
-        // если выбран 1d или 3d - очистить маркеры
-        constructedWidget?.onChartReady(() => {
-            constructedWidget.activeChart().onIntervalChanged().subscribe(null,
-                (interval) => {
-                    const isResolutionForbidden = !!forbiddenMarkResolutions.find(it => it === interval);
-                    if (isResolutionForbidden) constructedWidget.activeChart().clearMarks();
-                });
-
-            constructedWidget.activeChart().onSymbolChanged().subscribe(null,
-                () => {
-                    console.log(constructedWidget.activeChart().symbol());
-                }
-            );
-        });
-
-        setTvWidget(constructedWidget);
+        constructTvWidget().then(setTvWidget);
 
         return () => {
             if (tvWidget !== null) {
@@ -67,8 +39,46 @@ const TradingViewWidget = ({ className }: TradingViewWidgetProps) => {
                 localStorage.removeItem('history');
             }
         };
+    }, []);
 
-    }, [ theme, pair ]);
+    const constructTvWidget = async () => {
+        const tradePair = searchParams.get('tradePair');
+
+        const options: ChartingLibraryWidgetOptions = {
+            ...defaultTradingWidgetProps,
+            symbol: await validateTradePair(tradePair).then((pair) => {
+                setSearchParams([['tradePair', pair]]);
+                return pair;
+            }),
+            // мы гарантируем, что при вызове этой функции widgetRef.current !== null
+            // функция может быть вызвана только после проверки на null
+            container: widgetRef.current!,
+            theme: capitalizeFirstLetter(theme) as ThemeName,
+            overrides: getOverrides(),
+        };
+
+        const constructedWidget = new widget(options);
+
+        constructedWidget?.onChartReady(() => {
+            // навешиваем слушаетель события на смену resolution
+            // если выбран 1d или 3d - очистить маркеры
+            constructedWidget.activeChart().onIntervalChanged().subscribe(null, (interval) => {
+                const isResolutionForbidden = !!forbiddenMarkResolutions.find(it => it === interval);
+                if (isResolutionForbidden) constructedWidget.activeChart().clearMarks();
+            });
+
+            // при смене торговой пары обновляем URL, и tradePair для сокетов
+            constructedWidget.activeChart().onSymbolChanged().subscribe(null, () => {
+                const newTradePair = constructedWidget.activeChart().symbol();
+                validateTradePair(tradePair).then(pair => {
+                    setTradePair(pair);
+                    setSearchParams([['tradePair', newTradePair]]);
+                });
+            });
+        });
+
+        return constructedWidget;
+    };
 
     // при изменении интервала времени в истории торгов запрашивать marks
     useEffect(() => {
@@ -76,8 +86,16 @@ const TradingViewWidget = ({ className }: TradingViewWidgetProps) => {
             tvWidget.activeChart().clearMarks();
             tvWidget.activeChart().refreshMarks();
         });
-
     }, [markRefreshFlag, tvWidget]);
+
+    // Смена темы
+    useEffect(() => {
+        tvWidget?.onChartReady(() => {
+            tvWidget.changeTheme(capitalizeFirstLetter(theme) as ThemeName).then(() => {
+                tvWidget.applyOverrides(getOverrides());
+            });
+        });
+    }, [theme, tvWidget]);
 
     return (
         <div
