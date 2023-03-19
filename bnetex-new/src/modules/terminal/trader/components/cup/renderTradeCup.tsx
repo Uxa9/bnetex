@@ -1,4 +1,4 @@
-import { WebsocketContext } from '../../../../../context/WebsocketContext';
+// import { WebsocketContext } from '../../../../../context/WebsocketContext';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { convertPricesByTick, getOrderBookSnapshot } from './services/getOrderBookSnapshot';
@@ -26,7 +26,7 @@ const RenderTradeCup = (props: any) => {
 
     const { bakeToast } = useToast();
 
-    const socket = useContext(WebsocketContext);
+    // const socket = useContext(WebsocketContext);
 
     const { pair } = useParams();
     const { amount } = props;
@@ -69,23 +69,23 @@ const RenderTradeCup = (props: any) => {
         refOrderBookSocket.current = new WebSocket(`wss://fstream.binance.com/stream?streams=${pair?.toLocaleLowerCase()}@depth20`);
         refPairPrice.current = new WebSocket(`wss://stream.binance.com/stream?streams=${pair?.toLocaleLowerCase()}@miniTicker`);
 
-        socket.emit('userTraderPosition', '');
+        // socket.emit('userTraderPosition', '');
 
-        socket.on('currentUserTradePosition', (response: any) => {
-            const { inf } = response;
+        // socket.on('currentUserTradePosition', (response: any) => {
+        //     const { inf } = response;
 
-            if (inf.length > 0) {
-                const curPosition = inf.find((item: any) => item.symbol === pair);
+        //     if (inf.length > 0) {
+        //         const curPosition = inf.find((item: any) => item.symbol === pair);
 
-                Number(curPosition.positionAmt) > 0 ?
-                    setPosType('long') :
-                    setPosType('short');
+        //         Number(curPosition.positionAmt) > 0 ?
+        //             setPosType('long') :
+        //             setPosType('short');
 
-                setPosPrice(curPosition.entryPrice);
-            } else {
-                setPosPrice(0);
-            }
-        });
+        //         setPosPrice(curPosition.entryPrice);
+        //     } else {
+        //         setPosPrice(0);
+        //     }
+        // });
 
         return () => {
             if (!refSnapshot.current) return;
@@ -94,8 +94,8 @@ const RenderTradeCup = (props: any) => {
             if (!posSnapshot.current) return;
             clearInterval(posSnapshot.current);
 
-            socket.off('connect');
-            socket.off('onMessage');
+            // socket.off('connect');
+            // socket.off('onMessage');
         };
     }, []);
 

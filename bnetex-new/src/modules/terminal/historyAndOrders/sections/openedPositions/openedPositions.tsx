@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { WebsocketContext } from '../../../../../context/WebsocketContext';
+// import { WebsocketContext } from '../../../../../context/WebsocketContext';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import CoinSymbol from 'modules/terminal/components/coinSymbol/coinSymbol';
 import { CoinSymbolProps } from 'modules/terminal/types/coinSymbol';
@@ -34,7 +34,7 @@ const OpenedPositions = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const socket = useContext(WebsocketContext);
+    // const socket = useContext(WebsocketContext);
 
     const changePair = (pair: any) => {
         if (location.pathname.split('/')[2] === 'trader') {
@@ -45,33 +45,33 @@ const OpenedPositions = () => {
     };
 
     useEffect(() => {
-        socket.on('connect', () => {
-            console.log('Connected!');
-        });
+        // socket.on('connect', () => {
+        //     console.log('Connected!');
+        // });
 
-        socket.on('currentPosition', (tradeInfo: any) => {
-            setData([{
-                coinSymbol: {
-                    pair: tradeInfo.symbol,
-                    lever: Number(tradeInfo.leverage),
-                    type: 'Бессрочные',
-                },
-                amount: tradeInfo.volume,
-                entryPrice: tradeInfo.entryPrice,
-                markedPrice: tradeInfo.markPrice,
-                margin: {
-                    value: 0,
-                    type: 'cross',
-                },
-                PNL: tradeInfo.userPnl,
-            }]);
-        });
+        // socket.on('currentPosition', (tradeInfo: any) => {
+        //     setData([{
+        //         coinSymbol: {
+        //             pair: tradeInfo.symbol,
+        //             lever: Number(tradeInfo.leverage),
+        //             type: 'Бессрочные',
+        //         },
+        //         amount: tradeInfo.volume,
+        //         entryPrice: tradeInfo.entryPrice,
+        //         markedPrice: tradeInfo.markPrice,
+        //         margin: {
+        //             value: 0,
+        //             type: 'cross',
+        //         },
+        //         PNL: tradeInfo.userPnl,
+        //     }]);
+        // });
 
-        return () => {
-            console.log('Unregistering Events...');
-            socket.off('connect');
-            socket.off('onMessage');
-        };
+        // return () => {
+        //     console.log('Unregistering Events...');
+        //     socket.off('connect');
+        //     socket.off('onMessage');
+        // };
     }, []);
 
     useEffect(() => {

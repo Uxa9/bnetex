@@ -47,6 +47,7 @@ const TradingViewWidget = ({ className }: TradingViewWidgetProps) => {
         const options: ChartingLibraryWidgetOptions = {
             ...defaultTradingWidgetProps,
             symbol: await validateTradePair(tradePair).then((pair) => {
+                setTradePair(pair);
                 setSearchParams([['tradePair', pair]]);
                 return pair;
             }),

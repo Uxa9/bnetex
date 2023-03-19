@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const convertPricesByTick = (array: string[][], tick: number): string[][] => {
     const convertedArray: string[][] = [];
@@ -18,7 +18,7 @@ export const convertPricesByTick = (array: string[][], tick: number): string[][]
     return convertedArray;
 };
 
-export const getOrderBookSnapshot = async (pair: string | undefined = "BTCUSDT", step: number | undefined = 0.1) => {
+export const getOrderBookSnapshot = async (pair: string | undefined = 'BTCUSDT', step: number | undefined = 0.1) => {
     const res = await axios.get(`https://fapi.binance.com/fapi/v1/depth?symbol=${pair?.toLocaleLowerCase()}&limit=1000`);
 
     const asks: string[][] = res.data.asks.reverse();

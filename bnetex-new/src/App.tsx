@@ -1,4 +1,3 @@
-import { WebsocketProvider, socket } from './context/WebsocketContext';
 import { ModalSpawnerProvider } from 'lib/hooks/useModal';
 import { CurrentPlatformProvider } from 'lib/hooks/usePlatform';
 import { PromiseWithLoadingProvider } from 'lib/hooks/usePromiseWithLoading';
@@ -27,10 +26,8 @@ function App() {
                     <ToastProvider>
                         <PromiseWithLoadingProvider>
                             <ModalSpawnerProvider>
-                                <WebsocketProvider value={socket}>
-                                    <AppRoutes />
-                                    <ModalSpawner />
-                                </WebsocketProvider>
+                                <AppRoutes />
+                                <ModalSpawner />
                             </ModalSpawnerProvider>
                         </PromiseWithLoadingProvider>
                     </ToastProvider>

@@ -9,7 +9,7 @@ import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import Chart from 'modules/Global/components/lightChart/chart';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import { getUserInfo } from 'lib/utils/getUserInfo';
-import { WebsocketContext } from '../../../context/WebsocketContext';
+// import { WebsocketContext } from '../../../context/WebsocketContext';
 import { io, Socket } from 'socket.io-client';
 import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import {changeViewType, triggerTVMarkRefresh} from 'store/action-creators/algotrade';
@@ -46,25 +46,25 @@ const InvestorView = () => {
         console.log(newMessage);
     });
 
-    const socket = useContext(WebsocketContext);
+    // const socket = useContext(WebsocketContext);
     const [userTradeInfo, setUserTradeInfo] = useState<tradeSessionInfoInterface>();
 
     useEffect(() => {
-        socket.on('connect', () => {
-            console.log('Connected!');
-        });
+        // socket.on('connect', () => {
+        //     console.log('Connected!');
+        // });
 
-        socket.on('currentPosition', (tradeInfo: any) => {
-            console.log('onMessage event received!');
-            console.log(tradeInfo);
-            setUserTradeInfo(tradeInfo);
-        });
+        // socket.on('currentPosition', (tradeInfo: any) => {
+        //     console.log('onMessage event received!');
+        //     console.log(tradeInfo);
+        //     setUserTradeInfo(tradeInfo);
+        // });
 
-        return () => {
-            console.log('Unregistering Events...');
-            socket.off('connect');
-            socket.off('onMessage');
-        };
+        // return () => {
+        //     console.log('Unregistering Events...');
+        //     socket.off('connect');
+        //     socket.off('onMessage');
+        // };
     }, []);
 
     const handleViewTypeChange = (value: InvestorViewType) => {

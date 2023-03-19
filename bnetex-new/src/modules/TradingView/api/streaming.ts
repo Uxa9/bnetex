@@ -22,7 +22,7 @@ export function subscribeOnStream (
     const interval = availableIntervals[resolution];
     const ticker = symbolInfo.name?.toLowerCase();
 
-    const socket = new WebSocket(`wss://stream.binance.com:9443/ws/${ticker}@kline_${interval}`);
+    const socket = new WebSocket(`wss://fstream.binance.com/ws/${ticker}@kline_${interval}`);
 
     socket.onmessage = (event: MessageEvent) => {
         const binanceTickerData = JSON.parse(event.data);

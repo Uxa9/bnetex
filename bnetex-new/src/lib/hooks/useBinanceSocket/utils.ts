@@ -1,4 +1,4 @@
-import { BinanceSocketType, socketKeysRecord } from './types';
+import { AvailableSocketKeys, BinanceSocketType, ParsedDepthData, ParsedTickerData, socketKeysRecord, UnparsedSocketMessage } from './types';
 
 /**
  * Создает строку для combined stream
@@ -22,4 +22,32 @@ export const createCombinedStreamString = (tradePair: string, type: BinanceSocke
  */
 export const generateSocketId = (tradePair: string, type: BinanceSocketType) => {
     return `${tradePair}--${type}`;
+};
+
+const tradePairRegex = new RegExp(/(?<=("stream":"))[a-z]*/);
+
+export const parseSocketMessage = (message: string) => {
+    // Парсим строковое сообщение в Object: UnparsedSocketMessage,
+    // вырезая из поля "stream" имя торговой пары (ex: btcusdt@depth => @depth)
+    const { data, stream } = JSON.parse(message.replace(tradePairRegex, '')) as UnparsedSocketMessage;
+
+    // eslint-disable-next-line default-case
+    switch (stream) {
+        case AvailableSocketKeys.TICKER: {
+            return {
+                streamKey: stream,
+                currentPrice: data.c,
+            } as ParsedTickerData;
+        }
+        case AvailableSocketKeys.DEPTH: {
+            return {
+                streamKey: stream,
+                asks: data.a,
+                bids: data.b,
+                firstUpdate: data.U,
+                finalUpdate: data.u,
+                prevUpdate: data.pu,
+            } as ParsedDepthData;
+        }
+    }
 };

@@ -1,7 +1,8 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { throwError } from 'lib/utils/errorThrower';
-import { BinanceSocketType, binanceWSEndpoint } from './types';
-import { createCombinedStreamString, generateSocketId } from './utils';
+import { BinanceSocketType, binanceWSEndpoint, UnparsedSocketMessage } from './types';
+import { createCombinedStreamString, generateSocketId, parseSocketMessage } from './utils';
+import { getOrderBookSnapshot } from './sevices';
 
 export interface BinanceSocketContext {
     loading: boolean;
@@ -47,8 +48,16 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
         return () => closeActiveSocket();
     }, [activeSocketId]);
 
-    const openSocket = (socketId: string) => {
+    const loadOrderBook = async () => {
+        const { lastUpdateId, asks, bids } = await getOrderBookSnapshot(tradePair!);
+        console.log(lastUpdateId);
+
+    };
+
+    const openSocket = async (socketId: string) => {
         setLoading(true);
+
+        loadOrderBook();
 
         const socketURL = `${binanceWSEndpoint}${createCombinedStreamString(tradePair!, socketType!)}`;
         const socket = new WebSocket(socketURL);
@@ -61,8 +70,8 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
             setLoading(false);
         };
 
-        socket.onmessage = (ev: MessageEvent<any>) => {
-            console.log(JSON.parse(ev.data));
+        socket.onmessage = (ev: MessageEvent<string>) => {
+            const message = parseSocketMessage(ev.data);
         };
 
         socketMap.current.set(socketId, socket);
