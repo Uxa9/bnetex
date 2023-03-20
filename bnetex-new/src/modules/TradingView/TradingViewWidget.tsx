@@ -71,9 +71,9 @@ const TradingViewWidget = ({ className }: TradingViewWidgetProps) => {
             // при смене торговой пары обновляем URL, и tradePair для сокетов
             constructedWidget.activeChart().onSymbolChanged().subscribe(null, () => {
                 const newTradePair = constructedWidget.activeChart().symbol();
-                validateTradePair(tradePair).then(pair => {
+                validateTradePair(newTradePair).then(pair => {
                     setTradePair(pair);
-                    setSearchParams([['tradePair', newTradePair]]);
+                    setSearchParams([['tradePair', pair]]);
                 });
             });
         });

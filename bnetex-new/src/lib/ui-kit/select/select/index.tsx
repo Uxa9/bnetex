@@ -27,24 +27,27 @@ function Select<T> ({label, value, onChange, children}: SelectProps<T>) {
             return element.props.value === value;
         })[0];
 
-        return findValue as ReactElement<SelectOptionProps<T>> ?? 
+        return findValue as ReactElement<SelectOptionProps<T>> ??
             throwError(`Массив selectOptions не содержит текущего значения селектора: ${value}`);
-        
+
     }, [ value, children ]);
 
     const memorizedOptions = useMemo(() => {
         return React.Children.map(children, (child, index) => {
             const element = child as ReactElement<SelectOptionProps<T>>;
-            return React.cloneElement(element, { onClick: (e: MouseEvent<HTMLDivElement>) => {
-                onChange(element.props.value);
-                setIsMenuVisible(false);
-                e.stopPropagation();
-            }, key: index});
+            return React.cloneElement(element, {
+                onClick: (e: MouseEvent<HTMLDivElement>) => {
+                    onChange(element.props.value);
+                    setIsMenuVisible(false);
+                    e.stopPropagation();
+                },
+                key: index,
+            });
         });
     }, [ children, onChange ]);
 
     return(
-        <button 
+        <button
             className={clsx(
                 styles['select'],
                 isMenuVisible && styles['select--active']
@@ -53,14 +56,14 @@ function Select<T> ({label, value, onChange, children}: SelectProps<T>) {
             onBlur={() => setIsMenuVisible(false)}
             type={'button'}
         >
-            <fieldset  
+            <fieldset
                 className={clsx(styles['fieldset-outline'])}
             >
                 <legend className={styles['fieldset-outline__legend']}>
                     <span>{label}</span>
                 </legend>
             </fieldset>
-            <div 
+            <div
                 className={styles['select__body']}
                 id={id}
                 onClick={(e: MouseEvent<HTMLDivElement>) => {
@@ -73,7 +76,7 @@ function Select<T> ({label, value, onChange, children}: SelectProps<T>) {
                 { selectedValue }
                 <Angle className={styles['select__arrow']} />
             </div>
-            <div 
+            <div
                 className={clsx(
                     styles['select__menu'],
                     isMenuVisible && styles['select__menu--visible']
@@ -83,6 +86,6 @@ function Select<T> ({label, value, onChange, children}: SelectProps<T>) {
             </div>
         </button>
     );
-}; 
+};
 
 export default Select;

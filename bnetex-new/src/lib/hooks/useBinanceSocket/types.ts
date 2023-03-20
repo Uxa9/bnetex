@@ -14,8 +14,10 @@ export const socketKeysRecord: Record<BinanceSocketType, readonly string[]> = {
     investor: [],
 };
 
-
-type UnparsedTickerData = {
+/**
+ * Данные, приходящие с binance по запросу @miniTicker
+ */
+export type UnparsedTickerData = {
     E: number; // Event time
     c: string; // Close price
     e: string; // Event type (24hrMiniTicker)
@@ -27,17 +29,26 @@ type UnparsedTickerData = {
     v: string; //  Total base asset volume (vol of BTC in case of BTCUSDT symbol)
 }
 
-type TickerDataSocketMessage = {
+/**
+ * Распаршенная в объект строка из message сокета @miniTicker
+ */
+export type TickerSocketMessage = {
     stream: AvailableSocketKeys.TICKER;
     data: UnparsedTickerData;
 }
 
+/**
+ * data из TickerSocketMessage в читаемом формате
+ */
 export type ParsedTickerData = {
     streamKey: AvailableSocketKeys.TICKER,
     currentPrice: string,
 }
 
-type UnparsedDepthData = {
+/**
+ * Данные, приходящие с binance по запросу @depth
+ */
+export type UnparsedDepthData = {
     E: number; // Event time
     T: number; // Transaction time
     U: number; // First update ID in event
@@ -49,11 +60,17 @@ type UnparsedDepthData = {
     u: number; // Final update ID in event
 }
 
-type DepthDataSocketMessage = {
+/**
+ * Распаршенная в объект строка из message сокета @depth
+ */
+export type DepthSocketMessage = {
     stream: AvailableSocketKeys.DEPTH;
     data: UnparsedDepthData;
 }
 
+/**
+ * data из DepthSocketMessage в читаемом формате
+ */
 export type ParsedDepthData = {
     streamKey: AvailableSocketKeys.DEPTH,
     asks: [string, string][],
@@ -63,4 +80,12 @@ export type ParsedDepthData = {
     prevUpdate: number,
 }
 
-export type UnparsedSocketMessage = TickerDataSocketMessage | DepthDataSocketMessage;
+/**
+ * Объект, распаршенный из строки message. Data в не читаемом виде.
+ */
+export type RawSocketMessage = TickerSocketMessage | DepthSocketMessage;
+
+/**
+ * Объект RawSocketMessage, распаршенный в читаемый вид.
+ */
+export type ParsedSocketMessage = ParsedTickerData | ParsedDepthData;

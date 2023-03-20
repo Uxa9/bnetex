@@ -1,4 +1,5 @@
-import { AvailableSocketKeys, BinanceSocketType, ParsedDepthData, ParsedTickerData, socketKeysRecord, UnparsedSocketMessage } from './types';
+import { BinanceSocketType, ParsedDepthData, ParsedTickerData, RawSocketMessage,
+    socketKeysRecord, UnparsedDepthData, UnparsedTickerData} from './types';
 
 /**
  * Создает строку для combined stream
@@ -26,28 +27,28 @@ export const generateSocketId = (tradePair: string, type: BinanceSocketType) => 
 
 const tradePairRegex = new RegExp(/(?<=("stream":"))[a-z]*/);
 
-export const parseSocketMessage = (message: string) => {
-    // Парсим строковое сообщение в Object: UnparsedSocketMessage,
-    // вырезая из поля "stream" имя торговой пары (ex: btcusdt@depth => @depth)
-    const { data, stream } = JSON.parse(message.replace(tradePairRegex, '')) as UnparsedSocketMessage;
+/**
+ * Парсим строковое сообщение в RawSocketMessage,
+ * вырезая из поля "stream" имя торговой пары (ex: btcusdt@depth => @depth)
+ * @param message
+ * @returns
+ */
+export const parseSocketMessage = (message: string): RawSocketMessage => {
+    return JSON.parse(message.replace(tradePairRegex, '')) ;
+};
 
-    // eslint-disable-next-line default-case
-    switch (stream) {
-        case AvailableSocketKeys.TICKER: {
-            return {
-                streamKey: stream,
-                currentPrice: data.c,
-            } as ParsedTickerData;
-        }
-        case AvailableSocketKeys.DEPTH: {
-            return {
-                streamKey: stream,
-                asks: data.a,
-                bids: data.b,
-                firstUpdate: data.U,
-                finalUpdate: data.u,
-                prevUpdate: data.pu,
-            } as ParsedDepthData;
-        }
-    }
+export const tickerSocketMessageParser = (data: UnparsedTickerData) => {
+    return {
+        currentPrice: data.c,
+    } as ParsedTickerData;
+};
+
+export const depthSocketMessageParser = (data: UnparsedDepthData) => {
+    return {
+        asks: data.a,
+        bids: data.b,
+        firstUpdate: data.U,
+        finalUpdate: data.u,
+        prevUpdate: data.pu,
+    } as ParsedDepthData;
 };

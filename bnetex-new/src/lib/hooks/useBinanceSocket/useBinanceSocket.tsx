@@ -1,7 +1,9 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, Dispatch, ReactNode, SetStateAction,
+    useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { throwError } from 'lib/utils/errorThrower';
-import { BinanceSocketType, binanceWSEndpoint, UnparsedSocketMessage } from './types';
-import { createCombinedStreamString, generateSocketId, parseSocketMessage } from './utils';
+import { AvailableSocketKeys, BinanceSocketType, binanceWSEndpoint } from './types';
+import { createCombinedStreamString, depthSocketMessageParser, generateSocketId,
+    parseSocketMessage, tickerSocketMessageParser } from './utils';
 import { getOrderBookSnapshot } from './sevices';
 
 export interface BinanceSocketContext {
@@ -26,10 +28,15 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
     const [socketType, setSocketType] = useState<BinanceSocketType | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
+    const snapshotUpdateIdRef = useRef<number | null>(null);
+    const prevDepthStreamUpdateIdRef = useRef<number | null>(null);
+
     // id активного сокета вынесен в переменную,
     // чтобы открывать новый сокет только при наличии
     // валидных tradePair и socketType
     const activeSocketId = useMemo(() => {
+        console.log(tradePair);
+
         return tradePair && socketType
             ? generateSocketId(tradePair, socketType)
             : null;
@@ -50,19 +57,21 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
 
     const loadOrderBook = async () => {
         const { lastUpdateId, asks, bids } = await getOrderBookSnapshot(tradePair!);
-        console.log(lastUpdateId);
+        console.log('snapshot', asks, bids);
 
+        snapshotUpdateIdRef.current = lastUpdateId;
     };
 
     const openSocket = async (socketId: string) => {
         setLoading(true);
 
-        loadOrderBook();
-
         const socketURL = `${binanceWSEndpoint}${createCombinedStreamString(tradePair!, socketType!)}`;
         const socket = new WebSocket(socketURL);
 
-        socket.onopen = () => setLoading(false);
+        socket.onopen = () => {
+            loadOrderBook();
+            setLoading(false);
+        };
 
         socket.onerror = (e: Event) => {
             console.error(e); //toDo: bakeToast???
@@ -70,11 +79,40 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
             setLoading(false);
         };
 
-        socket.onmessage = (ev: MessageEvent<string>) => {
-            const message = parseSocketMessage(ev.data);
-        };
+        socket.onmessage = handleSocketMessage;
 
         socketMap.current.set(socketId, socket);
+    };
+
+    const handleSocketMessage = (ev: MessageEvent<string>) => {
+        const { stream, data } = parseSocketMessage(ev.data);
+
+        // eslint-disable-next-line default-case
+        switch (stream) {
+            case AvailableSocketKeys.TICKER: {
+                const { currentPrice } = tickerSocketMessageParser(data);
+                // console.log(currentPrice);
+                break;
+            }
+            case AvailableSocketKeys.DEPTH: {
+                const { asks, bids, finalUpdate, prevUpdate } = depthSocketMessageParser(data);
+
+                // https://binance-docs.github.io/apidocs/futures/en/#diff-book-depth-streams
+                if (!snapshotUpdateIdRef.current) return;
+                const depthUpdateIsOutdated = finalUpdate < snapshotUpdateIdRef.current;
+                if (depthUpdateIsOutdated) return;
+
+                const isDepthStreamContinuous = prevDepthStreamUpdateIdRef.current
+                    ? prevDepthStreamUpdateIdRef.current === prevUpdate
+                    : true;
+
+                if (!isDepthStreamContinuous) loadOrderBook();
+
+                prevDepthStreamUpdateIdRef.current = finalUpdate;
+
+                break;
+            }
+        }
     };
 
     // закрыть текущий активный сокет (если таковой существует)
@@ -85,6 +123,9 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
         const [prevSocketId, prevSocket] = prevSocketEntry;
         prevSocket.addEventListener('close', () => socketMap.current.delete(prevSocketId));
         prevSocket.close();
+
+        snapshotUpdateIdRef.current = null;
+        prevDepthStreamUpdateIdRef.current = null;
     };
 
     return (
