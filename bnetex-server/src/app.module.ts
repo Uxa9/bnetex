@@ -53,7 +53,6 @@ import { PriceFilter } from "./invest-trading/models/priceFilter.model";
                 Position, 
                 PositionEnters, 
                 Wallet, 
-                WalletNetwork, 
                 Network, 
                 Currency,
                 WalletNetwork,
