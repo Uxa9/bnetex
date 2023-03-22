@@ -1,10 +1,12 @@
 import {BelongsTo, Column, DataType, ForeignKey, Model, Table} from "sequelize-typescript";
 import {User} from "../../users/users.model";
+import { Currency } from "./currency.model";
 import {Network} from "./network.model";
+import { Wallet } from "./wallet.model";
 
 interface WalletNetworkCreationAttrs {
-    networkId  : number,
-    walletId : number
+    walletId : number,
+    currencyId: number,
 }
 
 @Table({
@@ -20,19 +22,24 @@ export class WalletNetwork extends Model<WalletNetwork, WalletNetworkCreationAtt
     })
     id : number;
 
+    @ForeignKey(() => Wallet)
     @Column({
         type          : DataType.INTEGER,
         allowNull     : false
     })
     walletId : number;
 
-    @ForeignKey(() => Network)
+    @ForeignKey(() => Currency)
     @Column({
         type          : DataType.INTEGER,
         allowNull     : false
     })
-    networkId : number;
+    currencyId : number;
 
-
+    @Column({
+        type          : DataType.INTEGER,
+        allowNull     : false
+    })
+    amount : number;
 
 }

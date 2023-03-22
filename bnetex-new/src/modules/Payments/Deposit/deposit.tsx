@@ -4,12 +4,25 @@ import { useGoToState } from 'lib/hooks/useGoToState';
 import { AppLinksEnum } from 'routes/appLinks';
 import CopyButton from 'lib/ui-kit/copyButton/copyButton';
 import clsx from 'clsx';
+import useWalletActions from 'services/walletActions';
+import { useEffect, useState } from 'react';
 
 const Deposit = () => {
 
     const { navigateBack } = useGoToState();
 
-    const WALLET_ADDRESS = 'TQwckR7VpEsrMFCogvjKhiQ1YJBNi5Qbjm';
+    const { getUserWallet } = useWalletActions();
+
+    const [walletAddress, setWalletAddress] = useState('');
+
+    useEffect(() => {
+        getUserWallet().then((data) => {
+            console.log(data);
+            
+            setWalletAddress(data.walletId);
+
+        })
+    })
 
     return(
         <div className='wrapper'>
@@ -27,11 +40,11 @@ const Deposit = () => {
                         <div className={styles['address__wrapper']}>
                             <p className={styles['address__code']}>
                                 <span>
-                                    {WALLET_ADDRESS}
+                                    {walletAddress}
                                 </span>
                             </p>
                             <CopyButton 
-                                textToCopy={WALLET_ADDRESS}
+                                textToCopy={walletAddress}
                                 successText={'Адрес кошелька успешно скопирован!'}
                             />
                         </div>

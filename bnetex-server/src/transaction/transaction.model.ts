@@ -71,6 +71,11 @@ export class Transaction extends Model<Transaction, TransactionCreationAttrs> {
     })
     payAddress : string;
 
+    @Column({
+        type : DataType.STRING
+    })
+    txId : string;
+
     // @ForeignKey(() => WalletNetwork)
     // @Column({
     //     type          : DataType.INTEGER,

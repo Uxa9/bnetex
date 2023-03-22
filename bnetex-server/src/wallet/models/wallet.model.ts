@@ -4,7 +4,8 @@ import {Network} from "./network.model";
 
 interface WalletCreationAttrs {
     userId  : number,
-    walletId : string
+    walletId : string,
+    networkId: number
 }
 
 @Table({
@@ -24,7 +25,13 @@ export class Wallet extends Model<Wallet, WalletCreationAttrs> {
         type          : DataType.STRING,
         allowNull     : false
     })
-    walletId : number;
+    walletId : string;
+
+    @Column({
+        type          : DataType.INTEGER,
+        allowNull     : false
+    })
+    networkId : number;
 
     @ForeignKey(() => User)
     @Column({

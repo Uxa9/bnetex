@@ -7,12 +7,13 @@ import {User} from "../users/users.model";
 import { WalletNetwork } from './models/walletNetwork';
 import { Network } from './models/network.model';
 import { Currency } from './models/currency.model';
+import { Transaction } from './models/transaction.model';
 
 @Module({
   providers: [WalletService],
   controllers: [WalletController],
   imports: [
-      SequelizeModule.forFeature([ Wallet, WalletNetwork, Network, Currency, User ]),
+      SequelizeModule.forFeature([ Wallet, WalletNetwork, Network, Currency, User, Transaction ]),
   ]
 })
 export class WalletModule {}
