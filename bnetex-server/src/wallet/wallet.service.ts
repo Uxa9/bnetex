@@ -3,10 +3,11 @@ import {InjectModel} from "@nestjs/sequelize";
 import {Wallet} from "./models/wallet.model";
 import {Network} from "./models/network.model";
 import {Currency} from "./models/currency.model";
-import {WalletNetwork} from "./models/walletNetwork";
+import {WalletNetwork} from "./models/walletNetwork.model";
 import axios from "axios";
 import { User } from '../users/users.model';
 import { Transaction } from './models/transaction.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class WalletService {
@@ -40,23 +41,25 @@ export class WalletService {
 
     async generateWallet(userId: number, network: string = "TRC20") {
         // const walletAddress = await axios.get(`paygateway.bnetex.com/wallet/generate/${network}`);
-        const walletAddress = await axios.get(`http://localhost:3800/Wallet/generate/${network}`);
+        const walletAddress = axios.get(`http://localhost:3800/Wallet/generate/${network}`);
 
-        const walletNetwork = await this.networkRepository.findOne({ where: {name: network}});
+        const walletNetwork = this.networkRepository.findOne({ where: {name: network}});
 
-        const wallet = await this.walletRepository.create({
-            walletId: walletAddress.data.address,
-            networkId: walletNetwork.id,    
-            userId: userId
+        Promise.all([walletAddress, walletNetwork]).then(async ([address, network]) => {
+            const wallet = await this.walletRepository.create({
+                walletId: address.data.address,
+                networkId: network.id,    
+                userId: userId
+            });
+
+            const walletMoney = await this.walletNetworkRepository.findOne({ where: { walletId: wallet.id }});
+            
+            return wallet;
         });
 
-        const walletMoney = await this.walletNetworkRepository.findOne({
-            where: {
-                walletId: wallet.id
-            }
-        });
 
-        return wallet;
+        
+
     }
 
     async generateMoneyWallet(userId: number, currency = "USDT") {
@@ -132,4 +135,28 @@ export class WalletService {
         });
     }
 
+    async withdrawMoney(dto: any) {
+        const user = await this.userRepository.findByPk(dto.userId);
+
+        if (user.mainWallet < dto.amount) return;
+
+        user.decrement({
+            mainWallet: dto.amount
+        });
+
+        // орел вызывает базу
+        axios.post(`http://localhost:3800/Binance/Withdraw/1/TRX/USDT/${dto.amount}/${dto.walletAddress}`,{}, {
+            headers: {
+                Authorization: process.env.PAYMENT_TOKEN
+            }
+        })
+            .then(async (res) => {
+                await this.transactionRepository.create({
+                    userId : dto.userId,
+                    transactionId : uuidv4(),
+                    amount : dto.amount
+                });
+            })
+            .catch(err => console.log(err));        
+    }
 }

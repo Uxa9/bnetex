@@ -23,7 +23,7 @@ import { GatewayModule } from "./gateway/gateway.module";
 import { SocketModule } from "./socket/socket.module";
 import { WalletModule } from './wallet/wallet.module';
 import {Wallet} from "./wallet/models/wallet.model";
-import { WalletNetwork } from "./wallet/models/walletNetwork";
+import { WalletNetwork } from "./wallet/models/walletNetwork.model";
 import { Network } from "./wallet/models/network.model";
 import { Currency } from "./wallet/models/currency.model";
 import { BinanceSymbols } from "./invest-trading/models/binanceSymbols.model";
@@ -62,7 +62,7 @@ import { PriceFilter } from "./invest-trading/models/priceFilter.model";
             autoLoadModels: true,
             logging: false
         }),
-        MongooseModule.forRoot(`mongodb://127.0.0.1:27017/exchange`),
+        // MongooseModule.forRoot(`mongodb://127.0.0.1:27017/exchange`),
         UsersModule,
         RolesModule,
         AuthModule,

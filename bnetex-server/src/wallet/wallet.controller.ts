@@ -19,4 +19,9 @@ export class WalletController {
     getUserTransactions(@Param('userId') userId : number) {
         return this.controllerService.getUserTransactions(userId);
     }
+
+    @Post('withdraw')
+    withdrawMoney(@Body() dto : any) {
+        return this.controllerService.withdrawMoney(dto);
+    }
 }

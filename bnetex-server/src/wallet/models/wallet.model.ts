@@ -1,6 +1,7 @@
 import {BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
 import {User} from "../../users/users.model";
 import {Network} from "./network.model";
+import { WalletNetwork } from "./walletNetwork.model";
 
 interface WalletCreationAttrs {
     userId  : number,
@@ -43,7 +44,7 @@ export class Wallet extends Model<Wallet, WalletCreationAttrs> {
     @BelongsTo(() => User)
     user : User;
 
-    // @HasMany(() => Network)
-    // networks: Network[];
+    @HasMany(() => WalletNetwork)
+    networks: WalletNetwork[];
 
 }
