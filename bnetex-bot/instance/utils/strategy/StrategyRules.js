@@ -4,7 +4,8 @@ var moment = require("moment");
 
 const StrategyRules = (intervalsData, triggers = [], groupped = false, log = false) => {
 
-    if(!groupped) return calcOneGroupd(triggers, intervalsData);
+    
+    if(!groupped) return calcOneGroupd(triggers, intervalsData, log);
       
     
     return triggers.map(i => calcOneGroupd(i, intervalsData, log) ).filter(i => i).length == triggers.length;
@@ -17,6 +18,7 @@ const StrategyRules = (intervalsData, triggers = [], groupped = false, log = fal
 let calcOneGroupd = (triggers, intervalsData, log = false) => {
   
 
+  log && console.log({triggers})
   
   
   let signal = false;

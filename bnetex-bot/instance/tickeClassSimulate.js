@@ -38,6 +38,8 @@ module.exports = class TickerClassSimulate {
           
             simulateEventer.on('callNextCandle', async (e) => {
 
+              
+
                 if(this.index > 1) return;
 
                 let tick = {};

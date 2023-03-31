@@ -9,6 +9,7 @@ const { CalcPrevZone } = require("../utils/strategy/CalcPrevZone");
 const { CalcZonesByBB } = require("../utils/strategy/CalcZonesByBB");
 const EventEmitter = require('events');
 const { Observable } = require("rxjs");
+var colors = require('colors');
 
 const config = require("../../config/config")();
 
@@ -36,7 +37,7 @@ module.exports = class ExchangeData {
     subscribeNext(){
 
         return Observable.create((subject) => {
-            this.throwNextCandle.on('next', () => {
+            this.throwNextCandle.on('next', () => {              
                 subject.next({
                   last: this.candlesticks[this.candlesticks.length-1],
                   last_100: this.candlesticks.slice(-100)
@@ -171,7 +172,7 @@ module.exports = class ExchangeData {
           
           ticketClassSimulate.initializingSubscribtion().subscribe(async (e) => {
             // Если свеча часовая
-    
+            
             if (e["1m"].startTime % 3600000 == 0) {
               console.log("Add 1 Hour".green);
     
@@ -297,9 +298,7 @@ module.exports = class ExchangeData {
     
     this.throwNextCandle.emit('next', this.candlesticks[this.candlesticks.length-1])
 
-    if(config.simulate){
-        simulateEventer.emit('callNextCandle', this.candlesticks[this.candlesticks.length-1])
-    }
+    
 
     
     

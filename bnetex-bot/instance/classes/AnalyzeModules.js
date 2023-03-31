@@ -1,6 +1,14 @@
+const matching = require("../utils/marketMathing/matching");
+const db = require("../db/sequelize/dbseq");
+const matrixMatching = require("../utils/marketMathing/matrixMatching");
+const { Op } = require("sequelize");
+const { getBBRulesIndexes, getBBRuleByIddex } = require("../utils/BollZoneRules");
+const StrategyRules = require("../utils/strategy/StrategyRules");
+
+
 module.exports = class AnalyzeModule {
 
-    constructor(pair){
+    constructor(pair, PositionModule){
 
         // Set trading pair
         this.pair = pair;
@@ -8,17 +16,185 @@ module.exports = class AnalyzeModule {
         // Actual Market Data
         this.marketData = undefined;
 
+        this.currentAnalyze = undefined;
+
+        this.WeekMatchingList = [];
+
+        this.PatternsByLogicalGroup = {}
+
+        this.PatternsByWorkingGroup = {}
+
+        // Логическая группа по которой идет торговла
+        this.ActiveLogicalGroup = undefined;
+
+        this.ActiveWeekMatching = undefined;
+
+        // Паттерны по которым сейчас идет работа или в очереди на торговлю
+        this.ActivePatternsInWorkingGroup = undefined;
+
+        this.positionModule = PositionModule
+
+        this._UpdaterWeekMatchingList();
+
+        this.POSITION = undefined;
+
     }
+
+    clearCurrentPattern(){ this.currentAnalyze = undefined; }
+  
+  
+    setActualPosition(POSITION = undefined){
+      this.POSITION = POSITION;
+      return this;
+    }
+  
 
     /**
      * Initial Global Market Analyze Function
      */
     async analyze(){
 
-        return {
-            deposit: 2000,
-            pattern: 221
-        };
+        
+        // TODO + ЗАменить на год
+        let MICRO_WEEK_SITUATION_INDEX = matching(this.marketData[259200][2]).index;
+
+        let MACRO_WEEK_SITUATION_INDEX = matrixMatching(this.marketData);
+
+        //console.log({MACRO_WEEK_SITUATION_INDEX, MICRO_WEEK_SITUATION_INDEX})
+
+        
+        if(!MICRO_WEEK_SITUATION_INDEX || !MACRO_WEEK_SITUATION_INDEX) return { CODE: 'ACTUAL'};
+
+        
+        
+
+        let WeekMatchingFiltered = this.WeekMatchingList.filter(i => i.MACRO_WEEK_SITUATION_INDEX == MACRO_WEEK_SITUATION_INDEX && i.MICRO_WEEK_SITUATION_INDEX == MICRO_WEEK_SITUATION_INDEX).sort((a,b) => b.tradingVolume - a.tradingVolume)
+
+        if(WeekMatchingFiltered.length == 0) return { CODE: 'ACTUAL'};
+        //console.log(WeekMatchingFiltered)
+
+        
+
+        // Если никакая группировка не выбрана, или найденная группировка больше по объему - переключаемся
+        if(!this.ActiveWeekMatching || this.ActiveWeekMatching.tradingVolume < WeekMatchingFiltered[0].tradingVolume){
+            this.ActiveWeekMatching = WeekMatchingFiltered[0];
+
+            // Надо деактивировать все паттерны не входящие в локальную группу
+            await this._deactivatePatterntByExcludedLogicalGroup(this.ActiveWeekMatching.LOGICAL_GROUP);
+        }
+
+        
+
+        
+        
+
+        // Надо определить, с каким паттерном дальше работаем
+        // Для этого надо проверить каждый паттерн на возможность активации
+        // Определили больший по объему паттерн активный
+        // Если позиций нету - запоминаем текущий паттерн как основной для следущего входа
+        // Если позиция есть - проверяем : если ли паттерн с большем объемом чем текущий
+            // Если есть - запоминаем и ждем входа по нему
+            // Если нету - работаем с паттерном по позиции (проверяем, есть ли условия для входа - отступ и условия входа)
+        // Если совпадает условие входа (и отступ, если позиция открытая) - посылаем сигнал на покупку и обновляем инфу в БД
+
+        // Getting all patterns in local group
+        let patternsGroupInLogicalGroup = await this._getPatternGroupsByLogicalGroup(this.ActiveWeekMatching.LOGICAL_GROUP, true);
+
+        //console.log(patternsGroupInLogicalGroup)
+        
+        //console.log({patternsGroupInLogicalGroup})
+
+        // Temp variable to hold local groups patterns
+        let patternsTempIds = [];
+        
+
+        // Loop every pattern for activate
+        for (let index = 0; index < patternsGroupInLogicalGroup.length; index++) {
+
+            const element = patternsGroupInLogicalGroup[index];
+            
+            let ActivateTriggers = groupByRules(
+                element.PATTERN_TRIGGERs.filter((i) => i.type == "ACTIVATION")
+            );
+
+            let patternCompare = StrategyRules(this.marketData, ActivateTriggers, true, false);
+
+            if(patternCompare || element.status) patternsTempIds.push(element);
+
+        }
+
+        
+        
+        
+
+        
+        
+        if(patternsTempIds.length == 0){
+             // Тут остается проверить только текущую позицию на усреднение
+             
+             this.ActivePatternsInWorkingGroup = undefined;
+             return { CODE: 'ACTUAL'}
+        }else{
+
+            await this._activateLocalGroups(patternsTempIds.map(i => i.id).filter(i => !i.status));
+            await this._getPatternGroupsByLogicalGroup(this.ActiveWeekMatching.LOGICAL_GROUP, true);
+            
+        }
+
+
+        let maxPatternByVolume = patternsTempIds.sort((a,b) => b.PART_OF_VOLUME - a.PART_OF_VOLUME)[0];
+        
+        
+        this.ActivePatternsInWorkingGroup = await this._getPatternGroupsByWorkinglGroup(maxPatternByVolume.WORKING_GROUP, true);
+
+        // If there are trading patterns - check to activate       
+        if(this.ActivePatternsInWorkingGroup.length == 0){
+            // Тут остается проверить только текущую позицию на усреднение
+            return { CODE: 'ACTUAL'}
+        }
+
+        // Определяем общий торговый депозит
+        let TotalTradingVolume = await this._getTotalTradingVolume();
+
+        
+
+        // Депозит на текущую торговую группу
+        let CurrentTradingVolume = this.ActiveWeekMatching.tradingVolume * TotalTradingVolume / 100;
+        
+        if(!CurrentTradingVolume){
+            // Тут остается проверить только текущую позицию на усреднение
+            return { CODE: 'ACTUAL'}
+        }
+
+        
+
+        let analyzeResponse = {
+            CurrentTradingVolume,
+            PartsForPatterns: this.ActivePatternsInWorkingGroup.reduce((prev, curr) => prev + curr.PART_OF_VOLUME, 0),
+            Pattern: this.ActivePatternsInWorkingGroup.filter(i => i.status).sort((a,b) => b.PART_OF_VOLUME - a.PART_OF_VOLUME)[0],
+            CODE: 'ANALYZE'
+        }
+
+        this.currentAnalyze = analyzeResponse;
+
+        return analyzeResponse;
+        
+        
+
+        
+
+        
+
+        
+
+
+        
+
+        
+
+
+        
+
     }
 
     /**
@@ -31,4 +207,156 @@ module.exports = class AnalyzeModule {
 
         return this;
     }
+
+    /**
+     * Deactivating all patterns by logical GROUP
+     * @param {*} LOGICAL_GROUP 
+     */
+    async _deactivatePatterntByExcludedLogicalGroup(LOGICAL_GROUP){
+        console.log('_deactivatePatterntByExcludedLogicalGroup')
+        return await db.models.Pattern.update({status: false}, {
+            logging: true,
+            where: {
+                LOGICAL_GROUP: {
+                    [Op.ne] : LOGICAL_GROUP
+                }
+            },
+            include: [
+                {
+                    model: db.models.Pairs,
+                    where: {
+                        Name: this.pair
+                    }
+                }
+            ]
+        })
+
+    }
+
+    // Activating local groups
+    async _activateLocalGroups(PATTERNIDs = []){
+
+        if(PATTERNIDs.length == 0) return;
+
+        return await db.models.Pattern.update({status: true}, {
+            where: {
+                id: {
+                    [Op.in] : PATTERNIDs
+                }
+            }
+        })
+
+    }
+
+    async _getPatternGroupsByWorkinglGroup(WORKING_GROUP, force = false){
+
+        if(this.PatternsByWorkingGroup[WORKING_GROUP] && !force){
+            return this.PatternsByWorkingGroup[WORKING_GROUP]
+        }
+
+        let result = await db.models.Pattern.findAll({
+            where: {
+                WORKING_GROUP
+            },
+            include: [
+                {
+                    model: db.models.Pairs,
+                    where: {
+                        Name: this.pair
+                    }
+                },
+                {
+                    model: db.models.PatternTrigger
+                },
+                {
+                    model: db.models.ActiveGroups,
+                    include: [
+                        {
+                            model: db.models.ActiveGroupTriggers
+                        },
+                        {
+                            model: db.models.Rules
+                        }
+                    ]
+                }
+            ]
+        });
+
+        // Something like caching, for fast simulation
+        this.PatternsByWorkingGroup[WORKING_GROUP] = result;
+
+        return this._getPatternGroupsByWorkinglGroup(WORKING_GROUP)
+
+    }
+    
+    async _getPatternGroupsByLogicalGroup(LOGICAL_GROUP, force = false){
+
+        if(this.PatternsByLogicalGroup[LOGICAL_GROUP] && !force){
+            return this.PatternsByLogicalGroup[LOGICAL_GROUP]
+        }
+
+        let result = await db.models.Pattern.findAll({
+            where: {
+                LOGICAL_GROUP
+            },
+            include: [
+                {
+                    model: db.models.Pairs,
+                    where: {
+                        Name: this.pair
+                    }
+                },
+                {
+                    model: db.models.PatternTrigger
+                }                
+            ]
+        });
+
+        // Something like caching, for fast simulation
+        this.PatternsByLogicalGroup[LOGICAL_GROUP] = result;
+
+        return this._getPatternGroupsByLogicalGroup(LOGICAL_GROUP)
+    }
+
+    // Check PAtterns to activate in LOCAL GROUP
+    async _checkPatternsGroupToActivateByLocalGroup(LOGICAL_GROUP){
+
+    }
+
+    async _getTotalTradingVolume(){
+
+        return 1000;
+
+    }
+
+
+    async _UpdaterWeekMatchingList(){ 
+
+        this.WeekMatchingList = await db.models.WeekMatching.findAll();
+        setTimeout(async () => this.WeekMatchingList = await db.models.WeekMatching.findAll(), 30000);
+
+    }
 }   
+
+
+
+
+
+
+
+
+
+const groupByRules = (ACTIVE_GROUP_TRIGGERs) => {    
+  
+    let zoneRulesBB = getBBRulesIndexes();
+  
+    let rules = zoneRulesBB.map((i) => getBBRuleByIddex(i));
+  
+    let grouppedTriggers = rules.map((i) =>
+      ACTIVE_GROUP_TRIGGERs.filter(
+        (j) => j.sigma == i.sigma && j.intervals == i.intervals
+      )
+    );
+  
+    return grouppedTriggers.filter((i) => i.length > 0);
+  };

@@ -6,7 +6,8 @@ const {
 } = require("../utils/BollZoneRules");
 const StrategyRules = require("../utils/strategy/StrategyRules");
 const FuturesModule = require("./FuturesModule");
-const moment = require('moment')
+const moment = require('moment');
+const binance = require("../utils/binance");
 
 module.exports = class PositionsModule {
   constructor(pair) {
@@ -15,6 +16,14 @@ module.exports = class PositionsModule {
     this.exchangeAccount = new Account()
 
     this.futures = new FuturesModule(this.pair);
+
+    
+
+  }
+
+
+  async getExchangePosition(){
+
   }
 
   /**
@@ -47,9 +56,10 @@ module.exports = class PositionsModule {
    */
   async closePositions() {
 
-
+    
     // Checking if there are actual positions
     let actualPosition = await this.getActualPositions();
+    
     
     if (!actualPosition) return null;
 
@@ -61,21 +71,23 @@ module.exports = class PositionsModule {
       actualPosition.averagePrice,
       this.actualPrice
     );
+    
+    
 
     // Checking that Position has enougth profit to close
     let enougthProfit = actualPosition.ACTIVE_GROUP.ProfitPercent;
+
+    //console.log({percentProfit, enougthProfit, AG: actualPosition.ACTIVE_GROUP})
 
     // Break current method if percent profit is not enougth
     if (percentProfit < enougthProfit) return;
 
     // Checking condition to close position
-    let groupped = this._groupByRules(
-      actualPosition.ACTIVE_GROUP.ACTIVE_GROUP_TRIGGERs.filter(
-        (i) => i.type == "CLOSE"
-      )
-    );
+    let groupped = actualPosition.ACTIVE_GROUP.ACTIVE_GROUP_TRIGGERs.filter((i) => i.type == "CLOSE");
 
-    let patternCompare = StrategyRules(this.lastKline, groupped, true, true);
+    let patternCompare = StrategyRules(this.lastKline, groupped, false, true);
+    
+    console.log({patternCompare})
 
     let POSITION_ACTIVE = await this.exchangeAccount.getOpenPositions(this.pair);
 
@@ -86,7 +98,7 @@ module.exports = class PositionsModule {
     // Calculated Profit if positions will be closed now
     let profitVolume = sellVolume - buyVolume;
 
-    patternCompare = true;
+    //patternCompare = false;
 
     // If Theres is not conditions for close position - break method
     if(!patternCompare) return null;
@@ -118,23 +130,111 @@ module.exports = class PositionsModule {
    * @returns
    */
   async getActualPositions() {
-    let position = await db.models.Position.findOne({
-      where: { pair: this.pair, status: true },
-      include: [
-        {
-          model: db.models.ActiveGroups,
-          include: [
-            {
-              model: db.models.ActiveGroupTriggers,
-            },
-          ],
-        },
-      ],
-    });
 
+    let position = undefined;    
+
+    
+    
+    
+    try{
+
+      position = await db.models.Position.findOne({
+
+        where: { pair: this.pair, status: true },
+        include: [
+          {
+            model: db.models.ActiveGroups,
+            include: [
+              {
+                model: db.models.ActiveGroupTriggers,
+              },
+              {
+                model: db.models.Rules
+              },
+              {
+                model: db.models.Pattern
+              }
+            ],
+          },
+          {
+            model: db.models.PositionEnters
+          }
+        ],
+      });
+
+    }catch(e){
+      console.log(e)
+    }
+
+    
+    
+    
     if (!position) return null;
 
     return position;
+  }
+
+  async updatePosition(POSITION, marketBuy, ACTIVE_GROUP, enterStep){
+
+    // Получаем текущую позицию с биржи
+    let binancePositions = await this.futures.futuresPositionRisk();
+
+    let exchangePosition = binancePositions.filter(i => i.symbol == this.pair);
+
+    if(exchangePosition.length == 0) return;
+
+    exchangePosition = exchangePosition[0];
+
+    
+
+    await db.models.PositionEnters.create({
+      volumeUSDT: parseFloat(marketBuy.cumQuote)/10,
+      volume: parseFloat(marketBuy.cumQty),
+      step: enterStep,
+      POSITIONId: POSITION.id,
+      ACTIVEGROUPId: ACTIVE_GROUP
+    })
+
+    //console.log({POSITION, marketBuy})
+    return await db.models.Position.update({
+      avegarePrice: parseFloat(exchangePosition.entryPrice),
+      averagePrice: parseFloat(exchangePosition.entryPrice),
+      lastEnterPrice: parseFloat(marketBuy.avgPrice),
+      ACTIVEGROUPId: ACTIVE_GROUP,
+      volumeACTIVE: POSITION.volumeACTIVE + parseFloat(marketBuy.cumQty),
+      volumeUSDT: POSITION.volumeUSDT + parseFloat(marketBuy.cumQuote)/10,
+      enterStep
+    }, {where: {
+      id: POSITION.id
+    }})
+
+  }
+
+
+  async createPosition(margin, enterPrice, qty, ACTIVE_GROUP, deposit){
+    
+    let position = await db.models.Position.create({
+      volumeUSDT: margin,
+      volumeACTIVE: qty,
+      pair: this.pair,
+      enterStep: 1,
+      ACTIVEGROUPId: ACTIVE_GROUP,
+      status: true,
+      positionType: 'LONG',
+      averagePrice: enterPrice,
+      avegarePrice: enterPrice,
+      enterPrice,
+      deposit
+    })
+
+    await db.models.PositionEnters.create({
+      volume: qty,
+      volumeUSDT: margin,
+      step: 1,
+      POSITIONId: position.id,
+      ACTIVEGROUPId: ACTIVE_GROUP
+    })
+
   }
 
   _groupByRules(ACTIVE_GROUP_TRIGGERs) {

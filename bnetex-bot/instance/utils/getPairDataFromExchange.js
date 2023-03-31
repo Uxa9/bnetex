@@ -25,6 +25,8 @@ module.exports = async (pair, timeframe, limit, startTimeFrom = false, lastTime 
 
   
 
+  
+
   // Отнимаем одну свечу на всякий случай
   startTime = startTime - timeframeRules(timeframe).singleMilliseconds;
 

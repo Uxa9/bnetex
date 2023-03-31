@@ -16,6 +16,12 @@ module.exports = class FuturesModule{
 
     }
 
+    async futuresPositionRisk(){
+
+        return await binance.futuresPositionRisk();
+
+    }
+
 
 
     /**

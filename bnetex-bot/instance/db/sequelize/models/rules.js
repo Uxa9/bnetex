@@ -1,6 +1,6 @@
 module.exports = function(sequelize, DataTypes) {
     return sequelize.define('POSITION_RULES', {
-        depositPercent: {
+        depositPart: {
             type: DataTypes.DOUBLE
         },
 
