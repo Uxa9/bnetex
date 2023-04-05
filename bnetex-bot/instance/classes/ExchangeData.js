@@ -37,9 +37,10 @@ module.exports = class ExchangeData {
     subscribeNext(){
 
         return Observable.create((subject) => {
-            this.throwNextCandle.on('next', () => {              
+            this.throwNextCandle.on('next', (last) => {              
+                console.log({last})
                 subject.next({
-                  last: this.candlesticks[this.candlesticks.length-1],
+                  last,
                   last_100: this.candlesticks.slice(-100)
                 })
             })
@@ -184,11 +185,7 @@ module.exports = class ExchangeData {
               this.candlesticks_1h.push(e["1m"]);
               console.log(this.candlesticks_1h[this.candlesticks_1h.length-1], this.candlesticks_1h[this.candlesticks_1h.length-2])
               this.candlesticks_1h.shift();
-              if (this.startHourDate === undefined) {
-                this.startHourDate = new Date();
-              } else {                
-                this.startHourDate = new Date();
-              }
+          
             }
     
             this.candlesticks.shift();
@@ -207,6 +204,8 @@ module.exports = class ExchangeData {
   async klinesHandler(klines) {
     //return;
 
+
+    console.log('klineHandler: ', klines.startTime)
     let intervals = Object.keys(klines);
 
     
@@ -243,8 +242,9 @@ module.exports = class ExchangeData {
       for (let index = 0; index < zoneRulesBB.length; index++) {
         const element = zoneRulesBB[index];
         const rule = getBBRuleByIddex(element);
-
+        console.log('ruleIntervals', rule)
         if (rule.intervals > 1440) {
+          console.log('ExchangeData: 98: RuleIntervals', rule.intervals, calculateHour);
           if (calculateHour) {
             candlesticks_1h = CalcBollingerComplex(
               rule,
@@ -291,12 +291,16 @@ module.exports = class ExchangeData {
 
           
         }
+
+        console.log('1111')
+
       }
 
       // Сращиваем 1ч и 1м
       candlesticks = compareCandlesticks(candlesticks, candlesticks_1h, true);
       
-
+      //console.log(candlesticks[candlesticks.length - 1])
+      
       this.candlesticks_1h = candlesticks_1h
       this.candlesticks.push(candlesticks[candlesticks.length - 1]);
     }

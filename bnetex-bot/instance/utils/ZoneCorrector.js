@@ -105,6 +105,17 @@ const zoneCorrector = (intervalsData = [], log = false) => {
             }
         }
 
+
+
+        if(zone == 4 && lastKline.back.join() == [1,2,3].join() && lastKline.prevZone == 2){
+            
+            lastKline = {
+                ...lastKline,
+                back: [1,2,3],
+                prevZone: 3
+            }
+        }
+
         
 
         if(zone == 1 && lastKline.back.join() == [0,1,3].join() && lastKline.prevZone == 1){

@@ -56,9 +56,8 @@ module.exports = class AnalyzeModule {
 
         
         // TODO + ЗАменить на год
-        if(!this.marketData[10080]){
-            //console.log(this.marketData)
-        }
+        console.log({last: this.marketData});
+        console.log({match: matching(this.marketData[10080][2])})
         let MICRO_WEEK_SITUATION_INDEX = matching(this.marketData[10080][2]).index;
 
         let MACRO_WEEK_SITUATION_INDEX = matrixMatching(this.marketData);
