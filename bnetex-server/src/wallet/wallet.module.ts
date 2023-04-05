@@ -14,6 +14,7 @@ import { Transaction } from './models/transaction.model';
   controllers: [WalletController],
   imports: [
       SequelizeModule.forFeature([ Wallet, WalletNetwork, Network, Currency, User, Transaction ]),
-  ]
+  ],
+  exports: [ WalletService ],
 })
 export class WalletModule {}

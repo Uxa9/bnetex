@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {InjectModel} from "@nestjs/sequelize";
 import {Wallet} from "./models/wallet.model";
 import {Network} from "./models/network.model";
@@ -45,7 +45,8 @@ export class WalletService {
 
         const walletNetwork = this.networkRepository.findOne({ where: {name: network}});
 
-        Promise.all([walletAddress, walletNetwork]).then(async ([address, network]) => {
+        return await Promise.all([walletAddress, walletNetwork]).then(async ([address, network]) => {
+
             const wallet = await this.walletRepository.create({
                 walletId: address.data.address,
                 networkId: network.id,    
@@ -138,25 +139,45 @@ export class WalletService {
     async withdrawMoney(dto: any) {
         const user = await this.userRepository.findByPk(dto.userId);
 
-        if (user.mainWallet < dto.amount) return;
+        if ( user.mainWallet < dto.amount ) {
+            throw new HttpException(
+                {
+                    status: "ERROR",
+                    message: "WALLET_AMOUNT_IS_LOWER_THAN_REQUESTED"
+                },
+                HttpStatus.BAD_REQUEST
+            );
+        }
 
         user.decrement({
             mainWallet: dto.amount
         });
 
-        // орел вызывает базу
-        axios.post(`http://localhost:3800/Binance/Withdraw/1/TRX/USDT/${dto.amount}/${dto.walletAddress}`,{}, {
+        axios.post(`http://localhost:3800/Binance/Withdraw/1/TRX/USDT/${dto.amount}/${dto.walletAddress}`, {}, {
             headers: {
-                Authorization: process.env.PAYMENT_TOKEN
+                Authorization: `Bearer ${process.env.PAYMENT_TOKEN}`
             }
         })
             .then(async (res) => {
+                console.log(res);
+                
                 await this.transactionRepository.create({
                     userId : dto.userId,
                     transactionId : uuidv4(),
                     amount : dto.amount
                 });
+
+                return {
+                    status: "SUCCESS"
+                }
             })
-            .catch(err => console.log(err));        
+            .catch(err => {
+                console.log(err);
+                
+                return {
+                    status: "ERROR"
+                }
+            });        
+
     }
 }
