@@ -35,9 +35,9 @@ const server = require('http').createServer(app);
 
     
 
-    let klines = await getPairDataFromExchange('BTCUSDT', '1m', 1000, 1675242540000 + 60000);
+    //let klines = await getPairDataFromExchange('BTCUSDT', '1m', 1000, 1675242540000 + 60000);
 
-    console.log(klines[0].startTime - 1675242540000)
+    //console.log(klines[0].startTime - 1675242540000)
 
     await db.setup();
 
@@ -45,7 +45,7 @@ const server = require('http').createServer(app);
 
     //await copySinglePattern('1D_LONG_SKALP_01_7D', '1D_LONG_SKALP_543_7D')
 
-    return;
+    //return;
 
     
 

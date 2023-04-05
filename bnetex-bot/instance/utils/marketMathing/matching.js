@@ -144,7 +144,7 @@ module.exports = (situation) => {
     zone: situation.zone,
   };
 
-  console.log(formatted)
+  //console.log(formatted)
 
   
 

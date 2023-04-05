@@ -341,7 +341,7 @@ module.exports = class DecisionsModule {
 
             try {
               let marketBuy = await this.futuresModule.marketBuy(qty, parseFloat(this.marketData.close));
-              console.log({marketBuy})
+              //console.log({marketBuy})
               if (marketBuy.orderId) {
                 this._updatePositionInDb(
                   qty,

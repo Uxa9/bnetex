@@ -56,8 +56,8 @@ module.exports = class AnalyzeModule {
 
         
         // TODO + ЗАменить на год
-        console.log({last: this.marketData});
-        console.log({match: matching(this.marketData[10080][2])})
+        //console.log({last: this.marketData});
+        //console.log({match: matching(this.marketData[10080][2])})
         let MICRO_WEEK_SITUATION_INDEX = matching(this.marketData[10080][2]).index;
 
         let MACRO_WEEK_SITUATION_INDEX = matrixMatching(this.marketData);
@@ -226,7 +226,7 @@ module.exports = class AnalyzeModule {
         }
 
         
-        console.log('ANALYZE_PATTERNS_LEN:', this.ActivePatternsInWorkingGroup.filter(i => i.status).length)
+        //console.log('ANALYZE_PATTERNS_LEN:', this.ActivePatternsInWorkingGroup.filter(i => i.status).length)
         let analyzeResponse = {
             CurrentTradingVolume,
             PartsForPatterns: this.ActivePatternsInWorkingGroup.reduce((prev, curr) => prev + curr.PART_OF_VOLUME, 0),
