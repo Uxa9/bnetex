@@ -1,11 +1,11 @@
 const { Observable } = require("rxjs");
 
-const binance = require("./utils/binance");
-const formatCandlesTick = require("./utils/formatCandlesTick");
+const binance = require("../utils/binance");
+const formatCandlesTick = require("../utils/formatCandlesTick");
 
 const moment = require("moment");
-const tickerHelper = require("./utils/tickerHelper");
-const { pnlTIcker$ } = require("../server/events/events");
+const tickerHelper = require("../utils/tickerHelper");
+const { pnlTIcker$ } = require("../../server/events/events");
 
 // В этом классе порисходит подписка на тики бинанс, происходит просчет ожиданий какие таймфреймы закроются следущие
 module.exports = class TickerClass {

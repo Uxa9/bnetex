@@ -1,7 +1,7 @@
 const { Observable } = require("rxjs");
 
-const { simulateEventer } = require("./utils/events");
-const getPairDataFromExchange = require("./utils/getPairDataFromExchange");
+const { simulateEventer } = require("../utils/events");
+const getPairDataFromExchange = require("../utils/getPairDataFromExchange");
 
 const moment = require('moment');
 
@@ -38,20 +38,27 @@ module.exports = class TickerClassSimulate {
           
             simulateEventer.on('callNextCandle', async (e) => {
 
-              
+              console.log('callNextCandle:', e.startTime)
 
                 if(this.index > 1) return;
 
                 let tick = {};
                 
-                if(this.klines.length <= 1){
-                  this.klines = await getPairDataFromExchange(this.pair, '1m', 1000, e.startTime);
+                if(this.klines.length <= 100){
+                  if( e.startTime % 3600000 !== 0 &&  (e.startTime - 60000) % 3600000 !== 0 && (e.startTime + 60000) % 3600000 !== 0)
+                  this.klines = await getPairDataFromExchange(this.pair, '1m', 1000, e.startTime + 60000);                  
                 }
 
                 tick = this.klines[1]
+
+                // if(!tick){
+                //   console.log('e', e)
+                //   console.log('LEN: ',this.klines.length);                  
+                // }
+
                 this.klines.shift();
 
-                //console.log({ticktime: moment(tick.startTime, 'x').format('DD MM YYYY HH:mm'), st: tick.startTime})                
+                
 
                 this.klinesToForce[tick.interval] = tick;
 

@@ -31,15 +31,15 @@ const matchingTable = [
 
   {
     back: "013",
-    prev: 2,
-    zone: 3,
+    prev: 3,
+    zone: 2,
     depositPercent: 20,
     index: 3
   },
   {
-    back: "013",
-    prev: 3,
-    zone: 2,
+    back: "012",
+    prev: 2,
+    zone: 3,
     depositPercent: 20,
     index: 3
   },
@@ -143,6 +143,10 @@ module.exports = (situation) => {
     prev: situation.prevZone,
     zone: situation.zone,
   };
+
+  //console.log(formatted)
+
+  
 
   let result = null;
 

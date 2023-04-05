@@ -24,12 +24,30 @@ const paramsConverter = require("./server/routes/middlewares/paramsConverter");
 const socket = require("./server/socket/socket");
 const getPairsListMySQL = require("./instance/db/sequelize/actions/pairs/getPairsListMySQL");
 const TelegramBotClass = require("./instance/utils/telegram/bot");
+const dbValidator = require("./instance/utils/dbValidator");
+const copySinglePattern = require("./instance/utils/copySinglePattern");
+const { sendMessageToMainChanel } = require("./instance/utils/telegram/tg");
+const getPairDataFromExchange = require("./instance/utils/getPairDataFromExchange");
 
 const server = require('http').createServer(app);
 
 (async () => {
 
+    
+
+    let klines = await getPairDataFromExchange('BTCUSDT', '1m', 1000, 1675242540000 + 60000);
+
+    console.log(klines[0].startTime - 1675242540000)
+
     await db.setup();
+
+    //await dbValidator();
+
+    //await copySinglePattern('1D_LONG_SKALP_01_7D', '1D_LONG_SKALP_543_7D')
+
+    return;
+
+    
 
     // app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -75,6 +93,9 @@ const server = require('http').createServer(app);
 
 
 })()
+
+
+
 
 
 

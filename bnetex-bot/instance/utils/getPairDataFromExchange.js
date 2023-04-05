@@ -10,7 +10,7 @@ var moment = require("moment");
 module.exports = async (pair, timeframe, limit, startTimeFrom = false, lastTime = false) => {
 
 
-  
+  console.log('Запрос еще 1000')
 
   // Рассчитываем время - откуда считать
   let startTime =

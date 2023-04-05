@@ -15,7 +15,7 @@ module.exports = class PositionsModule {
     this.lastKline = undefined;
     this.exchangeAccount = new Account()
 
-    this.futures = new FuturesModule(this.pair);
+    this.futures = new FuturesModule(this.pair, this);
 
     
 
@@ -33,7 +33,9 @@ module.exports = class PositionsModule {
    * @returns
    */
   async _setMinPrice(POSITION, price) {
-    if (POSITION.minPrice <= price) return;
+
+    
+    if (POSITION.minPrice <= price && POSITION.minPrice != null) return;
 
     await db.models.Position.update(
       { minPrice: price },
@@ -87,9 +89,9 @@ module.exports = class PositionsModule {
 
     let patternCompare = StrategyRules(this.lastKline, groupped, false, true);
     
-    console.log({patternCompare})
+    
 
-    let POSITION_ACTIVE = await this.exchangeAccount.getOpenPositions(this.pair);
+    let POSITION_ACTIVE = await this.exchangeAccount.getOpenPositions(this.pair, actualPosition);
 
     // Volume of buy 
     let buyVolume = actualPosition.averagePrice * parseFloat(POSITION_ACTIVE.positionAmt)
@@ -112,6 +114,9 @@ module.exports = class PositionsModule {
     // Close Postitons on Exhcnage
     await this.futures.marketSell(actualPosition.volumeACTIVE);
 
+    await this._deactivatePatterns();
+    
+
     return null;
   }
 
@@ -121,6 +126,20 @@ module.exports = class PositionsModule {
    */
   _calcProfitPercent(averagePrice, actualPrice) {
     return 100 - (averagePrice * 100) / actualPrice;
+  }
+
+
+  /**
+     * Deactivating all patterns     
+     */
+  async _deactivatePatterns(){    
+
+    return await db.models.Pattern.update({status: false}, {where: {
+      id: {
+        status: true
+      }
+    }})
+
   }
 
   
@@ -174,10 +193,10 @@ module.exports = class PositionsModule {
     return position;
   }
 
-  async updatePosition(POSITION, marketBuy, ACTIVE_GROUP, enterStep){
+  async updatePosition(POSITION, marketBuy, ACTIVE_GROUP, enterStep, enterPrice){
 
     // Получаем текущую позицию с биржи
-    let binancePositions = await this.futures.futuresPositionRisk();
+    let binancePositions = await this.futures.futuresPositionRisk(marketBuy, this.pair);
 
     let exchangePosition = binancePositions.filter(i => i.symbol == this.pair);
 
@@ -188,21 +207,22 @@ module.exports = class PositionsModule {
     
 
     await db.models.PositionEnters.create({
-      volumeUSDT: parseFloat(marketBuy.cumQuote)/10,
-      volume: parseFloat(marketBuy.cumQty),
+      volumeUSDT: parseFloat(marketBuy.cumQty)/10,
+      volume: parseFloat(marketBuy.cumQuote),
       step: enterStep,
       POSITIONId: POSITION.id,
-      ACTIVEGROUPId: ACTIVE_GROUP
+      ACTIVEGROUPId: ACTIVE_GROUP,
+      close: enterPrice
     })
 
-    //console.log({POSITION, marketBuy})
+    
     return await db.models.Position.update({
       avegarePrice: parseFloat(exchangePosition.entryPrice),
       averagePrice: parseFloat(exchangePosition.entryPrice),
       lastEnterPrice: parseFloat(marketBuy.avgPrice),
       ACTIVEGROUPId: ACTIVE_GROUP,
-      volumeACTIVE: POSITION.volumeACTIVE + parseFloat(marketBuy.cumQty),
-      volumeUSDT: POSITION.volumeUSDT + parseFloat(marketBuy.cumQuote)/10,
+      volumeACTIVE: POSITION.volumeACTIVE + parseFloat(marketBuy.cumQuote),
+      volumeUSDT: POSITION.volumeUSDT + parseFloat(marketBuy.cumQty)/10,
       enterStep
     }, {where: {
       id: POSITION.id
@@ -232,7 +252,8 @@ module.exports = class PositionsModule {
       volumeUSDT: margin,
       step: 1,
       POSITIONId: position.id,
-      ACTIVEGROUPId: ACTIVE_GROUP
+      ACTIVEGROUPId: ACTIVE_GROUP,
+      close: enterPrice
     })
 
   }

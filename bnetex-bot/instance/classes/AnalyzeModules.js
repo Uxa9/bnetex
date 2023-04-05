@@ -56,9 +56,65 @@ module.exports = class AnalyzeModule {
 
         
         // TODO + ЗАменить на год
-        let MICRO_WEEK_SITUATION_INDEX = matching(this.marketData[259200][2]).index;
+        if(!this.marketData[10080]){
+            //console.log(this.marketData)
+        }
+        let MICRO_WEEK_SITUATION_INDEX = matching(this.marketData[10080][2]).index;
 
         let MACRO_WEEK_SITUATION_INDEX = matrixMatching(this.marketData);
+
+        // let MACRO_WEEK_SITUATION_INDEX = matrixMatching({
+        //     '518400' : {
+        //         '2' : {
+        //             backPattern : [1,2,3],
+        //             prevZone : 1,
+        //             zone : 0
+        //         }
+        //     },
+        //     '259200' : {
+        //         '2' : {
+        //             backPattern : [1,2,3],
+        //             prevZone : 1,
+        //             zone : 0
+        //         }
+        //     },
+        //     '129600' : {
+        //         '2' : {
+        //             backPattern : [1,2,3],
+        //             prevZone : 1,
+        //             zone : 0
+        //         }
+        //     },
+        //     '86400' : {
+        //         '2' : {
+        //             backPattern : [1,2,3],
+        //             prevZone : 1,
+        //             zone : 0
+        //         }
+        //     },
+        //     '43200' : {
+        //         '2' : {
+        //             backPattern : [0,1,3],
+        //             prevZone : 1,
+        //             zone : 2
+        //         }
+        //     },
+        //     '20160' : {
+        //         '2' : {
+        //             backPattern : [1,2,3],
+        //             prevZone : 1,
+        //             zone : 0
+        //         }
+        //     },
+        //     '10080' : {
+        //         '2' : {
+        //             backPattern : [1,2,3],
+        //             prevZone : 1,
+        //             zone : 0
+        //         }
+        //     }
+        // });
+        
 
         //console.log({MACRO_WEEK_SITUATION_INDEX, MICRO_WEEK_SITUATION_INDEX})
 
@@ -100,7 +156,7 @@ module.exports = class AnalyzeModule {
         // Getting all patterns in local group
         let patternsGroupInLogicalGroup = await this._getPatternGroupsByLogicalGroup(this.ActiveWeekMatching.LOGICAL_GROUP, true);
 
-        //console.log(patternsGroupInLogicalGroup)
+        
         
         //console.log({patternsGroupInLogicalGroup})
 
@@ -142,10 +198,12 @@ module.exports = class AnalyzeModule {
         }
 
 
-        let maxPatternByVolume = patternsTempIds.sort((a,b) => b.PART_OF_VOLUME - a.PART_OF_VOLUME)[0];
+        let maxPatternByVolume = patternsTempIds.sort((a,b) => b.PERCENT_OF_DEPOSIT - a.PERCENT_OF_DEPOSIT)[0];
         
         
         this.ActivePatternsInWorkingGroup = await this._getPatternGroupsByWorkinglGroup(maxPatternByVolume.WORKING_GROUP, true);
+
+        
 
         // If there are trading patterns - check to activate       
         if(this.ActivePatternsInWorkingGroup.length == 0){
@@ -160,6 +218,8 @@ module.exports = class AnalyzeModule {
 
         // Депозит на текущую торговую группу
         let CurrentTradingVolume = this.ActiveWeekMatching.tradingVolume * TotalTradingVolume / 100;
+
+        //console.log({CurrentTradingVolume, awmtv: this.ActiveWeekMatching.tradingVolume})
         
         if(!CurrentTradingVolume){
             // Тут остается проверить только текущую позицию на усреднение
@@ -167,13 +227,15 @@ module.exports = class AnalyzeModule {
         }
 
         
-
+        console.log('ANALYZE_PATTERNS_LEN:', this.ActivePatternsInWorkingGroup.filter(i => i.status).length)
         let analyzeResponse = {
             CurrentTradingVolume,
             PartsForPatterns: this.ActivePatternsInWorkingGroup.reduce((prev, curr) => prev + curr.PART_OF_VOLUME, 0),
             Pattern: this.ActivePatternsInWorkingGroup.filter(i => i.status).sort((a,b) => b.PART_OF_VOLUME - a.PART_OF_VOLUME)[0],
             CODE: 'ANALYZE'
         }
+
+        
 
         this.currentAnalyze = analyzeResponse;
 
@@ -250,9 +312,7 @@ module.exports = class AnalyzeModule {
 
     async _getPatternGroupsByWorkinglGroup(WORKING_GROUP, force = false){
 
-        if(this.PatternsByWorkingGroup[WORKING_GROUP] && !force){
-            return this.PatternsByWorkingGroup[WORKING_GROUP]
-        }
+      
 
         let result = await db.models.Pattern.findAll({
             where: {
@@ -282,19 +342,15 @@ module.exports = class AnalyzeModule {
             ]
         });
 
-        // Something like caching, for fast simulation
-        this.PatternsByWorkingGroup[WORKING_GROUP] = result;
+        return result;
 
-        return this._getPatternGroupsByWorkinglGroup(WORKING_GROUP)
+        
 
     }
     
     async _getPatternGroupsByLogicalGroup(LOGICAL_GROUP, force = false){
 
-        if(this.PatternsByLogicalGroup[LOGICAL_GROUP] && !force){
-            return this.PatternsByLogicalGroup[LOGICAL_GROUP]
-        }
-
+        
         let result = await db.models.Pattern.findAll({
             where: {
                 LOGICAL_GROUP
@@ -312,10 +368,7 @@ module.exports = class AnalyzeModule {
             ]
         });
 
-        // Something like caching, for fast simulation
-        this.PatternsByLogicalGroup[LOGICAL_GROUP] = result;
-
-        return this._getPatternGroupsByLogicalGroup(LOGICAL_GROUP)
+        return result;
     }
 
     // Check PAtterns to activate in LOCAL GROUP
@@ -325,7 +378,8 @@ module.exports = class AnalyzeModule {
 
     async _getTotalTradingVolume(){
 
-        return 1000;
+        // TODO - брать с сайта
+        return 50000;
 
     }
 

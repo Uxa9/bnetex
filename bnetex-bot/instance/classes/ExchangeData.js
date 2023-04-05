@@ -1,5 +1,5 @@
-const TickerClassSimulate = require("../tickeClassSimulate");
-const TickerClass = require("../tickerClass");
+const TickerClassSimulate = require("./tickeClassSimulate");
+const TickerClass = require("./tickerClass");
 const { getMaxIntervals, getBBRulesIndexes, getBBRuleByIddex } = require("../utils/BollZoneRules");
 const compareCandlesticks = require("../utils/compareCandlesticks");
 const { simulateEventer } = require("../utils/events");
@@ -94,6 +94,8 @@ module.exports = class ExchangeData {
 
 
             if (rule.intervals > 1440) {
+
+                console.log('ExchangeData: 98: RuleIntervals', rule.intervals);
                 candlesticks_1h = CalcBollingerComplex(rule, candlesticks_1h);
         
                 // Зоны
@@ -175,8 +177,12 @@ module.exports = class ExchangeData {
             
             if (e["1m"].startTime % 3600000 == 0) {
               console.log("Add 1 Hour".green);
+              console.log('initializingSubscribtion', e["1m"].startTime);
+
+              
     
               this.candlesticks_1h.push(e["1m"]);
+              console.log(this.candlesticks_1h[this.candlesticks_1h.length-1], this.candlesticks_1h[this.candlesticks_1h.length-2])
               this.candlesticks_1h.shift();
               if (this.startHourDate === undefined) {
                 this.startHourDate = new Date();

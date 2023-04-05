@@ -90,11 +90,11 @@ const list =  [
             intervals: 259200,
             sigma: 3
         },
-        // {
-        //     index: 90,
-        //     intervals: 518400,
-        //     sigma: 2
-        // }
+        {
+            index: 90,
+            intervals: 518400,
+            sigma: 2
+        }
     ]
 
 

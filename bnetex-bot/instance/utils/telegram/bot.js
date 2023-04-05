@@ -71,7 +71,7 @@ module.exports = class TelegramBotClass {
                 
             }
             
-
+            console.log(dataToLoop)
 
             dataToLoop.map(pair => {
 
