@@ -6,6 +6,7 @@ import { walletReducer } from './walletReducer';
 import { roePnlReducer } from './roepnl';
 import { algotradeReducer } from './algotradeReducer';
 import { transactionsReducer } from './transactionsReducer';
+import { tradePairReducer } from './tradePair';
 
 export const rootReducer = combineReducers({
     auth: authReducer,
@@ -15,6 +16,7 @@ export const rootReducer = combineReducers({
     roePnl: roePnlReducer,
     algotrade: algotradeReducer,
     transactions: transactionsReducer,
+    tradePair: tradePairReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

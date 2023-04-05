@@ -7,7 +7,6 @@ import { createCombinedStreamString, depthSocketMessageParser, generateSocketId,
 import { getOrderBookSnapshot } from './sevices';
 
 export interface BinanceSocketContext {
-    loading: boolean;
     tradePair: string | null;
 
     setTradePair: Dispatch<SetStateAction<string | null>>;
@@ -26,7 +25,6 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
     // торговая пара - BTCUSDT, ETHUSDT, etc.
     const [tradePair, setTradePair] = useState<string | null>(null);
     const [socketType, setSocketType] = useState<BinanceSocketType | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
 
     const snapshotUpdateIdRef = useRef<number | null>(null);
     const prevDepthStreamUpdateIdRef = useRef<number | null>(null);
@@ -35,8 +33,6 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
     // чтобы открывать новый сокет только при наличии
     // валидных tradePair и socketType
     const activeSocketId = useMemo(() => {
-        console.log(tradePair);
-
         return tradePair && socketType
             ? generateSocketId(tradePair, socketType)
             : null;
@@ -63,20 +59,16 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
     };
 
     const openSocket = async (socketId: string) => {
-        setLoading(true);
-
         const socketURL = `${binanceWSEndpoint}${createCombinedStreamString(tradePair!, socketType!)}`;
         const socket = new WebSocket(socketURL);
 
         socket.onopen = () => {
             loadOrderBook();
-            setLoading(false);
         };
 
         socket.onerror = (e: Event) => {
             console.error(e); //toDo: bakeToast???
             closeActiveSocket();
-            setLoading(false);
         };
 
         socket.onmessage = handleSocketMessage;
@@ -131,7 +123,6 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
     return (
         <binanceSocketContext.Provider
             value={{
-                loading,
                 tradePair,
                 setTradePair,
                 setSocketType,
