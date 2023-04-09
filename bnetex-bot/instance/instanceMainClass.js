@@ -51,9 +51,11 @@ module.exports = class InstanceClass {
       // Сюда данные пробрасываются каждую минуту
       subscribtion.subscribe(async (candlesData) => { 
         
-        
+        // if(candlesData.last.startTime == 1679726580000){
+        //   console.log(candlesData.last)
+        // }
 
-        //console.log(moment(candlesData.last.startTime, 'x').format('DD MM YYYY HH:mm'))  
+        console.log(moment(candlesData.last.startTime, 'x').format('DD MM YYYY HH:mm'))  
 
         if(prices.length > 60) prices.shift();
 
@@ -75,10 +77,10 @@ module.exports = class InstanceClass {
         await this.positionsData.closePositions();
         
 
-        
+        let position = await this.positionsData.getActualPositions();
         
         // Updating actual market data for analyze module && Calling global analyze function
-        let analyzeResult = await this.analyzeModule.updateMarketData(candlesData.last).analyze(); if(!analyzeResult) return;
+        let analyzeResult = await this.analyzeModule.setActualPosition(position).updateMarketData(candlesData.last).analyze(); if(!analyzeResult) return;
 
         
         

@@ -7,6 +7,7 @@ const AnalyzeModule = require("./AnalyzeModules");
 const FuturesModule = require("./FuturesModule");
 const PositionsModule = require("./PositionsModule");
 const db = require("../db/sequelize/dbseq");
+const { Op } = require("sequelize");
 
 module.exports = class DecisionsModule {
   constructor(pair, positionsData) {
@@ -45,6 +46,8 @@ module.exports = class DecisionsModule {
 
     let groups = this.analyzeResponseData.Pattern.ACTIVE_GROUPs;
 
+    //console.log({groups})
+
     for (let index = 0; index < groups.length; index++) {
       const element = groups[index];
       
@@ -52,7 +55,8 @@ module.exports = class DecisionsModule {
       let OpenTriggers = element.ACTIVE_GROUP_TRIGGERs.filter(
         (i) => i.type == "OPEN"
       );
-
+      //console.log({element})
+      //console.log({OpenTriggers: element.ACTIVE_GROUP_TRIGGERs})
       let patternCompare = StrategyRules(
         this.marketData,
         OpenTriggers,
@@ -62,6 +66,10 @@ module.exports = class DecisionsModule {
 
       if (patternCompare) patternsToOpen.push(element);
     }
+
+    // if(this.marketData.startTime == 1679722980000){
+    //   console.log(this.marketData)
+    // }
 
     if (patternsToOpen.length == 0) return null;
 
@@ -129,8 +137,24 @@ module.exports = class DecisionsModule {
     let ActualPositionsModule = new PositionsModule(this.pair);
 
     let ActialPosition = await ActualPositionsModule.getActualPositions();
+    ActualPositionsModule.updateLastKline(this.marketData);
 
     if (!ActialPosition) {
+      
+      // Вырубаем все паттерны кроме текущего,  когда создали позицию
+      try{
+        await db.models.Pattern.update({status: false}, {
+        where : {
+          WORKING_GROUP: {
+            [Op.not] : this.analyzeResponseData.Pattern.WORKING_GROUP
+          }
+        }
+      })  
+      }catch(e){
+        console.log(e)
+      }
+      
+
       // Создаем позицию
       await ActualPositionsModule.createPosition(
         margin,
@@ -200,13 +224,17 @@ module.exports = class DecisionsModule {
     let patternTradingVolume = PatternTradingVolume / PartsForPatterns;
 
     // Единица обьема
-    let singlePart = patternTradingVolume / totalPartsOfPositions;
+    let singlePart = patternTradingVolume / totalPartsOfPositions * this.analyzeResponseData.Pattern.PART_OF_VOLUME;
 
     // Обьем для текущего входа
     let enterRuleVolume = Math.floor(singlePart * activeFirstRule.depositPart);
 
     // Объем в активе
     let qty = parseFloat((enterRuleVolume / lastPrice) * 10).toFixed(3);
+
+
+    console.log(this.analyzeResponseData);
+    console.log({singlePart, enterRuleVolume, PERCENT_OF_DEPOSIT, patternTradingVolume, totalPartsOfPositions})
 
     if (currentDiffOfAverage >= activeFirstRule.priceDifferencePercent) {
       try {
@@ -254,31 +282,55 @@ module.exports = class DecisionsModule {
     // Find actual positions to average
     let ActialPosition = await ActualPositionsModule.getActualPositions();
 
+    ActualPositionsModule.updateLastKline(this.marketData);
+
     let lastPrice = parseFloat(this.marketData.close);
 
     // Checking if Pattern allow entry into position
     let _openedPattern = this._checkPatternToOpen();
 
+    if(this.marketData.startTime == 1680572100000){
+      console.log("AR: ",this.analyzeResponseData)
+    }
+
     // Если вообще нет открытого - меняем нахуй
     if (!this.openedPatternToEnter && _openedPattern) {
       this.openedPatternToEnter = _openedPattern;
-    } else if (!this.openedPatternToEnter && _openedPattern) {
+      //console.log('HERE 1');
+    } else if (this.openedPatternToEnter && _openedPattern && (_openedPattern.id != this.openedPatternToEnter.id)) {
       // Если есть открытый, то дополнительно проверяем новый на профит
-
+      //console.log('HERE 2')
+      if(this.marketData.startTime == 1679722980000){
+        //console.log("PP:", this.openedPatternToEnter.ProfitPercent, _openedPattern.ProfitPercent)
+      }
       if (
         this.openedPatternToEnter.ProfitPercent <= _openedPattern.ProfitPercent
       ) {
         this.openedPatternToEnter = _openedPattern;
+        //console.log('HERE 3')
       }
     }
+
+    
+
     //console.log(this.openedPatternToEnter)
     // Clean Signal - First positive Candle after green
     let CLEAN__SIGNAL = this._firstPositiveCandle();
+
+    if(this.marketData.startTime == 1679722980000){
+      //console.log({CLEAN__SIGNAL})
+      if(ActialPosition){
+          //console.log(ActialPosition.averagePrice, lastPrice)
+      }
+    }
 
     if (!CLEAN__SIGNAL) return { code: "NON_ACTION" };
 
     if (ActialPosition && ActialPosition.averagePrice < lastPrice)
       return { code: "NON_ACTION" };
+
+
+    
 
     // Here
     if (ActialPosition) {
@@ -329,7 +381,7 @@ module.exports = class DecisionsModule {
               this.openedPatternToEnter.POSITION_RULEs
             );
 
-            let singlePart = patternTradingVolume / totalPartsOfPositions;
+            let singlePart = patternTradingVolume / totalPartsOfPositions * this.analyzeResponseData.Pattern.PART_OF_VOLUME;
 
             let enterRuleVolume = Math.floor(
               singlePart * activeFirstRule.depositPart
@@ -338,6 +390,9 @@ module.exports = class DecisionsModule {
             let lastPrice = parseFloat(this.marketData.close);
 
             let qty = parseFloat((enterRuleVolume / lastPrice) * 10).toFixed(3);
+
+            console.log(this.analyzeResponseData);
+            console.log({singlePart, enterRuleVolume, PERCENT_OF_DEPOSIT, patternTradingVolume, totalPartsOfPositions})
 
             try {
               let marketBuy = await this.futuresModule.marketBuy(qty, parseFloat(this.marketData.close));
@@ -373,10 +428,12 @@ module.exports = class DecisionsModule {
       );
 
       if (currentDiffOfAverage >= activeFirstRule.priceDifferencePercent) {
+        
         // TODO - забыл тут
         console.log("Заебись, можно усредняться");
       }
     } else if (_openedPattern) {
+
       let firstRule = getRuleByIndex(_openedPattern.POSITION_RULEs, 1);
 
       let totalPartsOfPositions = getTotalParts(_openedPattern.POSITION_RULEs);
@@ -391,13 +448,16 @@ module.exports = class DecisionsModule {
       let patternTradingVolume =
         PatternTradingVolume / this.analyzeResponseData.PartsForPatterns;
 
-      let singlePart = patternTradingVolume / totalPartsOfPositions;
+      let singlePart = patternTradingVolume / totalPartsOfPositions * this.analyzeResponseData.Pattern.PART_OF_VOLUME;
 
       let enterRuleVolume = Math.floor(singlePart * firstRule.depositPart);
 
       let lastPrice = parseFloat(this.marketData.close);
 
       let qty = parseFloat((enterRuleVolume / lastPrice) * 10).toFixed(3);
+
+      console.log(this.analyzeResponseData);
+      console.log({singlePart, enterRuleVolume, PERCENT_OF_DEPOSIT, patternTradingVolume, totalPartsOfPositions})
 
       //console.log({firstRule, totalPartsOfPositions, PERCENT_OF_DEPOSIT, PatternTradingVolume, patternTradingVolume, singlePart, enterRuleVolume, qty, ctv: this.analyzeResponseData.CurrentTradingVolume})
 

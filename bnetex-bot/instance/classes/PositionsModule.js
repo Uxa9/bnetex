@@ -8,6 +8,7 @@ const StrategyRules = require("../utils/strategy/StrategyRules");
 const FuturesModule = require("./FuturesModule");
 const moment = require('moment');
 const binance = require("../utils/binance");
+const { Op } = require("sequelize");
 
 module.exports = class PositionsModule {
   constructor(pair) {
@@ -136,7 +137,7 @@ module.exports = class PositionsModule {
 
     return await db.models.Pattern.update({status: false}, {where: {
       id: {
-        status: true
+        [Op.gt]: 0
       }
     }})
 
@@ -212,7 +213,9 @@ module.exports = class PositionsModule {
       step: enterStep,
       POSITIONId: POSITION.id,
       ACTIVEGROUPId: ACTIVE_GROUP,
-      close: enterPrice
+      close: enterPrice,
+      createdAt: moment(this.lastKline.startTime, 'x').toDate(),
+      unittimestamp: this.lastKline.startTime
     })
 
     
@@ -246,14 +249,16 @@ module.exports = class PositionsModule {
       enterPrice,
       deposit
     })
-
+    console.log(this.lastKline)
     await db.models.PositionEnters.create({
       volume: qty,
       volumeUSDT: margin,
       step: 1,
       POSITIONId: position.id,
       ACTIVEGROUPId: ACTIVE_GROUP,
-      close: enterPrice
+      close: enterPrice,
+      createdAt: moment(this.lastKline.startTime, 'x').toDate(),
+      unittimestamp: this.lastKline.startTime
     })
 
   }

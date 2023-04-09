@@ -120,10 +120,16 @@ module.exports = class AnalyzeModule {
         
         if(!MICRO_WEEK_SITUATION_INDEX || !MACRO_WEEK_SITUATION_INDEX) return { CODE: 'ACTUAL'};
 
+        //console.log({MACRO_WEEK_SITUATION_INDEX, MICRO_WEEK_SITUATION_INDEX})            
+
+
         
         
 
         let WeekMatchingFiltered = this.WeekMatchingList.filter(i => i.MACRO_WEEK_SITUATION_INDEX == MACRO_WEEK_SITUATION_INDEX && i.MICRO_WEEK_SITUATION_INDEX == MICRO_WEEK_SITUATION_INDEX).sort((a,b) => b.tradingVolume - a.tradingVolume)
+
+
+
 
         if(WeekMatchingFiltered.length == 0) return { CODE: 'ACTUAL'};
         //console.log(WeekMatchingFiltered)
@@ -163,6 +169,10 @@ module.exports = class AnalyzeModule {
         let patternsTempIds = [];
         
 
+        if(this.marketData.startTime == 1680572100000){
+                console.log({patternsGroupInLogicalGroup})            
+        }
+
         // Loop every pattern for activate
         for (let index = 0; index < patternsGroupInLogicalGroup.length; index++) {
 
@@ -172,7 +182,7 @@ module.exports = class AnalyzeModule {
                 element.PATTERN_TRIGGERs.filter((i) => i.type == "ACTIVATION")
             );
 
-            let patternCompare = StrategyRules(this.marketData, ActivateTriggers, true, false);
+            let patternCompare = StrategyRules(this.marketData, ActivateTriggers, true, this.ma);
 
             if(patternCompare || element.status) patternsTempIds.push(element);
 
@@ -195,9 +205,13 @@ module.exports = class AnalyzeModule {
             await this._getPatternGroupsByLogicalGroup(this.ActiveWeekMatching.LOGICAL_GROUP, true);
             
         }
-
-
-        let maxPatternByVolume = patternsTempIds.sort((a,b) => b.PERCENT_OF_DEPOSIT - a.PERCENT_OF_DEPOSIT)[0];
+        let maxPatternByVolume = undefined;
+        if(this.POSITION){
+            maxPatternByVolume = patternsTempIds.sort((a,b) => b.PERCENT_OF_DEPOSIT - a.PERCENT_OF_DEPOSIT)[0];
+        }else{
+            maxPatternByVolume = patternsTempIds.sort((a,b) => a.PERCENT_OF_DEPOSIT - b.PERCENT_OF_DEPOSIT)[0];            
+        }
+         
         
         
         this.ActivePatternsInWorkingGroup = await this._getPatternGroupsByWorkinglGroup(maxPatternByVolume.WORKING_GROUP, true);
@@ -226,15 +240,23 @@ module.exports = class AnalyzeModule {
         }
 
         
-        //console.log('ANALYZE_PATTERNS_LEN:', this.ActivePatternsInWorkingGroup.filter(i => i.status).length)
+        
+        let activePatternToForce = undefined;
+        
+        if(this.POSITION){
+            activePatternToForce = this.ActivePatternsInWorkingGroup.filter(i => i.status).sort((a,b) => b.PART_OF_VOLUME - a.PART_OF_VOLUME)[0]
+        }else{
+            activePatternToForce = this.ActivePatternsInWorkingGroup.filter(i => i.status).sort((a,b) => a.PART_OF_VOLUME - b.PART_OF_VOLUME)[0]
+        }
+
         let analyzeResponse = {
             CurrentTradingVolume,
             PartsForPatterns: this.ActivePatternsInWorkingGroup.reduce((prev, curr) => prev + curr.PART_OF_VOLUME, 0),
-            Pattern: this.ActivePatternsInWorkingGroup.filter(i => i.status).sort((a,b) => b.PART_OF_VOLUME - a.PART_OF_VOLUME)[0],
+            Pattern: activePatternToForce,
             CODE: 'ANALYZE'
         }
 
-        
+        //console.log(analyzeResponse.Pattern.ACTIVE_GROUPs)
 
         this.currentAnalyze = analyzeResponse;
 

@@ -19,6 +19,7 @@ module.exports = class FuturesModule{
      */
     async marketBuy(qty, close = undefined){
 
+        // TODO - В симуляции обьем в 10 раз меньше
         
         if(qty == 0 || !qty){
             let txt = `❌❌❌ \n <b>Ошибка ${this.pair}!</b> \n Недостаточно обьема для покупки актива \n`;

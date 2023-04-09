@@ -68,6 +68,9 @@ const zoneCorrector = (lastKline = [], log = false) => {
         }
 
 
+
+
+
         if(zone == 1 && lastKline.backPattern.join() == [1,2,3].join() && lastKline.prevZone == 1){
             
             lastKline = {
@@ -95,6 +98,16 @@ const zoneCorrector = (lastKline = [], log = false) => {
             lastKline = {
                 ...lastKline,
                 backPattern: [0,2,3],
+                prevZone: 2
+            }            
+        }
+
+
+        if(zone == 1 && lastKline.backPattern.join() == [2,3,4].join() && lastKline.prevZone == 1){
+                        
+            lastKline = {
+                ...lastKline,
+                backPattern: [2,3,4],
                 prevZone: 2
             }            
         }
