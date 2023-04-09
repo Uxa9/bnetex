@@ -41,7 +41,7 @@ export const checkInterval = (interval: TVInterval) => !!availableIntervals[inte
 
 function binanceRequest(url: string, params = {}) {
     return axios({
-        baseURL: 'https://api.binance.com/api/v3',
+        baseURL: 'https://fapi.binance.com/fapi/v1',
         method: 'get',
         url,
         params,

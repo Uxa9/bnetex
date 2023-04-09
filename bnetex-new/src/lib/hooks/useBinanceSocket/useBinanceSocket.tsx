@@ -5,6 +5,8 @@ import { AvailableSocketKeys, BinanceSocketType, binanceWSEndpoint } from './typ
 import { createCombinedStreamString, depthSocketMessageParser, generateSocketId,
     parseSocketMessage, tickerSocketMessageParser } from './utils';
 import { getOrderBookSnapshot } from './sevices';
+import { useAppDispatch } from '../useAppDispatch';
+import { clearOrderBook, setOrderBook, setTradePairPrice, updateOrderBook } from 'store/action-creators/tradePair';
 
 export interface BinanceSocketContext {
     tradePair: string | null;
@@ -19,6 +21,8 @@ export const useBinanceSocket = () => useContext(binanceSocketContext)
     ?? throwError('useBinanceSocket can be used only inside BinanceSocketProvider');
 
 export function BinanceSocketProvider({children}: {children: ReactNode}) {
+
+    const dispatch = useAppDispatch();
 
     // хранилище сокетов нужно для корректного закрытия
     const socketMap = useRef<Map<string, WebSocket>>(new Map());
@@ -53,7 +57,7 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
 
     const loadOrderBook = async () => {
         const { lastUpdateId, asks, bids } = await getOrderBookSnapshot(tradePair!);
-        console.log('snapshot', asks, bids);
+        dispatch(setOrderBook(asks, bids));
 
         snapshotUpdateIdRef.current = lastUpdateId;
     };
@@ -66,8 +70,7 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
             loadOrderBook();
         };
 
-        socket.onerror = (e: Event) => {
-            console.error(e); //toDo: bakeToast???
+        socket.onerror = () => {
             closeActiveSocket();
         };
 
@@ -83,7 +86,7 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
         switch (stream) {
             case AvailableSocketKeys.TICKER: {
                 const { currentPrice } = tickerSocketMessageParser(data);
-                // console.log(currentPrice);
+                dispatch(setTradePairPrice(currentPrice));
                 break;
             }
             case AvailableSocketKeys.DEPTH: {
@@ -98,9 +101,14 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
                     ? prevDepthStreamUpdateIdRef.current === prevUpdate
                     : true;
 
-                if (!isDepthStreamContinuous) loadOrderBook();
+                if (!isDepthStreamContinuous) {
+                    loadOrderBook();
+                    return;
+                };
 
                 prevDepthStreamUpdateIdRef.current = finalUpdate;
+
+                dispatch(updateOrderBook(asks, bids));
 
                 break;
             }
@@ -118,6 +126,8 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
 
         snapshotUpdateIdRef.current = null;
         prevDepthStreamUpdateIdRef.current = null;
+
+        dispatch(clearOrderBook());
     };
 
     return (
