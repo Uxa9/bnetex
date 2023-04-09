@@ -1,7 +1,7 @@
 import useApi from 'lib/hooks/useApi';
-import { getUserInfo } from 'lib/utils/getUserInfo';
-import { Dispatch } from 'redux';
-import { AlgotradeAction, AlgotradeActionTypes, AlgotradeDataResponse } from 'store/actions/algotrade';
+import {getUserInfo} from 'lib/utils/getUserInfo';
+import {Dispatch} from 'redux';
+import {AlgotradeAction, AlgotradeActionTypes, AlgotradeDataResponse} from 'store/actions/algotrade';
 
 const { protectedApi } = useApi();
 
@@ -26,3 +26,9 @@ export const triggerTVMarkRefresh = () => {
         dispatch({ type: AlgotradeActionTypes.REFRESH_TV_MARKS});
     };
 };
+
+export const changeViewType = (payload: string) => {
+    return (dispatch: Dispatch<AlgotradeAction>) => {
+        dispatch({type: AlgotradeActionTypes.CHANGE_VIEW_TYPE, payload: payload});
+    }
+}
