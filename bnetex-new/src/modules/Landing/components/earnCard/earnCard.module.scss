@@ -1,0 +1,39 @@
+@import 'styles/mixins';
+
+.card {
+  @include column-flex(16px);
+
+  border-radius: 8px;
+  padding: 48px 24px;
+  height: 192px;
+
+  @include mobile {
+    padding: 12px 16px;
+    height: 100%;
+  }
+
+  &:not(&--primary) {
+    background-color: $grayscale-card;
+    border: 1px solid $grayscale-3;
+    color: $grayscale-8;
+
+    .card__title {
+      color: $grayscale-9;
+    }
+  }
+
+  &--primary {
+    background: linear-gradient(135deg, $accent-5, $blue-5);
+    border: 1px solid $grayscale-6;
+    margin-bottom: 32px;
+    color: $grayscale-12;
+  }
+
+  &__title {
+    @include column-flex-center;
+  }
+
+  .description {
+    text-align: center;
+  }
+}

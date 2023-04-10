@@ -132,7 +132,8 @@ module.exports = class DecisionsModule {
     ACTIVE_GROUP,
     deposit,
     marketBuy = false,
-    enterStep = 1
+    enterStep = 1,
+    unixtime = 0
   ) {
     let margin = parseFloat((enterPrice * qty) / 10).toFixed(2);
 
@@ -250,7 +251,8 @@ module.exports = class DecisionsModule {
             this.openedPatternToEnter.id,
             ActialPosition.deposit,
             marketBuy,
-            currentPatternEntersCount + 1
+            currentPatternEntersCount + 1,
+            this.marketData.startTime
           );
           return { code: "AVERAGE_BY_CURRENT_CONDITION" };
         }
@@ -422,7 +424,8 @@ module.exports = class DecisionsModule {
                   this.openedPatternToEnter.id,
                   this.analyzeResponseData.CurrentTradingVolume,
                   marketBuy,
-                  1
+                  1,
+                  this.marketData.startTime
                 );
               }
             } catch (e) {
@@ -474,11 +477,6 @@ module.exports = class DecisionsModule {
 
       let qty = parseFloat((enterRuleVolume / lastPrice) * 10).toFixed(3);
 
-      console.log(this.analyzeResponseData);
-      console.log({singlePart, enterRuleVolume, PERCENT_OF_DEPOSIT, patternTradingVolume, totalPartsOfPositions})
-
-      //console.log({firstRule, totalPartsOfPositions, PERCENT_OF_DEPOSIT, PatternTradingVolume, patternTradingVolume, singlePart, enterRuleVolume, qty, ctv: this.analyzeResponseData.CurrentTradingVolume})
-
       try {
         let marketBuy = await this.futuresModule.marketBuy(qty, lastPrice);
         //console.log({marketBuy})
@@ -487,7 +485,10 @@ module.exports = class DecisionsModule {
             qty,
             lastPrice,
             this.openedPatternToEnter.id,
-            this.analyzeResponseData.CurrentTradingVolume
+            this.analyzeResponseData.CurrentTradingVolume,
+            marketBuy,
+            1,
+            this.marketData.startTime
           );
         }
       } catch (e) {

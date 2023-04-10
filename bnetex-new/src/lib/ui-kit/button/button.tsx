@@ -18,7 +18,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
 const Button: FC<ButtonProps> = props => {
 
     // Достаем пропсы и назначаем дефолтные значения, если ничего не передано
-    const {buttonStyle = 'primary', buttonTheme = 'accent', Icon, text, iconAlignment='left', 
+    const {buttonStyle = 'primary', buttonTheme = 'accent', Icon, text, iconAlignment='left',
         className, fillContainer = false, isLoading, mini = false, ...rest} = props;
 
     return (
@@ -39,7 +39,7 @@ const Button: FC<ButtonProps> = props => {
         >
             {
                 isLoading ?
-                    <Spinner 
+                    <Spinner
                         className={styles.spinner}
                     />
                     :

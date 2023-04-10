@@ -5,13 +5,15 @@ const moment = require('moment');
 
 module.exports = {
 
-    getByPeriod: async (periodInMonth = 6) => {
+    getByPeriod: async (from, to) => {
 
-        const date = moment(new Date().setMonth(new Date().getMonth() - periodInMonth), 'x').startOf('day').toDate();
+        let fromDate = moment(from, 'x').toISOString();
+
+        let toDate = moment(to, 'x').toISOString();
 
         return await db.models.Position.findAll({
             where: {
-                enterTime: { [Op.gte]: date },
+                enterTime: { [Op.between]: [fromDate, toDate] },
                 closeTime: { [Op.not]: null }
             },
             include: [

@@ -84,14 +84,12 @@ h6 {
 }
 
 button {
-
   background-color: inherit;
   cursor: pointer;
 }
 
-
 input[type='number'] {
-  -moz-appearance:textfield;
+  -moz-appearance: textfield;
 }
 
 input::-webkit-outer-spin-button,

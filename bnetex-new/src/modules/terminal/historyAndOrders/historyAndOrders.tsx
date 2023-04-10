@@ -5,7 +5,7 @@ import { ToggleButton, ToggleButtonGroup } from 'lib/ui-kit';
 import OpenedPositions from './sections/openedPositions/openedPositions';
 // import OpenedOrders from './sections/openedOrders/openedOrders';
 import OrderHistory from './sections/orderHistory/orderHistory';
-import {useTypedSelector} from "../../../lib/hooks/useTypedSelector";
+import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 
 type SectionType = 'openedPositions' | 'openedOrders' | 'tradeHistory';
 
@@ -35,18 +35,20 @@ const HistoryAndOrders = ({className}: {className: string}) => {
     const { viewType } = useTypedSelector(state => state.algotrade);
     const [availableSections, setAvailableSections] = useState<HistoryAndOrdersSection[]>(historyAndOrdersSections);
 
-    useEffect(() => {
-        if (viewType === "history") {
-            let sections = availableSections;
-            sections.pop();
-            setAvailableSections(sections);
+    useEffect(() => {      
+
+        if (viewType === "trade") {
+            
+            setAvailableSections([{
+                section: 'openedPositions',
+                title: 'Позиции',
+            }]);
+
+            setActiveSection('openedPositions');
         } else {
-            let sections = availableSections;
-            sections.push({
-                section: 'tradeHistory',
-                title: 'История сделок',
-            });
-            setAvailableSections(sections);
+            setAvailableSections(historyAndOrdersSections);    
+            
+            setActiveSection('tradeHistory');
         }
 
     }, [viewType]);

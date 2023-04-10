@@ -59,8 +59,7 @@ const OrderHistory = () => {
                                     </span>
                                     <CoinSymbol 
                                         {...{
-                                            firstCoin: 'BTC',
-                                            secondCoin: 'USDT',
+                                            pair: "BTCUSDT",
                                             lever: 10,
                                             type: 'Бессрочные',
                                         }}

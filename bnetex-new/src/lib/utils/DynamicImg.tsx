@@ -10,6 +10,8 @@ export interface DynamicImgProps {
     dynamicFormat?: boolean;
 }
 
+//toDo: переписать под ссылочную загрузку
+
 export function DynamicImg(props: DynamicImgProps) {
 
     const { path, className, alt, notLazy, dynamicFormat } = props;

@@ -15,7 +15,7 @@ const EmailValidation = lazy(() => import('modules/Auth/sections/emailValidation
 const AuthLayout = () => {
     const { pathname } = useLocation();
 
-    const { REGISTRATION, LOGIN, AUTH, REGISTRATION_FINALIZE, VERIFY_EMAIL, 
+    const { REGISTRATION, LOGIN, AUTH, REGISTRATION_FINALIZE, VERIFY_EMAIL,
         RECOVER_PASSWORD_REQUEST, CHANGE_PASSWORD } = AppLinksEnum;
 
     const loadSection = useCallback(() => {
@@ -44,10 +44,10 @@ const AuthLayout = () => {
         <main className={styles.layout}>
             <div className={styles.container}>
                 {
-                    authBlurItems.map((item: BlurProps, index: number) => 
-                        <Blur 
+                    authBlurItems.map((item: BlurProps, index: number) =>
+                        <Blur
                             key={index}
-                            {...item} 
+                            {...item}
                         />
                     )
                 }

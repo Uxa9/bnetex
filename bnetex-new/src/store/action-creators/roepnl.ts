@@ -44,6 +44,7 @@ export const getHistoricalData = (period: number, amount: number) => {
                 amount,
             })
             .then((res) => {
+                
                 dispatch({ type: RoePnlActionTypes.GET_HISTORICAL_DATA, data: transformDataToFixed(res.data)});
             })
             .catch((err) => {

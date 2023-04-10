@@ -1,4 +1,4 @@
-import styles from './changePasswordModal.module.scss';
+import styles from './modals.module.scss';
 import { Modal } from 'modules/Global/components/ModalSpawn/Modal/modal';
 import { BaseModalProps } from 'lib/hooks/useModal';
 import { Button, Input } from 'lib/ui-kit';

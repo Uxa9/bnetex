@@ -21,6 +21,9 @@ import { Position } from "./positions/position.model";
 import { PositionEnters } from "./positions/positionEnters.model";
 import { GatewayModule } from "./gateway/gateway.module";
 import { SocketModule } from "./socket/socket.module";
+import { WalletModule } from './wallet/wallet.module';
+import {Wallet} from "./wallet/wallet.model";
+import {WalletNetwork} from "./wallet/network.model";
 
 
 @Module({
@@ -37,7 +40,7 @@ import { SocketModule } from "./socket/socket.module";
             username: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
-            models: [User, Role, UserRoles, Request, InvestSession, Position, PositionEnters],
+            models: [User, Role, UserRoles, Request, InvestSession, Position, PositionEnters, Wallet, WalletNetwork],
             autoLoadModels: true,
             logging: false
         }),
@@ -52,7 +55,8 @@ import { SocketModule } from "./socket/socket.module";
         InvestSessionsModule,
         InvestTradingModule,
         GatewayModule,
-        SocketModule
+        SocketModule,
+        WalletModule
     ]
 })
 export class AppModule{};

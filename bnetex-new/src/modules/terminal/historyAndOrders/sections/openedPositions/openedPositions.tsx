@@ -5,7 +5,7 @@ import CoinSymbol from 'modules/terminal/components/coinSymbol/coinSymbol';
 import { CoinSymbolProps } from 'modules/terminal/types/coinSymbol';
 import { Margin } from 'modules/terminal/types/margin';
 import { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { closeAllPositions } from 'services/trading/closeAllPositions';
 import { getUserPositions } from 'services/trading/getUserPositions';
 import { getUserOpenPosition } from 'services/user';
@@ -13,7 +13,7 @@ import { mockedOpenePositions } from './mock';
 import styles from './openedPositions.module.scss';
 
 export interface OpenedPosition {
-    // coinSymbol: CoinSymbolProps;
+    coinSymbol: CoinSymbolProps;
     amount: number;
     entryPrice: number;
     markedPrice: number;
@@ -32,16 +32,30 @@ const OpenedPositions = () => {
     const [data, setData] = useState<OpenedPosition[]>([]);
 
     const location = useLocation();
+    const navigate = useNavigate();
 
     const socket = useContext(WebsocketContext);
+
+    const changePair = (pair: any) => {
+        if (location.pathname.split('/')[2] === "trader") {
+            console.log(pair);
+            
+            navigate(`/terminal/trader/${pair}`);
+        }
+    }
 
     useEffect(() => {
         socket.on('connect', () => {
             console.log('Connected!');
         });
 
-        socket.on('currentPosition', (tradeInfo: any) => {
+        socket.on('currentPosition', (tradeInfo: any) => {  
             setData([{
+                coinSymbol: {
+                    pair: tradeInfo.symbol,
+                    lever: Number(tradeInfo.leverage),
+                    type: "Бессрочные",
+                },
                 amount: tradeInfo.volume,
                 entryPrice: tradeInfo.entryPrice,
                 markedPrice: tradeInfo.markPrice,
@@ -60,11 +74,12 @@ const OpenedPositions = () => {
         };
     }, []);
 
-    useEffect(() => {        
-        if (location.pathname.split('/').pop() === "trader") {
+    useEffect(() => {         
+        if (location.pathname.split('/')[2] === "trader") {
             const getUserP = async () => {
                 const res = await getUserPositions();
-
+                // console.log(res);
+                
                 // console.log(res.data);
 
                 // const btcPosition = res.data.inf.find((item: any) => item.symbol === "BTCUSDT");
@@ -73,17 +88,26 @@ const OpenedPositions = () => {
 
                 // if (Number(inf.positionAmt) === 0) return;
                 // console.log(btcPosition);
-                
-                await setData([{
-                    amount : Number(inf.positionAmt),
-                    entryPrice : Number(Number(inf.entryPrice).toFixed(2)),
-                    markedPrice : Number(Number(pos.markPrice).toFixed(2)),
-                    margin : {
-                        value: Number(Number(inf.initialMargin).toFixed(2)),
-                        type: pos.marginType
-                    },
-                    PNL : Number(inf.unrealizedProfit)
-                }]);
+console.log(inf);
+console.log(pos);
+
+                setData(inf.map((item: any, index: number) => {                   
+                    return {
+                        coinSymbol: {
+                            pair: item.symbol,
+                            lever:  Number(item.leverage),
+                            type: "Бессрочные"
+                        },
+                        amount : Number(item.positionAmt),
+                        entryPrice : Number(Number(item.entryPrice).toFixed(2)),
+                        markedPrice : Number(Number(pos[index].markPrice).toFixed(2)),
+                        margin : {
+                            value: Number(Number(item.initialMargin).toFixed(2)),
+                            type: pos[index].marginType
+                        },
+                        PNL : Number(item.unrealizedProfit)
+                    }
+                }));
 
                 // console.log(data);
                 
@@ -96,7 +120,7 @@ const OpenedPositions = () => {
 
     useEffect(() => {
         getUserOpenPosition()
-            .then((res) => {
+            .then((res) => {                
                 setData(res.data);
             });
     }, [ /* тут нада из стейта брать в работе или не в работе */]);
@@ -106,7 +130,8 @@ const OpenedPositions = () => {
             <div
                 style={{
                     display: "flex",
-                    justifyContent: "flex-end"
+                    justifyContent: "flex-end",
+                    cursor: "pointer"
                 }}
             >
                 <span
@@ -147,10 +172,10 @@ const OpenedPositions = () => {
                                         Символ
                                     </span>
                                     <CoinSymbol
-                                        firstCoin='BTC'
-                                        secondCoin='USDT'
-                                        lever={10}
-                                        type='Бессрочные'
+                                        pair={position.coinSymbol.pair}
+                                        lever={position.coinSymbol?.lever}
+                                        type={position.coinSymbol?.type}
+                                        callbackFunc={changePair}
                                     />
                                 </td>
                                 <td className={styles['amount']}>
@@ -161,10 +186,9 @@ const OpenedPositions = () => {
                                         )}
                                     >Размер
                                     </span>
-                                    {/* <SignedNumber
-                                        value={position.amount}
-                                    /> */}
-                                    {(position.amount * 10).toFixed(2)}
+                                    <SignedNumber
+                                        value={(position.amount * 10).toFixed(2)}
+                                    />                                    
                                 </td>
                                 <td className={styles['entry-price']}>
                                     <span className={clsx(
@@ -212,7 +236,7 @@ const OpenedPositions = () => {
                                         Маржа
                                     </span>
                                     <div className={styles['margin']}>
-                                        <span>{position.amount}</span>
+                                        <span>{position.margin.value}</span>
                                         <span>({evaluateMarginType(position.margin.type)})</span>
                                     </div>
                                 </td>
@@ -226,7 +250,7 @@ const OpenedPositions = () => {
                                         PNL
                                     </span>
                                     <SignedNumber
-                                        value={(position.PNL).toFixed(2)}
+                                        value={(position.PNL)?.toFixed(2)}
                                     />
                                 </td>
                             </tr>

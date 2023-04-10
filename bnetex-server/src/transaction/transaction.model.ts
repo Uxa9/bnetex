@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
 import { User } from "../users/users.model";
+import {WalletNetwork} from "../wallet/network.model";
 
 
 interface TransactionCreationAttrs {
@@ -33,25 +34,15 @@ export class Transaction extends Model<Transaction, TransactionCreationAttrs> {
         type : DataType.INTEGER
     })
     userId : number;
-
-    // @ApiProperty({
-    //     example : '1',
-    //     description : 'user id'
-    // })
-    // @Column({
-    //     type : DataType.INTEGER,
-    //     allowNull : false
-    // })
-    // userId : number;
     
     @ApiProperty({
         example : '1',
-        description : 'payment id'
+        description : 'transaction id'
     })
     @Column({
         type : DataType.STRING
     })
-    paymentId : string;
+    transactionId : string;
 
     @ApiProperty({
         example : 'https://givememoney.com',
@@ -80,14 +71,12 @@ export class Transaction extends Model<Transaction, TransactionCreationAttrs> {
     })
     payAddress : string;
 
-    @ApiProperty({
-        example : 'USDTTRC20',
-        description : 'payment network'
-    })
+    @ForeignKey(() => WalletNetwork)
     @Column({
-        type : DataType.STRING
+        type          : DataType.INTEGER,
+        allowNull     : false
     })
-    payCurrency : string;
+    networkId : number;
 
     @ApiProperty({
         example : 123.45,
@@ -97,5 +86,8 @@ export class Transaction extends Model<Transaction, TransactionCreationAttrs> {
         type : DataType.DOUBLE
     })
     amount : number;
+
+    @BelongsTo(() => WalletNetwork)
+    network : WalletNetwork;
 
 }

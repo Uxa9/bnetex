@@ -21,13 +21,13 @@ var express = require("express"),
   router.use('/history', async (req,res) => {
     console.log(req)
 
-    if(!req.requestParams.periodMonth){
+    if(!req.requestParams.from || !req.requestParams.to){
         res.status(400);
-        res.json({error: true, detail: 'periodMonth is required'})
+        res.json({error: true, detail: 'from & to is required parameters'})
         return;
     }
 
-    let position = await positions.getByPeriod(req.requestParams.periodMonth)
+    let position = await positions.getByPeriod(req.requestParams.from,req.requestParams.to)
 
     res.json({status: 'ok', response: position})
 

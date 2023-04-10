@@ -27,7 +27,7 @@ module.exports = async (pair, kline) => {
     let patternCompare = StrategyRules(kline, groupped, true)
 
 
-    if(!patternCompare) return;
+    // if(!patternCompare) return;
 
 
     

@@ -1,0 +1,48 @@
+@import 'styles/mixins';
+
+.container {
+  display: grid;
+  place-items: center;
+  min-height: 400px;
+
+  .wrapper {
+    @include column-flex(32px);
+
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  .main {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 48px;
+    color: $grayscale-10;
+
+    @include max-width($early-mobile-bp) {
+      flex-direction: column;
+      row-gap: 24px;
+    }
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 16px;
+    max-width: 416px;
+    width: 100%;
+
+    button {
+      width: 100%;
+      height: fit-content; //toDo хуйня какая то, кнопка тг растет
+    }
+
+    @include max-width($early-mobile-bp) {
+        max-width: unset;
+    }
+
+    @include max-width(350) {
+      grid-template-columns: 1fr;
+      row-gap: 16px;
+    }
+  }
+}

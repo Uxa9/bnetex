@@ -29,9 +29,9 @@ export class TransactionService {
 
         transaction.update({
             'statusId': 1,
-            'paymentId': order.payment_id,
+            'transactionId': order.payment_id,
             'payAddress': order.pay_address,
-            'payCurrency': order.pay_currency
+            'networkId': order.pay_currency
         });
 
         return {
@@ -81,12 +81,12 @@ export class TransactionService {
 
     async fulfillTransaction(req: any) {        
         const transaction = await this.transactionRepository.findOne({
-            where: { paymentId : req.payment_id.toString() }
+            where: { transactionId : req.payment_id.toString() }
         });
         
         if ( transaction ) {
             const res = await axios.get(
-                `https://api-sandbox.nowpayments.io/v1/payment/${transaction.paymentId}`,
+                `https://api-sandbox.nowpayments.io/v1/payment/${transaction.transactionId}`,
                 { headers : { 'X-API-KEY' : process.env.PAYMENT_API_KEY } }
             );            
             

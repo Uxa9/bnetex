@@ -1,0 +1,37 @@
+@import 'styles/mixins';
+@import 'styles/variables';
+
+.container {
+  --dot-size: 12px;
+  --dot-container-size: 76px;
+
+  position: absolute;
+  top: calc($header-height + 32px);
+  left: 0;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: (repeat(auto-fit, minmax(var(--dot-container-size), 1fr)));
+
+  @include max-width($laptop-bp) {
+    --dot-size: 10px;
+    --dot-container-size: 40px;
+  }
+
+  @include max-width($mobile-bp) {
+    --dot-size: 6px;
+    --dot-container-size: 30px;
+  }
+}
+
+.column {
+  @include column-flex-center(calc(var(--dot-container-size) - var(--dot-size)));
+
+  width: 100%;
+}
+
+.dot {
+  height: var(--dot-size);
+  width: var(--dot-size);
+  background-color: $grayscale-3;
+  border-radius: 50%;
+}

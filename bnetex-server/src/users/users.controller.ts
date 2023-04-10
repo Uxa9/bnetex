@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, UsePipes, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, UsePipes, Param, Put } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/roles-auth.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -83,7 +83,7 @@ export class UsersController {
     }
 
     @ApiOperation({
-        summary : 'Transfer money between wallets'
+        summary : 'Transfer money between wallet'
     })
     @UseGuards(JwtAuthGuard)
     @Post('/transfer-money')
@@ -127,5 +127,10 @@ export class UsersController {
     @Get('invest/positions/:id')
     getOpenUserPosition(@Param('id') id: number) {
         return this.userService.getCurrentOpenPosition(id);
+    }
+
+    @Put('set-api')
+    setUserApiKey(@Body() dto: any) {
+        return this.userService.setApiKey(dto);
     }
 }

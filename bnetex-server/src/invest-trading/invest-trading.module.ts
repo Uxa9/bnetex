@@ -6,6 +6,7 @@ import { InvestTradingService } from './invest-trading.service';
 @Module({
     imports: [UsersModule],
     controllers: [InvestTradingController],
-    providers: [InvestTradingService]
+    providers: [InvestTradingService],
+    exports: [InvestTradingService]
 })
 export class InvestTradingModule { }

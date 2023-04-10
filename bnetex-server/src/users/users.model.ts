@@ -4,6 +4,8 @@ import { Request } from "../request/request.model";
 import { InvestSession } from "../invest-sessions/invest-sessions.model";
 import { Role } from "../roles/roles.model";
 import { UserRoles } from "../roles/user-roles.model";
+import { StringBoolean } from "binance";
+import {Wallet} from "../wallet/wallet.model";
 
 interface UserCreationAttrs {
     email : string,
@@ -110,6 +112,18 @@ export class User extends Model<User, UserCreationAttrs> {
     })
     tradeBalance : number;
 
+    @Column({
+        type          : DataType.STRING,
+        allowNull     : true
+    })
+    api_key : string;
+    
+    @Column({
+        type          : DataType.STRING,
+        allowNull     : true
+    })
+    api_secret : string;
+
     @BelongsToMany(() => Role, () => UserRoles)
     roles: Role[];
 
@@ -118,5 +132,8 @@ export class User extends Model<User, UserCreationAttrs> {
 
     @HasMany(() => Request)
     requests: Request[];
+
+    @HasMany(() => Wallet)
+    wallets: Wallet[];
 
 }

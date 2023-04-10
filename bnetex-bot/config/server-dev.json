@@ -9,10 +9,10 @@
     "tradingTimeframes": ["1m"],
     "tgBotKey": "5642351090:AAEcNaA0oJgEW5u6cZrjdsgPTZDMZSWi47s",
     "tgGroupId": -861751435,
-    "simulate": true,
+    "simulate": false,
     "startTime": 1678797000000,
     "initTelgram": true,
     "serverPort": 3009,
-    "serverOnly": false
+    "serverOnly": true
 }
  
