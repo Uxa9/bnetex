@@ -36,6 +36,36 @@ const server = require('http').createServer(app);
 
     await db.setup();
 
+    //await dbValidator();
+
+    //await copySinglePattern('1D_LONG_SKALP_01_7D', '1D_LONG_SKALP_543_7D')
+
+    /**
+     * 	
+     * 
+        1D_LONG_SKALP_01_7D
+
+        1D_LONG_SKALP_012_7D
+
+        1D_LONG_SKALP_21_7D
+
+        1D_LONG_SKALP_23_7D
+
+        1D_LONG_SKALP_32_7D
+
+        1D_LONG_SKALP_34_7D
+
+        1D_LONG_SKALP_43_7D
+
+        1D_LONG_SKALP_45_7D
+
+        1D_LONG_SKALP_543_7D
+     */
+
+    
+
+    
+
     // app.use(bodyParser.urlencoded({ extended: true }));
 
     app.use(bodyParser.json());
