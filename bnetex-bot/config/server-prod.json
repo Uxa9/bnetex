@@ -1,7 +1,7 @@
 {
   "port": 4800,
   "binance": {
-    "APIKEY": "WGqUwaTriNCuXjzoxycU5JTJpnhRJGlQDsrzwgDflKoqxprvJtsBSXsSBK89tIlt",
+    "APIKEY": "WGqUwaTriNCuXjzoxycU5JTJpnhRJGlQDsrzwgDflKoqxprvJtsBSXsSBK89tIlt1",
     "APISECRET": "RZ8o0o8bA3oDKqR1a3AemecdJL57SSpuj8UAzOEIEKCttSTHJfOiwRQvGwzp2K59",
     "TEST": false
   },

@@ -7,17 +7,22 @@ const { convertKlines } = require('../tickerHelper')
 const config = require("../../../config/config")();
 
 
+
+
 const moment = require('moment')
 
 const commandArgs = require('./commandsArgs');
 
+const events = require('../events').tgEvents;
+
 
 
 module.exports = class TelegramBotClass {
-    constructor(token, candlesticks){
+    constructor(token){
         
-        this.candlesticks = candlesticks;
         this.bot = new Telegraf(token)
+
+        this.candlesticks = {};
 
         
 
@@ -26,6 +31,10 @@ module.exports = class TelegramBotClass {
     }
 
     async init(){
+
+        events.on('updateKline', (e) => {
+            this.candlesticks[e.symbol] = e;
+        })
 
         console.log("Telegram BOT Initializing")        
 
@@ -43,29 +52,54 @@ module.exports = class TelegramBotClass {
 
             
 
-            let lastKline = this.candlesticks[this.candlesticks.length-1];
+            //let lastKline = this.candlesticks['BTCUSDT'];
 
             let zoneRulesBB = getBBRulesIndexes();
 
             
             
             if(!this.candlesticks || !Object.keys(this.candlesticks) || Object.keys(this.candlesticks).length == 0) return;
-            
-            
-            let txt = `<b>Время свечи:</b> ${lastKline.startTime} | ${moment(lastKline.startTime, 'x').format('DD MM YYYY HH:mm')}`;  
-            
-            console.log({lastKline})
-            for (let index = 0; index < zoneRulesBB.length; index++) {
-                const element = zoneRulesBB[index];
 
-                const rule = getBBRuleByIddex(element);
+            let txtFull = '';
+
+            let dataToLoop = Object.keys(this.candlesticks)
+
+
+            if(ctx.state.command.args.length > 0){
                 
-                txt += `<b>Rule: ${rule.intervals}/${rule.sigma}</b> | Zone: ${lastKline[rule.intervals][rule.sigma].zone} | Back: ${lastKline[rule.intervals][rule.sigma].backPattern} | PrevZone: ${lastKline[rule.intervals][rule.sigma].prevZone} \n`
+                dataToLoop = Object.keys(this.candlesticks).filter(i => i.toUpperCase() == ctx.state.command.args[0].toUpperCase())
+                
             }
+            
+            console.log(dataToLoop)
+
+            dataToLoop.map(pair => {
+
+                
+                let lastKline = this.candlesticks[pair];
+
+                
+
+                let txt = `${lastKline.symbol} | <b>Время свечи:</b> ${lastKline.startTime} | ${moment(lastKline.startTime, 'x').format('DD MM YYYY HH:mm')} \n`;              
+                
+                for (let index = 0; index < zoneRulesBB.length; index++) {
+                    const element = zoneRulesBB[index];
+
+                    const rule = getBBRuleByIddex(element);
+                    
+                    txt += `<b>Rule: ${rule.intervals}/${rule.sigma}</b> | Zone: ${lastKline[rule.intervals][rule.sigma].zone} | Back: ${lastKline[rule.intervals][rule.sigma].backPattern} | PrevZone: ${lastKline[rule.intervals][rule.sigma].prevZone} \n`
+                }
+
+                txtFull += txt + '\n';
+
+            })
+            
+            
+            
 
             
 
-            ctx.reply(txt, {parse_mode: 'html'})
+            ctx.reply(txtFull, {parse_mode: 'html'})
         })
 
 

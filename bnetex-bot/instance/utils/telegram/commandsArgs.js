@@ -1,6 +1,17 @@
 const commandArgs = () => (ctx, next) => {
 
-    console.log('IMHERE')
+    // if(ctx.hasOwnProperty('update')){
+    //     console.log();
+    //     next();
+    // }
+
+    if(ctx.update.hasOwnProperty('edited_message')){
+        ctx.update = {
+            message: ctx.update.edited_message,
+            ...ctx
+        }
+    }
+
     if (ctx.update.message.text && ctx.update.message.text.length > 0) {
         const text = ctx.update.message.text.toLowerCase();
         if (text.startsWith('/')) {

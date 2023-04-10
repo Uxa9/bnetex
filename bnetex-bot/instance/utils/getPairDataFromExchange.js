@@ -10,7 +10,7 @@ var moment = require("moment");
 module.exports = async (pair, timeframe, limit, startTimeFrom = false, lastTime = false) => {
 
 
-  
+  console.log('Запрос еще 1000')
 
   // Рассчитываем время - откуда считать
   let startTime =
@@ -22,6 +22,8 @@ module.exports = async (pair, timeframe, limit, startTimeFrom = false, lastTime 
   if(configFile.simulate){
     startTime = configFile.startTime - timeframeRules(timeframe).singleMilliseconds * limit;
   }
+
+  
 
   
 
@@ -70,6 +72,11 @@ module.exports = async (pair, timeframe, limit, startTimeFrom = false, lastTime 
   if(lastTime){
     data = data.filter(i => i.startTime <= lastTime)
   }
+
+  await new Promise((res, rej) => {
+    setTimeout(() => {res()}, 900)
+  })
+
   return data;
 };
 

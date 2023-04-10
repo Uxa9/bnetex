@@ -50,6 +50,11 @@ const list =  [
             sigma: 3
         },
         {
+            index: 55,
+            intervals: 20160,
+            sigma: 2
+        },
+        {
             index: 60,
             intervals: 43200,
             sigma: 2
@@ -59,6 +64,12 @@ const list =  [
             intervals: 43200,
             sigma: 3
         },
+        {
+            index: 66,
+            intervals: 86400,
+            sigma: 2
+        },
+        
         {
             index: 70,
             intervals: 129600,
@@ -78,6 +89,11 @@ const list =  [
             index: 81,
             intervals: 259200,
             sigma: 3
+        },
+        {
+            index: 90,
+            intervals: 518400,
+            sigma: 2
         }
     ]
 

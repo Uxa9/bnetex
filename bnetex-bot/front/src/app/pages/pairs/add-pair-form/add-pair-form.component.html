@@ -1,0 +1,12 @@
+<form nz-form [nzLayout]="'inline'" [formGroup]="addForm" (ngSubmit)="submit()">    
+    <div class="form-control">        
+        <input formControlName="name" nz-input name="name" type="text" id="name" placeholder="Name of a pattern">
+    </div>   
+    
+    <div class="form-actions">
+        <div class="form-control">
+            <button nz-button type="submit" [nzLoading]="isConfirmLoading" nzType="primary">Add new</button>
+        </div>
+    </div>
+    
+  </form>

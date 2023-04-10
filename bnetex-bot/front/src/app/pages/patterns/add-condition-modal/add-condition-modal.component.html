@@ -1,0 +1,48 @@
+<form nz-form [nzLayout]="'inline'" [formGroup]="addForm" (ngSubmit)="submit()">    
+    <div class="form-control">                
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a type" formControlName="type">
+            <nz-option *ngFor="let item of types" [nzLabel]="item.value" [nzValue]="item.value"></nz-option>            
+        </nz-select>        
+    </div>   
+
+    <div class="form-control">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a current zone" formControlName="zone">
+            <nz-option nzLabel="0" nzValue="0"></nz-option>
+            <nz-option nzLabel="1" nzValue="1"></nz-option>            
+            <nz-option nzLabel="2" nzValue="2"></nz-option>            
+            <nz-option nzLabel="3" nzValue="3"></nz-option>            
+            <nz-option nzLabel="4" nzValue="4"></nz-option>            
+            <nz-option nzLabel="5" nzValue="5"></nz-option>            
+        </nz-select>
+    </div>
+
+    <div class="form-control">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select prev zone" formControlName="prev">
+            <nz-option nzLabel="0" nzValue="0"></nz-option>
+            <nz-option nzLabel="1" nzValue="1"></nz-option>            
+            <nz-option nzLabel="2" nzValue="2"></nz-option>            
+            <nz-option nzLabel="3" nzValue="3"></nz-option>            
+            <nz-option nzLabel="4" nzValue="4"></nz-option>            
+            <nz-option nzLabel="5" nzValue="5"></nz-option>            
+        </nz-select>
+    </div>
+
+    <div class="form-control">
+        <input formControlName="back" nz-input name="back" type="text" id="back" placeholder="Back Pattern">
+    </div>
+
+    <div class="form-control">
+        <input formControlName="intervals" nz-input name="intervals" type="text" id="intervals" placeholder="Intervals">
+    </div>
+
+    <div class="form-control">
+        <input formControlName="sigma" nz-input name="sigma" type="text" id="sigma" placeholder="Sigma">
+    </div>
+    
+    <div class="form-actions">
+        <div class="form-control">
+            <button nz-button type="submit" [nzLoading]="isConfirmLoading" nzType="primary">Add new</button>
+        </div>
+    </div>
+    
+  </form>

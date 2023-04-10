@@ -39,11 +39,15 @@ const models = {
   Rules: require("./models/rules")(sequelize, DataTypes),  
   PositionEnters:require("./models/PositionEnters")(sequelize, DataTypes),  
   Position: require("./models/position")(sequelize, DataTypes),
+  Pairs: require("./models/pairs")(sequelize, DataTypes),
+  WeekMatching: require('./models/WeekMatching')(sequelize, DataTypes)
   
   
 };
 
 let syncAssotiations = () => {
+
+  
 
   //this.models.Pattern.hasMany(this.models.PatternConditions);
   //this.models.PatternConditions.belongsTo(this.models.Pattern)
@@ -66,12 +70,21 @@ let syncAssotiations = () => {
   this.models.Rules.belongsTo(this.models.ActiveGroups)
 
 
+  this.models.Pairs.hasMany(this.models.Pattern);
+  this.models.Pattern.belongsTo(this.models.Pairs)
+
+
   
 
 
   this.models.Position.hasMany(this.models.PositionEnters);
 
   this.models.PositionEnters.belongsTo(this.models.Position)
+
+
+  this.models.ActiveGroups.hasMany(this.models.PositionEnters);
+
+  this.models.PositionEnters.belongsTo(this.models.ActiveGroups)
 
 };
 

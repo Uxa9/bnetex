@@ -1,0 +1,63 @@
+<ng-container>
+  <nz-page-header
+    class="site-page-header"
+    nzTitle="Patterns"
+    nzSubtitle="Trading Patterns"
+  ></nz-page-header>
+  <nz-spin nzTip="Loading..." [nzSpinning]="isLoading">
+  <div>
+    
+    <div nz-row [nzGutter]="8">
+      <ng-container *ngFor="let item of tradingPatterns">
+        <div nz-col [nzSpan]="8" class="pattern__card">
+          <nz-list nzBordered nzSize="small">
+            <nz-list-header>Pattern №{{ item.id }} | {{item.TRADING_PAIR.Name}}</nz-list-header>
+            <nz-list-item *ngFor="let tg of sortByIntervals(item.PATTERN_TRIGGERs)">
+              <span [class.greenbg]="tg.type == 'ACTIVATION'" [class.redbg]="tg.type == 'DEACTIVATION'">{{ tg.type }}</span>
+              <div>
+                <nz-tag>
+                  <span nz-icon nzType="box-plot" nzTheme="outline"></span>
+                  {{ tg.intervals }} / {{ tg.sigma }} 
+                </nz-tag>
+                <nz-tag>
+                  <span nz-icon nzType="fast-backward" nzTheme="outline"></span>
+                  {{ tg.back }} 
+                </nz-tag>
+                <nz-tag>
+                  <span nz-icon nzType="step-backward" nzTheme="outline"></span>
+                  {{ tg.prev }}
+                </nz-tag>
+                <nz-tag>
+                  <span
+                    nz-icon
+                    nzType="vertical-align-bottom"
+                    nzTheme="outline"
+                  ></span>
+                  {{ tg.zone }}
+                </nz-tag>
+                <a
+                  nz-popconfirm
+                  nzPopconfirmTitle="Are you sure delete this condition?"
+                  nzPopconfirmPlacement="bottom"
+                  class="hover-pointer"
+                  (nzOnConfirm)="removeCondition(tg.id)"                  
+                  ><span
+                    nz-icon
+                    nzType="delete"
+                    nzTheme="outline"                    
+                  ></span
+                ></a>
+              </div>
+            </nz-list-item>
+            <nz-list-footer>
+              <a (click)="openConditionModal(item.id)">Add Condition</a>
+              <nz-divider [nzType]="'vertical'"></nz-divider>
+              <a routerLink="/pairs/{{pairValue}}/patterns/activeGroups/{{item.id}}" >Active Groups List</a>
+            </nz-list-footer>
+          </nz-list>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</nz-spin>
+</ng-container>

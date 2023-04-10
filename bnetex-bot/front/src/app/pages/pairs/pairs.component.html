@@ -1,0 +1,29 @@
+<nz-page-header
+  class="site-page-header"
+  nzTitle="Pairs"
+  nzSubtitle="Trading Pairs"
+></nz-page-header>
+
+<div class="table-operations">
+  <button nz-button (click)="addNewModal()">Add new</button>
+</div>
+<nz-table #basicTable [nzData]="dataSet">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Status</th>
+      <th>Pattern's Count</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data">
+      <td>{{ data.Name }}</td>
+      <td><nz-switch (ngModelChange)="statusUpdate($event, data.id)" [(ngModel)]="data.Status"></nz-switch></td>
+      <td>{{ data.PATTERNs.length }}</td>
+      <td>        
+        <a routerLink="/pairs/{{data.id}}/patterns">Conditions</a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
