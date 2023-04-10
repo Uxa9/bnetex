@@ -194,7 +194,7 @@ module.exports = class PositionsModule {
     return position;
   }
 
-  async updatePosition(POSITION, marketBuy, ACTIVE_GROUP, enterStep, enterPrice){
+  async updatePosition(POSITION, marketBuy, ACTIVE_GROUP, enterStep, enterPrice, deposit){
 
     // Получаем текущую позицию с биржи
     let binancePositions = await this.futures.futuresPositionRisk(marketBuy, this.pair);
@@ -226,7 +226,8 @@ module.exports = class PositionsModule {
       ACTIVEGROUPId: ACTIVE_GROUP,
       volumeACTIVE: POSITION.volumeACTIVE + parseFloat(marketBuy.cumQuote),
       volumeUSDT: POSITION.volumeUSDT + parseFloat(marketBuy.cumQty)/10,
-      enterStep
+      enterStep,
+      deposit
     }, {where: {
       id: POSITION.id
     }})

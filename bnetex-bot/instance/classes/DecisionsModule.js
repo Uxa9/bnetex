@@ -23,6 +23,8 @@ module.exports = class DecisionsModule {
 
     this.marketData = undefined;
 
+    this.wailtToResetOpennedPattern = false;
+
     this.futuresModule = new FuturesModule(pair, positionsData);
   }
 
@@ -169,7 +171,8 @@ module.exports = class DecisionsModule {
         marketBuy,
         ACTIVE_GROUP,
         enterStep,
-        enterPrice
+        enterPrice,
+        deposit
       );
     }
   }
@@ -276,6 +279,13 @@ module.exports = class DecisionsModule {
    * return value of completed action - AVERAGE_BY_NEW_CONTIDION | AVERAGE_BY_CURRENT_CONDITION | CREATE_NEW_POSITION | NON_ACTION
    */
   async decisionAction() {
+
+
+    if(this.wailtToResetOpennedPattern){
+      this.openedPatternToEnter = undefined;
+      this.wailtToResetOpennedPattern = false;
+    }
+
     // Actual Positions Module
     let ActualPositionsModule = new PositionsModule(this.pair);
 
@@ -316,6 +326,14 @@ module.exports = class DecisionsModule {
     //console.log(this.openedPatternToEnter)
     // Clean Signal - First positive Candle after green
     let CLEAN__SIGNAL = this._firstPositiveCandle();
+
+    if(CLEAN__SIGNAL){
+      this.wailtToResetOpennedPattern = true;
+    }
+
+    if(this.marketData.startTime >= 1679465100000 && this.marketData.startTime < 1679465700000){
+            console.log({CLEAN__SIGNAL, OP: this.openedPatternToEnter})
+    }
 
     if(this.marketData.startTime == 1679722980000){
       //console.log({CLEAN__SIGNAL})
@@ -432,11 +450,11 @@ module.exports = class DecisionsModule {
         // TODO - забыл тут
         console.log("Заебись, можно усредняться");
       }
-    } else if (_openedPattern) {
+    } else if (this.openedPatternToEnter) {
 
-      let firstRule = getRuleByIndex(_openedPattern.POSITION_RULEs, 1);
+      let firstRule = getRuleByIndex(this.openedPatternToEnter.POSITION_RULEs, 1);
 
-      let totalPartsOfPositions = getTotalParts(_openedPattern.POSITION_RULEs);
+      let totalPartsOfPositions = getTotalParts(this.openedPatternToEnter.POSITION_RULEs);
 
       let PERCENT_OF_DEPOSIT =
         this.analyzeResponseData.Pattern.PERCENT_OF_DEPOSIT;
@@ -468,7 +486,7 @@ module.exports = class DecisionsModule {
           this._updatePositionInDb(
             qty,
             lastPrice,
-            _openedPattern.id,
+            this.openedPatternToEnter.id,
             this.analyzeResponseData.CurrentTradingVolume
           );
         }

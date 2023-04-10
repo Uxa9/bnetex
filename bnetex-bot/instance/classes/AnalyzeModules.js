@@ -126,7 +126,14 @@ module.exports = class AnalyzeModule {
         
         
 
-        let WeekMatchingFiltered = this.WeekMatchingList.filter(i => i.MACRO_WEEK_SITUATION_INDEX == MACRO_WEEK_SITUATION_INDEX && i.MICRO_WEEK_SITUATION_INDEX == MICRO_WEEK_SITUATION_INDEX).sort((a,b) => b.tradingVolume - a.tradingVolume)
+        let WeekMatchingFiltered = undefined;
+
+        if(this.POSITION){
+            WeekMatchingFiltered = this.WeekMatchingList.filter(i => i.MACRO_WEEK_SITUATION_INDEX == MACRO_WEEK_SITUATION_INDEX && i.MICRO_WEEK_SITUATION_INDEX == MICRO_WEEK_SITUATION_INDEX).sort((a,b) => b.tradingVolume - a.tradingVolume)
+        }else{
+            WeekMatchingFiltered = this.WeekMatchingList.filter(i => i.MACRO_WEEK_SITUATION_INDEX == MACRO_WEEK_SITUATION_INDEX && i.MICRO_WEEK_SITUATION_INDEX == MICRO_WEEK_SITUATION_INDEX).sort((a,b) => a.tradingVolume - b.tradingVolume)
+        }
+        
 
 
 
@@ -135,9 +142,9 @@ module.exports = class AnalyzeModule {
         //console.log(WeekMatchingFiltered)
 
         
-
-        // Если никакая группировка не выбрана, или найденная группировка больше по объему - переключаемся
-        if(!this.ActiveWeekMatching || this.ActiveWeekMatching.tradingVolume < WeekMatchingFiltered[0].tradingVolume){
+        this.POSITION
+        // Если никакая группировка не выбрана, или найденная группировка больше по объему, или позиций нету - переключаемся
+        if(!this.ActiveWeekMatching || this.ActiveWeekMatching.tradingVolume < WeekMatchingFiltered[0].tradingVolume || !this.POSITION){
             this.ActiveWeekMatching = WeekMatchingFiltered[0];
 
             // Надо деактивировать все паттерны не входящие в локальную группу
@@ -256,7 +263,9 @@ module.exports = class AnalyzeModule {
             CODE: 'ANALYZE'
         }
 
-        //console.log(analyzeResponse.Pattern.ACTIVE_GROUPs)
+        if(this.marketData.startTime >= 1679465100000 && this.marketData.startTime < 1679465700000){
+            //console.log('AAA:',analyzeResponse)
+        }
 
         this.currentAnalyze = analyzeResponse;
 
@@ -296,9 +305,9 @@ module.exports = class AnalyzeModule {
      * @param {*} LOGICAL_GROUP 
      */
     async _deactivatePatterntByExcludedLogicalGroup(LOGICAL_GROUP){
-        console.log('_deactivatePatterntByExcludedLogicalGroup')
+        //console.log('_deactivatePatterntByExcludedLogicalGroup')
         return await db.models.Pattern.update({status: false}, {
-            logging: true,
+            //logging: true,
             where: {
                 LOGICAL_GROUP: {
                     [Op.ne] : LOGICAL_GROUP

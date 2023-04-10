@@ -41,7 +41,7 @@ const server = require('http').createServer(app);
 
     await db.setup();
 
-    await dbValidator();
+    //await dbValidator();
 
     //await copySinglePattern('1D_LONG_SKALP_01_7D', '1D_LONG_SKALP_543_7D')
 
