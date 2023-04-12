@@ -36,7 +36,7 @@ const InvestorView = () => {
 
     const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
 
-    const tradeSession = io(`http://localhost:5001?id=${getUserInfo().userId}`);
+    const tradeSession = io(`https://socket.bnetex.com?id=${getUserInfo().userId}`);
 
     tradeSession.on('connect', () => {
         console.log('connected');

@@ -8,6 +8,7 @@ import axios from "axios";
 import { User } from '../users/users.model';
 import { Transaction } from './models/transaction.model';
 import { v4 as uuidv4 } from 'uuid';
+import { log } from 'console';
 
 @Injectable()
 export class WalletService {

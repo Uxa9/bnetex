@@ -117,6 +117,9 @@ const UserInputForm = () => {
     ];
 
     const sendOrder = (type: string, side: string) => {
+        let a = type + side;
+        console.log(a);
+        
         // if (limitPrice !== 0) {
         //     sendFuturesOrder({
         //         side: side,
