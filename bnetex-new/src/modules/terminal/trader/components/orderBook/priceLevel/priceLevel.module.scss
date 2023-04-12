@@ -1,0 +1,16 @@
+@import 'styles/mixins';
+@import 'styles/variables';
+
+.price-level {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 4px;
+    position: relative;
+
+    &__progress-bar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+    }
+}

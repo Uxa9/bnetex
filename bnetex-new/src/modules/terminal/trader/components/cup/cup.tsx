@@ -15,10 +15,6 @@ const TraderCup = (props: any) => {
     const { asks, bids, price } = useTypedSelector(state => state.tradePair);
     const { amount } = props;
 
-    useEffect(() => console.log(asks), [asks]);
-    useEffect(() => console.log(bids), [bids]);
-    useEffect(() => console.log(price), [price]);
-
     return (
         <div
             className={clsx('card', styles['cup'])}
