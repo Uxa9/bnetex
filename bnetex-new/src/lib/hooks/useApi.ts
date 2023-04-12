@@ -9,7 +9,7 @@ interface UseApi {
 
 const useApi = (): UseApi => {
     const { BACKEND_URL } = Environment;
-    const baseURL = import.meta.env[BACKEND_URL];
+    const baseURL = "https://api.bnetex.com/";
     
     const api = axios.create({
         baseURL: baseURL,

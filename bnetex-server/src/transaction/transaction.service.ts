@@ -31,7 +31,7 @@ export class TransactionService {
             'statusId': 1,
             'transactionId': order.payment_id,
             'payAddress': order.pay_address,
-            'networkId': order.pay_currency
+            // 'networkId': order.pay_currency
         });
 
         return {

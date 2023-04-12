@@ -6,6 +6,7 @@ import { Request } from './request.model';
 import { UsersModule } from '../users/users.module';
 import { AuthModule } from '../auth/auth.module';
 import { RequestTypes } from './request-types.model';
+import { WalletModule } from 'src/wallet/wallet.module';
 
 @Module({
     providers: [RequestService],
@@ -13,7 +14,8 @@ import { RequestTypes } from './request-types.model';
     imports: [
         SequelizeModule.forFeature([Request, RequestTypes]),
         UsersModule,
-        AuthModule
+        AuthModule,
+        WalletModule
     ],
     exports: [
         RequestService

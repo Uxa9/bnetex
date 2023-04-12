@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import CoinSymbol from 'modules/terminal/components/coinSymbol/coinSymbol';
 import { CoinSymbolProps } from 'modules/terminal/types/coinSymbol';
-import { mockedOpenedOrders } from './mock';
+// import { mockedOpenedOrders } from './mock';
 import styles from './openedOrders.module.scss';
 import { formatDate } from 'lib/utils/formatDate';
 import PositionAction from 'modules/terminal/components/positionAction/positionAction';

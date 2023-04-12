@@ -44,8 +44,14 @@ export class InvestTradingController {
         return this.investTradingService.closeAllPositions(id);
     }
 
+    @Post("getBinanceSymbols")
+    getBinanceSymbols(@Body() params: any) {
+        return this.investTradingService.getBinanceSymbols(params);
+    }
+
     @Get("test")
     test() {
-        return this.investTradingService.test();
+        // return this.investTradingService.getBinanceSymbol();
+        // return this.investTradingService.test();
     }
 }
