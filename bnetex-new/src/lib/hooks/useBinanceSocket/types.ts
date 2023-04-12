@@ -1,4 +1,8 @@
+import { BinanceSymbol } from 'modules/TradingView/api/types';
+
 export type BinanceSocketType = 'trader' | 'investor';
+
+export type BinanceSymbolAssets = Pick<BinanceSymbol, 'baseAsset' | 'quoteAsset'>
 
 export const binanceWSEndpoint = 'wss://fstream.binance.com/stream?streams=';
 

@@ -9,7 +9,7 @@ import {
     ThemeName,
 } from '../../charting_library';
 import { getOverrides } from './colorOverrides';
-import { forbiddenMarkResolutions } from './api/types';
+import { BinanceSymbol, forbiddenMarkResolutions } from './api/types';
 import { useSearchParams } from 'react-router-dom';
 import { defaultTradingWidgetProps } from './defaultProps';
 import { useBinanceSocket } from 'lib/hooks/useBinanceSocket/useBinanceSocket';
@@ -25,7 +25,7 @@ const TradingViewWidget = ({ className }: TradingViewWidgetProps) => {
     const { theme } = useTheme();
     const [ searchParams, setSearchParams ] = useSearchParams();
     const { markRefreshFlag } = useTypedSelector(state => state.algotrade);
-    const { setTradePair } = useBinanceSocket();
+    const { setTradePair, setTradePairAssets } = useBinanceSocket();
 
     // Создание tv-виджета. Выполняется единожды при монтировании компонента
     useEffect(() => {
@@ -41,16 +41,22 @@ const TradingViewWidget = ({ className }: TradingViewWidgetProps) => {
         };
     }, []);
 
+    const onTradePairUpdate = ({ symbol, baseAsset, quoteAsset }: Omit<BinanceSymbol, 'priceFilter'>) => {
+        setTradePair(symbol);
+        setSearchParams([[ 'tradePair', symbol ]]);
+        setTradePairAssets({ baseAsset, quoteAsset });
+    };
+
     const constructTvWidget = async () => {
         const tradePair = searchParams.get('tradePair');
 
         const options: ChartingLibraryWidgetOptions = {
             ...defaultTradingWidgetProps,
-            symbol: await validateTradePair(tradePair).then((pair) => {
-                setTradePair(pair);
-                setSearchParams([['tradePair', pair]]);
-                return pair;
-            }),
+            symbol: await validateTradePair(tradePair)
+                .then(pair => {
+                    onTradePairUpdate(pair);
+                    return pair.symbol;
+                }),
             // мы гарантируем, что при вызове этой функции widgetRef.current !== null
             // функция может быть вызвана только после проверки на null
             container: widgetRef.current!,
@@ -71,10 +77,7 @@ const TradingViewWidget = ({ className }: TradingViewWidgetProps) => {
             // при смене торговой пары обновляем URL, и tradePair для сокетов
             constructedWidget.activeChart().onSymbolChanged().subscribe(null, () => {
                 const newTradePair = constructedWidget.activeChart().symbol();
-                validateTradePair(newTradePair).then(pair => {
-                    setTradePair(pair);
-                    setSearchParams([['tradePair', pair]]);
-                });
+                validateTradePair(newTradePair).then(onTradePairUpdate);
             });
         });
 

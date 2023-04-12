@@ -1,7 +1,7 @@
 import { createContext, Dispatch, ReactNode, SetStateAction,
     useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { throwError } from 'lib/utils/errorThrower';
-import { AvailableSocketKeys, BinanceSocketType, binanceWSEndpoint } from './types';
+import { AvailableSocketKeys, BinanceSocketType, BinanceSymbolAssets, binanceWSEndpoint } from './types';
 import { createCombinedStreamString, depthSocketMessageParser, generateSocketId,
     parseSocketMessage, tickerSocketMessageParser } from './utils';
 import { getOrderBookSnapshot } from './sevices';
@@ -10,9 +10,11 @@ import { clearOrderBook, setOrderBook, setTradePairPrice, updateOrderBook } from
 
 export interface BinanceSocketContext {
     tradePair: string | null;
+    tradePairAssets: BinanceSymbolAssets | null;
 
     setTradePair: Dispatch<SetStateAction<string | null>>;
     setSocketType: Dispatch<SetStateAction<BinanceSocketType | null>>;
+    setTradePairAssets: Dispatch<SetStateAction<BinanceSymbolAssets | null>>;
 }
 
 const binanceSocketContext = createContext<BinanceSocketContext | null>(null);
@@ -28,6 +30,8 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
     const socketMap = useRef<Map<string, WebSocket>>(new Map());
     // торговая пара - BTCUSDT, ETHUSDT, etc.
     const [tradePair, setTradePair] = useState<string | null>(null);
+    // ассеты торговой пары
+    const [tradePairAssets, setTradePairAssets] = useState<BinanceSymbolAssets | null>(null);
     const [socketType, setSocketType] = useState<BinanceSocketType | null>(null);
 
     const snapshotUpdateIdRef = useRef<number | null>(null);
@@ -134,8 +138,10 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
         <binanceSocketContext.Provider
             value={{
                 tradePair,
+                tradePairAssets,
                 setTradePair,
                 setSocketType,
+                setTradePairAssets,
             }}
         >
             {children}

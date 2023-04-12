@@ -1,5 +1,6 @@
 import { ChartingLibraryWidgetOptions, LanguageCode, ResolutionString } from 'charting_library/charting_library';
 import api from './api/api';
+import { BinanceSymbol } from './api/types';
 
 type DefaultTWOptions = Omit<ChartingLibraryWidgetOptions, 'container'>
 
@@ -9,13 +10,17 @@ function getLanguageFromURL(): LanguageCode | null {
     return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' ')) as LanguageCode;
 }
 
-export const DEFAULT_TRADE_PAIR = 'BTCUSDT';
+export const DEFAULT_TRADE_PAIR: Omit<BinanceSymbol, 'priceFilter'> = {
+    symbol: 'BTCUSDT',
+    baseAsset: 'BTC',
+    quoteAsset: 'USDT',
+};
 
 export const defaultTradingWidgetProps: DefaultTWOptions = {
     datafeed: api,
     interval: '5' as ResolutionString,
     library_path: '/charting_library/',
-    symbol: DEFAULT_TRADE_PAIR,
+    symbol: DEFAULT_TRADE_PAIR.symbol,
     charts_storage_url: 'https://saveload.tradingview.com',
     charts_storage_api_version: '1.1',
     client_id: 'tradingview.com',
