@@ -1,10 +1,12 @@
 export interface TradePairState {
     price: number | null;
-    asks: [number, number][] | null;
-    bids: [number, number][] | null;
+    asks: OrderBookDictionary | null;
+    bids: OrderBookDictionary | null;
     priceLoading: boolean;
     orderBookLoading: boolean;
 }
+
+export type OrderBookDictionary = { [key: string]: number }
 
 export enum TradePairActionTypes {
     SET_PRICE = 'SET_PRICE',
@@ -14,8 +16,8 @@ export enum TradePairActionTypes {
 }
 
 export interface OrderBookContents {
-    asks: [number, number][];
-    bids: [number, number][];
+    asks: OrderBookDictionary;
+    bids: OrderBookDictionary;
 }
 
 interface SetPriceAction {

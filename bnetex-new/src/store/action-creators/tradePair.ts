@@ -1,14 +1,11 @@
 import { Dispatch } from 'redux';
 import { OrderBookContents, TradePairAction, TradePairActionTypes } from 'store/actions/tradePair';
+import { parseAsksOrBidsArray } from 'store/utils/tradePairUtils';
 
 export const setTradePairPrice = (price: string) => {
     return (dispatch: Dispatch<TradePairAction>) => {
         dispatch({ type: TradePairActionTypes.SET_PRICE, price: parseFloat(price)});
     };
-};
-
-const parseAsksOrBidsArray = (array: [string, string][]): [number, number][] => {
-    return array.map(it => [ parseFloat(it[0]), parseFloat(it[1]) ]);
 };
 
 export const setOrderBook = (asks: [string, string][], bids: [string, string][]) => {
