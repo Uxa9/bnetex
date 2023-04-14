@@ -3,6 +3,9 @@ module.exports = function(sequelize, DataTypes) {
         deposit: {
             type: DataTypes.DOUBLE
         },
+        totalDeposit: {
+            type: DataTypes.DOUBLE
+        },
         enterPrice: {
             type: DataTypes.DOUBLE
         },
