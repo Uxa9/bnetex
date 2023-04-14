@@ -51,15 +51,15 @@ module.exports = class InstanceClass {
       // Сюда данные пробрасываются каждую минуту
       subscribtion.subscribe(async (candlesData) => { 
         
-        // if(candlesData.last.startTime == 1679726580000){
-        //   console.log(candlesData.last)
-        // }
-
+        
         console.log(moment(candlesData.last.startTime, 'x').format('DD MM YYYY HH:mm'))  
+        console.log(candlesData.last.startTime)  
+
+        
 
         if(prices.length > 60) prices.shift();
 
-        prices.push(parseFloat(candlesData.last.close))
+        //prices.push(parseFloat(candlesData.last.close))
         //console.clear();
         //console.log (asciichart.plot (prices, { height: 12 }))
         
@@ -107,9 +107,6 @@ module.exports = class InstanceClass {
 
 
         }
-
-        
-        
         
 
         if(config.simulate){

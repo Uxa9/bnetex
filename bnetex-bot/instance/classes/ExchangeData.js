@@ -9,8 +9,10 @@ const { CalcPrevZone } = require("../utils/strategy/CalcPrevZone");
 const { CalcZonesByBB } = require("../utils/strategy/CalcZonesByBB");
 const EventEmitter = require('events');
 const { Observable } = require("rxjs");
+const moment = require('moment');
 var colors = require('colors');
 const zoneCorrector = require("../utils/ZoneCorrector");
+const actualZoneFixer = require("../utils/actualZoneFixer");
 
 const config = require("../../config/config")();
 
@@ -39,7 +41,7 @@ module.exports = class ExchangeData {
 
         return Observable.create((subject) => {
             this.throwNextCandle.on('next', (last) => {              
-                //console.log({last})
+                
                 subject.next({
                   last,
                   last_100: this.candlesticks.slice(-100)
@@ -97,7 +99,7 @@ module.exports = class ExchangeData {
 
             if (rule.intervals > 1440) {
 
-                //console.log('ExchangeData: 98: RuleIntervals', rule.intervals);
+                
                 candlesticks_1h = CalcBollingerComplex(rule, candlesticks_1h);
         
                 // Зоны
@@ -106,6 +108,7 @@ module.exports = class ExchangeData {
                   candlesticks_1h,
                   candlesticks[candlesticks.length - 1].close
                 );
+                
         
                 // Предыдущая зона
                 candlesticks_1h = CalcPrevZone(rule, candlesticks_1h);
@@ -177,17 +180,12 @@ module.exports = class ExchangeData {
           ticketClassSimulate.initializingSubscribtion().subscribe(async (e) => {
             // Если свеча часовая
             
-            if (e["1m"].startTime % 3600000 == 0) {
-              //console.log("Add 1 Hour".green);
-              //console.log('initializingSubscribtion', e["1m"].startTime);
-
-              
+            //if (e["1m"].startTime % 3600000 == 0) {              
     
-              this.candlesticks_1h.push(e["1m"]);
-              //console.log(this.candlesticks_1h[this.candlesticks_1h.length-1], this.candlesticks_1h[this.candlesticks_1h.length-2])
+              this.candlesticks_1h.push(e["1m"]);              
               this.candlesticks_1h.shift();
           
-            }
+            //}
     
             this.candlesticks.shift();
     
@@ -206,7 +204,7 @@ module.exports = class ExchangeData {
     //return;
 
 
-    //console.log('klineHandler: ', klines.startTime)
+    
     let intervals = Object.keys(klines);
 
     
@@ -227,26 +225,35 @@ module.exports = class ExchangeData {
 
       let calculateHour = false;
 
+      //console.log(moment(candlesticks_1h[candlesticks_1h.length-1].startTime, 'x').format('DD MM YYYY HH:mm'))
+
       
 
-      if (
-        this.candlesticks_1h[this.candlesticks_1h.length - 1].startTime !=
-        this.lastHour
-      ) {
-        calculateHour = true;
-        this.lastHour =
-          this.candlesticks_1h[this.candlesticks_1h.length - 1].startTime;
-      }
+      // if (
+      //   this.candlesticks_1h[this.candlesticks_1h.length - 1].startTime !=
+      //   this.lastHour
+      // ) {
+      //   calculateHour = true;
+      //   this.lastHour =
+      //     this.candlesticks_1h[this.candlesticks_1h.length - 1].startTime;
+      // }
 
       
 
       for (let index = 0; index < zoneRulesBB.length; index++) {
         const element = zoneRulesBB[index];
         const rule = getBBRuleByIddex(element);
-        //console.log('ruleIntervals', rule)
+        
         if (rule.intervals > 1440) {
-          //console.log('ExchangeData: 98: RuleIntervals', rule.intervals, calculateHour);
-          if (calculateHour) {
+        
+          //if (calculateHour) {
+
+
+          
+
+          //console.log({aaaaaaaaa: candlesticks_1h[candlesticks_1h.length-1]})
+          
+
             candlesticks_1h = CalcBollingerComplex(
               rule,
               candlesticks_1h,
@@ -260,10 +267,18 @@ module.exports = class ExchangeData {
               candlesticks[candlesticks.length - 1].close,
               true
             );
+              
+            
+            
+            
 
             // Предыдущая зона
             candlesticks_1h = CalcPrevZone(rule, candlesticks_1h, true);
-          }
+
+
+          //}
+
+
         } else {
           
 
@@ -311,6 +326,20 @@ module.exports = class ExchangeData {
     // Корректировка зон через корректор
     let dataIntervals = zoneRulesBB.map(i => getBBRuleByIddex(i));
 
+
+    // let lastK = this.candlesticks[this.candlesticks.length-1];
+    // // Корректировка текущей зоне через корректор    
+    // for (let index = 0; index < dataIntervals.length; index++) {
+
+    //   const element = dataIntervals[index];
+
+    //   this.candlesticks[this.candlesticks.length-1][element.intervals][element.sigma] = actualZoneFixer(this.candlesticks[this.candlesticks.length-1][element.intervals][element.sigma], parseFloat(lastK.close), lastK.startTime == 1679927040000 && element.intervals == '10080');
+    // }
+    
+    
+
+
+
     for (let index = 0; index < dataIntervals.length; index++) {
 
       const element = dataIntervals[index];
@@ -319,8 +348,15 @@ module.exports = class ExchangeData {
       
     }
 
-    
+    if (this.candlesticks_1h[this.candlesticks_1h.length - 1].startTime % 3600000 != 0){ 
+      this.candlesticks_1h.splice(this.candlesticks_1h.length-1, 1) 
+    }
+
+
     this.throwNextCandle.emit('next', this.candlesticks[this.candlesticks.length-1])
+
+
+    
 
     
 

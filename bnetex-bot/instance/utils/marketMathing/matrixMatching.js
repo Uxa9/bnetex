@@ -488,8 +488,9 @@ module.exports = (kline) => {
             if(kline[jelem.intervals] && kline[jelem.intervals][jelem.sigma]){
                 
                 
-                //console.log(element.index, jelem.variations, matching(kline[jelem.intervals][jelem.sigma]).index)
-                if(jelem.variations.includes(matching(kline[jelem.intervals][jelem.sigma]).index)){
+                //console.log()
+                // jelem.intervals, "/", jelem.sigma
+                if(jelem.variations.includes(matching(kline[jelem.intervals][jelem.sigma], {intervals: jelem.intervals, sigma: jelem.sigma}).index)){
                     matchingCount++;
                 }
 

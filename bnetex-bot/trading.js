@@ -45,33 +45,41 @@ const server = require('http').createServer(app);
 
     await db.setup();
 
-    //await dbValidator();
+    await dbValidator();
 
-    //await copySinglePattern('1D_LONG_SKALP_01_7D', '1D_LONG_SKALP_543_7D')
+    return;
+
+    //await copySinglePattern('1D-LONG_1-7D_456789-30D_234-360D', '1D-LONG_9-7D_456789-30D_234-360D')
 
     /**
      * 	
      * 
-        1D_LONG_SKALP_01_7D
+        1д-лонг_(2)-7д_(456789)-30д_(234)-360д
+        *1D-LONG_2-7D_456789-30D_234-360D
 
-        1D_LONG_SKALP_012_7D
+        1д-лонг_(3)-7д _(456789)-30д_(234)-360д
+        *1D-LONG_3-7D_456789-30D_234-360D
 
-        1D_LONG_SKALP_21_7D
+        1д-лонг_(4)-7д_(456789)-30д_(234)-360д
+        *1D-LONG_4-7D_456789-30D_234-360D
 
-        1D_LONG_SKALP_23_7D
+        1д-лонг_(5)-7д_(456789)-30д_(234)-360д
+        *1D-LONG_5-7D_456789-30D_234-360D
 
-        1D_LONG_SKALP_32_7D
+        1д-лонг_(6)-7д_(456789)-30д_(234)-360д
+        *1D-LONG_6-7D_456789-30D_234-360D
 
-        1D_LONG_SKALP_34_7D
+        1д-лонг_(7)-7д_(456789)-30д_(234)-360д
+        *1D-LONG_7-7D_456789-30D_234-360D
 
-        1D_LONG_SKALP_43_7D
+        1д-лонг_(8)-7д_(456789)-30д_(234)-360д 
+        *1D-LONG_8-7D_456789-30D_234-360D
 
-        1D_LONG_SKALP_45_7D
-
-        1D_LONG_SKALP_543_7D
+        1д-лонг_(9)-7д_(456789)-30д_(234)-360д
+        *1D-LONG_9-7D_456789-30D_234-360D
      */
 
-    
+        return;
 
     
 

@@ -46,9 +46,13 @@ module.exports = class DecisionsModule {
 
     if (!this.analyzeResponseData.Pattern) return null;
 
+    
+
     let groups = this.analyzeResponseData.Pattern.ACTIVE_GROUPs;
 
-    //console.log({groups})
+    
+
+    
 
     for (let index = 0; index < groups.length; index++) {
       const element = groups[index];
@@ -57,21 +61,28 @@ module.exports = class DecisionsModule {
       let OpenTriggers = element.ACTIVE_GROUP_TRIGGERs.filter(
         (i) => i.type == "OPEN"
       );
-      //console.log({element})
-      //console.log({OpenTriggers: element.ACTIVE_GROUP_TRIGGERs})
+      
       let patternCompare = StrategyRules(
         this.marketData,
         OpenTriggers,
         false,
-        false
+        this.marketData.startTime == 1680486240000
       );
 
       if (patternCompare) patternsToOpen.push(element);
     }
 
-    // if(this.marketData.startTime == 1679722980000){
-    //   console.log(this.marketData)
-    // }
+    if(this.marketData.startTime == 1680486240000){
+      console.log('---------------')
+      console.log(this.analyzeResponseData);
+      console.log('---------------')
+      console.log(groups);
+      console.log('---------------')
+      console.log(patternsToOpen);
+      //process.exit();
+    }
+
+    
 
     if (patternsToOpen.length == 0) return null;
 
@@ -164,7 +175,8 @@ module.exports = class DecisionsModule {
         enterPrice,
         qty,
         ACTIVE_GROUP,
-        deposit
+        deposit,
+        unixtime
       );
     } else {
       await ActualPositionsModule.updatePosition(
@@ -199,7 +211,7 @@ module.exports = class DecisionsModule {
     let lastPrice = parseFloat(this.marketData.close);
 
     let currentDiffOfAverage = Math.abs(
-      100 - (lastPrice * 100) / ActialPosition.averagePrice
+      100 - (lastPrice * 100) / ActialPosition.lastEnterPrice
     );
 
     let activeFirstRule = getRuleByIndex(
@@ -237,8 +249,7 @@ module.exports = class DecisionsModule {
     let qty = parseFloat((enterRuleVolume / lastPrice) * 10).toFixed(3);
 
 
-    console.log(this.analyzeResponseData);
-    console.log({singlePart, enterRuleVolume, PERCENT_OF_DEPOSIT, patternTradingVolume, totalPartsOfPositions})
+    
 
     if (currentDiffOfAverage >= activeFirstRule.priceDifferencePercent) {
       try {
@@ -301,31 +312,24 @@ module.exports = class DecisionsModule {
     // Checking if Pattern allow entry into position
     let _openedPattern = this._checkPatternToOpen();
 
-    if(this.marketData.startTime == 1680572100000){
-      console.log("AR: ",this.analyzeResponseData)
-    }
+    
 
     // Если вообще нет открытого - меняем нахуй
     if (!this.openedPatternToEnter && _openedPattern) {
       this.openedPatternToEnter = _openedPattern;
-      //console.log('HERE 1');
+      
     } else if (this.openedPatternToEnter && _openedPattern && (_openedPattern.id != this.openedPatternToEnter.id)) {
-      // Если есть открытый, то дополнительно проверяем новый на профит
-      //console.log('HERE 2')
-      if(this.marketData.startTime == 1679722980000){
-        //console.log("PP:", this.openedPatternToEnter.ProfitPercent, _openedPattern.ProfitPercent)
-      }
+      // Если есть открытый, то дополнительно проверяем новый на профит            
       if (
         this.openedPatternToEnter.ProfitPercent <= _openedPattern.ProfitPercent
       ) {
         this.openedPatternToEnter = _openedPattern;
-        //console.log('HERE 3')
       }
     }
 
     
 
-    //console.log(this.openedPatternToEnter)
+    
     // Clean Signal - First positive Candle after green
     let CLEAN__SIGNAL = this._firstPositiveCandle();
 
@@ -333,19 +337,11 @@ module.exports = class DecisionsModule {
       this.wailtToResetOpennedPattern = true;
     }
 
-    if(this.marketData.startTime >= 1679465100000 && this.marketData.startTime < 1679465700000){
-            console.log({CLEAN__SIGNAL, OP: this.openedPatternToEnter})
-    }
-
-    if(this.marketData.startTime == 1679722980000){
-      //console.log({CLEAN__SIGNAL})
-      if(ActialPosition){
-          //console.log(ActialPosition.averagePrice, lastPrice)
-      }
-    }
-
+    
     if (!CLEAN__SIGNAL) return { code: "NON_ACTION" };
 
+
+    // TODO - Убрать условие
     if (ActialPosition && ActialPosition.averagePrice < lastPrice)
       return { code: "NON_ACTION" };
 
@@ -366,7 +362,7 @@ module.exports = class DecisionsModule {
       }
 
       // Ничего не делаем, позиция в плюсе
-      // TODO: UNCOMMENT FOR PROD
+      // TODO: UNCOMMENT FOR PROD (УБРАТЬ условие)
       if(ActialPosition.averagePrice < lastPrice) return { code: 'NON_ACTION' }
 
       if (this.openedPatternToEnter.id != ActialPosition.ACTIVEGROUPId) {
@@ -380,9 +376,10 @@ module.exports = class DecisionsModule {
             this.openedPatternToEnter.POSITION_RULEs,
             1
           );
-
+          
+          // TODO - Если ноль - условие истинно
           let currentDiffOfAverage = Math.abs(
-            100 - (lastPrice * 100) / ActialPosition.averagePrice
+            100 - (lastPrice * 100) / ActialPosition.lastEnterPrice
           );
 
           if (currentDiffOfAverage >= activeFirstRule.priceDifferencePercent) {
@@ -411,12 +408,11 @@ module.exports = class DecisionsModule {
 
             let qty = parseFloat((enterRuleVolume / lastPrice) * 10).toFixed(3);
 
-            console.log(this.analyzeResponseData);
-            console.log({singlePart, enterRuleVolume, PERCENT_OF_DEPOSIT, patternTradingVolume, totalPartsOfPositions})
+            
 
             try {
               let marketBuy = await this.futuresModule.marketBuy(qty, parseFloat(this.marketData.close));
-              //console.log({marketBuy})
+              
               if (marketBuy.orderId) {
                 this._updatePositionInDb(
                   qty,
@@ -445,7 +441,7 @@ module.exports = class DecisionsModule {
       );
 
       let currentDiffOfAverage = Math.abs(
-        100 - (lastPrice * 100) / ActialPosition.averagePrice
+        100 - (lastPrice * 100) / ActialPosition.lastEnterPrice
       );
 
       if (currentDiffOfAverage >= activeFirstRule.priceDifferencePercent) {
@@ -479,7 +475,7 @@ module.exports = class DecisionsModule {
 
       try {
         let marketBuy = await this.futuresModule.marketBuy(qty, lastPrice);
-        //console.log({marketBuy})
+        
         if (marketBuy.orderId) {
           this._updatePositionInDb(
             qty,

@@ -13,21 +13,17 @@ module.exports = async (LOGICAL_GROUP, NEW_LOGICAL_GROUP = "") => {
 
     
 
-    //console.log({PATTERNS})
+   
 
     for (let index = 1; index < PATTERNS.length+1; index++) {
+
         console.log({index})
-        //if(index > 1) continue;
-
+   
         const pattern = PATTERNS[index-1];
-
-        //console.log(pattern)
 
         let WORKING_GROUP_INDEX = pattern.WORKING_GROUP[pattern.WORKING_GROUP.length-1];
 
         let NEW_WORKING_GROUP = `${NEW_LOGICAL_GROUP}_${WORKING_GROUP_INDEX}`;
-
-        //console.log({NEW_WORKING_GROUP, NEW_LOGICAL_GROUP})
 
         let NEW_PATTERN = await db.models.Pattern.create({
             LOGICAL_GROUP: NEW_LOGICAL_GROUP,

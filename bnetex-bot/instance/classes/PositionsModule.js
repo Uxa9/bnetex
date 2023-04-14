@@ -80,7 +80,7 @@ module.exports = class PositionsModule {
     // Checking that Position has enougth profit to close
     let enougthProfit = actualPosition.ACTIVE_GROUP.ProfitPercent;
 
-    //console.log({percentProfit, enougthProfit, AG: actualPosition.ACTIVE_GROUP})
+    
 
     // Break current method if percent profit is not enougth
     if (percentProfit < enougthProfit) return;
@@ -235,7 +235,7 @@ module.exports = class PositionsModule {
   }
 
 
-  async createPosition(margin, enterPrice, qty, ACTIVE_GROUP, deposit){
+  async createPosition(margin, enterPrice, qty, ACTIVE_GROUP, deposit, unixtime){
     
     let position = await db.models.Position.create({
       volumeUSDT: margin,
@@ -248,9 +248,11 @@ module.exports = class PositionsModule {
       averagePrice: enterPrice,
       avegarePrice: enterPrice,
       enterPrice,
-      deposit
+      deposit,
+      lastEnterPrice: enterPrice,
+      enterTime: moment(unixtime, 'x').toDate()
     })
-    console.log(this.lastKline)
+    
     await db.models.PositionEnters.create({
       volume: qty,
       volumeUSDT: margin,

@@ -1,3 +1,5 @@
+const { sendMessageToMainChanel } = require("../telegram/tg");
+
 const matchingTable = [
   {
     back: "123",
@@ -135,9 +137,9 @@ const matchingTable = [
   },
 ];
 
-module.exports = (situation) => {
+module.exports = (situation, forlog = false) => {
 
-
+  
   let formatted = {
     back: situation.backPattern.join(""),
     prev: situation.prevZone,
@@ -166,7 +168,16 @@ module.exports = (situation) => {
 
   }
 
-  
+  if(!result){
+    console.log({situation})
+    console.log({formatted})
+
+    
+      console.log({forlog})
+    
+    
+    process.exit();
+  }
 
   return result;
 };
