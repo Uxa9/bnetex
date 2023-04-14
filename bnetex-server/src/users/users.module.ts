@@ -12,7 +12,7 @@ import { Request } from '../request/request.model';
 import { InvestSession } from '../invest-sessions/invest-sessions.model';
 import { PositionsModule } from '../positions/positions.module';
 import { HttpModule } from '@nestjs/axios';
-import { Wallet } from "../wallet/wallet.model";
+import { Wallet } from "../wallet/models/wallet.model";
 
 @Module({
     controllers: [UsersController],

@@ -27,7 +27,7 @@ export const getTransactions = () => {
         dispatch({ type: TransactionActionTypes.SEND_REQUEST});
 
         return protectedApi
-            .get(`/request/user/${getUserInfo().userId}`)
+            .get(`/wallets/transactions/${getUserInfo().userId}`)
             .then((res) => {
                 dispatch({ type: TransactionActionTypes.GET_TRANSACTIONS, data: parseTransactions(res.data)});
             })

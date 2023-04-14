@@ -75,9 +75,18 @@ const useWalletActions = () => {
                 };
             });
     };
+
+    const getUserWallet = async (): Promise<any> => {
+        return await api.get(`/wallets/${getUserInfo().userId}`)
+            .then((response) => {                
+                return {
+                    walletId: response.data
+                }
+            })
+    }
     
 
-    return { transferBetweenWallets, withdrawConfirm, withdrawRequest, getWallets };
+    return { transferBetweenWallets, withdrawConfirm, withdrawRequest, getWallets, getUserWallet };
 };
 
 export default useWalletActions;

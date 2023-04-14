@@ -1,12 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import axios from 'axios';
 import {USDMClient} from "binance";
 import { UsersService } from '../users/users.service';
+import { BinanceSymbols } from './models/binanceSymbols.model';
+import { InjectModel } from '@nestjs/sequelize';
+import { PriceFilter } from './models/priceFilter.model';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class InvestTradingService {
 
     constructor (
-        private userService: UsersService
+        @InjectModel(BinanceSymbols) private binanceSymbolsRepository: typeof BinanceSymbols,
+        @InjectModel(PriceFilter) private priceFilterRepository: typeof PriceFilter,
+        private userService: UsersService,
     ) {}
 
     async getUserBalance(id: number) {
@@ -202,6 +209,65 @@ export class InvestTradingService {
                 positions
             }
         });
+    }
+
+    async parseBinanceSymbols() { 
+        const a = await axios.get('https://api.binance.com/api/v3/exchangeInfo');
+
+        const { symbols } = a.data;
+
+        symbols.map(async (item: any) => {
+            
+            const filters = item.filters.find(obj => obj.filterType === "PRICE_FILTER");
+            
+            Promise.all([
+                this.binanceSymbolsRepository.create({
+                    symbol: item.symbol,
+                    baseAsset: item.baseAsset,
+                    quoteAsset: item.quoteAsset
+                }),
+                this.priceFilterRepository.create({
+                    maxPrice: filters.maxPrice,
+                    minPrice: filters.minPrice,
+                    tickSize: filters.tickSize
+                })
+            ]).then(async ([binanceSymbol, priceFilter]) => {
+
+                priceFilter.update({
+                    binanceSymbolsId: binanceSymbol.id
+                });
+            });
+
+        });
+    }
+
+    async getBinanceSymbols(params: any) {
+        const symbols = await this.binanceSymbolsRepository.findAll({
+            where: {
+                symbol: {
+                    [Op.like]: `%${params.filterString}%`
+                }
+            },
+            include: [{
+                model: PriceFilter
+            }]
+        });    
+
+        return symbols.map(item => {
+            
+            
+            return {
+                symbol: item.symbol,
+                baseAsset: item.baseAsset,
+                quoteAsset: item.quoteAsset,
+                priceFilter: {
+                    maxPrice: item.priceFilter.maxPrice,
+                    minPrice: item.priceFilter.minPrice,
+                    tickSize: item.priceFilter.tickSize
+                }
+            }
+        })
+
     }
 }
 

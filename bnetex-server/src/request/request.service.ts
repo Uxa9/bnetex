@@ -8,6 +8,7 @@ import { FulfillRequest } from './dto/fulfill-request.dto';
 import { RequestTypes } from './request-types.model';
 import { Request } from './request.model';
 import { MailerService } from '@nestjs-modules/mailer';
+import { WalletService } from 'src/wallet/wallet.service';
 
 @Injectable()
 export class RequestService {
@@ -16,7 +17,8 @@ export class RequestService {
         @InjectModel(Request) private requestRepository: typeof Request,
         @InjectModel(RequestTypes) private requestTypesRepository: typeof RequestTypes, 
         private userService: UsersService,
-        private readonly mailerService: MailerService
+        private readonly mailerService: MailerService,
+        private walletService: WalletService,
     ) {}
 
     async createRequest(dto: CreateRequest) {        
@@ -48,6 +50,15 @@ export class RequestService {
         const type = await this.getRequestTypeIdByName(dto.type);
 
         const authCode = await genereateAndSendAuthCode(user.email, dto.type);
+
+        if (dto.type === 'withdraw') {
+            const user = await this.userService.getUserById(dto.userId);
+
+            if (!user || user.mainWallet < dto.amount) return {
+                status: "ERROR",
+                message: "USER_BALANCE_LOWER_THAN_REQUESTED"
+            }
+        }
         
         const request = await this.requestRepository.create({
             ...dto,
@@ -88,32 +99,25 @@ export class RequestService {
         if ( request.confirmCode === dto.confirmCode ) {
             const user = await this.userService.getUserById(request.userId);
 
-            if ( user.mainWallet < request.amount ) {
-                throw new HttpException(
-                    {
-                        status: "ERROR",
-                        message: "WALLET_AMOUNT_IS_LOWER_THAN_REQUESTED"
-                    },
-                    HttpStatus.BAD_REQUEST
-                );
-            }
-
-            user.mainWallet -= request.amount;
-
-            user.save();
+            await this.walletService.withdrawMoney({
+                userId: user.id,
+                amount: request.amount,
+                walletAddress: request.walletAddress
+            });
+  
             request.update({fulfilled: true});
 
-            await this.mailerService.sendMail({
-                to: 'Valeriy.1.93@mail.ru',
-                from: 'infobnetex@internet.ru',
-                subject: 'Вывод',
-                template: 'withdraw',
-                context: {
-                    email: user.email,
-                    amount: request.amount,
-                    walletAddress: request.walletAddress
-                }
-            });
+            // await this.mailerService.sendMail({
+            //     to: 'Valeriy.1.93@mail.ru',
+            //     from: 'infobnetex@internet.ru',
+            //     subject: 'Вывод',
+            //     template: 'withdraw',
+            //     context: {
+            //         email: user.email,
+            //         amount: request.amount,
+            //         walletAddress: request.walletAddress
+            //     }
+            // });
     
 
             return {
