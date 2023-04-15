@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
-const config = require("../../../config/config");
+const config = require("../../../config/config")();
 
 
 
