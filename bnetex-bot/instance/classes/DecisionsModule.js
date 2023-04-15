@@ -176,7 +176,8 @@ module.exports = class DecisionsModule {
         qty,
         ACTIVE_GROUP,
         deposit,
-        unixtime
+        unixtime,
+        this.analyzeResponseData.TotalTradingVolume
       );
     } else {
       await ActualPositionsModule.updatePosition(
@@ -251,7 +252,7 @@ module.exports = class DecisionsModule {
 
     
 
-    if (currentDiffOfAverage >= activeFirstRule.priceDifferencePercent) {
+    if (currentDiffOfAverage >= activeFirstRule.priceDifferencePercent || activeFirstRule.priceDifferencePercent == 0) {
       try {
         let marketBuy = await this.futuresModule.marketBuy(qty, parseFloat(this.marketData.close));
         
@@ -342,8 +343,8 @@ module.exports = class DecisionsModule {
 
 
     // TODO - Убрать условие
-    if (ActialPosition && ActialPosition.averagePrice < lastPrice)
-      return { code: "NON_ACTION" };
+    // if (ActialPosition && ActialPosition.averagePrice < lastPrice)
+    //   return { code: "NON_ACTION" };
 
 
     
@@ -362,8 +363,8 @@ module.exports = class DecisionsModule {
       }
 
       // Ничего не делаем, позиция в плюсе
-      // TODO: UNCOMMENT FOR PROD (УБРАТЬ условие)
-      if(ActialPosition.averagePrice < lastPrice) return { code: 'NON_ACTION' }
+      
+      //if(ActialPosition.averagePrice < lastPrice) return { code: 'NON_ACTION' }
 
       if (this.openedPatternToEnter.id != ActialPosition.ACTIVEGROUPId) {
         // К нам пришел новый паттерн
@@ -377,12 +378,12 @@ module.exports = class DecisionsModule {
             1
           );
           
-          // TODO - Если ноль - условие истинно
+          
           let currentDiffOfAverage = Math.abs(
             100 - (lastPrice * 100) / ActialPosition.lastEnterPrice
           );
 
-          if (currentDiffOfAverage >= activeFirstRule.priceDifferencePercent) {
+          if (currentDiffOfAverage >= activeFirstRule.priceDifferencePercent || activeFirstRule.priceDifferencePercent == 0) {
             let PERCENT_OF_DEPOSIT =
               this.analyzeResponseData.Pattern.PERCENT_OF_DEPOSIT;
 
@@ -444,7 +445,7 @@ module.exports = class DecisionsModule {
         100 - (lastPrice * 100) / ActialPosition.lastEnterPrice
       );
 
-      if (currentDiffOfAverage >= activeFirstRule.priceDifferencePercent) {
+      if (currentDiffOfAverage >= activeFirstRule.priceDifferencePercent || activeFirstRule.priceDifferencePercent == 0) {
         
         // TODO - забыл тут
         console.log("Заебись, можно усредняться");

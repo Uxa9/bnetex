@@ -45,9 +45,9 @@ const server = require('http').createServer(app);
 
     await db.setup();
 
-    await dbValidator();
+    //await dbValidator();
 
-    return;
+    //return;
 
     //await copySinglePattern('1D-LONG_1-7D_456789-30D_234-360D', '1D-LONG_9-7D_456789-30D_234-360D')
 
@@ -79,7 +79,7 @@ const server = require('http').createServer(app);
         *1D-LONG_9-7D_456789-30D_234-360D
      */
 
-        return;
+        
 
     
 

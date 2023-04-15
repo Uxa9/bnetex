@@ -1,9 +1,13 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
+const config = require("../../../config/config");
+
+
+
 const connection__params = {
-  database: "exchange",
-  username: "mysql",
-  password: "mysql",
+  database: config.database.database,
+  username: config.database.user,
+  password: config.database.password,
 };
 
 var sequelize = new Sequelize(

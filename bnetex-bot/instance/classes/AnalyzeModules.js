@@ -247,6 +247,7 @@ module.exports = class AnalyzeModule {
     }
 
     let analyzeResponse = {
+      TotalTradingVolume,
       CurrentTradingVolume,
       PartsForPatterns: this.ActivePatternsInWorkingGroup.reduce(
         (prev, curr) => prev + curr.PART_OF_VOLUME,

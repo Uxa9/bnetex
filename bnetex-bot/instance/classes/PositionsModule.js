@@ -14,7 +14,11 @@ module.exports = class PositionsModule {
   constructor(pair) {
     this.pair = pair;
     this.lastKline = undefined;
-    this.exchangeAccount = new Account()
+    this.exchangeAccount = new Account();
+
+
+    this.TotalDeposit = 0;
+    
 
     this.futures = new FuturesModule(this.pair, this);
 
@@ -26,6 +30,9 @@ module.exports = class PositionsModule {
   async getExchangePosition(){
 
   }
+  
+
+  
 
   /**
    * Function sets minimal price to position
@@ -235,7 +242,7 @@ module.exports = class PositionsModule {
   }
 
 
-  async createPosition(margin, enterPrice, qty, ACTIVE_GROUP, deposit, unixtime){
+  async createPosition(margin, enterPrice, qty, ACTIVE_GROUP, deposit, unixtime, totalDeposit){
     
     let position = await db.models.Position.create({
       volumeUSDT: margin,
@@ -250,7 +257,8 @@ module.exports = class PositionsModule {
       enterPrice,
       deposit,
       lastEnterPrice: enterPrice,
-      enterTime: moment(unixtime, 'x').toDate()
+      enterTime: moment(unixtime, 'x').toDate(),
+      totalDeposit: totalDeposit
     })
     
     await db.models.PositionEnters.create({
