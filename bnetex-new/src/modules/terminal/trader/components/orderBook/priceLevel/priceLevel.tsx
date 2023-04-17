@@ -1,34 +1,45 @@
-import { ForwardedRef, forwardRef } from 'react';
+import { ForwardedRef, forwardRef, useMemo } from 'react';
 import styles from './priceLevel.module.scss';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
 import clsx from 'clsx';
+import { PriceLevelType } from '../types/types';
 
 interface PriceLevelProps {
-    priceValue: string;
-    volume: number;
+    price: string;
     biggestVolume: number;
-    isCurrentPrice?: boolean;
+    togglePrevCurrentPriceType?: () => void;
 }
 
-const PriceLevel = ({ priceValue, volume, biggestVolume, isCurrentPrice }: PriceLevelProps, ref: ForwardedRef<HTMLDivElement>) => {
-    const { asks, bids } = useTypedSelector(state => state.tradePair);
+const PriceLevel = ({
+    price, biggestVolume, togglePrevCurrentPriceType,
+}: PriceLevelProps, ref: ForwardedRef<HTMLDivElement>) => {
+    const { asks, bids, price: tradePairPrice } = useTypedSelector(state => state.tradePair);
+
+    const [priceLevelVolume, priceLevelType]: [number | undefined, PriceLevelType] = useMemo(() => {
+        const volumeFromAsks = asks?.[price];
+        const volumeFromBids = bids?.[price];
+
+        const type: PriceLevelType = volumeFromAsks ? 'ask' : volumeFromBids ? 'bid' : null;
+
+        return [volumeFromAsks ?? volumeFromBids, type];
+    }, [ asks, bids, price ]);
 
     return (
         <div
             className={clsx(
                 styles['price-level'],
-                asks?.[priceValue] && styles['price-level--ask'],
-                bids?.[priceValue] && styles['price-level--bid'],
-                isCurrentPrice && styles['price-level--current-price']
+                priceLevelType && styles[`price-level--${priceLevelType}`],
+                // tradePairPrice === parseFloat(price) && styles['price-level--current-price']
+                ref && styles['price-level--current-price']
             )}
             ref={ref}
         >
             <div
                 className={styles['price-level__progress-bar']}
-                style={{ width: `${Math.floor(parseFloat(priceValue) / biggestVolume)}%` }}
+                style={{ width: `${Math.floor(priceLevelVolume ?? 0 / biggestVolume)}%` }}
             />
-            <span>{priceValue}</span>
-            <span>{volume}</span>
+            <span>{price}</span>
+            <span>{priceLevelVolume}</span>
         </div>
     );
 };

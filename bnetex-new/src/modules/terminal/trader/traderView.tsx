@@ -16,6 +16,7 @@ import { useToast } from 'lib/hooks/useToast';
 import { useParams, useRoutes  } from 'react-router-dom';
 import TraderCup from './components/cup/cup';
 import { useBinanceSocket } from 'lib/hooks/useBinanceSocket/useBinanceSocket';
+import OrderBook from './components/orderBook/orderBook';
 
 type TraderViewType = 'limit' | 'tpsl';
 type TraderSumType  = 'exactSum' | 'percent';
@@ -87,8 +88,6 @@ const TradeView = () => {
                 setIsolated(true);
             });
 
-        refOrderBookSocket.current = new WebSocket(`wss://fstream.binance.com/stream?streams=${pair?.toLocaleLowerCase()}@depth20`);
-        refBtcPrice.current = new WebSocket(`wss://stream.binance.com/stream?streams=${pair?.toLocaleLowerCase()}@miniTicker`);
 
         return () => {
             if (!refSnapshot.current ) return;
@@ -133,9 +132,7 @@ const TradeView = () => {
             <div
                 className={clsx('card')}
             >
-                <TraderCup
-                    amount={amount}
-                />
+                <OrderBook />
             </div>
             <form
                 className={clsx('card', styles['trade-panel'])}

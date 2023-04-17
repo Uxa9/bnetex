@@ -61,6 +61,7 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
 
     const loadOrderBook = async () => {
         const { lastUpdateId, asks, bids } = await getOrderBookSnapshot(tradePair!);
+
         dispatch(setOrderBook(asks, bids));
 
         snapshotUpdateIdRef.current = lastUpdateId;

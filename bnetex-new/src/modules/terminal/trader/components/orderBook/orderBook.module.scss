@@ -1,0 +1,19 @@
+@import 'styles/mixins';
+@import 'styles/variables';
+
+.container {
+    @include column-flex(12px);
+
+    padding: 16px;
+    min-width: 300px;
+}
+
+.header {
+    @include align-center-row-flex(12px);
+
+    justify-content: space-between;
+}
+
+.prices {
+    @include column-flex;
+}

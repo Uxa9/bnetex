@@ -38,7 +38,7 @@ const parseCandle = (data: any): Bar => {
     const kline = data.k;
 
     return {
-        time: data.E,
+        time: kline.t,
         open: parseFloat(kline.o),
         high: parseFloat(kline.h),
         low: parseFloat(kline.l),

@@ -7,6 +7,18 @@
     padding: 2px 4px;
     position: relative;
 
+    &--ask {
+        background-color: $red-5;
+    }
+
+    &--bid {
+        background-color: $green-5;
+    }
+
+    &--current-price {
+        color: red;
+    }
+
     &__progress-bar {
         position: absolute;
         left: 0;

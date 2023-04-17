@@ -19,7 +19,7 @@ export const tradePairReducer = (state = initialState, action: TradePairAction):
             if (!state.asks || !state.bids) return state;
 
             const mergedAsks = mergeOrderBookUpdate(state.asks, action.data.asks);
-            const mergedBids = mergeOrderBookUpdate(state.asks, action.data.asks);
+            const mergedBids = mergeOrderBookUpdate(state.bids, action.data.bids);
             return { ...state, asks: mergedAsks, bids: mergedBids };
         }
         case TradePairActionTypes.CLEAR_ORDER_BOOK:
