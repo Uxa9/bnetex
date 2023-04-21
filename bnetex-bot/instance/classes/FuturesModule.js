@@ -39,11 +39,7 @@ module.exports = class FuturesModule{
 
             let actualPosition = await this.PositionsModule.getActualPositions();
 
-            if(actualPosition){
-                console.log({actualPosition})
-            }
-
-            console.log(marketBuyMock)
+            
 
             return marketBuyMock;
 
@@ -61,7 +57,7 @@ module.exports = class FuturesModule{
 
             if(actualPosition){
 
-                console.log(actualPosition.POSITION_ENTERs);
+            
 
                 let totalBuyPrice = [...actualPosition.POSITION_ENTERs, {close: marketBuy.avgPrice, volume: parseFloat(marketBuy.cumQuote)}].map(i => i.close * i.volume).reduce((prev, curr) => prev + curr, 0);
 
@@ -69,7 +65,7 @@ module.exports = class FuturesModule{
 
                 let avegarePrice = totalBuyPrice / totalActiveVolume;
                 
-                //console.log({totalBuyPrice, totalActiveVolume, avegarePrice, marketBuy})
+                
 
                 return [
                     {

@@ -1,89 +1,43 @@
 const matching = require("./matching");
 
 const matrix = [
+
+    // Index 21
+
+    // Index 22 
+
     {
-        index: 1,
+        index: 21,
         data: [
             { 
                 // 360
                 sigma: 2,
                 intervals: 518400,
-                variations: [1]
-            },
-            {
-                // 180
-                sigma: 2,
-                intervals: 259200,
-                variations: [1]
-            },
-            {
-                // 90
-                sigma: 2,
-                intervals: 129600,
-                variations: [1]
-            },
-            {
-                // 60
-                sigma: 2,
-                intervals: 86400,
-                variations: [1]
-            },
-            {
-                // 30
-                sigma: 2,
-                intervals: 43200,
-                variations: [1]
-            },
-            {
-                // 14
-                sigma: 2,
-                intervals: 20160,
-                variations: [1,2,3]
-            },
-            {
-                // 7
-                sigma: 2,
-                intervals: 10080,
                 variations: [2,3]
-            }
-        ]
-        
-    },
-
-    // Index 2
-
-    {
-        index: 2,
-        data: [
-            { 
-                // 360
-                sigma: 2,
-                intervals: 518400,
-                variations: [1]
             },
             {
                 // 180
                 sigma: 2,
                 intervals: 259200,
-                variations: [1]
+                variations: [4,5,6,7,8,9]
             },
             {
                 // 90
                 sigma: 2,
                 intervals: 129600,
-                variations: [1]
+                variations: [4,5,6,7,8,9]
             },
             {
                 // 60
                 sigma: 2,
                 intervals: 86400,
-                variations: [1]
+                variations: [4,5,6,7,8,9]
             },
             {
                 // 30
                 sigma: 2,
                 intervals: 43200,
-                variations: [1]
+                variations: [6,7,8,9]
             },
             {
                 // 14
@@ -95,118 +49,12 @@ const matrix = [
                 // 7
                 sigma: 2,
                 intervals: 10080,
-                variations: [1,2,3,4,5,6,7,8,9]
+                variations: [4,5,6,7,8,9]
             }
         ]
         
     },
-
-
-    // Index 3
-
-    {
-        index: 3,
-        data: [
-            { 
-                // 360
-                sigma: 2,
-                intervals: 518400,
-                variations: [1]
-            },
-            {
-                // 180
-                sigma: 2,
-                intervals: 259200,
-                variations: [1,2]
-            },
-            {
-                // 90
-                sigma: 2,
-                intervals: 129600,
-                variations: [1,2,3]
-            },
-            {
-                // 60
-                sigma: 2,
-                intervals: 86400,
-                variations: [1]
-            },
-            {
-                // 30
-                sigma: 2,
-                intervals: 43200,
-                variations: [2]
-            },
-            {
-                // 14
-                sigma: 2,
-                intervals: 20160,
-                variations: [1,2,3,4,5,6,7,8,9]
-            },
-            {
-                // 7
-                sigma: 2,
-                intervals: 10080,
-                variations: [1,2,3,4,5,6,7,8,9]
-            }
-        ]
-        
-    },
-
-
-    // Index 4
-
-    {
-        index: 4,
-        data: [
-            { 
-                // 360
-                sigma: 2,
-                intervals: 518400,
-                variations: [1]
-            },
-            {
-                // 180
-                sigma: 2,
-                intervals: 259200,
-                variations: [1,2]
-            },
-            {
-                // 90
-                sigma: 2,
-                intervals: 129600,
-                variations: [1,2,3]
-            },
-            {
-                // 60
-                sigma: 2,
-                intervals: 86400,
-                variations: [2]
-            },
-            {
-                // 30
-                sigma: 2,
-                intervals: 43200,
-                variations: [2,3,4,5,6,7,8,9]
-            },
-            {
-                // 14
-                sigma: 2,
-                intervals: 20160,
-                variations: [1,2,3,4,5,6,7,8,9]
-            },
-            {
-                // 7
-                sigma: 2,
-                intervals: 10080,
-                variations: [1,2,3,4,5,6,7,8,9]
-            }
-        ]
-        
-    },
-
-
-
+    
     // Index 22 
 
     {
@@ -252,7 +100,7 @@ const matrix = [
                 // 7
                 sigma: 2,
                 intervals: 10080,
-                variations: [4,5,6,7,8,9]
+                variations: [1,2,3]
             }
         ]
         
@@ -292,19 +140,19 @@ const matrix = [
                 // 30
                 sigma: 2,
                 intervals: 43200,
-                variations: [4,5,6,7,8,9]
+                variations: [1,2,3]
             },
             {
                 // 14
                 sigma: 2,
                 intervals: 20160,
-                variations: [4,5,6,7,8,9]
+                variations: [1,2,3,4,5,6,7,8,9]
             },
             {
                 // 7
                 sigma: 2,
                 intervals: 10080,
-                variations: [1,2,3]
+                variations: [1,2,3,4,5,6,7,8,9]
             }
         ]
         
@@ -345,13 +193,13 @@ const matrix = [
                 // 30
                 sigma: 2,
                 intervals: 43200,
-                variations: [4,5,6,7,8,9]
+                variations: [1,2,3]
             },
             {
                 // 14
                 sigma: 2,
                 intervals: 20160,
-                variations: [1,2,3]
+                variations: [1,2,3,4,5,6,7,8,9]
             },
             {
                 // 7
@@ -397,7 +245,7 @@ const matrix = [
                 // 30
                 sigma: 2,
                 intervals: 43200,
-                variations: [1,2,3]
+                variations: [4,5]
             },
             {
                 // 14
@@ -450,7 +298,7 @@ const matrix = [
                 // 30
                 sigma: 2,
                 intervals: 43200,
-                variations: [2,3,4,5]
+                variations: [1,2,3,4,5]
             },
             {
                 // 14
@@ -488,8 +336,9 @@ module.exports = (kline) => {
             if(kline[jelem.intervals] && kline[jelem.intervals][jelem.sigma]){
                 
                 
-                //console.log(element.index, jelem.variations, matching(kline[jelem.intervals][jelem.sigma]).index)
-                if(jelem.variations.includes(matching(kline[jelem.intervals][jelem.sigma]).index)){
+                //console.log()
+                // jelem.intervals, "/", jelem.sigma
+                if(jelem.variations.includes(matching(kline[jelem.intervals][jelem.sigma], {intervals: jelem.intervals, sigma: jelem.sigma}).index)){
                     matchingCount++;
                 }
 

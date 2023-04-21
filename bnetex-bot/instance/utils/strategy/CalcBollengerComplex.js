@@ -103,9 +103,9 @@ const CalcBollingerComplex = (rule, candlesticks, last = false) => {
 
     if(last){
       i = candlesticks.length-1;
-      //console.log({cclen: candlesticks.length})
+      
       candlesticks = [...[...candlesticks].slice(0, candlesticks.length - candlesToCalc.length), ...candlesToCalc];
-      //console.log({cclen2: candlesticks.length})
+      
     }
 
     for (let index = i; index < candlesticks.length; index++) {

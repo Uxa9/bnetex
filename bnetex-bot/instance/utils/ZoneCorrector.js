@@ -81,6 +81,29 @@ const zoneCorrector = (lastKline = [], log = false) => {
         }
 
 
+        if(zone == 3 && lastKline.backPattern.join() == [2,3,5].join() && lastKline.prevZone == 3){
+            
+            lastKline = {
+                ...lastKline,
+                backPattern: [2,4,5],
+                prevZone: 4
+            }
+        }
+
+
+        if(zone == 1 && lastKline.backPattern.join() == [0,2,3].join() && lastKline.prevZone == 3){
+            
+            lastKline = {
+                ...lastKline,
+                backPattern: [0,2,3],
+                prevZone: 2
+            }
+        }
+
+
+        
+
+
 
         if(zone == 4 && lastKline.backPattern.join() == [1,2,3].join() && lastKline.prevZone == 2){
             
@@ -103,7 +126,7 @@ const zoneCorrector = (lastKline = [], log = false) => {
         }
 
 
-        if(zone == 1 && lastKline.backPattern.join() == [2,3,4].join() && lastKline.prevZone == 1){
+        if(zone == 1 && lastKline.backPattern.join() == [2,3,4].join() && lastKline.prevZone == 3){
                         
             lastKline = {
                 ...lastKline,
@@ -111,6 +134,25 @@ const zoneCorrector = (lastKline = [], log = false) => {
                 prevZone: 2
             }            
         }
+
+        if(zone == 4 && lastKline.backPattern.join() == [0,1,2].join() && lastKline.prevZone == 2){
+                        
+            lastKline = {
+                ...lastKline,
+                backPattern: [1,2,3],
+                prevZone: 3
+            }            
+        }
+
+        if(zone == 4 && lastKline.backPattern.join() == [2,3,4].join() && lastKline.prevZone == 4){
+                        
+            lastKline = {
+                ...lastKline,
+                backPattern: [1,2,3],
+                prevZone: 3
+            }            
+        }
+
 
 
 

@@ -9,10 +9,15 @@
     "tradingTimeframes": ["1m"],
     "tgBotKey": "5642351090:AAEcNaA0oJgEW5u6cZrjdsgPTZDMZSWi47s",
     "tgGroupId": -861751435,
-    "simulate": false,
-    "startTime": 1678797000000,
+    "simulate": true,
+    "startTime": 1675296000000,
     "initTelgram": false,
     "serverPort": 3009,
-    "serverOnly": true
+    "serverOnly": false,
+    "database": {
+      "user" : "mysql",
+      "database": "exchange",
+      "password": "mysql"
+    }
 }
  

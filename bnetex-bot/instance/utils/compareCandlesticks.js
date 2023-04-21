@@ -6,8 +6,7 @@ const { getRulesMoreIntervals } = require("./BollZoneRules");
 // Сращиваем 1м и 15м
 module.exports = (c1m, c15m, onlylast = false) => {
   
-  //console.log(c15m.length)  
-
+ 
   let moreIntervals = getRulesMoreIntervals(1440);
 
   

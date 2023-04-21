@@ -38,7 +38,7 @@ module.exports = class TickerClassSimulate {
           
             simulateEventer.on('callNextCandle', async (e) => {
 
-              console.log('callNextCandle:', e.startTime)
+              //console.log('callNextCandle:', e.startTime)
 
                 if(this.index > 1) return;
 
@@ -51,11 +51,7 @@ module.exports = class TickerClassSimulate {
 
                 tick = this.klines[1]
 
-                // if(!tick){
-                //   console.log('e', e)
-                //   console.log('LEN: ',this.klines.length);                  
-                // }
-
+                
                 this.klines.shift();
 
                 

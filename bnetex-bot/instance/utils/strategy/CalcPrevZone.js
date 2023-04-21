@@ -11,16 +11,6 @@ module.exports.CalcPrevZone = (rule, candlesticks) => {
     for (let index = 0; (index < data.length && prevZone == undefined); index++) {
         const element = data[index];
         
-        // if(!element[rule.intervals] || !element[rule.intervals][rule.sigma]){
-
-
-        //     //console.log(`Проблема с индексом: ${index} | StartTime : ${element.startTime} | Ключи :  ${JSON.stringify(Object.keys(element))}`)
-
-        //     //console.log(`Проблема с индексом: ${index-1} | StartTime : ${data[index-1].startTime} | Ключи :  ${JSON.stringify(Object.keys(data[index-1]))}`)
-            
-        //     console.log({rule})
-        // }
-
         if(element[rule.intervals][rule.sigma].zone != currentZone){
             prevZone = element[rule.intervals][rule.sigma].zone;
         }
