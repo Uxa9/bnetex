@@ -93,11 +93,9 @@ module.exports = class PositionsModule {
     if (percentProfit < enougthProfit) return;
 
     // Checking condition to close position
-    let groupped = actualPosition.ACTIVE_GROUP.ACTIVE_GROUP_TRIGGERs.filter((i) => i.type == "CLOSE");
+    let groupped = groupByRules(actualPosition.ACTIVE_GROUP.ACTIVE_GROUP_TRIGGERs.filter((i) => i.type == "CLOSE"));
 
-    let patternCompare = StrategyRules(this.lastKline, groupped, false, true);
-    
-    
+    let patternCompare = StrategyRules(this.lastKline, groupped, true, true);
 
     let POSITION_ACTIVE = await this.exchangeAccount.getOpenPositions(this.pair, actualPosition);
 
@@ -201,7 +199,7 @@ module.exports = class PositionsModule {
     return position;
   }
 
-  async updatePosition(POSITION, marketBuy, ACTIVE_GROUP, enterStep, enterPrice, deposit){
+  async updatePosition(POSITION, marketBuy, ACTIVE_GROUP, enterStep, enterPrice, deposit, tradingVolume){
 
     // Получаем текущую позицию с биржи
     let binancePositions = await this.futures.futuresPositionRisk(marketBuy, this.pair);
@@ -222,7 +220,8 @@ module.exports = class PositionsModule {
       ACTIVEGROUPId: ACTIVE_GROUP,
       close: enterPrice,
       createdAt: moment(this.lastKline.startTime, 'x').toDate(),
-      unittimestamp: this.lastKline.startTime
+      unittimestamp: this.lastKline.startTime,
+      tradingVolume
     })
 
     
@@ -242,7 +241,7 @@ module.exports = class PositionsModule {
   }
 
 
-  async createPosition(margin, enterPrice, qty, ACTIVE_GROUP, deposit, unixtime, totalDeposit){
+  async createPosition(margin, enterPrice, qty, ACTIVE_GROUP, deposit, unixtime, totalDeposit, tradingVolume){
     
     let position = await db.models.Position.create({
       volumeUSDT: margin,
@@ -269,7 +268,8 @@ module.exports = class PositionsModule {
       ACTIVEGROUPId: ACTIVE_GROUP,
       close: enterPrice,
       createdAt: moment(this.lastKline.startTime, 'x').toDate(),
-      unittimestamp: this.lastKline.startTime
+      unittimestamp: this.lastKline.startTime,
+      tradingVolume
     })
 
   }
@@ -287,4 +287,20 @@ module.exports = class PositionsModule {
 
     return grouppedTriggers.filter((i) => i.length > 0);
   }
+};
+
+
+
+const groupByRules = (ACTIVE_GROUP_TRIGGERs) => {
+  let zoneRulesBB = getBBRulesIndexes();
+
+  let rules = zoneRulesBB.map((i) => getBBRuleByIddex(i));
+
+  let grouppedTriggers = rules.map((i) =>
+    ACTIVE_GROUP_TRIGGERs.filter(
+      (j) => j.sigma == i.sigma && j.intervals == i.intervals
+    )
+  );
+
+  return grouppedTriggers.filter((i) => i.length > 0);
 };

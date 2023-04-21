@@ -19,7 +19,7 @@ let calcOneGroupd = (triggers, intervalsData, log = false) => {
   
 
   log && console.log({triggers})
-  
+  log && console.log('TG LEN:', triggers.length)
   
   let signal = false;
   
@@ -27,7 +27,7 @@ let calcOneGroupd = (triggers, intervalsData, log = false) => {
     const element = triggers[index];
 
     
-    
+    log && console.log(intervalsData[element.intervals], intervalsData[element.intervals][element.sigma])
     if(intervalsData[element.intervals] && intervalsData[element.intervals][element.sigma]){
       
       let actual = intervalsData[element.intervals][element.sigma]

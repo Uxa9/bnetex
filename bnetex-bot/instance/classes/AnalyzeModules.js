@@ -111,7 +111,7 @@ module.exports = class AnalyzeModule {
     //         }
     //     }
     // });
-
+    //console.log({MICRO_WEEK_SITUATION_INDEX, MACRO_WEEK_SITUATION_INDEX})
     if (!MICRO_WEEK_SITUATION_INDEX || !MACRO_WEEK_SITUATION_INDEX)
       return { CODE: "ACTUAL" };
 
@@ -130,7 +130,7 @@ module.exports = class AnalyzeModule {
           i.MICRO_WEEK_SITUATION_INDEX == MICRO_WEEK_SITUATION_INDEX
       ).sort((a, b) => a.tradingVolume - b.tradingVolume);
     }
-
+    
     if (WeekMatchingFiltered.length == 0) return { CODE: "ACTUAL" };
 
     // Если никакая группировка не выбрана, или найденная группировка больше по объему, или позиций нету - переключаемся
@@ -147,7 +147,7 @@ module.exports = class AnalyzeModule {
         this.ActiveWeekMatching.LOGICAL_GROUP
       );
     }
-
+    
     // Надо определить, с каким паттерном дальше работаем
     // Для этого надо проверить каждый паттерн на возможность активации
     // Определили больший по объему паттерн активный
@@ -163,9 +163,17 @@ module.exports = class AnalyzeModule {
         this.ActiveWeekMatching.LOGICAL_GROUP,
         true
       );
-
+        
     // Temp variable to hold local groups patterns
     let patternsTempIds = [];
+
+    // patternsGroupInLogicalGroup.map(i => {
+    //   console.log({
+    //     id: i.id,
+    //     WORKING_GROUP: i.WORKING_GROUP,        
+    //   })
+    //   console.log(i.PATTERN_TRIGGERs)
+    // })
 
     // Loop every pattern for activate
     for (let index = 0; index < patternsGroupInLogicalGroup.length; index++) {
@@ -174,12 +182,12 @@ module.exports = class AnalyzeModule {
       let ActivateTriggers = groupByRules(
         element.PATTERN_TRIGGERs.filter((i) => i.type == "ACTIVATION")
       );
-
+      
       let patternCompare = StrategyRules(
         this.marketData,
         ActivateTriggers,
         true,
-        this.ma
+        element.id == 1016
       );
 
       if (patternCompare || element.status) patternsTempIds.push(element);
@@ -209,7 +217,7 @@ module.exports = class AnalyzeModule {
         (a, b) => a.PERCENT_OF_DEPOSIT - b.PERCENT_OF_DEPOSIT
       )[0];
     }
-
+    
     this.ActivePatternsInWorkingGroup =
       await this._getPatternGroupsByWorkinglGroup(
         maxPatternByVolume.WORKING_GROUP,

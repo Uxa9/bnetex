@@ -14,6 +14,9 @@ module.exports = function(sequelize, DataTypes) {
         },
         unittimestamp: {
             type: DataTypes.STRING
-        } 
+        },
+        tradingVolume: {
+            type: DataTypes.DOUBLE
+        }
     }, )
 }

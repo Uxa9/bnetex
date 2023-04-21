@@ -97,7 +97,7 @@ module.exports = class InstanceClass {
         
 
         let ANALYZE_ACTIONS = ['AVERAGE_BY_NEW_CONTIDION', 'CREATE_NEW_POSITION'];
-
+        console.log(decideResult.code);
         
 
         if(ANALYZE_ACTIONS.includes(decideResult.code)){
