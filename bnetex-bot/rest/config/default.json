@@ -1,0 +1,19 @@
+{
+    "exchanges" : {
+        "BINANCE" : {
+            "PAIRS" : ["BTCUSDT", "ETHUSDT", "XRPUSDT", "MATICUSDT", "SOLUSDT"],
+            "APIKEY" : "123",
+            "APISECRET": "321"
+        },
+        "BYBIT" : {
+            "PAIRS" : ["BTCUSDT", "ETHUSDT", "XRPUSDT", "MATICUSDT", "SOLUSDT"],
+            "APIKEY" : "oItM5TKhqFDi5AhxJE",
+            "APISECRET": "vOv2SVvwzl6mllijWr6WoflBiAM1CBpMfqTv"
+        },
+        "GATEIO" : {
+            "PAIRS" : ["BTC_USDT", "ETH_USDT", "XRP_USDT", "MATIC_USDT", "SOL_USDT"],
+            "APIKEY" : "9ae5be5517e5f6b1408ee65caf34a3e7",
+            "APISECRET" : "b0f0b65ca6824954dbb3426bbcaf0d36aede55f13175f5bb2583802c1d63106e"
+        }
+    }
+}

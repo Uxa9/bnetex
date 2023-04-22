@@ -1,0 +1,228 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "BNETEX ALGO API",
+    "version": "1.0.0",
+    "description": ""
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3800/"
+    }
+  ],
+  "paths": {
+    "/patterns/listBySymbol": {
+      "get": {
+        "tags": [
+          "Patterns"
+        ],
+        "summary": "Get List Of Patterns",
+        "description": "",
+        "parameters": [
+          {
+            "name": "symbol",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Patterns",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatternResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatternResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/patterns/listByWorkingGroup": {
+      "get": {
+        "tags": [
+          "Patterns"
+        ],
+        "summary": "Get List Of Patterns By Working Group",
+        "description": "",
+        "parameters": [
+          {
+            "name": "symbol",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "WORKING_GROUP",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Patterns",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatternResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatternResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/patterns/listByLogicalGroup": {
+      "get": {
+        "tags": [
+          "Patterns"
+        ],
+        "summary": "Get List Of Patterns By Logical Group",
+        "description": "",
+        "parameters": [
+          {
+            "name": "symbol",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "LOGICAL_GROUP",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Patterns",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatternResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatternResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/patterns/getLogicalGroups": {
+      "get": {
+        "tags": [
+          "Patterns"
+        ],
+        "summary": "Get List of Logical Groups",
+        "description": "",
+        "parameters": [
+          {
+            "name": "symbol",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Logical Groups"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PatternResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "example": "boolean"
+              }
+            }
+          },
+          "LOGICAL_GROUP": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "example": "string"
+              }
+            }
+          },
+          "WORKING_GROUP": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "example": "string"
+              }
+            }
+          },
+          "PART_OF_VOLUME": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "example": "number"
+              },
+              "format": {
+                "type": "string",
+                "example": "float"
+              }
+            }
+          },
+          "PERCENT_OF_DEPOSIT": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "example": "number"
+              },
+              "format": {
+                "type": "string",
+                "example": "float"
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "PatternResponse"
+        }
+      }
+    }
+  }
+}

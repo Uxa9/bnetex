@@ -7,3 +7,4 @@ bnetex-server/node_modules
 bnetex-new/node_modules
 *.zip
 node_modules/*
+bnetex-bot/rest/node_modules/*

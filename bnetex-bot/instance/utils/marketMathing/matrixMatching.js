@@ -88,7 +88,7 @@ const matrix = [
                 // 30
                 sigma: 2,
                 intervals: 43200,
-                variations: [4,5,6,7,8,9]
+                variations: [6,7,8,9]
             },
             {
                 // 14
@@ -140,13 +140,13 @@ const matrix = [
                 // 30
                 sigma: 2,
                 intervals: 43200,
-                variations: [1,2,3]
+                variations: [6,7,8,9]
             },
             {
                 // 14
                 sigma: 2,
                 intervals: 20160,
-                variations: [1,2,3,4,5,6,7,8,9]
+                variations: [1,2,3]
             },
             {
                 // 7
