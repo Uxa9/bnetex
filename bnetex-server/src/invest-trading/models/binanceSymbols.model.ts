@@ -1,5 +1,6 @@
 import {Column, DataType, ForeignKey, HasMany, HasOne, Model, Table} from "sequelize-typescript";
 import { PriceFilter } from "./priceFilter.model";
+import { LotFilter } from "./lotFIlter.model";
 
 interface BinanceSymbolsCreationAttrs {
     symbol : string,
@@ -37,5 +38,8 @@ export class BinanceSymbols extends Model<BinanceSymbols, BinanceSymbolsCreation
 
     @HasOne(() => PriceFilter)
     priceFilter: PriceFilter;
+
+    @HasOne(() => LotFilter)
+    lotFilter: LotFilter;
 
 }

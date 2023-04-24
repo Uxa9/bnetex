@@ -41,4 +41,9 @@ export interface KLine {
 
 export type HistoryPeriod = 1 | 3 | 6;
 
+export interface HistoryRangeSpots {
+    from: number;
+    to: number;
+}
+
 export type PeriodScope = Pick<PeriodParams, 'from' | 'to'>

@@ -2,12 +2,17 @@ import { BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "seque
 import { Role } from "../roles/roles.model";
 import { User } from "../users/users.model";
 
+interface UserRolesCreationAttrs {
+    roleId : number,
+    userId : number
+}
+
 @Table({
     tableName : 'user_roles',
     createdAt : false,
     updatedAt : false
 })
-export class UserRoles extends Model<UserRoles> {
+export class UserRoles extends Model<UserRoles, UserRolesCreationAttrs> {
 
     @Column({
         type          : DataType.INTEGER,

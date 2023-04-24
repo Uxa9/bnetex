@@ -28,6 +28,7 @@ import { Network } from "./wallet/models/network.model";
 import { Currency } from "./wallet/models/currency.model";
 import { BinanceSymbols } from "./invest-trading/models/binanceSymbols.model";
 import { PriceFilter } from "./invest-trading/models/priceFilter.model";
+import { LotFilter } from "./invest-trading/models/lotFIlter.model";
 
 
 @Module({
@@ -57,7 +58,8 @@ import { PriceFilter } from "./invest-trading/models/priceFilter.model";
                 Currency,
                 WalletNetwork,
                 BinanceSymbols,
-                PriceFilter
+                PriceFilter,
+                LotFilter
             ],
             autoLoadModels: true,
             logging: false

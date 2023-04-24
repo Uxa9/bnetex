@@ -38,9 +38,13 @@ export const getHistoricalData = (period: number, amount: number) => {
     return (dispatch: Dispatch<RoePnlAction>) => {
         dispatch({ type: RoePnlActionTypes.SEND_REQUEST});
 
+        const to = new Date().valueOf();
+        const from = new Date().setMonth(new Date().getMonth() - period);
+
         return api
             .post<SuccessfulRoePnlRequestData>('/positions/getHistData', {
-                period,
+                to,
+                from,
                 amount,
             })
             .then((res) => {

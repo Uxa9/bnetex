@@ -5,11 +5,12 @@ import { InvestTradingController } from './invest-trading.controller';
 import { InvestTradingService } from './invest-trading.service';
 import { BinanceSymbols } from './models/binanceSymbols.model';
 import { PriceFilter } from './models/priceFilter.model';
+import { LotFilter } from './models/lotFIlter.model';
 
 @Module({
     imports: [
         UsersModule,
-        SequelizeModule.forFeature([BinanceSymbols, PriceFilter]),
+        SequelizeModule.forFeature([BinanceSymbols, PriceFilter, LotFilter]),
     ],
     controllers: [InvestTradingController],
     providers: [InvestTradingService],

@@ -7,6 +7,7 @@ import { getExchangeServerTime, getSymbols, getKlines, checkInterval } from './s
 import { subscribeOnStream, unsubscribeFromStream } from './streaming';
 import { TVInterval, forbiddenMarkResolutions, HistoryPeriod } from './types';
 import { separateKlineRequestInterval } from './utils';
+import { EventEmitter } from 'events';
 
 const configurationData = {
     supports_marks: true,
@@ -17,12 +18,15 @@ const configurationData = {
     ],
 };
 
+
+
 export default {
     // get a configuration of your datafeed (e.g. supported resolutions, exchanges and so on)
     onReady: (callback: any) => {
         setTimeout(() => callback(configurationData)); // callback must be called asynchronously.
     },
 
+    
     // retrieve information about a specific symbol (exchange, price scale, full symbol etc.)
     // ResolveCallback
     resolveSymbol: (symbolName: string, onResolve: any, onError: (reason: string) => void) => {
@@ -142,8 +146,15 @@ export default {
         const lsHistoryPeriod = Number(localStorage.getItem('history')) as HistoryPeriod;
         const isResolutionForbidden = !!forbiddenMarkResolutions.find(it => it === resolution);
 
-        if (!lsHistoryPeriod || isResolutionForbidden) return onDataCallback([]);
-
-        getTVData(lsHistoryPeriod).then(data => onDataCallback(data));
+        if (isResolutionForbidden) return onDataCallback([]);
+        console.log(_from);
+        console.log(_to);
+        
+        getTVData({
+            from: _from * 1000,
+            to: _from * 1000 + 250000000 // zaebis
+        }).then(data => {            
+            onDataCallback(data);
+        });
     },
 };

@@ -51,7 +51,7 @@ export class InvestTradingController {
 
     @Get("test")
     test() {
-        // return this.investTradingService.getBinanceSymbol();
+        return this.investTradingService.parseBinanceSymbols();
         // return this.investTradingService.test();
     }
 }
