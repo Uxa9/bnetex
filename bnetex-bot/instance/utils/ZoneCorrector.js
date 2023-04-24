@@ -153,6 +153,34 @@ const zoneCorrector = (lastKline = [], log = false) => {
             }            
         }
 
+        if(zone == 1 && lastKline.backPattern.join() == [1,3,4].join() && lastKline.prevZone == 1){
+                        
+            lastKline = {
+                ...lastKline,
+                backPattern: [2,3,4],
+                prevZone: 2
+            }            
+        }
+
+
+        if(zone == 2 && lastKline.backPattern.join() == [2,3,4].join() && lastKline.prevZone == 2){
+                        
+            lastKline = {
+                ...lastKline,
+                backPattern: [1,3,4],
+                prevZone: 2
+            }            
+        }
+
+
+        if(zone == 3 && lastKline.backPattern.join() == [2,4,5].join() && lastKline.prevZone == 5){
+                        
+            lastKline = {
+                ...lastKline,
+                backPattern: [2,4,5],
+                prevZone: 4
+            }            
+        }
 
 
 

@@ -32,6 +32,8 @@ export class PositionsService {
                 })
                 .subscribe((res) => {
                     resolve(res.data.response);
+                }, err => {
+                    console.log(err)
                 }),
         );
 
@@ -118,39 +120,29 @@ export class PositionsService {
             const to = new Date().valueOf();
             const from = new Date().setMonth(new Date().getMonth() - period)
 
-            const positions: any[] = await new Promise((resolve, rej) => this.httpService.post('http://localhost:3009/front/history', {
-                from,
-                to
-            }).subscribe((res) => {
-                resolve(res.data.response);
-            }))
-    
-            let res = [];
-    
-            positions.map((position) => {
-                const positionEnters = position.POSITION_ENTERs;
-    
-                const lever = 10;
-    
-                const enters = positionEnters.map((enter) => {
-                    return {
-                        date: new Date(enter.createdAt),
-                        action: 'purchase',
-                        amount: enter.volumeUSDT * lever,
-                        price: enter.close,
-                        PNL: 0,
-                    };
-                });
-    
-                res = [...res, ...enters];
-    
-                res.push({
-                    date: new Date(position.closeTime),
-                    action: position.positionType === 'LONG' ? 'sale' : 'purchase',
-                    amount: position.volumeUSDT * lever,
-                    price: position.closePrice,
-                    PNL: position.sumProfit,
-                });
+        const positions: any[] = await new Promise((resolve, rej) => this.httpService.post('http://localhost:3009/front/history', {
+            periodMonth: period
+        }).subscribe((res) => {
+            resolve(res.data.response);
+        }, err => {
+            console.log(err)
+        }))
+
+        let res = [];
+
+        positions.map((position) => {
+            const positionEnters = position.POSITION_ENTERs;
+
+            const lever = 10;
+
+            const enters = positionEnters.map((enter) => {
+                return {
+                    date: new Date(enter.createdAt),
+                    action: 'purchase',
+                    amount: enter.volumeUSDT * lever,
+                    price: enter.close,
+                    PNL: 0,
+                };
             });
     
             return res;

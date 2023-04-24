@@ -1,37 +1,62 @@
 const { pnlTIcker$ } = require('../events/events');
 
+const { debounceTime, debounce, of, interval} = require('rxjs')
 
 const getCurrentPositionMySQL = require('../../instance/db/sequelize/actions/positions/getCurrentPositionMySQL');
 
 
 var users = [];
 
+var lastRoeInfo = {};
+
 
 module.exports = (server)  => {
+    
 
 
     const io = require('socket.io')(server);
 
-    pnlTIcker$.subscribe(async e => {
+    interval(1000).subscribe(_ => {
+
+        Object.keys(lastRoeInfo).map(i => {
+            let info = lastRoeInfo[i];
+            
+            if(info){
+                io.emit("ROE_UPDATE", info);
+            }else{
+                io.emit("ROE_UPDATE", null);
+            }
+        })
+        
+    })
+
+    pnlTIcker$.pipe().subscribe(async e => {
     
+        
 
         let currentPosition = await getCurrentPositionMySQL({status: true, pair: e.symbol});
+        
 
-        if(!currentPosition) return;
+        if(!currentPosition){
+            lastRoeInfo[e.symbol] = null;
+            return;
+        }
 
         let close = parseFloat(e.close).toFixed(2)
 
         let averagePrice = currentPosition.averagePrice;
+        
+        
 
         let percent = (close * 100 / averagePrice) - 100;
 
 
-        io.emit("ROE_UPDATE", {
+        lastRoeInfo[e.symbol] = {
             pair: e.symbol,
             roe: percent * 10,
             markPrice: close,
             position: currentPosition
-        });
+        }
 
 
     })

@@ -107,7 +107,7 @@ export class InvestSessionsService {
             let sessionStart = new Date(session.startSessionTime).getTime();
             
             this.httpService.get(`http://localhost:3009/front/activePositions/${sessionStart}`).subscribe((res) => resolve(res.data))
-        })
+        })        
         
         
 
@@ -115,8 +115,9 @@ export class InvestSessionsService {
 
         // Считаем объемы которые надо продать
         let volumeToClose = actualPositions.map(i => {
+            console.log({tradeBalance: session.tradeBalance, VA: i.volumeACTIVE, TD: i.totalDeposit})
             return {
-                volumeToMarketSellBuy: i.volumeACTIVE * session.tradeBalance / i.deposit,
+                volumeToMarketSellBuy: session.tradeBalance * i.volumeACTIVE / i.totalDeposit,
                 pair: i.pair,
                 type: i.positionType == 'LONG' ? 'SELL' : 'BUY'
             }
@@ -124,12 +125,33 @@ export class InvestSessionsService {
 
         
 
-        
+        let errorToClose = undefined;
         // Закрываем обьемы
         if(volumeToClose.length > 0){
-            await new Promise((resolve, reject) => {
-                this.httpService.post('http://localhost:3009/front/closeVolumeMarket', {volumeToClose, user: {email: user.email, tradeBalance: user.tradeBalance}}).subscribe((res) => resolve(res.data))
-            })
+            
+            try{
+                await new Promise((resolve, reject) => {
+                    this.httpService.post('http://localhost:3009/front/closeVolumeMarket', {volumeToClose, user: {email: user.email, tradeBalance: user.tradeBalance}}).subscribe((res) => resolve(res.data), err => {
+                        if(err?.response?.data?.detail){
+                            reject(err.response.data.detail)                    
+                        }else{
+                            reject('SERVER_ERROR')
+                        }
+                        
+                    })
+                })
+            }catch(error){
+                
+                throw new HttpException(
+                    {
+                        status: "ERROR",
+                        message: error
+                    },
+                    HttpStatus.BAD_REQUEST
+                );
+
+            }
+            
         }
         
 

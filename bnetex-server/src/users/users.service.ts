@@ -20,6 +20,7 @@ export class UsersService {
     constructor(@InjectModel(User) private userRepository: typeof User,
         @InjectModel(UserRoles) private userRolesRepository: typeof UserRoles,
         private roleService: RolesService,
+        private jwtService: JwtService,
         @Inject(forwardRef(() => InvestSessionsService)) // чета хуита какая-то
         private investSessions: InvestSessionsService,
         private positionService: PositionsService) { }
@@ -148,6 +149,10 @@ export class UsersService {
             mainWallet: user.mainWallet,
             investWallet: user.investWallet
         }
+    }
+
+    verifyToken(token){
+        return this.jwtService.verify(token) 
     }
 
     async transferMoney(dto: TransferMoney) {

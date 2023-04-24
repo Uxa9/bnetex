@@ -8,7 +8,7 @@ import { FulfillRequest } from './dto/fulfill-request.dto';
 import { RequestTypes } from './request-types.model';
 import { Request } from './request.model';
 import { MailerService } from '@nestjs-modules/mailer';
-import { WalletService } from 'src/wallet/wallet.service';
+import { WalletService } from '../wallet/wallet.service';
 
 @Injectable()
 export class RequestService {

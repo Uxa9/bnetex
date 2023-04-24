@@ -9,6 +9,7 @@ const FuturesModule = require("./FuturesModule");
 const moment = require('moment');
 const binance = require("../utils/binance");
 const { Op } = require("sequelize");
+const { sendMessageToMainChanel } = require("../utils/telegram/tg");
 
 module.exports = class PositionsModule {
   constructor(pair) {
@@ -28,6 +29,43 @@ module.exports = class PositionsModule {
 
 
   async getExchangePosition(){
+
+  }
+
+  async closeFrontPosition(POSITIONId, qty, user, marketSell, OPENED_POSITION){
+      
+      let position = await db.models.Position.findByPk(POSITIONId);
+
+      console.log(marketSell)
+
+      if(!user.tradeBalance || user.tradeBalance == 0){
+        sendMessageToMainChanel(`При остановке алгоритма обнаружен пустой баланс пользователя ${user.email}`);
+      }
+
+      qty = parseFloat(qty);
+
+      if(position.volumeACTIVE == qty){
+        
+        let mockLastKline = {
+          close: parseFloat(marketSell.avgPrice),
+          endTime: marketSell.updateTime
+        }
+        this.updateLastKline(mockLastKline);
+        
+        return await this.closePositions(true, OPENED_POSITION);
+
+      }else{
+        
+          return await db.models.Position.update({volumeACTIVE: position.volumeACTIVE - qty, totalDeposit: position.totalDeposit - user.tradeBalance},  {
+            where: {
+              id: position.id          
+            }
+          })
+          
+      }
+
+
+      
 
   }
   
@@ -64,7 +102,7 @@ module.exports = class PositionsModule {
    * Function tries to close actual positions
    * @returns
    */
-  async closePositions() {
+  async closePositions(nonPattern = false, OPENED_POSITION = false) {
 
     
     // Checking if there are actual positions
@@ -90,18 +128,30 @@ module.exports = class PositionsModule {
     
 
     // Break current method if percent profit is not enougth
-    if (percentProfit < enougthProfit) return;
+    if (percentProfit < enougthProfit && !nonPattern) return;
 
     // Checking condition to close position
     let groupped = groupByRules(actualPosition.ACTIVE_GROUP.ACTIVE_GROUP_TRIGGERs.filter((i) => i.type == "CLOSE"));
 
-    let patternCompare = StrategyRules(this.lastKline, groupped, true, true);
+    let patternCompare = false;
 
-    let POSITION_ACTIVE = await this.exchangeAccount.getOpenPositions(this.pair, actualPosition);
+    if(!nonPattern){
+
+      patternCompare = StrategyRules(this.lastKline, groupped, true, true);
+
+    }
+    let POSITION_ACTIVE = undefined;
+    if(!OPENED_POSITION){
+      POSITION_ACTIVE = await this.exchangeAccount.getOpenPositions(this.pair, actualPosition);
+    }else{
+      POSITION_ACTIVE = OPENED_POSITION;
+    }
+    
 
     // Volume of buy 
     let buyVolume = actualPosition.averagePrice * parseFloat(POSITION_ACTIVE.positionAmt)
     let sellVolume = this.actualPrice * parseFloat(POSITION_ACTIVE.positionAmt)
+    
         
     // Calculated Profit if positions will be closed now
     let profitVolume = sellVolume - buyVolume;
@@ -109,7 +159,7 @@ module.exports = class PositionsModule {
     //patternCompare = false;
 
     // If Theres is not conditions for close position - break method
-    if(!patternCompare) return null;
+    if(!patternCompare && !nonPattern) return null;
 
     // Params to set into positions in DB
     let mysqlPARAMS = {status: false, closeTime: moment(this.lastKline.endTime, 'x').toDate(), percentProfit, closePrice: parseFloat(this.lastKline.close), sumProfit: profitVolume}
@@ -117,10 +167,14 @@ module.exports = class PositionsModule {
     // Updating position in MYSQL
     await db.models.Position.update(mysqlPARAMS, {where: {id: actualPosition.id}})
 
-    // Close Postitons on Exhcnage
-    await this.futures.marketSell(actualPosition.volumeACTIVE);
+    
 
-    await this._deactivatePatterns();
+    if(!nonPattern){
+      // Close Postitons on Exhcnage
+      let marketSell = await this.futures.marketSell(actualPosition.volumeACTIVE);
+
+      await this._deactivatePatterns();
+    }
     
 
     return null;

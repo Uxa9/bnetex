@@ -39,25 +39,27 @@ const InvestorView = () => {
     const tradeSession = io(`https://socket.bnetex.com?id=${getUserInfo().userId}`);
     // const tradeSession = io(`http://localhost:5001?id=${getUserInfo().userId}`);
 
-    tradeSession.on('connect', () => {
-        console.log('connected');
-    });
+    // tradeSession.on('connect', () => {
+    //     console.log('connected');
+    // });
 
-    tradeSession.on('currentPosition', (newMessage: any) => {
-        console.log(newMessage);
-    });
+    // tradeSession.on('currentPosition', (newMessage: any) => {
+    //     console.log(newMessage);
+    // });
 
     const socket = useContext(WebsocketContext);
     const [userTradeInfo, setUserTradeInfo] = useState<tradeSessionInfoInterface>();
 
     useEffect(() => {
+
+        const tradeSession = io(`http://localhost:5001?id=${getUserInfo().userId}`);
+
         socket.on('connect', () => {
             console.log('Connected!');
         });
 
         socket.on('currentPosition', (tradeInfo: any) => {
-            console.log('onMessage event received!');
-            console.log(tradeInfo);
+            console.log('onMessage event received!');            
             setUserTradeInfo(tradeInfo);
         });
 

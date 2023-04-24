@@ -40,7 +40,7 @@ module.exports = class TickerClassSimulate {
 
               //console.log('callNextCandle:', e.startTime)
 
-                if(this.index > 1) return;
+                
 
                 let tick = {};
                 

@@ -1,4 +1,5 @@
 const { Observable } = require("rxjs");
+var WebSocket = require('ws')
 
 const binance = require("../utils/binance");
 const formatCandlesTick = require("../utils/formatCandlesTick");
@@ -6,6 +7,7 @@ const formatCandlesTick = require("../utils/formatCandlesTick");
 const moment = require("moment");
 const tickerHelper = require("../utils/tickerHelper");
 const { pnlTIcker$ } = require("../../server/events/events");
+const LocalStore = require("../utils/LocalStore");
 
 // В этом классе порисходит подписка на тики бинанс, происходит просчет ожиданий какие таймфреймы закроются следущие
 module.exports = class TickerClass {
@@ -35,27 +37,40 @@ module.exports = class TickerClass {
         this.nextKlinTime
       );
 
-      binance.futuresSubscribe(`${this.pair.toLowerCase()}@kline_1h`, 
-        async (candlesticks) => {  
+      // binance.futuresSubscribe(`${this.pair.toLowerCase()}@kline_1h`, 
+      //   async (candlesticks) => {  
           
           
 
-          let tick = formatCandlesTick(candlesticks);
+      //     let tick = formatCandlesTick(candlesticks);
 
-          pnlTIcker$.next(tick);
+      //     pnlTIcker$.next(tick);
           
-          if (tick.isFinal) {            
-            subject.next(tick);
-          }
-        }
-      );
+      //     LocalStore.setStoreValue(`${this.pair.toLowerCase()}__LASTPRICE`, tick.close);
+          
+      //     if (tick.isFinal) {            
+      //       subject.next(tick);
+      //     }
+      //   }
+      // );
 
-      this.timeframes.map((interval) => {
-        binance.futuresSubscribe(`${this.pair.toLowerCase()}@kline_${interval.toLowerCase()}`,          
+        //binance.futuresAggTradeStream( this.pair.toUpperCase(), console.log );
+        
+        var tradeStream = new WebSocket(`wss://fstream.binance.com/ws/${this.pair.toLowerCase()}@aggTrade`);        
+
+        tradeStream.on('message', (message) => {
+          let response = JSON.parse(message);          
+          let close = parseFloat(response['p'])
+          pnlTIcker$.next({close, symbol: this.pair.toUpperCase()});
+        })
+      
+        binance.futuresSubscribe(`${this.pair.toLowerCase()}@kline_1m`,          
           
           async (candlesticks) => {
+            
             let tick = formatCandlesTick(candlesticks);
-
+            
+            
             
 
             if (tick.isFinal) {
@@ -79,7 +94,7 @@ module.exports = class TickerClass {
             }
           }
         );
-      });
+      
     });
     return this.nextIntervalsData$;
   }

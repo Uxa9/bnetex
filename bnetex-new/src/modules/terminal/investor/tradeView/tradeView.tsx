@@ -13,12 +13,15 @@ import { startInvestTrading, stopInvestTrading } from 'services/investTrading';
 import { getUser } from 'services/user';
 import { getWallets } from 'store/action-creators/wallet';
 import styles from './tradeView.module.scss';
+import { useToast } from 'lib/hooks/useToast';
 
 interface TradeViewData {
     amount: number;
 }
 
 const TradeView = () => {
+
+    const { bakeToast } = useToast();
 
     const { open: openStartAlgorythmModal } = useModal(StartAlgorythmModal);
     const { open: openStopAlgorythmModal } = useModal(StopAlgorythmModal);
@@ -57,10 +60,17 @@ const TradeView = () => {
     };
 
     const stopInvestAlgorythm = async () => {
-        await stopInvestTrading();
-        setIsAlgorythmActive(false);
-        setOperationalBalance(0);
-    };
+
+        try{
+            await stopInvestTrading();
+            setIsAlgorythmActive(false);
+            setOperationalBalance(0);
+        }catch(err: any){            
+            bakeToast.error(err.response?.data.message);
+        }
+        
+        
+    }; 
 
     const {
         register,
