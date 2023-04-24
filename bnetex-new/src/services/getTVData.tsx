@@ -1,12 +1,12 @@
 import useApi from 'lib/hooks/useApi';
-import { HistoryPeriod } from 'modules/TradingView/api/types';
+import { HistoryRangeSpots } from 'modules/TradingView/api/types';
 
 const { api } = useApi();
 
-const getTVData = async (historyPeriod: HistoryPeriod) => {
+const getTVData = async (historyRangeSpots: HistoryRangeSpots) => {
     return await api
         .post('/positions/getTVData',{
-            period: historyPeriod,
+            ...historyRangeSpots
         })
         .then((response) =>  response.data);
 };

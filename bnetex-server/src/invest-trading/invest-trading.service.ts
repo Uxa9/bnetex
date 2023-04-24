@@ -6,6 +6,7 @@ import { BinanceSymbols } from './models/binanceSymbols.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { PriceFilter } from './models/priceFilter.model';
 import { Op } from 'sequelize';
+import { LotFilter } from './models/lotFIlter.model';
 
 @Injectable()
 export class InvestTradingService {
@@ -13,6 +14,7 @@ export class InvestTradingService {
     constructor (
         @InjectModel(BinanceSymbols) private binanceSymbolsRepository: typeof BinanceSymbols,
         @InjectModel(PriceFilter) private priceFilterRepository: typeof PriceFilter,
+        @InjectModel(LotFilter) private lotFilterRepository: typeof LotFilter,
         private userService: UsersService,
     ) {}
 
@@ -212,13 +214,15 @@ export class InvestTradingService {
     }
 
     async parseBinanceSymbols() { 
-        const a = await axios.get('https://api.binance.com/api/v3/exchangeInfo');
+        const a = await axios.get('https://fapi.binance.com/fapi/v1/exchangeInfo');
 
         const { symbols } = a.data;
 
         symbols.map(async (item: any) => {
             
             const filters = item.filters.find(obj => obj.filterType === "PRICE_FILTER");
+
+            const lotFilter = item.filters.find(obj => obj.filterType === "LOT_SIZE");
             
             Promise.all([
                 this.binanceSymbolsRepository.create({
@@ -230,10 +234,18 @@ export class InvestTradingService {
                     maxPrice: filters.maxPrice,
                     minPrice: filters.minPrice,
                     tickSize: filters.tickSize
+                }),
+                this.lotFilterRepository.create({
+                    stepSize: lotFilter.stepSize,
+                    minQty: lotFilter.minQty,
+                    maxQty: lotFilter.maxQty
                 })
-            ]).then(async ([binanceSymbol, priceFilter]) => {
-
+            ]).then(async ([binanceSymbol, priceFilter, lotSize]) => {
                 priceFilter.update({
+                    binanceSymbolsId: binanceSymbol.id
+                });
+
+                lotSize.update({
                     binanceSymbolsId: binanceSymbol.id
                 });
             });
@@ -248,9 +260,10 @@ export class InvestTradingService {
                     [Op.like]: `%${params.filterString}%`
                 }
             },
-            include: [{
-                model: PriceFilter
-            }]
+            include: [
+                {model: PriceFilter},
+                {model: LotFilter}
+            ]
         });    
 
         return symbols.map(item => {
@@ -264,6 +277,11 @@ export class InvestTradingService {
                     maxPrice: item.priceFilter.maxPrice,
                     minPrice: item.priceFilter.minPrice,
                     tickSize: item.priceFilter.tickSize
+                },
+                lotFilter: {
+                    stepSize: item.lotFilter.stepSize,
+                    minQty: item.lotFilter.minQty,
+                    maxQty: item.lotFilter.maxQty
                 }
             }
         })

@@ -12,29 +12,42 @@ import { Op } from 'sequelize';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { InvestSessionsService } from '../invest-sessions/invest-sessions.service';
 import { PositionsService } from '../positions/positions.service';
+import { UserRoles } from 'src/roles/user-roles.model';
 
 @Injectable()
 export class UsersService {
 
     constructor(@InjectModel(User) private userRepository: typeof User,
+        @InjectModel(UserRoles) private userRolesRepository: typeof UserRoles,
         private roleService: RolesService,
         @Inject(forwardRef(() => InvestSessionsService)) // чета хуита какая-то
         private investSessions: InvestSessionsService,
         private positionService: PositionsService) { }
 
     async createUser(dto: CreateUserDto) {
-        const user = await this.userRepository.create(dto);
-        const role = await this.roleService.getRoleByValue('investor');
+        try {
+            const role = await this.roleService.getRoleByValue('investor');
+            if (!role) throw HttpStatus.INTERNAL_SERVER_ERROR;
+            
+            const user = await this.userRepository.create(dto);
+    
+            // user.$set('roles', [role.id])
+            //     .then(() => {
+            //         user.roles = [role];
+            //     });
 
-        user.$set('roles', [role.id])
-            .then(() => {
-                user.roles = [role];
-            });
-
-        return {
-            status: "SUCCESS",
-            message: "USER_CREATED"
-        };
+            await this.userRolesRepository.create({
+                userId: user.id,
+                roleId: role.id
+            })
+    
+            return {
+                status: "SUCCESS",
+                message: "USER_CREATED"
+            };
+        } catch (error) {
+            throw HttpStatus.INTERNAL_SERVER_ERROR;
+        }
     }
 
     async getAllUsers() {

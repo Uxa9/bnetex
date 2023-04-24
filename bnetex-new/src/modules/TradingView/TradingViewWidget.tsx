@@ -97,12 +97,25 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
         // навешиваем слушаетель события на смену resolution
         // если выбран 1d или 3d - очистить маркеры
         _widget?.onChartReady(() => {
+
+            let visibleRange = _widget.activeChart().getVisibleRange();
+            let intervalLength = visibleRange.to - visibleRange.from;
+
             _widget.activeChart().onIntervalChanged().subscribe(null,
                 (interval) => {
                     const isResolutionForbidden = !!forbiddenMarkResolutions.find(it => it === interval);
 
                     if (isResolutionForbidden) _widget.activeChart().clearMarks();
                 });
+            
+            _widget.activeChart().onVisibleRangeChanged().subscribe(null, 
+                (interval) => {
+                    if (Math.abs(visibleRange.from - interval.from) > intervalLength / 2) {
+                        _widget.activeChart().clearMarks();
+                        _widget.activeChart().refreshMarks();
+                    }
+                }
+            );
         });
 
         setTvWidget(_widget);

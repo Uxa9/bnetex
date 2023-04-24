@@ -19,8 +19,7 @@ var express = require("express"),
 
 
   router.use('/history', async (req,res) => {
-    console.log(req)
-
+    console.log(req.requestParams);
     if(!req.requestParams.from || !req.requestParams.to){
         res.status(400);
         res.json({error: true, detail: 'from & to is required parameters'})

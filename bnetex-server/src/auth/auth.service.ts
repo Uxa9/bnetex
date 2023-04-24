@@ -15,6 +15,11 @@ import { GetActivationLinkTime } from './dto/get-activation-link-time.dto';
 import { TokenVerify } from './dto/token-verify.dto';
 import { EmailDto } from './dto/email.dto';
 import {ResetPasswordDto} from "./dto/reset-password.dto";
+import { InternalServerError } from 'src/exceptions/internalError.exception';
+import { log } from 'console';
+import exception from 'src/exceptions/exception';
+import authException from 'src/exceptions/auth/authExceptions';
+import userException from 'src/exceptions/user/userExceptions';
 
 @Injectable()
 export class AuthService {
@@ -24,62 +29,61 @@ export class AuthService {
         private readonly mailerService: MailerService) { }
 
     async login(userDto: LoginUserDto) {
-        const user = await this.validateUser(userDto);
+        try {
+            const user = await this.validateUser(userDto);
 
-        const token = await this.generateToken(user);
+            const token = await this.generateToken(user);
 
-        return {
-            status: "SUCCESS",
-            message: "EMAIL_CONFIRMED",
-            userId: user.id,
-            ...token
-        };
+            return {
+                status: "SUCCESS",
+                message: "EMAIL_CONFIRMED",
+                userId: user.id,
+                ...token
+            };
+        } catch (err) {
+            throw err;
+        }
     }
 
     async registration(userDto: CreateUserDto) {
-        const candidate = await this.userService.getUserByEmail(userDto.email);
+        try {
+            const candidate = await this.userService.getUserByEmail(userDto.email);
 
-        if (candidate) {
-            throw new HttpException({
-                status: "ERROR",
-                message: "USER_WITH_THIS_EMAIL_ALREADY_EXISTS"
-            },
-                HttpStatus.BAD_REQUEST
-            );
-        }
+            if (candidate) {
+                // Ну ваще надо подумать, что в такой ситуации делать
+                if (candidate.isActivated === false) throw HttpStatus.FOUND
 
-        let authCode = generateAuthCode();
-
-        await this.mailerService.sendMail({
-            to: userDto.email,
-            from: 'infobnetex@internet.ru',
-            subject: 'Код подтверждения',
-            template: 'signup',
-            context: {
-                code: authCode
+                throw HttpStatus.BAD_REQUEST;
             }
-        });
 
-        const hashPassword = await bcrypt.hash(userDto.password, 5);
-        await this.userService.createUser({ ...userDto, password: hashPassword, activationLink: authCode });
+            let authCode = generateAuthCode();
 
-        return {
-            status: "SUCCESS",
-            message: "REG_SUCCESS"
-        }
+            const hashPassword = await bcrypt.hash(userDto.password, 5);
+            await this.userService.createUser({ ...userDto, password: hashPassword, activationLink: authCode });
+
+            await this.mailerService.sendMail({
+                to: userDto.email,
+                from: 'infobnetex@internet.ru',
+                subject: 'Код подтверждения',
+                template: 'signup',
+                context: {
+                    code: authCode
+                }
+            });
+
+            return {
+                status: "SUCCESS",
+                message: "REG_SUCCESS"
+            }
+        } catch (error) {
+            authException(error);            
+        }        
     }
 
     async resendLink(dto: ResendActivationLink) {
         const user = await this.userService.getUserByEmail(dto.email);
 
-        if (!user) {
-            throw new HttpException({
-                status: "ERROR",
-                message: "USER_NOT_FOUND"
-            },
-                HttpStatus.NOT_FOUND
-            );
-        }
+        if (!user) throw new UserNotFoundException;
 
         let authCode = generateAuthCode();
 
@@ -202,30 +206,21 @@ export class AuthService {
     }
 
     private async validateUser(userDto: LoginUserDto) {
-        const user = await this.userService.getUserByEmail(userDto.email);
-
-        if (!user) {
-            throw new UserNotFoundException();
-        }
-
-        if (!user.isActivated) {
-
-            throw new UnauthorizedException({
-                status: "ERROR",
-                message: "USER_NOT_ACTIVATED"
-            });
-        }
-
-        const passwordEq = await bcrypt.compare(userDto.password, user.password);
-
-        if (user && passwordEq) {
+        try {
+            const user = await this.userService.getUserByEmail(userDto.email);
+    
+            if (!user) throw HttpStatus.BAD_REQUEST;
+    
+            if (!user.isActivated) throw HttpStatus.FORBIDDEN;
+    
+            const passwordEq = await bcrypt.compare(userDto.password, user.password);
+    
+            if (!passwordEq) throw HttpStatus.UNAUTHORIZED;
+    
             return user;
+        } catch (error) {
+            return userException(error);
         }
-
-        throw new UnauthorizedException({
-            status: "ERROR",
-            message: "WRONG_PASSWORD"
-        });
     }
 
     async dropPassword(dto: EmailDto) {

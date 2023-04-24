@@ -3,10 +3,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { AxiosError } from 'axios';
 // import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { catchError, firstValueFrom } from 'rxjs';
 import { Op } from 'sequelize';
-import { GetDataDto } from './dto/get-data.dto';
 // import { Position, PositionDocument } from './shemas/_position.schema';
 import { Position } from './position.model';
 import { PositionEnters } from './positionEnters.model';
@@ -21,132 +19,156 @@ export class PositionsService {
         private readonly httpService: HttpService,
     ) { }
 
-    async getPnlAndRoe(dto: GetDataDto) {
+    async getPnlAndRoe(dto: any) {
+
+        const from = dto.from || new Date().valueOf();
+        const to   = dto.to || new Date().valueOf();
+        
         const positions = await new Promise((resolve, rej) =>
             this.httpService
                 .post('http://localhost:3009/front/history', {
-                    periodMonth: dto.period,
+                    from,
+                    to
                 })
                 .subscribe((res) => {
                     resolve(res.data.response);
                 }),
         );
 
-        const result = await this.getHistoricalData(positions, dto.amount, dto.period);
+        const result = await this.getHistoricalData(positions, dto.amount, from, to);
 
         return result;
     }
 
-    async getHistoricalData(data: any, amount: number, period: number = 1) {
-        let dates = [];
-        let acc = 0;
-
-        const curDate = new Date();
-        let startDate = new Date(new Date().setMonth(curDate.getMonth() - period));
-
-        while (startDate.getMonth() !== curDate.getMonth() ||
-            startDate.getDate() !== curDate.getDate() ||
-            startDate.getFullYear() !== curDate.getFullYear()
-        ) {
-            dates.push(
-                // `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
-                startDate.toISOString().split('T')[0]
-            );
-
-            startDate = new Date(startDate.setDate(startDate.getDate() + 1));
-        }
-
-        let pnlValues = Array(dates.length).fill(0);
-        let roeValues = Array(dates.length).fill(0);
-
-        data.map((position) => {           
+    async getHistoricalData(data: any, amount: number, from: number, to: number) {      
+        try {
             
-            let customAmountPercent = amount / position.deposit;
-
-            const lever = 10;
-
-            const pnl = position.sumProfit * customAmountPercent * lever;     
-            const percent = position.sumProfit / position.deposit * 100 * lever;
-
-            const posCloseTime = new Date(position.closeTime);
-
-            // const index = dates.findIndex(item => item === `${posCloseTime.getFullYear()}-${posCloseTime.getMonth() + 1}-${posCloseTime.getDate()}`);
-            const index = dates.findIndex(item => item === posCloseTime.toISOString().split('T')[0]);
-
-            // if (index === 45) return
-            // if (index === 46) return
-            // if (index === 47) return
-            // if (index === 48) return
-
-            if (index !== -1) {            
-                acc += percent;
-
-                pnlValues[index] += pnl;
-                roeValues[index] = acc;
-            } else {
-                // бля, ну вообще странно
+            let dates = [];
+            let acc = 0;
+    
+            const curDate = new Date(to);
+            let startDate = new Date(from);
+    
+            while (startDate.getMonth() !== curDate.getMonth() ||
+                startDate.getDate() !== curDate.getDate() ||
+                startDate.getFullYear() !== curDate.getFullYear()
+            ) {
+                dates.push(
+                    startDate.toISOString().split('T')[0]
+                );
+    
+                startDate = new Date(startDate.setDate(startDate.getDate() + 1));
             }
 
-        });
+            let pnlValues = Array(dates.length).fill(0);
+            let roeValues = Array(dates.length).fill(0);
+            
+            data.map((position) => {           
+                // console.log(position);
+                
+                // let customAmountPercent = amount / position.deposit;
+    
+                // const lever = 10;
+    
+                // const pnl = position.sumProfit * customAmountPercent * lever;     
+                
+                const posCloseTime = new Date(position.closeTime);
+                const index = dates.findIndex(item => item === posCloseTime.toISOString().split('T')[0]);
 
-        roeValues.slice(1).map((item, index) => {   
-            if (item === 0) {
-                roeValues[index+1] = roeValues[index];
-            }
-        });
+                if (index !== -1) { 
+                    const rate = amount / position.totalDeposit;
+                    // console.log(rate);
+                    
+                    const percent = position.sumProfit / position.totalDeposit;
+                    acc += percent * 100;
+    
+                    // pnlValues[index] += pnl;
+                    // roeValues[index] = acc;
+                    // console.log(position.sumProfit * rate);
 
-        return {
-            dates,
-            pnlValues,
-            roeValues,
-        };
+                    pnlValues[index] += position.sumProfit * rate;
+                    roeValues[index] = acc;
+                } else {
+                    // бля, ну вообще странно
+                }
+            });
+    
+            roeValues.slice(1).map((item, index) => {   
+                if (item === 0) {
+                    roeValues[index+1] = roeValues[index];
+                }
+            });
+    
+            return {
+                dates,
+                pnlValues,
+                roeValues,
+            };
+        } catch (error) {
+            console.log('hist data');
+            
+            
+            console.log(error);
+            
+        }
     }
 
     async getHistoricalDataOrders(period: number) {
+        try {
+            const to = new Date().valueOf();
+            const from = new Date().setMonth(new Date().getMonth() - period)
 
-        const positions: any[] = await new Promise((resolve, rej) => this.httpService.post('http://localhost:3009/front/history', {
-            periodMonth: period
-        }).subscribe((res) => {
-            resolve(res.data.response);
-        }))
-
-        let res = [];
-
-        positions.map((position) => {
-            const positionEnters = position.POSITION_ENTERs;
-
-            const lever = 10;
-
-            const enters = positionEnters.map((enter) => {
-                return {
-                    date: new Date(enter.createdAt),
-                    action: 'purchase',
-                    amount: enter.volumeUSDT * lever,
-                    price: enter.close,
-                    PNL: 0,
-                };
+            const positions: any[] = await new Promise((resolve, rej) => this.httpService.post('http://localhost:3009/front/history', {
+                from,
+                to
+            }).subscribe((res) => {
+                resolve(res.data.response);
+            }))
+    
+            let res = [];
+    
+            positions.map((position) => {
+                const positionEnters = position.POSITION_ENTERs;
+    
+                const lever = 10;
+    
+                const enters = positionEnters.map((enter) => {
+                    return {
+                        date: new Date(enter.createdAt),
+                        action: 'purchase',
+                        amount: enter.volumeUSDT * lever,
+                        price: enter.close,
+                        PNL: 0,
+                    };
+                });
+    
+                res = [...res, ...enters];
+    
+                res.push({
+                    date: new Date(position.closeTime),
+                    action: position.positionType === 'LONG' ? 'sale' : 'purchase',
+                    amount: position.volumeUSDT * lever,
+                    price: position.closePrice,
+                    PNL: position.sumProfit,
+                });
             });
-
-            res = [...res, ...enters];
-
-            res.push({
-                date: new Date(position.closeTime),
-                action: position.positionType === 'LONG' ? 'sale' : 'purchase',
-                amount: position.volumeUSDT * lever,
-                price: position.closePrice,
-                PNL: position.sumProfit * lever,
-            });
-        });
-
-        return res;
+    
+            return res;
+            
+        } catch (error) {
+            console.log('hist data orders');
+            
+            console.log(error);
+            
+        }
     }
 
-    async getTVdata(dto: any) {
-
+    async getTVdata(dto: any) {        
         try {
             const { data } = await firstValueFrom(this.httpService.post<any>(
                 'http://localhost:3009/front/history', {
-                periodMonth: dto.period || 6
+                from: dto.from || 1,
+                to: dto.to || new Date().valueOf()
             }).pipe(
                 catchError((error: AxiosError) => {
                     throw new HttpException(
