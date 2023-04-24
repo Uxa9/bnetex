@@ -17,6 +17,9 @@ const PORT = Number(process.env.SOCKET_PORT) || 5001;
 })
 export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDisconnect {
 
+
+    public lastRecivedPayload: any = undefined as any;
+
     constructor(
         private socketClient: SocketClientService,
         private userService: UsersService,
@@ -26,52 +29,85 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
         
     }
 
-    onModuleInit() {
-        this.socketClient.emitForcer.subscribe( async (payload: any) => {           
-            
-            for (let s of this.server.of('/').sockets) {
+    private async handleAlgoMessage(){
+
+        if(!this.lastRecivedPayload) return;        
+
+        const payload = this.lastRecivedPayload;
+
+        for (let s of this.server.of('/').sockets) {
                 
-                let id = Number(s[1].handshake.query.id);
+            let id = Number(s[1].handshake.query.id);
 
-                if(!id) return;
+            if(!id) return;
 
-                let user = await this.userService.getUserById(id);                
+            let user = await this.userService.getUserById(id);                
 
-                if (user.openTrade) {
+            if (user.openTrade) {
 
-                    const userSession = await this.investSessionService.getUserActiveSession(id);                    
+                const userSession = await this.investSessionService.getUserActiveSession(id);
+                
+                if (
+                    new Date(payload.position.enterTime).getTime() > 
+                    new Date(userSession.startSessionTime).getTime()) {
+                    const totalDeposit = payload.position.totalDeposit;
+                    const { roe } = payload;
+                    
+                    
+                    const userPartition = user.tradeBalance * 100 / totalDeposit;
 
-                    if (
-                        new Date(payload.position.enterTime).getTime() > 
-                        new Date(userSession.startSessionTime).getTime()) {
-                        const totalDeposit = payload.position.deposit;
-                        const { roe } = payload;
-                        
-                        const userPartition = user.tradeBalance / totalDeposit * 100;
-                        const userPnl = userPartition * (1 + Number(roe) / 100) - userPartition;
-                        
-                        s[1].emit('currentPosition', {
-                            userPnl,
-                            userRoe: roe,
-                            pair: payload.pair,
-                            volume: payload.position.volumeUSDT,
-                            entryPrice: payload.position.averagePrice,
-                            markPrice: payload.markPrice,
-                            margin: "я бля хуй знает что сюда надо"
-                        });
+                    //console.log({TB: user.tradeBalance, VA: payload.position.volumeACTIVE, userPartition})
 
-                    } else {                        
-                        s[1].emit('currentPosition', {
-                            msg: "no active positions"
-                        })
-                    }
-                } else {
+                    const userPartitionAmt = user.tradeBalance * payload.position.volumeACTIVE / totalDeposit
+                    //const userPnl = userPartition * (1 + Number(roe) / 100) - userPartition;
+                    
+                    const leverage = 10;
+
+                    const margin = (userPartitionAmt * payload.markPrice / leverage);
+
+                    
+                    let sellVolume = (payload.position.volumeACTIVE * payload.markPrice);
+                    let buyVolume = (payload.position.volumeACTIVE * payload.position.averagePrice);
+                    let totalPNL = sellVolume-buyVolume;
+                    
+                    let totalROE = totalPNL * 100 / margin;
+
+                    //console.log({totalROE, totalPNL})
+
+                    // const userPnl = userPartition * (1 + Number(roe) / 100) - userPartition;
+
+                    const userPnl = user.tradeBalance * totalPNL / totalDeposit;
+                    const userRoe = user.tradeBalance * totalROE / totalDeposit;
+
+                    //console.log({userPnl})
+
+                    //console.log({sellVolume, buyVolume, diff: sellVolume-buyVolume})
+                    
+                    
+                    
                     s[1].emit('currentPosition', {
-                        msg: "user not trading"
-                    })
+                        userPnl,
+                        userRoe,
+                        symbol: payload.pair,
+                        leverage,
+                        volume: userPartitionAmt * payload.markPrice,
+                        entryPrice: payload.position.averagePrice,
+                        markPrice: payload.markPrice,
+                        margin: margin.toFixed(2)
+                    });
+
                 }
-                                
-            }
+            } 
+                            
+        }
+
+    }
+
+    onModuleInit() {
+        this.socketClient.emitForcer.subscribe( async (payload: any) => {                   
+            this.lastRecivedPayload = payload;
+            this.handleAlgoMessage();
+            
         });
     }
 
@@ -79,7 +115,8 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
     server: Server;
 
     handleConnection(client: any, ...args: any[]): any {        
-        console.log('Client connected');
+        console.log('Client connected');        
+        this.handleAlgoMessage()
     }
 
     @SubscribeMessage('join')

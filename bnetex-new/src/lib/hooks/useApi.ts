@@ -9,7 +9,7 @@ interface UseApi {
 
 const useApi = (): UseApi => {
     const { BACKEND_URL } = Environment;
-    const baseURL = "https://api.bnetex.com/";
+    const baseURL = "http://localhost:5000/";
     
     const api = axios.create({
         baseURL: baseURL,

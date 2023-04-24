@@ -3,15 +3,15 @@
     "binance": {
       "APIKEY": "8f7b54d669216d815d2a9ec42700eecb5fd5e15b42fb3dfb598f7fb5355b39ea",
       "APISECRET": "82edf111707a6332f5852483a3e4b2e5c0f844dc1dfca4bb3c2ef54d730533b5",
-      "TEST": true
+      "TEST": false
     },
     "tradingPairs" : ["BTCUSDT"],    
     "tradingTimeframes": ["1m"],
     "tgBotKey": "5642351090:AAEcNaA0oJgEW5u6cZrjdsgPTZDMZSWi47s",
     "tgGroupId": -861751435,
-    "simulate": true,
+    "simulate": false,
     "startTime": 1675296000000,
-    "initTelgram": false,
+    "initTelgram": true,
     "serverPort": 3009,
     "serverOnly": false,
     "database": {

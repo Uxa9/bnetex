@@ -59,6 +59,7 @@ export class UsersController {
     @ApiOperation({
         summary : 'Kakaphony, remove later'
     })
+    @UseGuards(JwtAuthGuard)
     @Get('/getWallets/:id')
     getWallets(@Param('id') id: number) {
         return this.userService.getWallets(id);
@@ -123,7 +124,7 @@ export class UsersController {
     getTotalInvestAmount() {
         return this.userService.getTotalInvestAmount();
     }
-
+    @UseGuards(JwtAuthGuard)
     @Get('invest/positions/:id')
     getOpenUserPosition(@Param('id') id: number) {
         return this.userService.getCurrentOpenPosition(id);

@@ -25,13 +25,15 @@ module.exports = {
     },
 
     getByStartTime: async (startTime) => {
-
-        return await db.models.Position.findAll({
+        
+        let result = await db.models.Position.findAll({
             where: {
                 enterTime: { [Op.gte]: moment(startTime, 'x').toDate() },
-                closeTime: { [Op.not]: null }
+                closeTime: { [Op.is]: null }
             },
         })
+        
+        return result;
 
         
     }

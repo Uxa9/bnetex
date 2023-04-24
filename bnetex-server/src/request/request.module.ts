@@ -6,7 +6,7 @@ import { Request } from './request.model';
 import { UsersModule } from '../users/users.module';
 import { AuthModule } from '../auth/auth.module';
 import { RequestTypes } from './request-types.model';
-import { WalletModule } from 'src/wallet/wallet.module';
+import { WalletModule } from '../wallet/wallet.module';
 
 @Module({
     providers: [RequestService],

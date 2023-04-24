@@ -6,6 +6,7 @@ const initialState: AuthState = {
 };
 
 export const authReducer = (state = initialState, action: AuthAction): AuthState => {
+    
     switch (action.type) {
         case AuthActionTypes.LOGIN:
             return { isAuth: true, loading: false };

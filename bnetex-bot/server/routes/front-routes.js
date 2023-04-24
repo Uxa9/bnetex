@@ -12,6 +12,10 @@ const getPattenrGroupsMySQL = require('../../instance/db/sequelize/actions/patte
 const createConditionGroupMySQL = require('../../instance/db/sequelize/actions/patterns/createConditionGroupMySQL');
 
 const createRuleMySQL = require('../../instance/db/sequelize/actions/patterns/createRuleMySQL');
+const FuturesModule = require('../../instance/classes/FuturesModule');
+const PositionsModule = require('../../instance/classes/PositionsModule');
+const LocalStore = require('../../instance/utils/LocalStore');
+const Account = require('../../instance/utils/binance/account');
 const config = require('../../config/config')();
 
 var express = require("express"),
@@ -19,7 +23,7 @@ var express = require("express"),
 
 
   router.use('/history', async (req,res) => {
-    console.log(req)
+    
 
     if(!req.requestParams.from || !req.requestParams.to){
         res.status(400);
@@ -135,21 +139,59 @@ var express = require("express"),
   router.post('/closeVolumeMarket', async (req,res) => {
 
     let volumeToClose = req.requestParams.volumeToClose;
+    
+    console.log({volumeToClose})
 
     if(volumeToClose.length == 0 ) return;
 
     let messageToChanel = `<b>Остановка автоматической торговли</b> \nЗакрытие объемов пользователя <b>${req.requestParams.user.email} </b> \nТорговый баланс : <b>${req.requestParams.user.tradeBalance}</b> USDT \n`
     
-    //console.log("Количество пар на закрытие:", volumeToClose.length)
+    
+    let qtyVolumes = volumeToClose.map(i => {
+      return parseFloat(i.volumeToMarketSellBuy)
+    })
+
+    console.log({qtyVolumes})
+
+    if(qtyVolumes.filter(i => i < 0.001).length > 0){
+      res.status(500);
+      res.json({
+        error: true,
+        detail: 'Ошибка сведения обьемов. Части обьемов не соотвествуют минимальному количеству'
+      });
+      return;
+    }
+    
+
+
 
     for (let index = 0; index < volumeToClose.length; index++) {
       const element = volumeToClose[index];
       if(element.type == 'SELL'){
+
+          let exchangeClass = new FuturesModule(element.pair)
+
+          let positionModule = new PositionsModule(element.pair);
+
+          let exchangeAccount = new Account()
+
+
           
           console.log(`Продать ${element.volumeToMarketSellBuy} актива ${element.pair}`)    
-          // TODO      
-          //await marketSell(element.pair, parseFloat(element.volumeToMarketSellBuy))
-          messageToChanel += `Переделать с помощью <b>EXCHANGE CLASS</b>`
+
+          let actualPosition = await positionModule.getActualPositions();
+
+          console.log({actualPosition})
+
+          if(!actualPosition) return;
+                    
+          let qtyToSell = parseFloat(element.volumeToMarketSellBuy).toFixed(3);
+          
+          
+          let OPENED_POSITION = await exchangeAccount.getOpenPositions(element.pair); 
+          let marketSell = await exchangeClass.marketSell(qtyToSell);                    
+
+          await positionModule.closeFrontPosition(actualPosition.id, parseFloat(element.volumeToMarketSellBuy).toFixed(3), req.requestParams.user, marketSell, OPENED_POSITION);         
 
           messageToChanel += `Товровая пара: <b>${element.pair}</b> | Объем : <b>${parseFloat(element.volumeToMarketSellBuy)}</b> \n`
       }

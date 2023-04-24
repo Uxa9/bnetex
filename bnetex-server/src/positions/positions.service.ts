@@ -29,6 +29,8 @@ export class PositionsService {
                 })
                 .subscribe((res) => {
                     resolve(res.data.response);
+                }, err => {
+                    console.log(err)
                 }),
         );
 
@@ -108,6 +110,8 @@ export class PositionsService {
             periodMonth: period
         }).subscribe((res) => {
             resolve(res.data.response);
+        }, err => {
+            console.log(err)
         }))
 
         let res = [];

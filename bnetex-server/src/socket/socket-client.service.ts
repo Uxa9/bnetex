@@ -13,6 +13,7 @@ export class SocketClientService implements OnModuleInit {
             console.log('connected');            
         });
         this.socketClient.on('ROE_UPDATE', (payload: any) => {
+            
             this.emitForcer.next(payload);
         });
     }

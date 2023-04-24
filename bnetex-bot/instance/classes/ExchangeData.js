@@ -165,13 +165,19 @@ module.exports = class ExchangeData {
     
         if (!config.simulate) {
           ticketClass.initializingSubscribtion().subscribe((e) => {
-            if (Object.keys(e).includes("1m")) {
-              setTimeout(() => {
-                this.klinesHandler(e);
-              }, 500);
-            } else {
-              this.candlesticks_1h.push(e);
-            }
+
+            this.candlesticks_1h.push(e["1m"]);              
+            this.candlesticks_1h.shift();
+            this.candlesticks.shift();
+            
+            this.klinesHandler(e);
+            // if (Object.keys(e).includes("1m")) {
+            //   setTimeout(() => {
+            //     this.klinesHandler(e);
+            //   }, 500);
+            // } else {
+            //   this.candlesticks_1h.push(e);
+            // }
           });
         } else {
 

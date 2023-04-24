@@ -175,11 +175,19 @@ export class AuthService {
                     valid: true
                 }
             } else {
+                throw new HttpException({
+                    message: 'TOKEN_EXPIRED',
+                    status: 'ERROR'
+                }, HttpStatus.UNAUTHORIZED)
                 return {
                     valid: false
                 }
             }
         } catch (error) {
+            throw new HttpException({
+                message: 'TOKEN_EXPIRED',
+                status: 'ERROR'
+            }, HttpStatus.UNAUTHORIZED)
             return {
                 valid: false
             }            

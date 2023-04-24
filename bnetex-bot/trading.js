@@ -28,6 +28,7 @@ const dbValidator = require("./instance/utils/dbValidator");
 const copySinglePattern = require("./instance/utils/copySinglePattern");
 const { sendMessageToMainChanel } = require("./instance/utils/telegram/tg");
 const getPairDataFromExchange = require("./instance/utils/getPairDataFromExchange");
+const LocalStore = require("./instance/utils/LocalStore");
 
 const server = require('http').createServer(app);
 
@@ -37,6 +38,9 @@ const server = require('http').createServer(app);
 
 (async () => {
 
+
+    
+
     
 
     //let klines = await getPairDataFromExchange('BTCUSDT', '1m', 1000, 1675242540000 + 60000);
@@ -45,13 +49,13 @@ const server = require('http').createServer(app);
 
     await db.setup();
 
-    await dbValidator();
+    //await dbValidator();
 
     //return;
 
     //await copySinglePattern('1D_LONG_1_7D_45-30D_23-360D', '1_123_234_1D_LONG_1_7D_123_30D_234_360D')
 
-    return;
+    //return;
 
     /**
      * 	

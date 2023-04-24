@@ -36,9 +36,11 @@ const OpenedPositions = () => {
 
     const socket = useContext(WebsocketContext);
 
+
+
     const changePair = (pair: any) => {
         if (location.pathname.split('/')[2] === "trader") {
-            console.log(pair);
+            
             
             navigate(`/terminal/trader/${pair}`);
         }
@@ -60,7 +62,7 @@ const OpenedPositions = () => {
                 entryPrice: tradeInfo.entryPrice,
                 markedPrice: tradeInfo.markPrice,
                 margin: {
-                    value: 0,
+                    value: tradeInfo.margin,
                     type: "cross"
                 },
                 PNL: tradeInfo.userPnl,
@@ -88,8 +90,6 @@ const OpenedPositions = () => {
 
                 // if (Number(inf.positionAmt) === 0) return;
                 // console.log(btcPosition);
-console.log(inf);
-console.log(pos);
 
                 setData(inf.map((item: any, index: number) => {                   
                     return {
@@ -102,7 +102,7 @@ console.log(pos);
                         entryPrice : Number(Number(item.entryPrice).toFixed(2)),
                         markedPrice : Number(Number(pos[index].markPrice).toFixed(2)),
                         margin : {
-                            value: Number(Number(item.initialMargin).toFixed(2)),
+                            value: Number(Number(item.margin).toFixed(2)),
                             type: pos[index].marginType
                         },
                         PNL : Number(item.unrealizedProfit)
@@ -134,11 +134,11 @@ console.log(pos);
                     cursor: "pointer"
                 }}
             >
-                <span
+                {/* <span
                     onClick={() => closeAllPositions()}
                 >
                     Закрыть все позиции
-                </span>
+                </span> */}
             </div>
             <table className={styles['opened-positions']}>
                 <thead>
@@ -158,7 +158,10 @@ console.log(pos);
                 <tbody>
                     {
                         data.map((position: OpenedPosition, index: number) =>
-                            <tr
+                            {
+                                
+                                return (
+                                    <tr
                                 className={'text'}
                                 key={index}
                             >
@@ -187,7 +190,7 @@ console.log(pos);
                                     >Размер
                                     </span>
                                     <SignedNumber
-                                        value={(position.amount * 10).toFixed(2)}
+                                        value={(position.amount).toFixed(2)}
                                     />                                    
                                 </td>
                                 <td className={styles['entry-price']}>
@@ -235,7 +238,8 @@ console.log(pos);
                                     >
                                         Маржа
                                     </span>
-                                    <div className={styles['margin']}>
+                                    <div className={styles['margin']}>                                        
+                                    
                                         <span>{position.margin.value}</span>
                                         <span>({evaluateMarginType(position.margin.type)})</span>
                                     </div>
@@ -254,6 +258,8 @@ console.log(pos);
                                     />
                                 </td>
                             </tr>
+                                )
+                            }
                         )
                     }
                 </tbody>
