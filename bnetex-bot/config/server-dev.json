@@ -11,7 +11,7 @@
     "tgGroupId": -861751435,
     "simulate": false,
     "startTime": 1675296000000,
-    "initTelgram": true,
+    "initTelgram": false,
     "serverPort": 3009,
     "serverOnly": false,
     "database": {
