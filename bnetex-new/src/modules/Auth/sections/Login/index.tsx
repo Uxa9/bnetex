@@ -42,7 +42,12 @@ const Login = () => {
 
     const onSubmit = (data: LoginFormData) => {
         dispatch(loginUser(data.email, data.password))
-            .then(() => goToState(DASHBOARD))
+            // .then(() => {
+            //     setTimeout(() => goToState(DASHBOARD), 2000);
+            //     })
+            .then(() => {
+                location.assign(`${location.origin}/dashboard`);
+            })
             .catch((error: Error) => {
                 error.message === 'USER_NOT_ACTIVATED' && 
                     goToState(`${AUTH}/${VERIFY_EMAIL}`);

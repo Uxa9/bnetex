@@ -17,7 +17,6 @@ import { EmailDto } from './dto/email.dto';
 import {ResetPasswordDto} from "./dto/reset-password.dto";
 import { InternalServerError } from 'src/exceptions/internalError.exception';
 import { log } from 'console';
-import exception from 'src/exceptions/exception';
 import authException from 'src/exceptions/auth/authExceptions';
 import userException from 'src/exceptions/user/userExceptions';
 
@@ -45,7 +44,7 @@ export class AuthService {
         }
     }
 
-    async registration(userDto: CreateUserDto) {
+    async registration(userDto: any) {
         try {
             const candidate = await this.userService.getUserByEmail(userDto.email);
 

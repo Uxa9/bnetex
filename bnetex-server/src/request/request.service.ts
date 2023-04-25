@@ -1,4 +1,6 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
+import { Request as Req } from 'express';
 import { InjectModel } from '@nestjs/sequelize';
 import genereateAndSendAuthCode from '../services/genereateAndSendAuthCode';
 import { UsersService } from '../users/users.service';
@@ -9,6 +11,7 @@ import { RequestTypes } from './request-types.model';
 import { Request } from './request.model';
 import { MailerService } from '@nestjs-modules/mailer';
 import { WalletService } from '../wallet/wallet.service';
+import { MyException } from 'src/exceptions/exception';
 
 @Injectable()
 export class RequestService {
@@ -19,6 +22,7 @@ export class RequestService {
         private userService: UsersService,
         private readonly mailerService: MailerService,
         private walletService: WalletService,
+        @Inject(REQUEST) private readonly Req: Req,
     ) {}
 
     async createRequest(dto: CreateRequest) {        
@@ -135,9 +139,18 @@ export class RequestService {
         }
     }
 
-    async getAllUserRequest(userId: number) {
+    async getAllUserRequest() {
+        
+        const req:any = this.Req;
+        const user = await this.userService.getUserById(req.user.id);            
+    
+        if (!user) throw new MyException({
+            code : HttpStatus.EXPECTATION_FAILED,
+            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
+        });
+
         const requests = await this.requestRepository.findAll({
-            where: {userId: userId}
+            where: {userId: req.user.id}
         });
 
         return requests;

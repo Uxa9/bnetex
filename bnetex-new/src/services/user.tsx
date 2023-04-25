@@ -16,7 +16,6 @@ export const getUser = async () => {
 export const changeUserPassword = async (prevPassword: string, newPassword: string) => {
     return await protectedApi.post(
         '/users/changePassword', {
-            userId: getUserInfo().userId,
             prevPassword: prevPassword,
             newPassword: newPassword,
         });
@@ -24,18 +23,18 @@ export const changeUserPassword = async (prevPassword: string, newPassword: stri
 
 export const getRoeAndPnl = async () => {
     return await protectedApi.get(
-        `/users/getRoeAndPnl/${getUserInfo().userId}`,
+        `/users/getRoeAndPnl`,
     );
 };
 
 export const getInvestInfo = async () => {
     return await protectedApi.get(
-        `/users/invest/${getUserInfo().userId}`);
+        `/users/invest`);
 };
 
 export const getUserOpenPosition = async () => {
     return await protectedApi.get(
-        `/users/invest/positions/${getUserInfo().userId}`);
+        `/users/invest/positions`);
 };
 
 export const resendActivationCode = async (email: string) => {
@@ -55,7 +54,6 @@ export const checkActivationCodeTime = async (email: string) => {
 export const changeApiKey = async (api_key: string, api_secret: string) => {
     return await api.put(
         '/users/set-api', {
-            id: getUserInfo().userId,
             api_key,
             api_secret
         }

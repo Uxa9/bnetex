@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, UsePipes, Param, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, UsePipes, Param, Put, Headers, HttpCode } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/roles-auth.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -12,6 +12,7 @@ import { UserIdDto } from './dto/user-id.dto';
 import { StartInvestDto } from './dto/start-invest.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 
+
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -22,10 +23,11 @@ export class UsersController {
         summary : 'Create user'
     })
     @ApiResponse({
-        status : 200,
+        status : 201,
         type : User
     })
-    @Post()
+    @Put()
+    @HttpCode(201)
     create(@Body() userDto: CreateUserDto) {
         return this.userService.createUser(userDto);
     }
@@ -39,16 +41,16 @@ export class UsersController {
     })
     @Roles('admin')
     @UseGuards(RolesGuard)
-    @Get()
+    @Get('/all')
     getAll() {
         return this.userService.getAllUsers();
     }
 
-    @UseGuards(JwtAuthGuard)
-    @Get('/:id')
-    getUser(@Param('id') id: number) {
-        return this.userService.getUser(id);
-    }
+    // @UseGuards(RolesGuard)
+    // @Get('/:id')
+    // getUser(@Param('id') id: number) {
+    //     return this.userService.getUser(id);
+    // }
 
     @UseGuards(JwtAuthGuard)
     @Post('/changePassword')
@@ -56,31 +58,33 @@ export class UsersController {
         return this.userService.changePassword(dto);
     }
 
+// Нужно ли вот это вообще?
+
     @ApiOperation({
         summary : 'Kakaphony, remove later'
     })
     @UseGuards(JwtAuthGuard)
-    @Get('/getWallets/:id')
-    getWallets(@Param('id') id: number) {
-        return this.userService.getWallets(id);
+    @Get('/getWallets')
+    getWallets(@Headers('Authorization') token: string) {
+        return this.userService.getWallets();
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('/getpnl/:id')
-    getPnL(@Param('id') id: number) {
-        return this.userService.getPnL(id);
+    @Get('/getpnl')
+    getPnL(@Headers('Authorization') token: string) {
+        return this.userService.getPnL();
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('/getroe/:id')
-    getRoE(@Param('id') id: number) {
-        return this.userService.getRoE(id);
+    @Get('/getroe')
+    getRoE(@Headers('Authorization') token: string) {
+        return this.userService.getRoE();
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('/getRoeAndPnl/:id')
-    getRoeAndPnl(@Param('id') id: number) {
-        return this.userService.getUserPnlAndRoe(id);
+    @Get('/getRoeAndPnl')
+    getRoeAndPnl(@Headers('Authorization') token: string) {
+        return this.userService.getUserPnlAndRoe();
     }
 
     @ApiOperation({
@@ -109,29 +113,36 @@ export class UsersController {
     }
     
     @UseGuards(JwtAuthGuard)
-    @Get('/stopInvest/:id')
-    stopInvest(@Param('id') id: number) {
-        return this.userService.stopInvest(id);
+    @Get('/stopInvest')
+    stopInvest() {
+        return this.userService.stopInvest();
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('/invest/:id')
-    getUserTradeSession(@Param('id') id: number) {
-        return this.userService.getUserActiveSession(id);
+    @Get('/invest')
+    getUserTradeSession() {
+        return this.userService.getUserActiveSession();
     }
     
     @Get('/totalInvestAmount/get')
     getTotalInvestAmount() {
         return this.userService.getTotalInvestAmount();
     }
+
     @UseGuards(JwtAuthGuard)
-    @Get('invest/positions/:id')
-    getOpenUserPosition(@Param('id') id: number) {
-        return this.userService.getCurrentOpenPosition(id);
+    @Get('invest/positions')
+    getOpenUserPosition() {
+        return this.userService.getCurrentOpenPosition();
     }
 
     @Put('set-api')
     setUserApiKey(@Body() dto: any) {
         return this.userService.setApiKey(dto);
+    }
+
+    @UseGuards(JwtAuthGuard)    
+    @Get('test')
+    test(@Headers('Authorization') token: string) {
+        return this.userService.test();
     }
 }

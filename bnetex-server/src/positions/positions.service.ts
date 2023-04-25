@@ -8,6 +8,7 @@ import { Op } from 'sequelize';
 // import { Position, PositionDocument } from './shemas/_position.schema';
 import { Position } from './position.model';
 import { PositionEnters } from './positionEnters.model';
+import { rejects } from 'assert';
 
 @Injectable()
 export class PositionsService {
@@ -22,9 +23,9 @@ export class PositionsService {
     async getPnlAndRoe(dto: any) {
 
         const from = dto.from || new Date().valueOf();
-        const to   = dto.to || new Date().valueOf();
-        
-        const positions = await new Promise((resolve, rej) =>
+        const to = dto.to || new Date().valueOf();
+
+        const positions :any[] = await new Promise((resolve, reject) =>
             this.httpService
                 .post('http://localhost:3009/front/history', {
                     from,
@@ -33,24 +34,31 @@ export class PositionsService {
                 .subscribe((res) => {
                     resolve(res.data.response);
                 }, err => {
-                    console.log(err)
+                    console.log(err);
+                    reject([]);
                 }),
         );
+
+        if (positions.length === 0) return {
+            dates: [],
+            pnlValues: [],
+            roeValues: []
+        }
 
         const result = await this.getHistoricalData(positions, dto.amount, from, to);
 
         return result;
     }
 
-    async getHistoricalData(data: any, amount: number, from: number, to: number) {      
+    async getHistoricalData(data: any, amount: number, from: number, to: number) {
         try {
-            
+
             let dates = [];
             let acc = 0;
-    
+
             const curDate = new Date(to);
             let startDate = new Date(from);
-    
+
             while (startDate.getMonth() !== curDate.getMonth() ||
                 startDate.getDate() !== curDate.getDate() ||
                 startDate.getFullYear() !== curDate.getFullYear()
@@ -58,32 +66,32 @@ export class PositionsService {
                 dates.push(
                     startDate.toISOString().split('T')[0]
                 );
-    
+
                 startDate = new Date(startDate.setDate(startDate.getDate() + 1));
             }
 
             let pnlValues = Array(dates.length).fill(0);
             let roeValues = Array(dates.length).fill(0);
-            
-            data.map((position) => {           
+
+            data.map((position) => {
                 // console.log(position);
-                
+
                 // let customAmountPercent = amount / position.deposit;
-    
+
                 // const lever = 10;
-    
+
                 // const pnl = position.sumProfit * customAmountPercent * lever;     
-                
+
                 const posCloseTime = new Date(position.closeTime);
                 const index = dates.findIndex(item => item === posCloseTime.toISOString().split('T')[0]);
 
-                if (index !== -1) { 
+                if (index !== -1) {
                     const rate = amount / position.totalDeposit;
                     // console.log(rate);
-                    
+
                     const percent = position.sumProfit / position.totalDeposit;
                     acc += percent * 100;
-    
+
                     // pnlValues[index] += pnl;
                     // roeValues[index] = acc;
                     // console.log(position.sumProfit * rate);
@@ -94,13 +102,13 @@ export class PositionsService {
                     // бля, ну вообще странно
                 }
             });
-    
-            roeValues.slice(1).map((item, index) => {   
+
+            roeValues.slice(1).map((item, index) => {
                 if (item === 0) {
-                    roeValues[index+1] = roeValues[index];
+                    roeValues[index + 1] = roeValues[index];
                 }
             });
-    
+
             return {
                 dates,
                 pnlValues,
@@ -108,10 +116,10 @@ export class PositionsService {
             };
         } catch (error) {
             console.log('hist data');
-            
-            
+
+
             console.log(error);
-            
+
         }
     }
 
@@ -120,42 +128,43 @@ export class PositionsService {
             const to = new Date().valueOf();
             const from = new Date().setMonth(new Date().getMonth() - period)
 
-        const positions: any[] = await new Promise((resolve, rej) => this.httpService.post('http://localhost:3009/front/history', {
-            periodMonth: period
-        }).subscribe((res) => {
-            resolve(res.data.response);
-        }, err => {
-            console.log(err)
-        }))
+            const positions: any[] = await new Promise((resolve, reject) => this.httpService.post('http://localhost:3009/front/history', {
+                periodMonth: period
+            }).subscribe((res) => {
+                resolve(res.data.response);
+            }, err => {
+                console.log(err);
+                reject([]);
+            }))
 
-        let res = [];
+            let res = [];
 
-        positions.map((position) => {
-            const positionEnters = position.POSITION_ENTERs;
+            positions.map((position) => {
+                const positionEnters = position.POSITION_ENTERs;
 
-            const lever = 10;
+                const lever = 10;
 
-            const enters = positionEnters.map((enter) => {
-                return {
-                    date: new Date(enter.createdAt),
-                    action: 'purchase',
-                    amount: enter.volumeUSDT * lever,
-                    price: enter.close,
-                    PNL: 0,
-                };
+                const enters = positionEnters.map((enter) => {
+                    return {
+                        date: new Date(enter.createdAt),
+                        action: 'purchase',
+                        amount: enter.volumeUSDT * lever,
+                        price: enter.close,
+                        PNL: 0,
+                    };
+                });
+
+                return res;
+
             });
-    
-            return res;
-            
         } catch (error) {
             console.log('hist data orders');
-            
+
             console.log(error);
-            
         }
     }
 
-    async getTVdata(dto: any) {        
+    async getTVdata(dto: any) {
         try {
             const { data } = await firstValueFrom(this.httpService.post<any>(
                 'http://localhost:3009/front/history', {

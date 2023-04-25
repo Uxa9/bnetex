@@ -22,6 +22,8 @@ export const loginUser = (email: string, password: string) => {
                 password: password,
             })
             .then((res) => {
+                console.log(res);
+                
                 const userInfo = {
                     token: res.data.token,
                     userId: res.data.userId,
@@ -108,7 +110,11 @@ export const verifyToken =  () => {
             '/auth/token/verify', {
                 token: getUserInfo().token,
             })
-            .then(() => dispatch({ type: AuthActionTypes.LOGIN}))
+            .then((res) => {
+                console.log(res);
+                
+                dispatch({ type: AuthActionTypes.LOGIN})
+            })
             .catch(() => {
                 dispatch({ type: AuthActionTypes.AUTH_REQUEST_RETURNED});
             });

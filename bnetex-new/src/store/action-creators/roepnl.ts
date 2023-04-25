@@ -23,7 +23,7 @@ export const getRoeAndPnl = () => {
         dispatch({ type: RoePnlActionTypes.SEND_REQUEST});
 
         return protectedApi
-            .get<SuccessfulRoePnlRequestData>(`/users/getRoeAndPnl/${getUserInfo().userId}`)
+            .get<SuccessfulRoePnlRequestData>(`/users/getRoeAndPnl`)
             .then((res) => {
                 dispatch({ type: RoePnlActionTypes.GET_ROE_PNL, data: transformDataToFixed(res.data)});
             })

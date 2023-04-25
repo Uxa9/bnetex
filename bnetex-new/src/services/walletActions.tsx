@@ -32,7 +32,7 @@ const useWalletActions = () => {
 
         return await protectedApi.post(
             '/users/transfer-money', 
-            {...sendData, userId: getUserInfo().userId},
+            {...sendData},
             {headers: {
                 'Authorization': `Bearer ${getUserInfo().token}`,
             }}
@@ -67,7 +67,7 @@ const useWalletActions = () => {
     };
 
     const getWallets = async (): Promise<WalletCategoryWithBalance> => {
-        return await api.get(`/users/getWallets/${getUserInfo().userId}`)
+        return await api.get(`/users/getWallets`)
             .then((response) => {
                 return {
                     main: response.data.mainWallet,
@@ -77,7 +77,7 @@ const useWalletActions = () => {
     };
 
     const getUserWallet = async (): Promise<any> => {
-        return await api.get(`/wallets/${getUserInfo().userId}`)
+        return await api.get(`/wallets`)
             .then((response) => {                
                 return {
                     walletId: response.data

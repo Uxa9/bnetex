@@ -28,11 +28,11 @@ export class CreateUserDto {
     })
     readonly password: string;
 
-    @ApiProperty({
-        example : '322228',
-        description : 'user activation code'
-    })
-    readonly activationLink: string;
+    // @ApiProperty({
+    //     example : '322228',
+    //     description : 'user activation code'
+    // })
+    // readonly activationLink: string;
 
 
     // @ApiProperty({

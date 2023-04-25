@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards, Headers } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateRequestTypeDto } from './dto/create-request-type.dto';
@@ -33,10 +33,10 @@ export class RequestController {
     @ApiOperation({
         summary : 'Find all user requests'
     })
-    // @UseGuards(JwtAuthGuard)
-    @Get('/user/:id')
-    findUserRequests(@Param('id') id: number) {
-        return this.requestService.getAllUserRequest(id);
+    @UseGuards(JwtAuthGuard)
+    @Get('/user')
+    findUserRequests(@Headers('Authorization') token: string) {
+        return this.requestService.getAllUserRequest();
     }
 
     @ApiOperation({
