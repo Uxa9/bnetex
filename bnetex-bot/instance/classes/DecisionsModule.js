@@ -197,6 +197,8 @@ module.exports = class DecisionsModule {
       (i) => i.ACTIVEGROUPId == ActialPosition.ACTIVEGROUPId && i.tradingVolume == this.analyzeResponseData.CurrentTradingVolume
     ).length;
 
+    console.log('ARD1:', currentPatternEntersCount)
+
     // Все правила входа по текущей активной группе
     let actualActiveGroupEnterRules =
       ActialPosition.ACTIVE_GROUP.POSITION_RULEs;
@@ -255,10 +257,11 @@ module.exports = class DecisionsModule {
     // Обьем депозита для текущего паттерна
     let patternTradingVolume = PatternTradingVolume / PartsForPatterns;
 
+    console.log('ARD', this.analyzeResponseData)
     // Единица обьема
     let singlePart =
       (patternTradingVolume / totalPartsOfPositions) *
-      this.analyzeResponseData.Pattern.PART_OF_VOLUME;
+      ActialPosition.ACTIVE_GROUP.PATTERN.PART_OF_VOLUME;
 
     // Обьем для текущего входа
     let enterRuleVolume = Math.floor(singlePart * activeFirstRule.depositPart);
