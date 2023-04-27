@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 
-export class UserFoundButNotActivated extends HttpException {
+export class UserNotAuthorized extends HttpException {
     constructor() {
         super(
             {
                 status: "ERROR",
-                message: "USER_FOUND_BUT_NOT_ACTIVATED"
+                message: "USER_NOT_AUTHORIZED"
             },
-            HttpStatus.FOUND
+            HttpStatus.UNAUTHORIZED
         );
     }
 }

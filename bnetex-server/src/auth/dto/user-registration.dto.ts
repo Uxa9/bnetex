@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
 
-export class CreateUserDto {
+export class RegUserDto {
     @ApiProperty({
         example : 'bnetex@bne.tex',
         description : 'user e-mail'
@@ -26,13 +26,4 @@ export class CreateUserDto {
         message : 'Password must be longer than 8 symbols'
     })
     readonly password: string;
-
-    @ApiProperty({
-        example : '322228',
-        description : 'user activation code'
-    })
-    @IsString({
-        message : 'Activation link must be a string'
-    })
-    readonly activationLink: string;
 }

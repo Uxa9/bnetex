@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 
-export class UserFoundButNotActivated extends HttpException {
+export class UserJWTOkayButUserNotFound extends HttpException {
     constructor() {
         super(
             {
                 status: "ERROR",
-                message: "USER_FOUND_BUT_NOT_ACTIVATED"
+                message: "JWT_OKAY_BUT_USER_NOT_FOUND"
             },
-            HttpStatus.FOUND
+            HttpStatus.EXPECTATION_FAILED
         );
     }
 }

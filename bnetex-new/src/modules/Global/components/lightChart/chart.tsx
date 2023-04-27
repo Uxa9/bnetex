@@ -6,6 +6,8 @@ import { useTheme } from 'lib/hooks/useTheme';
 import { evaluateTheme } from 'lib/utils/evaluateAppColors';
 import clsx from 'clsx';
 import { Spinner } from 'assets/images/icons';
+import { getUserInfo } from 'lib/utils/getUserInfo';
+import { decodeUserJwt } from 'lib/utils/decodeJwt';
 
 interface ChartProps {
     data: SingleValueData[];
@@ -29,6 +31,8 @@ const Chart = ({
     const chartRef = useRef<HTMLDivElement | null>(null);
     const [chartBase, setChartBase] = useState<IChartApi | null>(null);
     const [lineChart, setLineChart] = useState<ISeriesApi<'Area'> | null>(null);
+
+    const userInfo = decodeUserJwt();
 
     const [withComission, setWithCommision] = useState<boolean>(false);
     const toggleComission = () => setWithCommision(prevState => !prevState);
@@ -152,7 +156,7 @@ const Chart = ({
                     <div className={styles['comission-block']}>
                         <ToolTip
                             title={'С комиссией'}
-                            infoText={'Комиссия за сделки — этот платеж взимается с клиента в виде процента от прибыли со всех торговых операции. Ставка комиссии - 50% от прибыли (PNL/ROE).'}
+                            infoText={`Комиссия за сделки — этот платеж взимается с клиента в виде процента от прибыли со всех торговых операции. Ставка комиссии - ${userInfo.roles[0].investPercent || 50}% от прибыли (PNL/ROE).`}
                         />
                         <Switch
                             checked={withComission}

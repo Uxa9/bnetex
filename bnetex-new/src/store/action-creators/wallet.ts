@@ -11,7 +11,7 @@ export const getWallets = () => {
         dispatch({ type: WalletActionTypes.SEND_WALLET_REQUEST});
 
         return protectedApi
-            .get(`/users/getWallets/${getUserInfo().userId}`)
+            .get(`/users/getWallets`)
             .then((res) => {
                 dispatch({
                     type: WalletActionTypes.GET_WALLETS,

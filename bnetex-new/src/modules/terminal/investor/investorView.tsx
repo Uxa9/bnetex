@@ -13,6 +13,7 @@ import { WebsocketContext } from '../../../context/WebsocketContext';
 import { io, Socket } from 'socket.io-client';
 import { useAppDispatch } from 'lib/hooks/useAppDispatch';
 import {changeViewType, triggerTVMarkRefresh} from 'store/action-creators/algotrade';
+import { decodeUserJwt } from 'lib/utils/decodeJwt';
 
 type InvestorViewType = 'trade' | 'history';
 
@@ -33,6 +34,7 @@ const InvestorView = () => {
     const [invesotrRoe, setInvestorRoe] = useState<Number>(0);
 
     const dispatch = useAppDispatch();
+    const userInfo = decodeUserJwt();
 
     const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
 
@@ -121,7 +123,7 @@ const InvestorView = () => {
             >
                 <ToolTip
                     title='Доход инвестора'
-                    infoText='Доход инвестора это PNL алгоритма за вычетом комиссии BNETEX (50%), от суммы переданной алгоритму.'
+                    infoText={`Доход инвестора это PNL алгоритма за вычетом комиссии BNETEX (${userInfo.roles[0].investPercent || 50}%), от суммы переданной алгоритму.`}
                 />
                 <div
                     className={styles['data-card__row']}

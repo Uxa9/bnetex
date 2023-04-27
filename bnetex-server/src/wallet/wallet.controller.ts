@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { WalletService } from './wallet.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Wallets')
 @Controller('wallets')
 export class WalletController {
     constructor(private controllerService: WalletService) {}

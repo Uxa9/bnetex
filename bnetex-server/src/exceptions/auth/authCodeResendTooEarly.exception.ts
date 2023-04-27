@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 
-export class UserFoundButNotActivated extends HttpException {
+export class AuthCodeResendTooEarly extends HttpException {
     constructor() {
         super(
             {
                 status: "ERROR",
-                message: "USER_FOUND_BUT_NOT_ACTIVATED"
+                message: "AUTH_CODE_REQUIRED_TOO_MANY_TIMES"
             },
-            HttpStatus.FOUND
+            HttpStatus.TOO_MANY_REQUESTS
         );
     }
 }

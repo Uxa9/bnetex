@@ -34,15 +34,24 @@ export class Role extends Model<Role, RoleCreationAttrs> {
         unique        : true,
         allowNull     : false
     })
-    value : string;
+    name : string;
+
+    @ApiProperty({
+        example : '50',
+        description : 'Role invest profit percentage'
+    })
+    @Column({
+        type          : DataType.INTEGER,
+        defaultValue  : 50
+    })
+    investPercent : number;
 
     @ApiProperty({
         example : 'Investor',
         description : 'user role description'
     })
     @Column({
-        type          : DataType.STRING,
-        allowNull     : false
+        type          : DataType.STRING
     })
     desc : string;
     

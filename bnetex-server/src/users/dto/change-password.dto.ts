@@ -1,19 +1,22 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { IsNumber, IsString } from "class-validator";
 
 export class ChangePasswordDto {
 
-    @IsNumber({}, {
-        message : "Id must be a number"
+    @ApiProperty({
+        example: "Lolkek228"
     })
-    readonly userId : number;
-
     @IsString({
-        message : "Password must be a string"
+        message : "Previous password must be a string"
     })
     readonly prevPassword : string;
 
+    @ApiProperty({
+        example: "Lolkek228"
+    })
     @IsString({
-        message : "Password must be a string"
+        message : "New password must be a string"
     })
     readonly newPassword : string;
+
 }

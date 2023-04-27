@@ -1,18 +1,18 @@
-import { NotFoundException } from "@nestjs/common"
-import { UserNotFoundException } from "./userNotFound.exception";
-
+import { HttpException, HttpStatus } from "@nestjs/common";
 
 interface ErrorStructure {
-    status: number;
+    code: number;
     message: string;
 }
 
-const exception = (error: ErrorStructure) => {
-
-    if (error.status === 400) {
-        if (error.message === "USER_NOT_FOUND") throw new UserNotFoundException;
+export class MyException extends HttpException {
+    constructor(error : ErrorStructure) {
+        super(
+            {
+                status: "ERROR",
+                message: error.message
+            },
+            error.code
+        );
     }
-
 }
-
-export default exception;

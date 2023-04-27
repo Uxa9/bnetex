@@ -1,4 +1,6 @@
-import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable, Scope } from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
+import { Request } from 'express';
 import { InjectModel } from '@nestjs/sequelize';
 import { UserNotFoundException } from '../exceptions/userNotFound.exception';
 import { RolesService } from '../roles/roles.service';
@@ -13,8 +15,16 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { InvestSessionsService } from '../invest-sessions/invest-sessions.service';
 import { PositionsService } from '../positions/positions.service';
 import { UserRoles } from 'src/roles/user-roles.model';
+import { JwtService } from '@nestjs/jwt';
+import { UserException } from 'src/exceptions/user/user.exception';
+import { MyException } from 'src/exceptions/exception';
+import { InternalServerError } from 'src/exceptions/internalError.exception';
+import { UserAlreadyExist } from 'src/exceptions/auth/userAlreadyExist.exception';
+import { RoleNotFound } from 'src/exceptions/role/roleNotFound.exception';
+import { UserJWTOkayButUserNotFound } from 'src/exceptions/user/userJWTokayButUserNotFound.exception';
+import { UserWrongPassword } from 'src/exceptions/user/userWrongPassword.exceptions';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class UsersService {
 
     constructor(@InjectModel(User) private userRepository: typeof User,
@@ -23,80 +33,80 @@ export class UsersService {
         private jwtService: JwtService,
         @Inject(forwardRef(() => InvestSessionsService)) // чета хуита какая-то
         private investSessions: InvestSessionsService,
+        @Inject(REQUEST) private readonly Request: Request,
         private positionService: PositionsService) { }
 
     async createUser(dto: CreateUserDto) {
+        const role = await this.roleService.getRoleByName('investor');
+        if (!role) throw new RoleNotFound;
+
+        const userExistCheck = await this.getUserByEmail(dto.email);
+        if (userExistCheck) throw new UserAlreadyExist;
+        
         try {
-            const role = await this.roleService.getRoleByValue('investor');
-            if (!role) throw HttpStatus.INTERNAL_SERVER_ERROR;
-            
             const user = await this.userRepository.create(dto);
     
-            // user.$set('roles', [role.id])
-            //     .then(() => {
-            //         user.roles = [role];
-            //     });
-
             await this.userRolesRepository.create({
                 userId: user.id,
                 roleId: role.id
-            })
-    
-            return {
-                status: "SUCCESS",
-                message: "USER_CREATED"
-            };
-        } catch (error) {
-            throw HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-    }
-
-    async getAllUsers() {
-        const users = await this.userRepository.findAll({ include: { all: true } });
-        return users;
-    }
-
-    async changePassword(dto: ChangePasswordDto) {
-
-        const user = await this.getUserById(dto.userId);
-
-        const passwordEq = await bcrypt.compare(dto.prevPassword, user.password);
-
-        if ( passwordEq ) {
-            const hashPassword = await bcrypt.hash(dto.newPassword, 5);
-
-            await user.update({
-                password: hashPassword
             });
 
             return {
                 status: "SUCCESS",
-                message: "PASSWORD_CHANGED"
-            }
-        } else {
-            throw new HttpException(
-                {
-                    status: "ERROR",
-                    message: "PREVIOUS_PASSWORD_WRONG"
-                },
-                HttpStatus.BAD_REQUEST
-            );
+                message: "USER_CREATED"
+            };
+        } catch (error) {            
+            throw new InternalServerError;
+        }
+    }
+
+    async getAllUsers() {
+        try {
+            const users = await this.userRepository.findAll({ include: { all: true } });
+            return users;
+        } catch (error) {
+            throw new InternalServerError;
+        }
+    }
+
+    async changePassword(dto: ChangePasswordDto) {
+        const req:any = this.Request;
+        const user = await this.getUserById(req.user.id);
+        
+        const passwordEq = await bcrypt.compare(dto.prevPassword, user.password);
+        if (!passwordEq) throw new UserWrongPassword;
+        const hashPassword = await bcrypt.hash(dto.newPassword, 5);
+
+        try {
+            await user.update({
+                password: hashPassword
+            });
+        } catch (error) {
+            throw new InternalServerError;
         }
 
+        return {
+            status: "SUCCESS",
+            message: "PASSWORD_CHANGED"
+        }   
     }
 
     async getUserByEmail(email: string) {
-        const user = await this.userRepository.findOne({
-            where: { email },
-            include: { all: true }
-        });
-
-        return user;
+        try {
+            const user = await this.userRepository.findOne({
+                where: { email },
+                include: { all: true }
+            });
+    
+            return user;
+        } catch (error) {            
+            throw new InternalServerError;
+        }
     }
 
     async addRole(dto: AddRoleDto) {
         const user = await this.userRepository.findByPk(dto.userId);
-        const role = await this.roleService.getRoleByValue(dto.value);
+        const role = await this.roleService.getRoleByName(dto.value);
 
         if (role && user) {
             await user.$add('role', role.id);
@@ -117,13 +127,14 @@ export class UsersService {
     }
 
     async getUserById(id: number) {
-        const user = await this.userRepository.findByPk(id);
-
-        if ( !user ) {
-            throw new UserNotFoundException();
+        try {
+            const user = await this.userRepository.findByPk(id, {                
+                include: { all: true }
+            });
+            return user;
+        } catch (error) {
+            throw new InternalServerError;
         }
-
-        return user;
     }
 
     async getUser(id: number) {
@@ -142,8 +153,15 @@ export class UsersService {
         };
     }
 
-    async getWallets(id: number) {
-        const user = await this.getUserById(id);
+    async getWallets() {
+        
+        const req:any = this.Request;
+        const user = await this.getUserById(req.user.id);            
+    
+        if (!user) throw new MyException({
+            code : HttpStatus.EXPECTATION_FAILED,
+            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
+        });
 
         return {
             mainWallet: user.mainWallet,
@@ -151,7 +169,7 @@ export class UsersService {
         }
     }
 
-    verifyToken(token){
+    verifyToken(token: string){
         return this.jwtService.verify(token) 
     }
 
@@ -198,8 +216,15 @@ export class UsersService {
         return Math.random() * (max - min) + min;
     }
 
-    async getPnL(id: number) {
-        await this.getUserById(id);
+    async getPnL() {
+        
+        const req:any = this.Request;
+        const user = await this.getUserById(req.user.id);            
+    
+        if (!user) throw new MyException({
+            code : HttpStatus.EXPECTATION_FAILED,
+            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
+        });
 
         return {
             pnl: {
@@ -225,8 +250,17 @@ export class UsersService {
         }
     }
 
-    async getRoE(id: number) {
-        await this.getUserById(id);
+    async getRoE() {
+        
+        const req:any = this.Request;
+        console.log(req);
+        
+        const user = await this.getUserById(req.user.id);            
+    
+        if (!user) throw new MyException({
+            code : HttpStatus.EXPECTATION_FAILED,
+            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
+        });
 
         return {
             roe: {
@@ -252,8 +286,21 @@ export class UsersService {
         }
     }
 
-    async getUserPnlAndRoe(id: number) {
-        const sessions = await this.investSessions.getAllUserSessions(id);
+    async getUserPnlAndRoe() {
+        
+        const req:any = this.Request;
+        console.log(req);
+        console.log(this.Request);
+        
+        const user = await this.getUserById(req.user.id);            
+    console.log(user);
+    
+        if (!user) throw new MyException({
+            code : HttpStatus.EXPECTATION_FAILED,
+            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
+        });
+
+        const sessions = await this.investSessions.getAllUserSessions(req.user.id);
 
         if ( sessions.length == 0 ) {
             return {
@@ -297,14 +344,30 @@ export class UsersService {
         return await this.investSessions.createSession(dto);
     }
 
-    async stopInvest(id: number) {
-        const res = await this.investSessions.stopSession(id);
+    async stopInvest() {
+        const req:any = this.Request;
+        const user = await this.getUserById(req.user.id);            
+    
+        if (!user) throw new MyException({
+            code : HttpStatus.EXPECTATION_FAILED,
+            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
+        });
+
+        const res = await this.investSessions.stopSession(req.user.id);
         
         return res; //опять чето странное
     }
 
-    async getUserActiveSession(id: number) {
-        const session = await this.investSessions.getUserActiveSession(id);
+    async getUserActiveSession() {
+        const req:any = this.Request;
+        const user = await this.getUserById(req.user.id);            
+    
+        if (!user) throw new MyException({
+            code : HttpStatus.EXPECTATION_FAILED,
+            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
+        });
+
+        const session = await this.investSessions.getUserActiveSession(req.user.id);
 
         if ( !session ) {
             return {
@@ -341,15 +404,22 @@ export class UsersService {
         return res.reduce((acc, user) => acc + user.tradeBalance, 0);
     }
 
-    async getCurrentOpenPosition(id: number) {
+    async getCurrentOpenPosition() {
+        const req:any = this.Request;
+        const user = await this.getUserById(req.user.id);           
+    
+        if (!user) throw new MyException({
+            code : HttpStatus.EXPECTATION_FAILED,
+            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
+        });         
+    
         const position = await this.positionService.getCurrentOpenPosition();
-        const user = await this.getUserById(id);
 
         if ( !position || !user.openTrade ) {
             return [];
         }
         
-        const userSession = await this.investSessions.getUserActiveSession(id);
+        const userSession = await this.investSessions.getUserActiveSession(req.user.id);
 
         if (userSession.startSessionTime.getTime() > position.enterTime) {
             return [];
@@ -371,7 +441,14 @@ export class UsersService {
     }
 
     async setApiKey(dto: any) {
-        const user = await this.getUserById(dto.id);
+        
+        const req:any = this.Request;
+        const user = await this.getUserById(req.user.id);           
+    
+        if (!user) throw new MyException({
+            code : HttpStatus.EXPECTATION_FAILED,
+            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
+        });     
         
         const api = {
             api_key : dto.api_key,
@@ -395,5 +472,13 @@ export class UsersService {
                 HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
+    }
+
+    async test() {
+        const a:any = this.Request;
+
+        console.log(a?.user);
+        
+        
     }
 }

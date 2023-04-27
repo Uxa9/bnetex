@@ -5,7 +5,7 @@ const getUserTransactions = async (id: number) => {
     const { api } = useApi();
 
     return await api.get(
-        `/request/user/${id}`,
+        `/request/user`,
     )
         .then((response) => {
             return response.data;
