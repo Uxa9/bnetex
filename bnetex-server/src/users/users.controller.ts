@@ -95,6 +95,13 @@ export class UsersController {
         return this.userService.getPnL();
     }
 
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/info')
+    info(@Headers('Authorization') token: string) {
+        return this.userService.getCurrentUser();
+    }
+
     @UseGuards(JwtAuthGuard)
     @Get('/getroe')
     getRoE(@Headers('Authorization') token: string) {
@@ -128,19 +135,19 @@ export class UsersController {
 
     @UseGuards(JwtAuthGuard)
     @Post('/startInvest')
-    startInvest(@Body() dto: StartInvestDto) {
+    startInvest(@Body() dto: StartInvestDto, @Headers('Authorization') token: string) {
         return this.userService.startInvest(dto);
     }
     
     @UseGuards(JwtAuthGuard)
     @Get('/stopInvest')
-    stopInvest() {
+    stopInvest(@Headers('Authorization') token: string) {
         return this.userService.stopInvest();
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('/invest')
-    getUserTradeSession() {
+    getUserTradeSession(@Headers('Authorization') token: string) {
         return this.userService.getUserActiveSession();
     }
     
@@ -151,7 +158,7 @@ export class UsersController {
 
     @UseGuards(JwtAuthGuard)
     @Get('invest/positions')
-    getOpenUserPosition() {
+    getOpenUserPosition(@Headers('Authorization') token: string) {
         return this.userService.getCurrentOpenPosition();
     }
 

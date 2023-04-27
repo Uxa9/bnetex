@@ -4,13 +4,7 @@ import { getUserInfo } from 'lib/utils/getUserInfo';
 const { api, protectedApi } = useApi();
 
 export const getUser = async () => {
-    return await protectedApi.get(
-        `/users/${getUserInfo().userId}`,
-        {
-            headers: {
-                'Authorization': `Bearer ${getUserInfo().token}`,
-            },
-        });
+    return await protectedApi.get(`/users/info`);
 };
 
 export const changeUserPassword = async (prevPassword: string, newPassword: string) => {

@@ -34,7 +34,11 @@ export class AuthService {
     async login(userDto: LoginUserDto) {
         const user = await this.validateUser(userDto);
 
+        
+
         const token = await this.generateToken(user);
+
+        
 
         return {
             status: "SUCCESS",
@@ -228,12 +232,13 @@ export class AuthService {
     private async generateToken(user: User) {
         const payload = {
             email: user.email,
-            // id: user.id,
+            id: user.id,
+            userId: user.id,
             roles: user.roles.map(role => {
                 return {
                     name: role.name,
                     investPercent: role.investPercent,
-                    desc: role.desc
+                    desc: role.desc,
                 }
             }),
             mainWallet: user.mainWallet,
@@ -246,7 +251,13 @@ export class AuthService {
     }
 
     private async validateUser(userDto: LoginUserDto) {
+
+        
+
         const user = await this.userService.getUserByEmail(userDto.email);
+
+        
+
         if (!user) throw new UserNotFoundException;
 
         if (!user.isActivated) throw new UserNotActivated;

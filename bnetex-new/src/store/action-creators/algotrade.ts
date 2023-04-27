@@ -1,4 +1,5 @@
 import useApi from 'lib/hooks/useApi';
+import { decodeUserJwt } from 'lib/utils/decodeJwt';
 import {getUserInfo} from 'lib/utils/getUserInfo';
 import {Dispatch} from 'redux';
 import {AlgotradeAction, AlgotradeActionTypes, AlgotradeDataResponse} from 'store/actions/algotrade';
@@ -10,7 +11,7 @@ export const getAlgotradeData = () => {
         dispatch({ type: AlgotradeActionTypes.SEND_REQUEST});
 
         return protectedApi
-            .get<AlgotradeDataResponse>(`/users/invest/${getUserInfo().userId}`)
+            .get<AlgotradeDataResponse>(`/users/invest/${decodeUserJwt().userId}`)
             .then((res) => {
                 dispatch({ type: AlgotradeActionTypes.GET_ALGOTRADE_DATA, data: res.data});
             })

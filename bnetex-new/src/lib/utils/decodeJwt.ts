@@ -9,6 +9,8 @@ interface TokenInfo {
     }[];
     mainWallet: number | null;
     investWallet: number | null;
+    id: number | null;
+    userId: number | null;
 }
 
 const defaultTokenInfo: TokenInfo = {
@@ -18,7 +20,9 @@ const defaultTokenInfo: TokenInfo = {
         investPercent: null
     }],
     mainWallet: null,
-    investWallet: null
+    investWallet: null,
+    userId: null, 
+    id: null
 };
 
 export const decodeUserJwt = () => {
@@ -38,7 +42,9 @@ export const decodeUserJwt = () => {
             investPercent: role.investPercent
         }}),
         mainWallet: tokenInfo.mainWallet,
-        investWallet: tokenInfo.investWallet
+        investWallet: tokenInfo.investWallet,
+        id: tokenInfo.id,
+        userId: tokenInfo.id
     }
 
     return response;

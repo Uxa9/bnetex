@@ -14,6 +14,6 @@ export const startInvestTrading = async (amount: number) => {
 
 export const stopInvestTrading = async () => {
     return await protectedApi.get(
-        `/users/stopInvest/${getUserInfo().userId}`
+        `/users/stopInvest`
     );
 };

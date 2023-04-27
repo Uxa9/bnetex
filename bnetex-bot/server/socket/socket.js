@@ -18,6 +18,8 @@ module.exports = (server)  => {
 
     interval(1000).subscribe(_ => {
 
+        console.log({lastRoeInfo})
+
         Object.keys(lastRoeInfo).map(i => {
             let info = lastRoeInfo[i];
             

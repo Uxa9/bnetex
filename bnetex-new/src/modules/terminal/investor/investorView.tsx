@@ -38,8 +38,9 @@ const InvestorView = () => {
 
     const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
 
-    const tradeSession = io(`https://socket.bnetex.com?id=${getUserInfo().userId}`);
-    // const tradeSession = io(`http://localhost:5001?id=${getUserInfo().userId}`);
+    const tradeSession = io(`http://localhost:5001?id=${userInfo.userId}`);
+    
+    // const tradeSession = io(`http://localhost:5001?id=${userInfo.userId}`);
 
     // tradeSession.on('connect', () => {
     //     console.log('connected');
@@ -54,7 +55,7 @@ const InvestorView = () => {
 
     useEffect(() => {
 
-        const tradeSession = io(`http://localhost:5001?id=${getUserInfo().userId}`);
+        const tradeSession = io(`http://localhost:5001?id=${decodeUserJwt().userId}`);
 
         socket.on('connect', () => {
             console.log('Connected!');

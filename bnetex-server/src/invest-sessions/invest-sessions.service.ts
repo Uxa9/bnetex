@@ -1,12 +1,14 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, Scope } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { PositionsService } from '../positions/positions.service';
 import { UsersService } from '../users/users.service';
 import { CreateTradeSessionDto } from './dto/create-session.dto';
 import { InvestSession } from './invest-sessions.model';
+import { REQUEST } from '@nestjs/core';
+import { Request } from 'express';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class InvestSessionsService {
 
     constructor(
@@ -14,10 +16,16 @@ export class InvestSessionsService {
         private userService: UsersService,
         private positionService: PositionsService,
         private readonly httpService: HttpService,
+        @Inject(REQUEST) private readonly Request: Request,
     ) { }
 
     async createSession(dto: CreateTradeSessionDto) {
-        const user = await this.userService.getUserById(dto.userId);
+
+        const req:any = this.Request;
+
+        
+          
+        const user = await this.userService.getUserById(req.user.id);
 
         if (user.openTrade === true) {
             throw new HttpException(
@@ -40,7 +48,7 @@ export class InvestSessionsService {
         }
 
         const session = await this.investSessionRepository.create({
-            userId: dto.userId,
+            userId: req.user.id,
             tradeBalance: dto.amount,
             startSessionTime: new Date,
         });

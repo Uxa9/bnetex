@@ -19,6 +19,7 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
 
 
     public lastRecivedPayload: any = undefined as any;
+    
 
     constructor(
         private socketClient: SocketClientService,
@@ -31,9 +32,12 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
 
     private async handleAlgoMessage(){
 
+        
         if(!this.lastRecivedPayload) return;        
 
         const payload = this.lastRecivedPayload;
+
+        
 
         for (let s of this.server.of('/').sockets) {
                 
@@ -104,7 +108,9 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
     }
 
     onModuleInit() {
-        this.socketClient.emitForcer.subscribe( async (payload: any) => {                   
+        console.log("ЖОПААААААААа")
+        this.socketClient.emitForcer.subscribe( async (payload: any) => {   
+            console.log({payload})
             this.lastRecivedPayload = payload;
             this.handleAlgoMessage();
             
@@ -115,7 +121,8 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
     server: Server;
 
     handleConnection(client: any, ...args: any[]): any {        
-        console.log('Client connected');        
+        console.log('Client connected');     
+        console.log(client.handshake.query.id)   
         this.handleAlgoMessage()
     }
 

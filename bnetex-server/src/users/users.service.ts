@@ -69,6 +69,11 @@ export class UsersService {
         }
     }
 
+    async getCurrentUser(){
+        const req:any = this.Request;
+        return await this.getUserById(req.user.id);
+    }
+
     async changePassword(dto: ChangePasswordDto) {
         const req:any = this.Request;
         const user = await this.getUserById(req.user.id);
@@ -99,7 +104,8 @@ export class UsersService {
             });
     
             return user;
-        } catch (error) {            
+        } catch (error) {  
+            console.log(error)          
             throw new InternalServerError;
         }
     }
@@ -406,6 +412,7 @@ export class UsersService {
 
     async getCurrentOpenPosition() {
         const req:any = this.Request;
+        console.log(req)
         const user = await this.getUserById(req.user.id);           
     
         if (!user) throw new MyException({
