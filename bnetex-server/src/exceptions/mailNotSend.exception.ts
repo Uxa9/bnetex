@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 
-export class UserFoundButNotActivated extends HttpException {
+export class MailNotSend extends HttpException {
     constructor() {
         super(
             {
                 status: "ERROR",
-                message: "USER_FOUND_BUT_NOT_ACTIVATED"
+                message: "ERROR_WHILE_SEND_MAIL_CHECK_EMAIL_ADDRESS"
             },
-            HttpStatus.FOUND
+            HttpStatus.FORBIDDEN
         );
     }
 }

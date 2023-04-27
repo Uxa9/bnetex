@@ -11,10 +11,15 @@ async function  start() {
         .setTitle('Bnetex client API')
         .setDescription('API for connection between Bnetex terminal and DB')
         .setVersion('0.0.1')
-        .addTag('bnetex')
+        // .addTag('bnetex')
         .build();
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('/api/docs', app, document);
+    SwaggerModule.setup('/api/docs', app, document, {
+        swaggerOptions: {
+            tagsSorter: 'alpha',
+            operationsSorter: 'alpha',
+        }
+    });
 
     app.useGlobalPipes(new ValidationPipe());
 

@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 
-export class UserFoundButNotActivated extends HttpException {
+export class RoleNotFound extends HttpException {
     constructor() {
         super(
             {
                 status: "ERROR",
-                message: "USER_FOUND_BUT_NOT_ACTIVATED"
+                message: "EXPECTED_ROLE_NOT_FOUND_CHECK_DB"
             },
-            HttpStatus.FOUND
+            HttpStatus.EXPECTATION_FAILED
         );
     }
 }

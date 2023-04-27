@@ -20,6 +20,9 @@ import { UserException } from 'src/exceptions/user/user.exception';
 import { MyException } from 'src/exceptions/exception';
 import { InternalServerError } from 'src/exceptions/internalError.exception';
 import { UserAlreadyExist } from 'src/exceptions/auth/userAlreadyExist.exception';
+import { RoleNotFound } from 'src/exceptions/role/roleNotFound.exception';
+import { UserJWTOkayButUserNotFound } from 'src/exceptions/user/userJWTokayButUserNotFound.exception';
+import { UserWrongPassword } from 'src/exceptions/user/userWrongPassword.exceptions';
 
 @Injectable({ scope: Scope.REQUEST })
 export class UsersService {
@@ -34,8 +37,8 @@ export class UsersService {
         private positionService: PositionsService) { }
 
     async createUser(dto: CreateUserDto) {
-        const role = await this.roleService.getRoleByValue('investor');
-        if (!role) throw new InternalServerError;
+        const role = await this.roleService.getRoleByName('investor');
+        if (!role) throw new RoleNotFound;
 
         const userExistCheck = await this.getUserByEmail(dto.email);
         if (userExistCheck) throw new UserAlreadyExist;
@@ -52,63 +55,58 @@ export class UsersService {
                 status: "SUCCESS",
                 message: "USER_CREATED"
             };
-        } catch (error) {
+        } catch (error) {            
             throw new InternalServerError;
         }
     }
 
     async getAllUsers() {
-        const users = await this.userRepository.findAll({ include: { all: true } });
-        return users;
+        try {
+            const users = await this.userRepository.findAll({ include: { all: true } });
+            return users;
+        } catch (error) {
+            throw new InternalServerError;
+        }
     }
 
     async changePassword(dto: ChangePasswordDto) {
+        const req:any = this.Request;
+        const user = await this.getUserById(req.user.id);
+        
+        const passwordEq = await bcrypt.compare(dto.prevPassword, user.password);
+        if (!passwordEq) throw new UserWrongPassword;
+        const hashPassword = await bcrypt.hash(dto.newPassword, 5);
 
         try {
-            const req:any = this.Request;
-            const user = await this.getUserById(req.user.id);            
-    
-            if (!user) throw {
-                code : HttpStatus.EXPECTATION_FAILED,
-                message : "JWT_OKAY_BUT_USER_NOT_FOUND"
-            };
-
-            const passwordEq = await bcrypt.compare(dto.prevPassword, user.password);
-
-            if (!passwordEq) throw {
-                code : HttpStatus.FORBIDDEN,
-                message : "PASSWORD_NOT_MATCH"
-            };
-
-            const hashPassword = await bcrypt.hash(dto.newPassword, 5);
-    
             await user.update({
                 password: hashPassword
             });
-
-            return {
-                status: "SUCCESS",
-                message: "PASSWORD_CHANGED"
-            }
-            
         } catch (error) {
-            if (!error.code || error.code === HttpStatus.INTERNAL_SERVER_ERROR) throw new InternalServerError;
-            else throw new MyException(error);
-        }       
+            throw new InternalServerError;
+        }
+
+        return {
+            status: "SUCCESS",
+            message: "PASSWORD_CHANGED"
+        }   
     }
 
     async getUserByEmail(email: string) {
-        const user = await this.userRepository.findOne({
-            where: { email },
-            include: { all: true }
-        });
-
-        return user;
+        try {
+            const user = await this.userRepository.findOne({
+                where: { email },
+                include: { all: true }
+            });
+    
+            return user;
+        } catch (error) {            
+            throw new InternalServerError;
+        }
     }
 
     async addRole(dto: AddRoleDto) {
         const user = await this.userRepository.findByPk(dto.userId);
-        const role = await this.roleService.getRoleByValue(dto.value);
+        const role = await this.roleService.getRoleByName(dto.value);
 
         if (role && user) {
             await user.$add('role', role.id);
@@ -129,9 +127,14 @@ export class UsersService {
     }
 
     async getUserById(id: number) {
-        const user = await this.userRepository.findByPk(id);
-
-        return user;
+        try {
+            const user = await this.userRepository.findByPk(id, {                
+                include: { all: true }
+            });
+            return user;
+        } catch (error) {
+            throw new InternalServerError;
+        }
     }
 
     async getUser(id: number) {
@@ -166,7 +169,7 @@ export class UsersService {
         }
     }
 
-    verifyToken(token){
+    verifyToken(token: string){
         return this.jwtService.verify(token) 
     }
 

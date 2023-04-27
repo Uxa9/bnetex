@@ -11,6 +11,12 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UserIdDto } from './dto/user-id.dto';
 import { StartInvestDto } from './dto/start-invest.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
+import { UserCreatedSuccess } from './responseTypes/userCreatedType';
+import { RoleNotFound } from 'src/exceptions/role/roleNotFound.exception';
+import { UserAlreadyExist } from 'src/exceptions/user/userAlreadyExist.exception';
+import { InternalServerError } from 'src/exceptions/internalError.exception';
+import { UserWrongPassword } from 'src/exceptions/user/userWrongPassword.exceptions';
 
 
 @ApiTags('Users')
@@ -19,18 +25,24 @@ export class UsersController {
 
     constructor(private userService: UsersService) {}
 
-    @ApiOperation({
-        summary : 'Create user'
-    })
-    @ApiResponse({
-        status : 201,
-        type : User
-    })
-    @Put()
-    @HttpCode(201)
-    create(@Body() userDto: CreateUserDto) {
-        return this.userService.createUser(userDto);
-    }
+    // А по идее это не надо
+    // @ApiOperation({
+    //     summary : 'Create user'
+    // })
+    // @ApiResponse({
+    //     status : 201,
+    //     type : UserCreatedSuccess
+    // })
+    // @ApiException(() => [
+    //     RoleNotFound,
+    //     UserAlreadyExist,
+    //     InternalServerError
+    // ])
+    // @Put()
+    // @HttpCode(201)
+    // create(@Body() userDto: CreateUserDto) {
+    //     return this.userService.createUser(userDto);
+    // }
 
     @ApiOperation({
         summary : 'Get all users'
@@ -39,6 +51,9 @@ export class UsersController {
         status : 200,
         type : [User]
     })
+    @ApiException(() => [
+        InternalServerError
+    ])
     @Roles('admin')
     @UseGuards(RolesGuard)
     @Get('/all')
@@ -46,12 +61,17 @@ export class UsersController {
         return this.userService.getAllUsers();
     }
 
-    // @UseGuards(RolesGuard)
-    // @Get('/:id')
-    // getUser(@Param('id') id: number) {
-    //     return this.userService.getUser(id);
-    // }
-
+    @ApiOperation({
+        summary : 'Change user password'
+    })
+    @ApiResponse({
+        status : 200,
+        type : [User]
+    })
+    @ApiException(() => [
+        UserWrongPassword,
+        InternalServerError
+    ])
     @UseGuards(JwtAuthGuard)
     @Post('/changePassword')
     changePassword(@Body() dto: ChangePasswordDto) {

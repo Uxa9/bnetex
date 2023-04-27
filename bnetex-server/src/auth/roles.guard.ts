@@ -3,6 +3,8 @@ import { Reflector } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
 import { Observable } from "rxjs";
 import { ROLES_KEY } from "./roles-auth.decorator";
+import { UserNotAuthorized } from "src/exceptions/user/userNotAuthorized.exception";
+import { AuthAccessDenied } from "src/exceptions/auth/authAccessDenied.exception";
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -18,30 +20,25 @@ export class RolesGuard implements CanActivate {
                 context.getClass()
             ]);
 
-            if (!requiredRoles) {
-                return true;
-            }
+            if (!requiredRoles) return true;
 
-            const req = context.switchToHttp().getRequest()
+            const req = context.switchToHttp().getRequest();
             const authHeader = req.headers.authorization;
             const bearer = authHeader.split(' ')[0];
             const token  = authHeader.split(' ')[1];
 
-            if (bearer !== 'Bearer' || !token) {
-                throw new UnauthorizedException({
-                    message : 'User not authorized'
-                });
-            }
+            if (bearer !== 'Bearer' || !token) throw new UserNotAuthorized;
 
             const user = this.jwtService.verify(token);
             req.user = user;
             
-            return user.roles.some(role=> requiredRoles.includes(role.value));
+            const valid = user.roles.some(role=> requiredRoles.includes(role.name));
+
+            if (valid) return true;
+            else throw new Error;
+
         } catch (e) {
-            throw new HttpException(
-                'Access denied',
-                HttpStatus.FORBIDDEN
-            );
+            throw new AuthAccessDenied;
         }
 
     }

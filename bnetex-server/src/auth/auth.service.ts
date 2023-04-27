@@ -1,10 +1,8 @@
-import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { CreateUserDto } from '../users/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../users/users.model';
-import genereateAndSendAuthCode from '../services/genereateAndSendAuthCode';
 import { ConfirmEmail } from '../users/dto/confirm-email.dto';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { UserNotFoundException } from '../exceptions/userNotFound.exception';
@@ -14,11 +12,17 @@ import { ResendActivationLink } from './dto/resend-activation-link.dto';
 import { GetActivationLinkTime } from './dto/get-activation-link-time.dto';
 import { TokenVerify } from './dto/token-verify.dto';
 import { EmailDto } from './dto/email.dto';
-import {ResetPasswordDto} from "./dto/reset-password.dto";
+import { ResetPasswordDto } from "./dto/reset-password.dto";
 import { InternalServerError } from 'src/exceptions/internalError.exception';
-import { log } from 'console';
-import authException from 'src/exceptions/auth/authExceptions';
-import userException from 'src/exceptions/user/userExceptions';
+import { UserAlreadyExist } from 'src/exceptions/auth/userAlreadyExist.exception';
+import { UserNotActivated } from 'src/exceptions/user/userNotActivated.exception';
+import { UserWrongPassword } from 'src/exceptions/user/userWrongPassword.exceptions';
+import { UserFoundButNotActivated } from 'src/exceptions/auth/userNotActivated.exception';
+import { RegUserDto } from './dto/user-registration.dto';
+import { UserAlreadyActivated } from 'src/exceptions/user/userAlreadyActivated.exception';
+import { MailNotSend } from 'src/exceptions/mailNotSend.exception';
+import { AuthCodeResendTooEarly } from 'src/exceptions/auth/authCodeResendTooEarly.exception';
+import { AuthCodeWrongException } from 'src/exceptions/auth/authCodeWrong.exception';
 
 @Injectable()
 export class AuthService {
@@ -28,41 +32,67 @@ export class AuthService {
         private readonly mailerService: MailerService) { }
 
     async login(userDto: LoginUserDto) {
+        const user = await this.validateUser(userDto);
+
+        const token = await this.generateToken(user);
+
+        return {
+            status: "SUCCESS",
+            message: "EMAIL_CONFIRMED",
+            ...token
+        };
+    }
+
+    async registration(userDto: RegUserDto) {
+        const candidate = await this.userService.getUserByEmail(userDto.email);
+        if (candidate) {
+            if (candidate.isActivated === false) throw new UserFoundButNotActivated;
+
+            throw new UserAlreadyExist;
+        }
+
+        let authCode = generateAuthCode();
+
+        const hashPassword = await bcrypt.hash(userDto.password, 5);
+
         try {
-            const user = await this.validateUser(userDto);
+            await this.mailerService.sendMail({
+                to: userDto.email,
+                from: process.env.SMTP_USER,
+                subject: 'Код подтверждения',
+                template: 'signup',
+                context: {
+                    code: authCode
+                }
+            });
+        } catch (error) {
+            throw new MailNotSend;   
+        }        
 
-            const token = await this.generateToken(user);
+        await this.userService.createUser({ 
+            ...userDto, 
+            password: hashPassword, 
+            activationLink: authCode 
+        });
 
-            return {
-                status: "SUCCESS",
-                message: "EMAIL_CONFIRMED",
-                userId: user.id,
-                ...token
-            };
-        } catch (err) {
-            throw err;
+        return {
+            status: "SUCCESS",
+            message: "REG_SUCCESS"
         }
     }
 
-    async registration(userDto: any) {
+    async resendLink(dto: ResendActivationLink) {
+        const user = await this.userService.getUserByEmail(dto.email);
+        if (!user) throw new UserNotFoundException;
+        if (user.isActivated) throw new UserAlreadyActivated;
+        if (new Date().valueOf() - user.linkTimestamp.valueOf() < 30000) throw new AuthCodeResendTooEarly;
+
+        let authCode = generateAuthCode();
+        
         try {
-            const candidate = await this.userService.getUserByEmail(userDto.email);
-
-            if (candidate) {
-                // Ну ваще надо подумать, что в такой ситуации делать
-                if (candidate.isActivated === false) throw HttpStatus.FOUND
-
-                throw HttpStatus.BAD_REQUEST;
-            }
-
-            let authCode = generateAuthCode();
-
-            const hashPassword = await bcrypt.hash(userDto.password, 5);
-            await this.userService.createUser({ ...userDto, password: hashPassword, activationLink: authCode });
-
             await this.mailerService.sendMail({
-                to: userDto.email,
-                from: 'infobnetex@internet.ru',
+                to: dto.email,
+                from: process.env.SMTP_USER,
                 subject: 'Код подтверждения',
                 template: 'signup',
                 context: {
@@ -70,53 +100,24 @@ export class AuthService {
                 }
             });
 
+            await user.update({
+                activationLink: authCode,
+                linkTimestamp: new Date()
+            });
+
             return {
                 status: "SUCCESS",
-                message: "REG_SUCCESS"
+                message: "MAIL_SENT"
             }
         } catch (error) {
-            authException(error);            
-        }        
-    }
-
-    async resendLink(dto: ResendActivationLink) {
-        const user = await this.userService.getUserByEmail(dto.email);
-
-        if (!user) throw new UserNotFoundException;
-
-        let authCode = generateAuthCode();
-
-        await this.mailerService.sendMail({
-            to: dto.email,
-            from: 'infobnetex@internet.ru',
-            subject: 'Код подтверждения',
-            template: 'signup',
-            context: {
-                code: authCode
-            }
-        });
-
-        await user.update({
-            activationLink: authCode,
-            linkTimestamp: new Date()
-        });
-
-        return {
-            status: "SUCCESS",
-            message: "MAIL_SENT"
+            throw new InternalServerError;
         }
     }
 
     async getActivationLinkDatetime(dto: GetActivationLinkTime) {
         const user = await this.userService.getUserByEmail(dto.email);
-
         if (!user) {
-            throw new HttpException({
-                status: "ERROR",
-                message: "USER_NOT_FOUND"
-            },
-                HttpStatus.NOT_FOUND
-            );
+            throw new UserNotFoundException
         }
 
         return user.linkTimestamp;
@@ -124,85 +125,117 @@ export class AuthService {
 
     async confirmEmail(confirmDto: ConfirmEmail) {
         const user = await this.userService.getUserByEmail(confirmDto.email);
+        if (!user) throw new UserNotFoundException;
+        if (user.isActivated) throw new UserAlreadyActivated;
+        if (confirmDto.activationCode !== user.activationLink) throw new AuthCodeWrongException;
 
-        if (!user) {
-            throw new UserNotFoundException();
-        }
-
-        if (user.isActivated) {
-            return {
-                status: "ERROR",
-                message: "EMAIL_ALREADY_CONFIRMED"
-            }
-        }
-
-        if (confirmDto.activationCode === user.activationLink) {
-
-            const token = await this.generateToken(user);
-
-            let authCode = generateAuthCode();
-
+        const token = await this.generateToken(user);
+        const authCode = generateAuthCode();
+        
+        try {
             user.update({
                 isActivated: true,
-                activationLink: authCode
+                activationLink: authCode,
+                linkTimestamp: new Date()
             });
 
             return {
                 status: "SUCCESS",
                 message: "EMAIL_CONFIRMED",
                 ...token,
-                userId: user.id,
             };
-        } else {
-
-            throw new HttpException({
-                status: "ERROR",
-                message: "WRONG_CODE"
-            },
-                HttpStatus.FORBIDDEN
-            );
+        } catch (error) {
+            throw new InternalServerError;
         }
     }
 
-    // async callGenerateActivationLink() {
-    //     return genereateAuthCode();
-    // }
-
     async verifyToken(dto: TokenVerify) {
-
         try {
-            const valid = await this.jwtService.verify(dto.token);
-              
-            if (valid) {
-                return {
-                    valid: true
-                }
-            } else {
-                throw new HttpException({
-                    message: 'TOKEN_EXPIRED',
-                    status: 'ERROR'
-                }, HttpStatus.UNAUTHORIZED)
-                return {
-                    valid: false
-                }
+            await this.jwtService.verify(dto.token);
+            return {
+                valid: true
             }
         } catch (error) {
-            throw new HttpException({
-                message: 'TOKEN_EXPIRED',
-                status: 'ERROR'
-            }, HttpStatus.UNAUTHORIZED)
             return {
                 valid: false
-            }            
-        }
+            }     
+        }        
+    }
+
+    async dropPassword(dto: EmailDto) {
+        const user = await this.userService.getUserByEmail(dto.email);
+        if (!user) throw new UserNotFoundException;
+
+        let authCode = generateAuthCode();
         
+        try {    
+            await user.update({
+                activationLink: authCode,
+                linkTimestamp: new Date()
+            });    
+        } catch (error) {
+            throw new InternalServerError;            
+        }
+
+        try {
+            await this.mailerService.sendMail({
+                to: dto.email,
+                from: 'infobnetex@internet.ru',
+                subject: 'Сброс пароля',
+                template: 'dropPassword',
+                context: {
+                    link: `https://bnetex.com/auth/password-recovery?code=${authCode}`
+                }
+            });
+        } catch (error) {
+            throw new MailNotSend;
+        }
+
+        return {
+            status: "SUCCESS",
+            message: "MAIL_SENT"
+        }
+    }
+
+    async getNewPassword(dto: ResetPasswordDto) {
+        const user = await this.userService.getUserByEmail(dto.email);
+        if (!user) throw new UserNotFoundException;
+
+        if (dto.code !== user.activationLink) throw new AuthCodeWrongException;
+
+        const password = await bcrypt.hash(dto.password, 5);
+        const authCode = generateAuthCode();
+
+        try {
+            await user.update({
+                password: password,
+                activationLink: authCode,
+                linkTimestamp: new Date()
+            });
+            
+            const token = await this.generateToken(user);
+    
+            return {
+                status: "SUCCESS",
+                message: "PASSWORD_CHANGED",
+                ...token
+            };
+        } catch (error) {
+            throw new InternalServerError;
+        }
     }
 
     private async generateToken(user: User) {
         const payload = {
             email: user.email,
-            id: user.id,
-            roles: user.roles,
+            // id: user.id,
+            roles: user.roles.map(role => {
+                return {
+                    name: role.name,
+                    investPercent: role.investPercent,
+                    desc: role.desc
+                }
+            }),
             mainWallet: user.mainWallet,
             investWallet: user.investWallet
         }
@@ -213,84 +246,15 @@ export class AuthService {
     }
 
     private async validateUser(userDto: LoginUserDto) {
-        try {
-            const user = await this.userService.getUserByEmail(userDto.email);
-    
-            if (!user) throw HttpStatus.BAD_REQUEST;
-    
-            if (!user.isActivated) throw HttpStatus.FORBIDDEN;
-    
-            const passwordEq = await bcrypt.compare(userDto.password, user.password);
-    
-            if (!passwordEq) throw HttpStatus.UNAUTHORIZED;
-    
-            return user;
-        } catch (error) {
-            return userException(error);
-        }
-    }
+        const user = await this.userService.getUserByEmail(userDto.email);
+        if (!user) throw new UserNotFoundException;
 
-    async dropPassword(dto: EmailDto) {
-        const user = await this.userService.getUserByEmail(dto.email);
+        if (!user.isActivated) throw new UserNotActivated;
 
-        if (!user) {
-            throw new UserNotFoundException();
-        }
+        const passwordEq = await bcrypt.compare(userDto.password, user.password);
 
-        let authCode = generateAuthCode();
+        if (!passwordEq) throw new UserWrongPassword;
 
-        user.update({
-            activationLink: authCode,
-            linkTimestamp: new Date
-        });
-
-        await this.mailerService.sendMail({
-            to: dto.email,
-            from: 'infobnetex@internet.ru',
-            subject: 'Сброс пароля',
-            template: 'dropPassword',
-            context: {
-                link: `https://bnetex.com/auth/password-recovery?code=${authCode}`
-            }
-        });
-
-        return {
-            status: "SUCCESS",
-            message: "MAIL_SENT"
-        }
-    }
-
-    async getNewPassword(dto: ResetPasswordDto) {
-        const user = await this.userService.getUserByEmail(dto.email);
-
-        if (!user) {
-            throw new UserNotFoundException();
-        }
-
-        if (dto.code === user.activationLink) {
-            const password = await bcrypt.hash(dto.password, 5);
-
-            await user.update({
-                password: password,
-                activationLink: ""
-            });
-
-            const token = await this.generateToken(user);
-
-            return {
-                status: "SUCCESS",
-                message: "PASSWORD_CHANGED",
-                userId: user.id,
-                ...token
-            };
-        } else {
-
-            throw new HttpException({
-                    status: "ERROR",
-                    message: "WRONG_CODE"
-                },
-                HttpStatus.FORBIDDEN
-            );
-        }
+        return user;
     }
 }

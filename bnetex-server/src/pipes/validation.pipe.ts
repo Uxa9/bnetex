@@ -13,7 +13,7 @@ export class ValidationPipe implements PipeTransform<any> {
         if (errors.length) {
             let messages = "";
 
-            errors.map(err => {                
+            errors.map(err => {         
                 messages = messages.concat(`\n${Object.values(err.constraints).join(', ')}`);
             });
 

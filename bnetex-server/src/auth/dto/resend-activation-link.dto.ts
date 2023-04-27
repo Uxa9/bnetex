@@ -1,6 +1,11 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 
 export class ResendActivationLink {
+    @ApiProperty({
+        example : 'bnetex@bne.tex',
+        description : 'user e-mail'
+    })
     @IsString({
         message : 'E-mail must be a string'
     })

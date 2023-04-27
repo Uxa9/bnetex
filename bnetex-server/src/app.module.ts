@@ -65,17 +65,17 @@ import { LotFilter } from "./invest-trading/models/lotFIlter.model";
             logging: false
         }),
         // MongooseModule.forRoot(`mongodb://127.0.0.1:27017/exchange`),
-        UsersModule,
-        RolesModule,
         AuthModule,
-        TransactionModule,
-        RequestModule,
-        MailSenderModule,
-        PositionsModule,
+        GatewayModule,
         InvestSessionsModule,
         InvestTradingModule,
-        GatewayModule,
+        MailSenderModule,
+        PositionsModule,
+        RequestModule,
+        RolesModule,
         SocketModule,
+        TransactionModule,
+        UsersModule,
         WalletModule
     ]
 })
