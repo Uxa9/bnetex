@@ -15,6 +15,8 @@ export const getHistoricalData = async (period: number, amount: number): Promise
             amount,
         });
 
+        
+
     return {
         dates: result.data.dates,
         pnlValues: result.data.pnlValues,

@@ -7,7 +7,7 @@ import { InvestTradingModule } from "../invest-trading/invest-trading.module";
 import { SocketClientService } from "src/socket/socket-client.service";
 
 @Module({
-    providers: [MyGateway, SocketClientService],
+    providers: [MyGateway],
     imports: [SocketModule, UsersModule, InvestSessionsModule, InvestTradingModule]
 })
 export class GatewayModule {}

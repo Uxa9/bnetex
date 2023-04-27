@@ -8,7 +8,7 @@ import { InvestSession } from './invest-sessions.model';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable({ scope: Scope.DEFAULT })
 export class InvestSessionsService {
 
     constructor(
@@ -19,13 +19,13 @@ export class InvestSessionsService {
         @Inject(REQUEST) private readonly Request: Request,
     ) { }
 
-    async createSession(dto: CreateTradeSessionDto) {
+    async createSession(dto: CreateTradeSessionDto, userId: number) {
 
         const req:any = this.Request;
 
         
           
-        const user = await this.userService.getUserById(req.user.id);
+        const user = await this.userService.getUserById(userId);
 
         if (user.openTrade === true) {
             throw new HttpException(
@@ -48,7 +48,7 @@ export class InvestSessionsService {
         }
 
         const session = await this.investSessionRepository.create({
-            userId: req.user.id,
+            userId: userId,
             tradeBalance: dto.amount,
             startSessionTime: new Date,
         });

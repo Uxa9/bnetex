@@ -80,13 +80,16 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
 
                     // const userPnl = userPartition * (1 + Number(roe) / 100) - userPartition;
 
-                    const userPnl = user.tradeBalance * totalPNL / totalDeposit;
-                    const userRoe = user.tradeBalance * totalROE / totalDeposit;
+                    let userPnl = user.tradeBalance * totalPNL / totalDeposit;
+                    let userRoe = user.tradeBalance * totalROE / totalDeposit;
 
-                    //console.log({userPnl})
+                    //console.log({u})
+                    const userPercent = user.roles[0].investPercent;
 
-                    //console.log({sellVolume, buyVolume, diff: sellVolume-buyVolume})
-                    
+                    if(userPnl > 0){
+                        userPnl = userPnl * userPercent / 100;
+                        userRoe = userRoe * userPercent / 100;
+                    }
                     
                     
                     s[1].emit('currentPosition', {
@@ -108,9 +111,9 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
     }
 
     onModuleInit() {
-        console.log("ЖОПААААААААа")
+        
         this.socketClient.emitForcer.subscribe( async (payload: any) => {   
-            console.log({payload})
+            
             this.lastRecivedPayload = payload;
             this.handleAlgoMessage();
             

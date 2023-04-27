@@ -159,10 +159,10 @@ export class UsersService {
         };
     }
 
-    async getWallets() {
+    async getWallets(userId: number) {
         
         const req:any = this.Request;
-        const user = await this.getUserById(req.user.id);            
+        const user = await this.getUserById(userId);            
     
         if (!user) throw new MyException({
             code : HttpStatus.EXPECTATION_FAILED,
@@ -222,10 +222,10 @@ export class UsersService {
         return Math.random() * (max - min) + min;
     }
 
-    async getPnL() {
+    async getPnL(userId: number) {
         
-        const req:any = this.Request;
-        const user = await this.getUserById(req.user.id);            
+        
+        const user = await this.getUserById(userId);            
     
         if (!user) throw new MyException({
             code : HttpStatus.EXPECTATION_FAILED,
@@ -256,12 +256,12 @@ export class UsersService {
         }
     }
 
-    async getRoE() {
+    async getRoE(userId: number) {
         
         const req:any = this.Request;
         console.log(req);
         
-        const user = await this.getUserById(req.user.id);            
+        const user = await this.getUserById(userId);            
     
         if (!user) throw new MyException({
             code : HttpStatus.EXPECTATION_FAILED,
@@ -292,13 +292,11 @@ export class UsersService {
         }
     }
 
-    async getUserPnlAndRoe() {
+    async getUserPnlAndRoe(userId: number) {
         
-        const req:any = this.Request;
-        console.log(req);
-        console.log(this.Request);
         
-        const user = await this.getUserById(req.user.id);            
+        
+        const user = await this.getUserById(userId);            
     // console.log(user);
     
         if (!user) throw new MyException({
@@ -306,7 +304,7 @@ export class UsersService {
             message : "JWT_OKAY_BUT_USER_NOT_FOUND"
         });
 
-        const sessions = await this.investSessions.getAllUserSessions(req.user.id);
+        const sessions = await this.investSessions.getAllUserSessions(userId);
 
         if ( sessions.length == 0 ) {
             return {
@@ -346,34 +344,34 @@ export class UsersService {
         }
     }
 
-    async startInvest(dto: StartInvestDto) {
-        return await this.investSessions.createSession(dto);
+    async startInvest(dto: StartInvestDto, userId: number) {
+        return await this.investSessions.createSession(dto, userId);
     }
 
-    async stopInvest() {
-        const req:any = this.Request;
-        const user = await this.getUserById(req.user.id);            
+    async stopInvest(id: number) {
+        
+        const user = await this.getUserById(id);            
     
         if (!user) throw new MyException({
             code : HttpStatus.EXPECTATION_FAILED,
             message : "JWT_OKAY_BUT_USER_NOT_FOUND"
         });
 
-        const res = await this.investSessions.stopSession(req.user.id);
+        const res = await this.investSessions.stopSession(id);
         
         return res; //опять чето странное
     }
 
-    async getUserActiveSession() {
-        const req:any = this.Request;
-        const user = await this.getUserById(req.user.id);            
+    async getUserActiveSession(id: number) {
+        
+        const user = await this.getUserById(id);            
     
         if (!user) throw new MyException({
             code : HttpStatus.EXPECTATION_FAILED,
             message : "JWT_OKAY_BUT_USER_NOT_FOUND"
         });
 
-        const session = await this.investSessions.getUserActiveSession(req.user.id);
+        const session = await this.investSessions.getUserActiveSession(id);
 
         if ( !session ) {
             return {
@@ -410,10 +408,9 @@ export class UsersService {
         return res.reduce((acc, user) => acc + user.tradeBalance, 0);
     }
 
-    async getCurrentOpenPosition() {
-        const req:any = this.Request;
-        console.log(req)
-        const user = await this.getUserById(req.user.id);           
+    async getCurrentOpenPosition(id: number) {
+        
+        const user = await this.getUserById(id);           
     
         if (!user) throw new MyException({
             code : HttpStatus.EXPECTATION_FAILED,
@@ -426,7 +423,7 @@ export class UsersService {
             return [];
         }
         
-        const userSession = await this.investSessions.getUserActiveSession(req.user.id);
+        const userSession = await this.investSessions.getUserActiveSession(id);
 
         if (userSession.startSessionTime.getTime() > position.enterTime) {
             return [];

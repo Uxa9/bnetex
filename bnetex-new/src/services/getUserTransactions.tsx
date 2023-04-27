@@ -1,6 +1,6 @@
 import useApi from 'lib/hooks/useApi';
 
-const getUserTransactions = async (id: number) => {
+const getUserTransactions = async () => {
 
     const { api } = useApi();
 

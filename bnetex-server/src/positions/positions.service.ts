@@ -22,6 +22,8 @@ export class PositionsService {
 
     async getPnlAndRoe(dto: any) {
 
+        console.log({dto})
+
         const from = dto.from || new Date().valueOf();
         const to = dto.to || new Date().valueOf();
 
@@ -129,15 +131,21 @@ export class PositionsService {
             const from = new Date().setMonth(new Date().getMonth() - period)
 
             const positions: any[] = await new Promise((resolve, reject) => this.httpService.post('http://localhost:3009/front/history', {
-                periodMonth: period
+                to,
+                from
             }).subscribe((res) => {
+                
                 resolve(res.data.response);
             }, err => {
+                
                 console.log(err);
                 reject([]);
             }))
 
-            let res = [];
+
+            
+
+            let res:any[] = [];
 
             positions.map((position) => {
                 const positionEnters = position.POSITION_ENTERs;
@@ -154,9 +162,20 @@ export class PositionsService {
                     };
                 });
 
-                return res;
+                res = [...res, ...enters];
+
+                res.push({
+                    date: new Date(position.closeTime),
+                    action: position.positionType === 'LONG' ? 'sale' : 'purchase',
+                    amount: position.volumeUSDT * lever,
+                    price: position.closePrice,
+                    PNL: position.sumProfit * lever,
+                });
 
             });
+
+            return res;
+
         } catch (error) {
             console.log('hist data orders');
 

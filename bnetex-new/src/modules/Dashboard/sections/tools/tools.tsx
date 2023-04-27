@@ -27,7 +27,7 @@ const Tools = () => {
 
     useEffect(() => {
         dispath(getRoeAndPnl());
-        getUserTransactions(getUserInfo().userId ?? 0)
+        getUserTransactions()
             .then(res => {
                 let data = res.map((item: any) => {
                     return ({

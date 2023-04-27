@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, UsePipes, Param, Put, Headers, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, UsePipes, Param, Put, Headers, HttpCode, Request } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/roles-auth.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -85,33 +85,33 @@ export class UsersController {
     })
     @UseGuards(JwtAuthGuard)
     @Get('/getWallets')
-    getWallets(@Headers('Authorization') token: string) {
-        return this.userService.getWallets();
+    getWallets(@Request() req: any) {
+        return this.userService.getWallets(req.user.id);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('/getpnl')
-    getPnL(@Headers('Authorization') token: string) {
-        return this.userService.getPnL();
+    getPnL(@Request() req: any) {
+        return this.userService.getPnL(req.user.id);
     }
 
 
     @UseGuards(JwtAuthGuard)
     @Get('/info')
-    info(@Headers('Authorization') token: string) {
-        return this.userService.getCurrentUser();
+    info(@Request() req: any) {
+        return this.userService.getUserById(req.user.id);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('/getroe')
-    getRoE(@Headers('Authorization') token: string) {
-        return this.userService.getRoE();
+    getRoE(@Request() req: any) {
+        return this.userService.getRoE(req.user.id);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('/getRoeAndPnl')
-    getRoeAndPnl(@Headers('Authorization') token: string) {
-        return this.userService.getUserPnlAndRoe();
+    getRoeAndPnl(@Request() req: any) {
+        return this.userService.getUserPnlAndRoe(req.user.id);
     }
 
     @ApiOperation({
@@ -135,20 +135,20 @@ export class UsersController {
 
     @UseGuards(JwtAuthGuard)
     @Post('/startInvest')
-    startInvest(@Body() dto: StartInvestDto, @Headers('Authorization') token: string) {
-        return this.userService.startInvest(dto);
+    startInvest(@Body() dto: StartInvestDto, @Request() req: any) {
+        return this.userService.startInvest(dto, req.user.id);
     }
     
     @UseGuards(JwtAuthGuard)
     @Get('/stopInvest')
-    stopInvest(@Headers('Authorization') token: string) {
-        return this.userService.stopInvest();
+    stopInvest(@Request() req: any) {
+        return this.userService.stopInvest(req.user.id);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('/invest')
-    getUserTradeSession(@Headers('Authorization') token: string) {
-        return this.userService.getUserActiveSession();
+    getUserTradeSession(@Request() req: any) {
+        return this.userService.getUserActiveSession(req.user.id);
     }
     
     @Get('/totalInvestAmount/get')
@@ -158,8 +158,9 @@ export class UsersController {
 
     @UseGuards(JwtAuthGuard)
     @Get('invest/positions')
-    getOpenUserPosition(@Headers('Authorization') token: string) {
-        return this.userService.getCurrentOpenPosition();
+    getOpenUserPosition(@Request() req: any) {
+        
+        return this.userService.getCurrentOpenPosition(req.user.id);
     }
 
     @Put('set-api')
