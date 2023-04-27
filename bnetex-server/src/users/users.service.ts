@@ -24,7 +24,7 @@ import { RoleNotFound } from 'src/exceptions/role/roleNotFound.exception';
 import { UserJWTOkayButUserNotFound } from 'src/exceptions/user/userJWTokayButUserNotFound.exception';
 import { UserWrongPassword } from 'src/exceptions/user/userWrongPassword.exceptions';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable({ scope: Scope.DEFAULT })
 export class UsersService {
 
     constructor(@InjectModel(User) private userRepository: typeof User,
@@ -293,7 +293,7 @@ export class UsersService {
         console.log(this.Request);
         
         const user = await this.getUserById(req.user.id);            
-    console.log(user);
+    // console.log(user);
     
         if (!user) throw new MyException({
             code : HttpStatus.EXPECTATION_FAILED,
