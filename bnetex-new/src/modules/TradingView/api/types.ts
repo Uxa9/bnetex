@@ -43,17 +43,24 @@ export type HistoryPeriod = 1 | 3 | 6;
 
 export type PeriodScope = Pick<PeriodParams, 'from' | 'to'>
 
-export type BinanceSymbol = {
+export type BinanceSymbol<T = string> = {
     symbol: string;
     baseAsset: string;
     quoteAsset: string;
-    priceFilter?: PriceFilter;
+    priceFilter: PriceFilter<T>;
+    lotFilter: LotFilter<T>;
 }
 
-export type PriceFilter = {
-    maxPrice: string;
-    minPrice: string;
-    tickSize: string;
+export type PriceFilter<T = string> = {
+    maxPrice: T;
+    minPrice: T;
+    tickSize: T;
+};
+
+export type LotFilter<T = string> = {
+    maxQty: T;
+    minQty: T;
+    stepSize: T;
 };
 
 export const configurationData: DatafeedConfiguration = {

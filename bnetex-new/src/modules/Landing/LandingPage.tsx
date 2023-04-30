@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import DynamicGrid from './components/DynamicGrid/dynamicGrid';
 import styles from './LandingPage.module.scss';
 import Devices from './sections/devices/devices';
@@ -10,6 +11,11 @@ import Trade from './sections/trade/trade';
 //toDo: пофиксить overflow страницы
 
 const LandingPage = () => {
+    const a = useRef<ResizeObserver>()
+    useEffect(() => {
+
+    }, []);
+
     return (
         <main className={styles['container']}>
             <DynamicGrid />

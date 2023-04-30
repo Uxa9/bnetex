@@ -7,6 +7,7 @@ import { createCombinedStreamString, depthSocketMessageParser, generateSocketId,
 import { getOrderBookSnapshot } from './sevices';
 import { useAppDispatch } from '../useAppDispatch';
 import { clearOrderBook, setOrderBook, setTradePairPrice, updateOrderBook } from 'store/action-creators/tradePair';
+import { BinanceSymbol, PriceFilter } from 'modules/TradingView/api/types';
 
 export interface BinanceSocketContext {
     tradePair: string | null;
@@ -22,14 +23,14 @@ const binanceSocketContext = createContext<BinanceSocketContext | null>(null);
 export const useBinanceSocket = () => useContext(binanceSocketContext)
     ?? throwError('useBinanceSocket can be used only inside BinanceSocketProvider');
 
-export function BinanceSocketProvider({children}: {children: ReactNode}) {
+export function BinanceSocketProvider({ children }: { children: ReactNode }) {
 
     const dispatch = useAppDispatch();
 
     // хранилище сокетов нужно для корректного закрытия
     const socketMap = useRef<Map<string, WebSocket>>(new Map());
     // торговая пара - BTCUSDT, ETHUSDT, etc.
-    const [tradePair, setTradePair] = useState<string | null>(null);
+    const [tradePair, setTradePair] = useState<BinanceSymbol<number> | null>(null);
     // ассеты торговой пары
     const [tradePairAssets, setTradePairAssets] = useState<BinanceSymbolAssets | null>(null);
     const [socketType, setSocketType] = useState<BinanceSocketType | null>(null);
@@ -59,11 +60,15 @@ export function BinanceSocketProvider({children}: {children: ReactNode}) {
         return () => closeActiveSocket();
     }, [activeSocketId]);
 
+    const updateTradePair = ({ priceFilter, lotFilter, ...rest }: BinanceSymbol<string>) => {
+
+        
+    }
+
     const loadOrderBook = async () => {
         const { lastUpdateId, asks, bids } = await getOrderBookSnapshot(tradePair!);
 
         dispatch(setOrderBook(asks, bids));
-
         snapshotUpdateIdRef.current = lastUpdateId;
     };
 

@@ -26,19 +26,36 @@ const OrderBook = () => {
         return Math.max(biggestAsk, biggestBid);
     }, [ asks, bids ]);
 
+    // Первичная генерация массива цен в стакане.
+    // должна выполняться при наличии цены торговой пары
+    // и пустом массиве цен (т.е. либо после монтирования либо после смены торговой пары)
     useEffect(() => {
         if (priceLevels || !price) return;
 
         generateMorePriceLevels(price);
-    }, [ price, tradePair]);
-
-    const evaluateCurrentPriceRef = useCallback((itemPrice: number) => {
-
-        if (!price) return null;
-        console.log( Math.abs(itemPrice - price));
-
-        return Math.abs(itemPrice - price) <= ORDER_BOOK_STEP ? currentPriceLevelRef : null;
     }, [ price ]);
+
+    // Очистка массива цен при смене торговой пары
+    useEffect(() => {
+        if (priceLevels) setPriceLevels(null);
+    }, [ tradePair ]);
+
+    // цена по текущему шагу ближайшая к текущей цене
+    // например, при шаге в 10 и цене в 21117 ближайшей ценой будет 21120
+    const closestToCurrentPrice = useMemo(() => {
+        if (!price) return null;
+        const roundedToNearest = Math.round(price / ORDER_BOOK_STEP) * ORDER_BOOK_STEP;
+
+        return Math.round(roundedToNearest * 10) / 10;
+    }, [ price ]);
+
+    // реф должен передаваться только в тот компонент цены, в котором отображается
+    // актуальная цена торговой пары (или ближайшая к ней)
+    const evaluateCurrentPriceRef = useCallback((itemPrice: number) => {
+        console.log( itemPrice);
+
+        return closestToCurrentPrice === itemPrice ? currentPriceLevelRef : null;
+    }, [ closestToCurrentPrice ]);
 
     return (
         <div

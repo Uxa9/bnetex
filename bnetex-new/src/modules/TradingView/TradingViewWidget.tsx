@@ -41,7 +41,7 @@ const TradingViewWidget = ({ className }: TradingViewWidgetProps) => {
         };
     }, []);
 
-    const onTradePairUpdate = ({ symbol, baseAsset, quoteAsset }: Omit<BinanceSymbol, 'priceFilter'>) => {
+    const onTradePairUpdate = ({ symbol, baseAsset, quoteAsset }: BinanceSymbol) => {
         setTradePair(symbol);
         setSearchParams([[ 'tradePair', symbol ]]);
         setTradePairAssets({ baseAsset, quoteAsset });

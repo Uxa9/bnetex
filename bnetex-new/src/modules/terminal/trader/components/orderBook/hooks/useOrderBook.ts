@@ -5,12 +5,20 @@ interface UseOrderBookProps {
     setPriceLevels: Dispatch<SetStateAction<number[] | null>>
 }
 
-const useOrderBook = ({setPriceLevels}: UseOrderBookProps) => {
+/**
+ * Хук, инкапсулирующий методы обновления цен в стакане
+ * @returns
+ */
+const useOrderBook = ({ setPriceLevels }: UseOrderBookProps) => {
 
-    const generateLowerPriceLevels = (basePriceLevel: number) => {
+    /**
+     * Сгенерировать массив цен, меньших цены basePriceLevel
+     * @param basePriceLevel
+     */
+    const generateLowerPriceLevels = (basePriceLevel: number, quantity = DEFAULT_ORDER_BOOK_INCREMENT) => {
         const extraPriceLevels: number[] = [ basePriceLevel ];
 
-        for (let i = 0; i < DEFAULT_ORDER_BOOK_INCREMENT; i++) {
+        for (let i = 0; i < quantity; i++) {
             if (extraPriceLevels[i] === 0) break;
             const incrementedValue = extraPriceLevels[i] - ORDER_BOOK_STEP;
             extraPriceLevels.push(incrementedValue);
@@ -19,10 +27,14 @@ const useOrderBook = ({setPriceLevels}: UseOrderBookProps) => {
         return extraPriceLevels;
     };
 
-    const generateHigherPriceLevels = (basePriceLevel: number) => {
+    /**
+     * Сгенерировать массив цен, бОльших цены basePriceLevel
+     * @param basePriceLevel
+     */
+    const generateHigherPriceLevels = (basePriceLevel: number, quantity = DEFAULT_ORDER_BOOK_INCREMENT) => {
         const extraPriceLevels: number[] = [ basePriceLevel ];
 
-        for (let i = 0; i < DEFAULT_ORDER_BOOK_INCREMENT; i++) {
+        for (let i = 0; i < quantity; i++) {
             const incrementedValue = extraPriceLevels[i] + ORDER_BOOK_STEP;
             extraPriceLevels.push(incrementedValue);
         }
@@ -30,6 +42,12 @@ const useOrderBook = ({setPriceLevels}: UseOrderBookProps) => {
         return extraPriceLevels.reverse();
     };
 
+    /**
+     * Функция виртуализации списка цен в стакане. Позволяет добавлять цены
+     * меньшие/большие basePriceLevel.
+     * Автоматически удаляет из стейта некоторое число цен (по умолчанию 20 элементов)
+     * при превышении лимита на размер стейта.
+     */
     const generateMorePriceLevels = useCallback((basePriceLevel: number, action?: 'increment' | 'decrement') => {
         switch (action) {
             case 'increment': {
@@ -51,8 +69,8 @@ const useOrderBook = ({setPriceLevels}: UseOrderBookProps) => {
                 break;
             }
             default: {
-                const extraLowerPriceLevels = generateLowerPriceLevels(basePriceLevel);
-                const extraHigherPriceLevels = generateHigherPriceLevels(extraLowerPriceLevels[0] + ORDER_BOOK_STEP);
+                const extraLowerPriceLevels = generateLowerPriceLevels(basePriceLevel, 19);
+                const extraHigherPriceLevels = generateHigherPriceLevels(extraLowerPriceLevels[0] + ORDER_BOOK_STEP, 19);
                 setPriceLevels(extraHigherPriceLevels.concat(extraLowerPriceLevels));
             }
         }

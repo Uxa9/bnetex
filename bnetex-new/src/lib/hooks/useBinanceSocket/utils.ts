@@ -1,3 +1,4 @@
+import { BinanceSymbol, LotFilter, PriceFilter } from 'modules/TradingView/api/types';
 import { BinanceSocketType, ParsedDepthData, ParsedTickerData, RawSocketMessage,
     socketKeysRecord, UnparsedDepthData, UnparsedTickerData} from './types';
 
@@ -51,4 +52,25 @@ export const depthSocketMessageParser = (data: UnparsedDepthData) => {
         finalUpdate: data.u,
         prevUpdate: data.pu,
     } as ParsedDepthData;
+};
+
+// toDo: наверное нужно сделать универсальной функцией в global utils
+function parseObjectValuesToNumber<O extends Object, ReturnType>(object: O): ReturnType {
+    return Object.entries(object)
+        .reduce((acc: any, [ key, value ]) => {
+            return { ...acc, [key]: parseFloat(value) };
+        }, {}) as ReturnType;
+}
+
+export const parseBinanceSymbol = (symbol: BinanceSymbol<string>): BinanceSymbol<number> => {
+    const { priceFilter, lotFilter, ...rest } = symbol;
+
+    const parsedPriceFilter = parseObjectValuesToNumber<PriceFilter<string>, PriceFilter<number>>(priceFilter);
+    const parsedLotFilter = parseObjectValuesToNumber<LotFilter<string>, LotFilter<number>>(lotFilter);
+
+    return {
+        ...rest,
+        priceFilter: parsedPriceFilter,
+        lotFilter: parsedLotFilter,
+    };
 };
