@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=root
+      - MYSQL_ROOT_PASSWORD=root
+  mongodb:
+    image: mongo:6-jammy
+    ports:
+      - '27017:27017'
+  mailhog:
+    image: mailhog/mailhog
+    logging:
+      driver: 'none'
+    ports:
+      - 1025:1025
+      - 8025:8025
