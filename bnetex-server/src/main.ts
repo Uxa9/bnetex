@@ -2,6 +2,7 @@ import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "./pipes/validation.pipe";
+import { GlobalExceptionFilter } from "./filters/global-exception.filter";
 
 async function  start() {
     const PORT = process.env.PORT || 5000;
@@ -21,6 +22,7 @@ async function  start() {
         }
     });
 
+    app.useGlobalFilters(new GlobalExceptionFilter());
     app.useGlobalPipes(new ValidationPipe());
 
     app.enableCors();
