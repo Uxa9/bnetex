@@ -1,8 +1,10 @@
-import { Dispatch, SetStateAction, useCallback } from 'react';
-import { DEFAULT_ORDER_BOOK_INCREMENT, MAX_ORDER_BOOK_SIZE, ORDER_BOOK_STEP } from '../types/types';
+import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
+import { DEFAULT_ORDER_BOOK_INCREMENT, MAX_ORDER_BOOK_SIZE } from '../types/types';
+import { useBinanceSocket } from 'lib/hooks/useBinanceSocket/useBinanceSocket';
 
 interface UseOrderBookProps {
-    setPriceLevels: Dispatch<SetStateAction<number[] | null>>
+    setPriceLevels: Dispatch<SetStateAction<number[] | null>>;
+    tickSize?: number;
 }
 
 /**
@@ -10,6 +12,12 @@ interface UseOrderBookProps {
  * @returns
  */
 const useOrderBook = ({ setPriceLevels }: UseOrderBookProps) => {
+
+    const { tradePair, tradePairFractionDigits } = useBinanceSocket();
+
+    const tickSize: number | null = useMemo(() => {
+        return tradePair?.priceFilter.tickSize ?? null;
+    }, [ tradePair ]);
 
     /**
      * Сгенерировать массив цен, меньших цены basePriceLevel
@@ -20,8 +28,8 @@ const useOrderBook = ({ setPriceLevels }: UseOrderBookProps) => {
 
         for (let i = 0; i < quantity; i++) {
             if (extraPriceLevels[i] === 0) break;
-            const incrementedValue = extraPriceLevels[i] - ORDER_BOOK_STEP;
-            extraPriceLevels.push(incrementedValue);
+            const incrementedValue = (extraPriceLevels[i] - tickSize!).toFixed(tradePairFractionDigits);
+            extraPriceLevels.push(parseFloat(incrementedValue));
         }
 
         return extraPriceLevels;
@@ -35,8 +43,8 @@ const useOrderBook = ({ setPriceLevels }: UseOrderBookProps) => {
         const extraPriceLevels: number[] = [ basePriceLevel ];
 
         for (let i = 0; i < quantity; i++) {
-            const incrementedValue = extraPriceLevels[i] + ORDER_BOOK_STEP;
-            extraPriceLevels.push(incrementedValue);
+            const incrementedValue = (extraPriceLevels[i] + tickSize!).toFixed(tradePairFractionDigits);
+            extraPriceLevels.push(parseFloat(incrementedValue));
         }
 
         return extraPriceLevels.reverse();
@@ -49,6 +57,8 @@ const useOrderBook = ({ setPriceLevels }: UseOrderBookProps) => {
      * при превышении лимита на размер стейта.
      */
     const generateMorePriceLevels = useCallback((basePriceLevel: number, action?: 'increment' | 'decrement') => {
+        if (!tickSize) return;
+
         switch (action) {
             case 'increment': {
                 const extraPriceLevels = generateHigherPriceLevels(basePriceLevel);
@@ -70,11 +80,11 @@ const useOrderBook = ({ setPriceLevels }: UseOrderBookProps) => {
             }
             default: {
                 const extraLowerPriceLevels = generateLowerPriceLevels(basePriceLevel, 19);
-                const extraHigherPriceLevels = generateHigherPriceLevels(extraLowerPriceLevels[0] + ORDER_BOOK_STEP, 19);
+                const extraHigherPriceLevels = generateHigherPriceLevels(extraLowerPriceLevels[0] + tickSize, 19);
                 setPriceLevels(extraHigherPriceLevels.concat(extraLowerPriceLevels));
             }
         }
-    }, [ setPriceLevels ]);
+    }, [ setPriceLevels, tickSize ]);
 
     return { generateMorePriceLevels };
 };

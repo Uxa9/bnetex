@@ -14,6 +14,7 @@ import { useSearchParams } from 'react-router-dom';
 import { defaultTradingWidgetProps } from './defaultProps';
 import { useBinanceSocket } from 'lib/hooks/useBinanceSocket/useBinanceSocket';
 import { validateTradePair } from './utils/validateTradePair';
+import { parseBinanceSymbol } from 'lib/hooks/useBinanceSocket/utils';
 
 interface TradingViewWidgetProps {
     className?: string;
@@ -25,7 +26,7 @@ const TradingViewWidget = ({ className }: TradingViewWidgetProps) => {
     const { theme } = useTheme();
     const [ searchParams, setSearchParams ] = useSearchParams();
     const { markRefreshFlag } = useTypedSelector(state => state.algotrade);
-    const { setTradePair, setTradePairAssets } = useBinanceSocket();
+    const { setTradePair } = useBinanceSocket();
 
     // Создание tv-виджета. Выполняется единожды при монтировании компонента
     useEffect(() => {
@@ -41,10 +42,9 @@ const TradingViewWidget = ({ className }: TradingViewWidgetProps) => {
         };
     }, []);
 
-    const onTradePairUpdate = ({ symbol, baseAsset, quoteAsset }: BinanceSymbol) => {
-        setTradePair(symbol);
-        setSearchParams([[ 'tradePair', symbol ]]);
-        setTradePairAssets({ baseAsset, quoteAsset });
+    const onTradePairUpdate = (tradePair: BinanceSymbol) => {
+        setTradePair(parseBinanceSymbol(tradePair));
+        setSearchParams([[ 'tradePair', tradePair.symbol ]]);
     };
 
     const constructTvWidget = async () => {

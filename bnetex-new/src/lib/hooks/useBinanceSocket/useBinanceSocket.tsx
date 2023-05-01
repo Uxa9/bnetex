@@ -1,21 +1,20 @@
 import { createContext, Dispatch, ReactNode, SetStateAction,
     useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { throwError } from 'lib/utils/errorThrower';
-import { AvailableSocketKeys, BinanceSocketType, BinanceSymbolAssets, binanceWSEndpoint } from './types';
+import { AvailableSocketKeys, BinanceSocketType, binanceWSEndpoint } from './types';
 import { createCombinedStreamString, depthSocketMessageParser, generateSocketId,
     parseSocketMessage, tickerSocketMessageParser } from './utils';
 import { getOrderBookSnapshot } from './sevices';
 import { useAppDispatch } from '../useAppDispatch';
 import { clearOrderBook, setOrderBook, setTradePairPrice, updateOrderBook } from 'store/action-creators/tradePair';
-import { BinanceSymbol, PriceFilter } from 'modules/TradingView/api/types';
+import { BinanceSymbol } from 'modules/TradingView/api/types';
 
 export interface BinanceSocketContext {
-    tradePair: string | null;
-    tradePairAssets: BinanceSymbolAssets | null;
+    tradePair: BinanceSymbol<number> | null;
+    tradePairFractionDigits?: number;
 
-    setTradePair: Dispatch<SetStateAction<string | null>>;
+    setTradePair: Dispatch<SetStateAction<BinanceSymbol<number> | null>>;
     setSocketType: Dispatch<SetStateAction<BinanceSocketType | null>>;
-    setTradePairAssets: Dispatch<SetStateAction<BinanceSymbolAssets | null>>;
 }
 
 const binanceSocketContext = createContext<BinanceSocketContext | null>(null);
@@ -31,19 +30,20 @@ export function BinanceSocketProvider({ children }: { children: ReactNode }) {
     const socketMap = useRef<Map<string, WebSocket>>(new Map());
     // торговая пара - BTCUSDT, ETHUSDT, etc.
     const [tradePair, setTradePair] = useState<BinanceSymbol<number> | null>(null);
-    // ассеты торговой пары
-    const [tradePairAssets, setTradePairAssets] = useState<BinanceSymbolAssets | null>(null);
     const [socketType, setSocketType] = useState<BinanceSocketType | null>(null);
 
     const snapshotUpdateIdRef = useRef<number | null>(null);
     const prevDepthStreamUpdateIdRef = useRef<number | null>(null);
+
+    // кол-во символов после запятой в tickSize
+    const tradePairFractionDigits = String(tradePair?.priceFilter.tickSize).split('.').at(-1)?.length;
 
     // id активного сокета вынесен в переменную,
     // чтобы открывать новый сокет только при наличии
     // валидных tradePair и socketType
     const activeSocketId = useMemo(() => {
         return tradePair && socketType
-            ? generateSocketId(tradePair, socketType)
+            ? generateSocketId(tradePair.symbol, socketType)
             : null;
     }, [tradePair, socketType]);
 
@@ -60,20 +60,15 @@ export function BinanceSocketProvider({ children }: { children: ReactNode }) {
         return () => closeActiveSocket();
     }, [activeSocketId]);
 
-    const updateTradePair = ({ priceFilter, lotFilter, ...rest }: BinanceSymbol<string>) => {
-
-        
-    }
-
     const loadOrderBook = async () => {
-        const { lastUpdateId, asks, bids } = await getOrderBookSnapshot(tradePair!);
+        const { lastUpdateId, asks, bids } = await getOrderBookSnapshot(tradePair!.symbol);
 
         dispatch(setOrderBook(asks, bids));
         snapshotUpdateIdRef.current = lastUpdateId;
     };
 
     const openSocket = async (socketId: string) => {
-        const socketURL = `${binanceWSEndpoint}${createCombinedStreamString(tradePair!, socketType!)}`;
+        const socketURL = `${binanceWSEndpoint}${createCombinedStreamString(tradePair!.symbol, socketType!)}`;
         const socket = new WebSocket(socketURL);
 
         socket.onopen = () => {
@@ -144,10 +139,9 @@ export function BinanceSocketProvider({ children }: { children: ReactNode }) {
         <binanceSocketContext.Provider
             value={{
                 tradePair,
-                tradePairAssets,
+                tradePairFractionDigits,
                 setTradePair,
                 setSocketType,
-                setTradePairAssets,
             }}
         >
             {children}

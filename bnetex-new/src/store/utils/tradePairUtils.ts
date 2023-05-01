@@ -10,7 +10,7 @@ import { OrderBookDictionary } from 'store/actions/tradePair';
 export const parseAsksOrBidsArray = (array: [string, string][]): OrderBookDictionary => {
     const dictionary: OrderBookDictionary = {};
     array.forEach(it => {
-        const price = parseFloat(it[0]).toFixed(1);
+        const price = parseFloat(it[0]);
         const volume = parseFloat(it[1]);
         dictionary[price] = volume;
     });

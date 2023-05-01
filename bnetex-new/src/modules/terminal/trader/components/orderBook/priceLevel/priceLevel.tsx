@@ -7,17 +7,19 @@ import { PriceLevelType } from '../types/types';
 interface PriceLevelProps {
     price: string;
     biggestVolume: number;
-    togglePrevCurrentPriceType?: () => void;
 }
 
 const PriceLevel = ({
-    price, biggestVolume, togglePrevCurrentPriceType,
+    price, biggestVolume,
 }: PriceLevelProps, ref: ForwardedRef<HTMLDivElement>) => {
     const { asks, bids, price: tradePairPrice } = useTypedSelector(state => state.tradePair);
 
     const [priceLevelVolume, priceLevelType]: [number | undefined, PriceLevelType] = useMemo(() => {
-        const volumeFromAsks = asks?.[price];
-        const volumeFromBids = bids?.[price];
+        // парсим во float, чтобы корректно обрабатывать значения с нулем на конце:
+        // 1000.10 -> 1000,1 (т.к. в asks/bids ключи являются числом)
+        const floatPrice = parseFloat(price);
+        const volumeFromAsks = asks?.[floatPrice];
+        const volumeFromBids = bids?.[floatPrice];
 
         const type: PriceLevelType = volumeFromAsks ? 'ask' : volumeFromBids ? 'bid' : null;
 
