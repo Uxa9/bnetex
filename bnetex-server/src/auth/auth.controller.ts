@@ -35,12 +35,9 @@ import { PasswordChangedSuccess } from './reponseTypes/passwordChanged.exception
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-
     constructor(private authService: AuthService) {}
 
-    @ApiOperation({
-        summary : 'Login user'
-    })
+    @ApiOperation({ summary : 'Login user' })
     @ApiResponse({
         status : 200,
         type : LoginResponseSuccess
@@ -53,13 +50,10 @@ export class AuthController {
     ])
     @Post('login')
     login(@Body() userDto: LoginUserDto) {
-        
         return this.authService.login(userDto);
     }
 
-    @ApiOperation({
-        summary : 'User registration'
-    })
+    @ApiOperation({ summary : 'User registration' })
     @ApiResponse({
         status : 201,
         type : RegSuccess
@@ -129,9 +123,7 @@ export class AuthController {
         return this.authService.confirmEmail(confirmDto);
     }
 
-    @ApiOperation({
-        summary : 'Verifiy jwt'
-    })
+    @ApiOperation({ summary : 'Verifiy jwt' })
     @ApiResponse({
         status : 200,
         type : TokenConfirmResponse

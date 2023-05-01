@@ -33,12 +33,7 @@ export class AuthService {
 
     async login(userDto: LoginUserDto) {
         const user = await this.validateUser(userDto);
-
-        
-
         const token = await this.generateToken(user);
-
-        
 
         return {
             status: "SUCCESS",
@@ -251,19 +246,12 @@ export class AuthService {
     }
 
     private async validateUser(userDto: LoginUserDto) {
-
-        
-
         const user = await this.userService.getUserByEmail(userDto.email);
 
-        
-
         if (!user) throw new UserNotFoundException;
-
         if (!user.isActivated) throw new UserNotActivated;
 
         const passwordEq = await bcrypt.compare(userDto.password, user.password);
-
         if (!passwordEq) throw new UserWrongPassword;
 
         return user;

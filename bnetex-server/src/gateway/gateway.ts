@@ -49,7 +49,7 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDi
 
             if (user.openTrade) {
 
-                const userSession = await this.investSessionService.getUserActiveSession(id);
+                const userSession = await this.investSessionService.getUserActiveSession(user);
                 
                 if (
                     new Date(payload.position.enterTime).getTime() > 

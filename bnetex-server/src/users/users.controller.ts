@@ -1,28 +1,23 @@
-import { Controller, Get, Post, Body, UseGuards, UsePipes, Param, Put, Headers, HttpCode, Request } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, UseGuards, Put } from '@nestjs/common';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/roles-auth.decorator';
-import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './users.model';
 import { UsersService } from './users.service';
 import { RolesGuard } from '../auth/roles.guard';
 import { AddRoleDto } from './dto/add-role.dto';
 import { TransferMoney } from './dto/transfer-money.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UserIdDto } from './dto/user-id.dto';
 import { StartInvestDto } from './dto/start-invest.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
-import { UserCreatedSuccess } from './responseTypes/userCreatedType';
-import { RoleNotFound } from 'src/exceptions/role/roleNotFound.exception';
-import { UserAlreadyExist } from 'src/exceptions/user/userAlreadyExist.exception';
 import { InternalServerError } from 'src/exceptions/internalError.exception';
 import { UserWrongPassword } from 'src/exceptions/user/userWrongPassword.exceptions';
+import { JwtGuard } from 'src/auth/jwt.guard';
+import { ReqUser } from 'src/auth/req-user.decorator';
 
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-
     constructor(private userService: UsersService) {}
 
     // А по идее это не надо
@@ -44,111 +39,101 @@ export class UsersController {
     //     return this.userService.createUser(userDto);
     // }
 
-    @ApiOperation({
-        summary : 'Get all users'
-    })
-    @ApiResponse({
-        status : 200,
-        type : [User]
-    })
-    @ApiException(() => [
-        InternalServerError
-    ])
+    @Get('/all')
+    @ApiOperation({ summary : 'Get all users' })
+    @ApiOkResponse({ type : [User] })
+    @ApiException(() => [InternalServerError])
     @Roles('admin')
     @UseGuards(RolesGuard)
-    @Get('/all')
     getAll() {
         return this.userService.getAllUsers();
     }
-
-    @ApiOperation({
-        summary : 'Change user password'
-    })
-    @ApiResponse({
-        status : 200,
-        type : [User]
-    })
+    
+    @Post('/changePassword')
+    @ApiOperation({ summary : 'Change user password' })
+    @ApiOkResponse({ type : [User] })
     @ApiException(() => [
         UserWrongPassword,
         InternalServerError
     ])
-    @UseGuards(JwtAuthGuard)
-    @Post('/changePassword')
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
     changePassword(@Body() dto: ChangePasswordDto) {
         return this.userService.changePassword(dto);
     }
 
-// Нужно ли вот это вообще?
-
-    @ApiOperation({
-        summary : 'Kakaphony, remove later'
-    })
-    @UseGuards(JwtAuthGuard)
     @Get('/getWallets')
-    getWallets(@Request() req: any) {
-        return this.userService.getWallets(req.user.id);
+    @ApiOperation({ summary : 'Kakaphony, remove later' })
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    getWallets(@ReqUser() user: User) {
+        return this.userService.getWallets(user);
     }
 
-    @UseGuards(JwtAuthGuard)
     @Get('/getpnl')
-    getPnL(@Request() req: any) {
-        return this.userService.getPnL(req.user.id);
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    getPnL() {
+        return this.userService.getPnL();
     }
 
-
-    @UseGuards(JwtAuthGuard)
     @Get('/info')
-    info(@Request() req: any) {
-        return this.userService.getUserById(req.user.id);
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    info(@ReqUser() user: User) {
+        return user;
     }
 
-    @UseGuards(JwtAuthGuard)
     @Get('/getroe')
-    getRoE(@Request() req: any) {
-        return this.userService.getRoE(req.user.id);
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    getRoE() {
+        return this.userService.getRoE();
     }
 
-    @UseGuards(JwtAuthGuard)
     @Get('/getRoeAndPnl')
-    getRoeAndPnl(@Request() req: any) {
-        return this.userService.getUserPnlAndRoe(req.user.id);
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    getRoeAndPnl(@ReqUser() user: User) {
+        return this.userService.getUserPnlAndRoe(user.id);
     }
 
-    @ApiOperation({
-        summary : 'Transfer money between wallet'
-    })
-    @UseGuards(JwtAuthGuard)
     @Post('/transfer-money')
+    @ApiOperation({ summary : 'Transfer money between wallet' })
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
     transferMoney(@Body() dto: TransferMoney) {
         return this.userService.transferMoney(dto);
     }
-
-    @ApiOperation({
-        summary : 'Add user role'
-    })
-    @Roles('admin')
-    @UseGuards(RolesGuard)
+    
     @Post('/role')
+    @ApiOperation({ summary : 'Add user role' })
+    @ApiBearerAuth()
+    @Roles('admin')
+    @UseGuards(JwtGuard, RolesGuard)
     addRole(@Body() dto: AddRoleDto) {
         return this.userService.addRole(dto);
     }
 
-    @UseGuards(JwtAuthGuard)
     @Post('/startInvest')
-    startInvest(@Body() dto: StartInvestDto, @Request() req: any) {
-        return this.userService.startInvest(dto, req.user.id);
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    startInvest(@Body() dto: StartInvestDto, @ReqUser() user: User) {
+        return this.userService.startInvest(dto, user);
     }
     
-    @UseGuards(JwtAuthGuard)
     @Get('/stopInvest')
-    stopInvest(@Request() req: any) {
-        return this.userService.stopInvest(req.user.id);
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    stopInvest(@ReqUser() user: User) {
+        return this.userService.stopInvest(user);
     }
 
-    @UseGuards(JwtAuthGuard)
     @Get('/invest')
-    getUserTradeSession(@Request() req: any) {
-        return this.userService.getUserActiveSession(req.user.id);
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    getUserTradeSession(@ReqUser() user: User) {
+        return this.userService.getUserActiveSession(user);
     }
     
     @Get('/totalInvestAmount/get')
@@ -156,21 +141,17 @@ export class UsersController {
         return this.userService.getTotalInvestAmount();
     }
 
-    @UseGuards(JwtAuthGuard)
     @Get('invest/positions')
-    getOpenUserPosition(@Request() req: any) {
-        
-        return this.userService.getCurrentOpenPosition(req.user.id);
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    getOpenUserPosition(@ReqUser() user: User) {
+        return this.userService.getCurrentOpenPosition(user);
     }
 
     @Put('set-api')
-    setUserApiKey(@Body() dto: any) {
-        return this.userService.setApiKey(dto);
-    }
-
-    @UseGuards(JwtAuthGuard)    
-    @Get('test')
-    test(@Headers('Authorization') token: string) {
-        return this.userService.test();
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    setUserApiKey(@Body() dto: any, @ReqUser() user: User) {
+        return this.userService.setApiKey(dto, user);
     }
 }

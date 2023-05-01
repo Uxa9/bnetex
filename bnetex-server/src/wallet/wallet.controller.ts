@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { WalletService } from './wallet.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Wallets')
 @Controller('wallets')
@@ -18,6 +18,7 @@ export class WalletController {
     }
     
     @Get('transactions/:userId')
+    @ApiBearerAuth()
     getUserTransactions(@Param('userId') userId : number) {
         return this.controllerService.getUserTransactions(userId);
     }

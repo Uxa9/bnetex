@@ -7,6 +7,7 @@ import { CreateTradeSessionDto } from './dto/create-session.dto';
 import { InvestSession } from './invest-sessions.model';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
+import { User } from 'src/users/users.model';
 
 @Injectable({ scope: Scope.DEFAULT })
 export class InvestSessionsService {
@@ -19,14 +20,7 @@ export class InvestSessionsService {
         @Inject(REQUEST) private readonly Request: Request,
     ) { }
 
-    async createSession(dto: CreateTradeSessionDto, userId: number) {
-
-        const req:any = this.Request;
-
-        
-          
-        const user = await this.userService.getUserById(userId);
-
+    async createSession(dto: CreateTradeSessionDto, user: User) {
         if (user.openTrade === true) {
             throw new HttpException(
                 {
@@ -48,7 +42,7 @@ export class InvestSessionsService {
         }
 
         const session = await this.investSessionRepository.create({
-            userId: userId,
+            userId: user.id,
             tradeBalance: dto.amount,
             startSessionTime: new Date,
         });
@@ -75,9 +69,7 @@ export class InvestSessionsService {
         }
     }
 
-    async stopSession(id: number) {
-        const user = await this.userService.getUserById(id);
-
+    async stopSession(user: User) {
         if ( user.openTrade === false ) {
             throw new HttpException(
                 {
@@ -90,7 +82,7 @@ export class InvestSessionsService {
 
         const session = await this.investSessionRepository.findOne({
             where: {
-                userId: id,
+                userId: user.id,
                 stopSessionTime: null
             }
         });
@@ -113,13 +105,8 @@ export class InvestSessionsService {
 
             // Время начала сессии торговой
             let sessionStart = new Date(session.startSessionTime).getTime();
-            
             this.httpService.get(`${process.env.BOT_URL}front/activePositions/${sessionStart}`).subscribe((res) => resolve(res.data))
-        })        
-        
-        
-
-        
+        })
 
         // Считаем объемы которые надо продать
         let volumeToClose = actualPositions.map(i => {
@@ -131,13 +118,10 @@ export class InvestSessionsService {
             }
         })
 
-        
-
         let errorToClose = undefined;
         // Закрываем обьемы
         if(volumeToClose.length > 0){
-            
-            try{
+            try {
                 await new Promise((resolve, reject) => {
                     this.httpService.post(`${process.env.BOT_URL}front/closeVolumeMarket`, {volumeToClose, user: {email: user.email, tradeBalance: user.tradeBalance}}).subscribe((res) => resolve(res.data), err => {
                         if(err?.response?.data?.detail){
@@ -148,8 +132,7 @@ export class InvestSessionsService {
                         
                     })
                 })
-            }catch(error){
-                
+            } catch(error) {
                 throw new HttpException(
                     {
                         status: "ERROR",
@@ -162,11 +145,7 @@ export class InvestSessionsService {
             
         }
         
-
-        
-        
         await Promise.all([
-
             user.update({
                 openTrade: false,
                 investWallet: user.investWallet + user.tradeBalance + (sessionPnL),
@@ -183,9 +162,7 @@ export class InvestSessionsService {
         };
     }
 
-    async getUserActiveSession(id: number) {
-        const user = await this.userService.getUserById(id);
-
+    async getUserActiveSession(user: User) {
         if ( user.openTrade === false ) {
             throw new HttpException(
                 {
@@ -198,7 +175,7 @@ export class InvestSessionsService {
 
         const session = await this.investSessionRepository.findOne({
             where: {
-                userId: id,
+                userId: user.id,
                 stopSessionTime: null
             }
         });

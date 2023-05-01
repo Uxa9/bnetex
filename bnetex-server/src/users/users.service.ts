@@ -144,7 +144,9 @@ export class UsersService {
     }
 
     async getUser(id: number) {
-        const user = await this.userRepository.findByPk(id);
+        const user = await this.userRepository.findByPk(id, {                
+            include: { all: true }
+        });
 
         if ( !user ) {
             throw new UserNotFoundException();
@@ -159,16 +161,7 @@ export class UsersService {
         };
     }
 
-    async getWallets(userId: number) {
-        
-        const req:any = this.Request;
-        const user = await this.getUserById(userId);            
-    
-        if (!user) throw new MyException({
-            code : HttpStatus.EXPECTATION_FAILED,
-            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
-        });
-
+    async getWallets(user: User) {
         return {
             mainWallet: user.mainWallet,
             investWallet: user.investWallet
@@ -222,16 +215,7 @@ export class UsersService {
         return Math.random() * (max - min) + min;
     }
 
-    async getPnL(userId: number) {
-        
-        
-        const user = await this.getUserById(userId);            
-    
-        if (!user) throw new MyException({
-            code : HttpStatus.EXPECTATION_FAILED,
-            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
-        });
-
+    async getPnL() {
         return {
             pnl: {
                 values: [
@@ -256,18 +240,7 @@ export class UsersService {
         }
     }
 
-    async getRoE(userId: number) {
-        
-        const req:any = this.Request;
-        console.log(req);
-        
-        const user = await this.getUserById(userId);            
-    
-        if (!user) throw new MyException({
-            code : HttpStatus.EXPECTATION_FAILED,
-            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
-        });
-
+    async getRoE() {
         return {
             roe: {
                 values: [
@@ -293,17 +266,6 @@ export class UsersService {
     }
 
     async getUserPnlAndRoe(userId: number) {
-        
-        
-        
-        const user = await this.getUserById(userId);            
-    // console.log(user);
-    
-        if (!user) throw new MyException({
-            code : HttpStatus.EXPECTATION_FAILED,
-            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
-        });
-
         const sessions = await this.investSessions.getAllUserSessions(userId);
 
         if ( sessions.length == 0 ) {
@@ -344,47 +306,28 @@ export class UsersService {
         }
     }
 
-    async startInvest(dto: StartInvestDto, userId: number) {
-        return await this.investSessions.createSession(dto, userId);
+    async startInvest(dto: StartInvestDto, user: User) {
+        return await this.investSessions.createSession(dto, user);
     }
 
-    async stopInvest(id: number) {
-        
-        const user = await this.getUserById(id);            
-    
-        if (!user) throw new MyException({
-            code : HttpStatus.EXPECTATION_FAILED,
-            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
-        });
-
-        const res = await this.investSessions.stopSession(id);
-        
-        return res; //опять чето странное
+    async stopInvest(user: User) {
+        return this.investSessions.stopSession(user);
     }
 
-    async getUserActiveSession(id: number) {
-        
-        const user = await this.getUserById(id);            
-    
-        if (!user) throw new MyException({
-            code : HttpStatus.EXPECTATION_FAILED,
-            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
-        });
+    async getUserActiveSession(user: User) {
+        const session = await this.investSessions.getUserActiveSession(user);
 
-        const session = await this.investSessions.getUserActiveSession(id);
-
-        if ( !session ) {
+        if (!session) {
             return {
-                startSessionTime : new Date().getTime() ,
+                startSessionTime : new Date().getTime(),
                 pnl : 0,
                 roe : 0,
-                balance : 0
+                balance : 0,
             }
         }
 
         // Если позиция в профите, забираем 50%
         const sessionPnL = session.lastPnl > 0 ? session.lastPnl / 2 : session.lastPnl;
-
         const sessionRoE = session.lastRoe > 0 ? session.lastRoe / 2 : session.lastRoe;
 
         return {
@@ -408,22 +351,14 @@ export class UsersService {
         return res.reduce((acc, user) => acc + user.tradeBalance, 0);
     }
 
-    async getCurrentOpenPosition(id: number) {
-        
-        const user = await this.getUserById(id);           
-    
-        if (!user) throw new MyException({
-            code : HttpStatus.EXPECTATION_FAILED,
-            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
-        });         
-    
+    async getCurrentOpenPosition(user: User) {    
         const position = await this.positionService.getCurrentOpenPosition();
 
         if ( !position || !user.openTrade ) {
             return [];
         }
         
-        const userSession = await this.investSessions.getUserActiveSession(id);
+        const userSession = await this.investSessions.getUserActiveSession(user);
 
         if (userSession.startSessionTime.getTime() > position.enterTime) {
             return [];
@@ -444,16 +379,7 @@ export class UsersService {
         }];
     }
 
-    async setApiKey(dto: any) {
-        
-        const req:any = this.Request;
-        const user = await this.getUserById(req.user.id);           
-    
-        if (!user) throw new MyException({
-            code : HttpStatus.EXPECTATION_FAILED,
-            message : "JWT_OKAY_BUT_USER_NOT_FOUND"
-        });     
-        
+    async setApiKey(dto: any, user: User) {
         const api = {
             api_key : dto.api_key,
             api_secret : dto.api_secret
@@ -476,13 +402,5 @@ export class UsersService {
                 HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
-    }
-
-    async test() {
-        const a:any = this.Request;
-
-        console.log(a?.user);
-        
-        
     }
 }
