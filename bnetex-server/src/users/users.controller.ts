@@ -39,7 +39,7 @@ export class UsersController {
     //     return this.userService.createUser(userDto);
     // }
 
-    @Get('/all')
+    @Get('all')
     @ApiOperation({ summary : 'Get all users' })
     @ApiOkResponse({ type : [User] })
     @ApiException(() => [InternalServerError])
@@ -49,7 +49,7 @@ export class UsersController {
         return this.userService.getAllUsers();
     }
     
-    @Post('/changePassword')
+    @Post('changePassword')
     @ApiOperation({ summary : 'Change user password' })
     @ApiOkResponse({ type : [User] })
     @ApiException(() => [
@@ -58,11 +58,11 @@ export class UsersController {
     ])
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
-    changePassword(@Body() dto: ChangePasswordDto) {
-        return this.userService.changePassword(dto);
+    changePassword(@Body() dto: ChangePasswordDto, @ReqUser() user: User) {
+        return this.userService.changePassword(dto, user);
     }
 
-    @Get('/getWallets')
+    @Get('getWallets')
     @ApiOperation({ summary : 'Kakaphony, remove later' })
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
@@ -70,73 +70,73 @@ export class UsersController {
         return this.userService.getWallets(user);
     }
 
-    @Get('/getpnl')
+    @Get('getpnl')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     getPnL() {
         return this.userService.getPnL();
     }
 
-    @Get('/info')
+    @Get('info')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     info(@ReqUser() user: User) {
         return user;
     }
 
-    @Get('/getroe')
+    @Get('getroe')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     getRoE() {
         return this.userService.getRoE();
     }
 
-    @Get('/getRoeAndPnl')
+    @Get('getRoeAndPnl')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     getRoeAndPnl(@ReqUser() user: User) {
         return this.userService.getUserPnlAndRoe(user.id);
     }
 
-    @Post('/transfer-money')
+    @Post('transfer-money')
     @ApiOperation({ summary : 'Transfer money between wallet' })
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
-    transferMoney(@Body() dto: TransferMoney) {
-        return this.userService.transferMoney(dto);
+    transferMoney(@Body() dto: TransferMoney, @ReqUser() user: User) {
+        return this.userService.transferMoney(dto, user);
     }
     
-    @Post('/role')
+    @Post('role')
     @ApiOperation({ summary : 'Add user role' })
     @ApiBearerAuth()
     @Roles('admin')
     @UseGuards(JwtGuard, RolesGuard)
-    addRole(@Body() dto: AddRoleDto) {
-        return this.userService.addRole(dto);
+    addRole(@Body() dto: AddRoleDto, @ReqUser() user: User) {
+        return this.userService.addRole(dto, user.id);
     }
 
-    @Post('/startInvest')
+    @Post('startInvest')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     startInvest(@Body() dto: StartInvestDto, @ReqUser() user: User) {
         return this.userService.startInvest(dto, user);
     }
     
-    @Get('/stopInvest')
+    @Get('stopInvest')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     stopInvest(@ReqUser() user: User) {
         return this.userService.stopInvest(user);
     }
 
-    @Get('/invest')
+    @Get('invest')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     getUserTradeSession(@ReqUser() user: User) {
         return this.userService.getUserActiveSession(user);
     }
     
-    @Get('/totalInvestAmount/get')
+    @Get('totalInvestAmount/get')
     getTotalInvestAmount() {
         return this.userService.getTotalInvestAmount();
     }

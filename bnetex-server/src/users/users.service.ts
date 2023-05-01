@@ -16,18 +16,15 @@ import { InvestSessionsService } from '../invest-sessions/invest-sessions.servic
 import { PositionsService } from '../positions/positions.service';
 import { UserRoles } from 'src/roles/user-roles.model';
 import { JwtService } from '@nestjs/jwt';
-import { UserException } from 'src/exceptions/user/user.exception';
-import { MyException } from 'src/exceptions/exception';
 import { InternalServerError } from 'src/exceptions/internalError.exception';
 import { UserAlreadyExist } from 'src/exceptions/auth/userAlreadyExist.exception';
 import { RoleNotFound } from 'src/exceptions/role/roleNotFound.exception';
-import { UserJWTOkayButUserNotFound } from 'src/exceptions/user/userJWTokayButUserNotFound.exception';
 import { UserWrongPassword } from 'src/exceptions/user/userWrongPassword.exceptions';
 
 @Injectable({ scope: Scope.DEFAULT })
 export class UsersService {
 
-    constructor(@InjectModel(User) private userRepository: typeof User,
+    constructor(@InjectModel(User) private usersRepository: typeof User,
         @InjectModel(UserRoles) private userRolesRepository: typeof UserRoles,
         private roleService: RolesService,
         private jwtService: JwtService,
@@ -44,7 +41,7 @@ export class UsersService {
         if (userExistCheck) throw new UserAlreadyExist;
         
         try {
-            const user = await this.userRepository.create(dto);
+            const user = await this.usersRepository.create(dto);
     
             await this.userRolesRepository.create({
                 userId: user.id,
@@ -62,7 +59,7 @@ export class UsersService {
 
     async getAllUsers() {
         try {
-            const users = await this.userRepository.findAll({ include: { all: true } });
+            const users = await this.usersRepository.findAll({ include: { all: true } });
             return users;
         } catch (error) {
             throw new InternalServerError;
@@ -74,18 +71,16 @@ export class UsersService {
         return await this.getUserById(req.user.id);
     }
 
-    async changePassword(dto: ChangePasswordDto) {
-        const req:any = this.Request;
-        const user = await this.getUserById(req.user.id);
-        
+    async changePassword(dto: ChangePasswordDto, user: User) {
         const passwordEq = await bcrypt.compare(dto.prevPassword, user.password);
         if (!passwordEq) throw new UserWrongPassword;
         const hashPassword = await bcrypt.hash(dto.newPassword, 5);
 
         try {
-            await user.update({
-                password: hashPassword
-            });
+            await this.usersRepository.update(
+                { password: hashPassword },
+                { where: {id: user.id} }
+            );
         } catch (error) {
             throw new InternalServerError;
         }
@@ -98,7 +93,7 @@ export class UsersService {
 
     async getUserByEmail(email: string) {
         try {
-            const user = await this.userRepository.findOne({
+            const user = await this.usersRepository.findOne({
                 where: { email },
                 include: { all: true }
             });
@@ -110,8 +105,8 @@ export class UsersService {
         }
     }
 
-    async addRole(dto: AddRoleDto) {
-        const user = await this.userRepository.findByPk(dto.userId);
+    async addRole(dto: AddRoleDto, userId: number) {
+        const user = await this.usersRepository.findByPk(userId);
         const role = await this.roleService.getRoleByName(dto.value);
 
         if (role && user) {
@@ -123,7 +118,7 @@ export class UsersService {
     }
 
     async confirmEmail(id: number) {
-        const user = await this.userRepository.findByPk(id);
+        const user = await this.usersRepository.findByPk(id);
 
         if ( !user ) {
             throw new UserNotFoundException();
@@ -134,7 +129,7 @@ export class UsersService {
 
     async getUserById(id: number) {
         try {
-            const user = await this.userRepository.findByPk(id, {                
+            const user = await this.usersRepository.findByPk(id, {                
                 include: { all: true }
             });
             return user;
@@ -144,7 +139,7 @@ export class UsersService {
     }
 
     async getUser(id: number) {
-        const user = await this.userRepository.findByPk(id, {                
+        const user = await this.usersRepository.findByPk(id, {                
             include: { all: true }
         });
 
@@ -172,15 +167,9 @@ export class UsersService {
         return this.jwtService.verify(token) 
     }
 
-    async transferMoney(dto: TransferMoney) {
-        const user = await this.userRepository.findByPk(dto.userId);
-
-        if ( !user ) {
-            throw new UserNotFoundException();
-        }
-
-        if (!this.userRepository.getAttributes().hasOwnProperty(dto.reciever) ||
-            !this.userRepository.getAttributes().hasOwnProperty(dto.sender)) {
+    async transferMoney(dto: TransferMoney, user: User) {
+        if (!this.usersRepository.getAttributes().hasOwnProperty(dto.reciever) ||
+            !this.usersRepository.getAttributes().hasOwnProperty(dto.sender)) {
             throw new HttpException(
                 {
                     status: "ERROR",
@@ -203,7 +192,10 @@ export class UsersService {
         user[dto.sender] -= dto.amount;
         user[dto.reciever] += dto.amount;
 
-        await user.save();
+        await this.usersRepository.update(
+            user,
+            { where: { id: user.id } }
+        );
 
         return {
             status: "SUCCESS",
@@ -339,7 +331,7 @@ export class UsersService {
     }
 
     async getTotalInvestAmount() {
-        const res = await this.userRepository.findAll({
+        const res = await this.usersRepository.findAll({
             where: {
                 tradeBalance: {
                     [Op.gt]: 0
@@ -386,7 +378,10 @@ export class UsersService {
         };
 
         try {
-            await user.update(api);
+            await this.usersRepository.update(
+                api,
+                { where: { id: user.id } }
+            );
 
             return {
                 status: "SUCCESS",

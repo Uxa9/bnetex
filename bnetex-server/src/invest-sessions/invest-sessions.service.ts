@@ -14,6 +14,7 @@ export class InvestSessionsService {
 
     constructor(
         @InjectModel(InvestSession) private investSessionRepository: typeof InvestSession,
+        @InjectModel(User) private usersRepository: typeof User,
         private userService: UsersService,
         private positionService: PositionsService,
         private readonly httpService: HttpService,
@@ -48,11 +49,11 @@ export class InvestSessionsService {
         });
 
         if (session) {
-            await user.update({
+            await this.usersRepository.update({
                 openTrade: true,
                 investWallet: user.investWallet - dto.amount,
                 tradeBalance: user.tradeBalance + dto.amount 
-            });
+            }, { where: {id: user.id} });
 
             return {
                 status: "SUCCESS",
@@ -146,11 +147,11 @@ export class InvestSessionsService {
         }
         
         await Promise.all([
-            user.update({
+            this.usersRepository.update({
                 openTrade: false,
                 investWallet: user.investWallet + user.tradeBalance + (sessionPnL),
                 tradeBalance: 0
-            }),
+            }, { where: {id: user.id} }),
             session.update({
                 stopSessionTime: new Date
             })
@@ -180,7 +181,7 @@ export class InvestSessionsService {
             }
         });
 
-        if ( !session ) {
+        if (!session) {
             throw new HttpException(
                 {
                     status: "ERROR",
@@ -194,12 +195,8 @@ export class InvestSessionsService {
     }
 
     async getAllUserSessions(id: number) {
-        await this.userService.getUserById(id);
-
         return await this.investSessionRepository.findAll({
-            where: {
-                userId: id
-            },
+            where: { userId: id },
             order: [
                 ["startSessionTime", "ASC"]
             ]
