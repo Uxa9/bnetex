@@ -2,49 +2,31 @@ import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { AxiosError } from 'axios';
-// import { InjectModel } from '@nestjs/mongoose';
-import { catchError, firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { Op } from 'sequelize';
-// import { Position, PositionDocument } from './shemas/_position.schema';
 import { Position } from './position.model';
-import { PositionEnters } from './positionEnters.model';
-import { rejects } from 'assert';
 
 @Injectable()
 export class PositionsService {
     constructor(
-        // @InjectModel(Position.name) private PositionModel: Model<PositionDocument>
         @InjectModel(Position) private positionRepository: typeof Position,
-        @InjectModel(PositionEnters)
-        private positionEntersRepository: typeof PositionEnters,
         private readonly httpService: HttpService,
     ) { }
 
     async getPnlAndRoe(dto: any) {
-
-        console.log({dto})
-
         const from = dto.from || new Date().valueOf();
         const to = dto.to || new Date().valueOf();
 
-        const positions :any[] = await new Promise((resolve, reject) =>
-            this.httpService
-                .post('http://localhost:3009/front/history', {
-                    from,
-                    to
-                })
-                .subscribe((res) => {
-                    resolve(res.data.response);
-                }, err => {
-                    console.log(err);
-                    reject([]);
-                }),
-        );
+        const positions: any[] = (await lastValueFrom(this.httpService
+            .post(`${process.env.BOT_URL}front/history`, {
+                from,
+                to
+            }))).data.response;
 
         if (positions.length === 0) return {
             dates: [],
-            pnlValues: [],
-            roeValues: []
+            pnl: [],
+            roe: []
         }
 
         const result = await this.getHistoricalData(positions, dto.amount, from, to);
@@ -53,76 +35,49 @@ export class PositionsService {
     }
 
     async getHistoricalData(data: any, amount: number, from: number, to: number) {
-        try {
+        let dates = [];
+        let acc = 0;
 
-            let dates = [];
-            let acc = 0;
+        const curDate = new Date(to);
+        let startDate = new Date(from);
 
-            const curDate = new Date(to);
-            let startDate = new Date(from);
-
-            while (startDate.getMonth() !== curDate.getMonth() ||
-                startDate.getDate() !== curDate.getDate() ||
-                startDate.getFullYear() !== curDate.getFullYear()
-            ) {
-                dates.push(
-                    startDate.toISOString().split('T')[0]
-                );
-
-                startDate = new Date(startDate.setDate(startDate.getDate() + 1));
-            }
-
-            let pnlValues = Array(dates.length).fill(0);
-            let roeValues = Array(dates.length).fill(0);
-
-            data.map((position) => {
-                // console.log(position);
-
-                // let customAmountPercent = amount / position.deposit;
-
-                // const lever = 10;
-
-                // const pnl = position.sumProfit * customAmountPercent * lever;     
-
-                const posCloseTime = new Date(position.closeTime);
-                const index = dates.findIndex(item => item === posCloseTime.toISOString().split('T')[0]);
-
-                if (index !== -1) {
-                    const rate = amount / position.totalDeposit;
-                    // console.log(rate);
-
-                    const percent = position.sumProfit / position.totalDeposit;
-                    acc += percent * 100;
-
-                    // pnlValues[index] += pnl;
-                    // roeValues[index] = acc;
-                    // console.log(position.sumProfit * rate);
-
-                    pnlValues[index] += position.sumProfit * rate;
-                    roeValues[index] = acc;
-                } else {
-                    // бля, ну вообще странно
-                }
-            });
-
-            roeValues.slice(1).map((item, index) => {
-                if (item === 0) {
-                    roeValues[index + 1] = roeValues[index];
-                }
-            });
-
-            return {
-                dates,
-                pnlValues,
-                roeValues,
-            };
-        } catch (error) {
-            console.log('hist data');
-
-
-            console.log(error);
-
+        while (startDate.getMonth() !== curDate.getMonth() ||
+            startDate.getDate() !== curDate.getDate() ||
+            startDate.getFullYear() !== curDate.getFullYear()
+        ) {
+            dates.push(startDate.toISOString().split('T')[0]);
+            startDate = new Date(startDate.setDate(startDate.getDate() + 1));
         }
+
+        let pnl = Array(dates.length).fill(0);
+        let roe = Array(dates.length).fill(0);
+
+        data.forEach((position) => {
+            const posCloseTime = new Date(position.closeTime);
+            const index = dates.findIndex(item => item === posCloseTime.toISOString().split('T')[0]);
+
+            if (index !== -1) {
+                const rate = amount / position.totalDeposit;
+
+                const percent = position.sumProfit / position.totalDeposit;
+                acc += percent * 100;
+
+                pnl[index] += position.sumProfit * rate;
+                roe[index] = acc;
+            }
+        });
+
+        roe.slice(1).forEach((item, index) => {
+            if (item === 0) {
+                roe[index + 1] = roe[index];
+            }
+        });
+
+        return {
+            dates,
+            pnl: pnl.map(it => Number(it.toFixed(2))),
+            roe: roe.map(it => Number(it.toFixed(2))),
+        };
     }
 
     async getHistoricalDataOrders(period: number) {
@@ -130,20 +85,11 @@ export class PositionsService {
             const to = new Date().valueOf();
             const from = new Date().setMonth(new Date().getMonth() - period)
 
-            const positions: any[] = await new Promise((resolve, reject) => this.httpService.post('http://localhost:3009/front/history', {
-                to,
-                from
-            }).subscribe((res) => {
-                
-                resolve(res.data.response);
-            }, err => {
-                
-                console.log(err);
-                reject([]);
-            }))
-
-
-            
+            const positions: any[] = (await lastValueFrom(this.httpService
+                .post(`${process.env.BOT_URL}front/history`, {
+                    from,
+                    to
+                }))).data.response;
 
             let res:any[] = [];
 
@@ -186,7 +132,7 @@ export class PositionsService {
     async getTVdata(dto: any) {
         try {
             const { data } = await firstValueFrom(this.httpService.post<any>(
-                'http://localhost:3009/front/history', {
+                `${process.env.BOT_URL}front/history`, {
                 from: dto.from || 1,
                 to: dto.to || new Date().valueOf()
             }).pipe(

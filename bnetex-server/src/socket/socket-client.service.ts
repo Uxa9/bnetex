@@ -19,7 +19,7 @@ export class SocketClientService implements OnModuleInit {
     }
 
     constructor() {
-        this.socketClient = io('ws://localhost:3009');
+        this.socketClient = io(process.env.BOT_SOCKET_URL);
     }
 
     onModuleInit() {

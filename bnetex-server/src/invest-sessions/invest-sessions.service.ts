@@ -114,7 +114,7 @@ export class InvestSessionsService {
             // Время начала сессии торговой
             let sessionStart = new Date(session.startSessionTime).getTime();
             
-            this.httpService.get(`http://localhost:3009/front/activePositions/${sessionStart}`).subscribe((res) => resolve(res.data))
+            this.httpService.get(`${process.env.BOT_URL}front/activePositions/${sessionStart}`).subscribe((res) => resolve(res.data))
         })        
         
         
@@ -139,7 +139,7 @@ export class InvestSessionsService {
             
             try{
                 await new Promise((resolve, reject) => {
-                    this.httpService.post('http://localhost:3009/front/closeVolumeMarket', {volumeToClose, user: {email: user.email, tradeBalance: user.tradeBalance}}).subscribe((res) => resolve(res.data), err => {
+                    this.httpService.post(`${process.env.BOT_URL}front/closeVolumeMarket`, {volumeToClose, user: {email: user.email, tradeBalance: user.tradeBalance}}).subscribe((res) => resolve(res.data), err => {
                         if(err?.response?.data?.detail){
                             reject(err.response.data.detail)                    
                         }else{

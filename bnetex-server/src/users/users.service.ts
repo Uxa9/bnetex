@@ -338,8 +338,8 @@ export class UsersService {
         }
         
         return {
-            pnl,
-            roe,
+            pnl: pnl.map(it => Number(it.toFixed(2))),
+            roe: roe.map(it => Number(it.toFixed(2))),
             dates
         }
     }
