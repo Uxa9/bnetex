@@ -44,10 +44,6 @@ module.exports = class DecisionsModule {
   _checkPatternToOpen() {
     let patternsToOpen = [];
 
-    if(this.marketData.startTime > 1675987200000){
-      console.log(this.analyzeResponseData)
-    }
-
     if (!this.analyzeResponseData.Pattern) return null;
 
     let groups = this.analyzeResponseData.Pattern.ACTIVE_GROUPs;
@@ -55,28 +51,22 @@ module.exports = class DecisionsModule {
     for (let index = 0; index < groups.length; index++) {
       const element = groups[index];
 
-      let OpenTriggers = element.ACTIVE_GROUP_TRIGGERs.filter(
-        (i) => i.type == "OPEN"
+      
+
+      let OpenTriggers = groupByRules(
+        element.ACTIVE_GROUP_TRIGGERs.filter(
+          (i) => i.type == "OPEN"
+        )
       );
 
       let patternCompare = StrategyRules(
         this.marketData,
         OpenTriggers,
-        false,
-        this.marketData.startTime == 1680486240000
+        true,
+        false
       );
 
       if (patternCompare) patternsToOpen.push(element);
-    }
-
-    if (this.marketData.startTime == 1680486240000) {
-      console.log("---------------");
-      console.log(this.analyzeResponseData);
-      console.log("---------------");
-      console.log(groups);
-      console.log("---------------");
-      console.log(patternsToOpen);
-      //process.exit();
     }
 
     if (patternsToOpen.length == 0) return null;
@@ -190,14 +180,31 @@ module.exports = class DecisionsModule {
   }
 
   async _averagePositionByCurrentRule(ActialPosition) {
-    if (!ActialPosition) return { code: "NON_ACTION" };
+    if (!ActialPosition || this.analyzeResponseData.CODE == "ACTUAL") return { code: "NON_ACTION" };
+
+    let OpenTriggers = groupByRules(
+      ActialPosition.ACTIVE_GROUP.ACTIVE_GROUP_TRIGGERs.filter(
+        (i) => i.type == "OPEN"
+      )
+    );
+
+    let patternCompare = StrategyRules(
+      this.marketData,
+      OpenTriggers,
+      true,
+      false
+    );
+
+    if (!patternCompare) return { code: "NON_ACTION" };;
 
     // Количество входов по текущей активной группу
     let currentPatternEntersCount = ActialPosition.POSITION_ENTERs.filter(
-      (i) => i.ACTIVEGROUPId == ActialPosition.ACTIVEGROUPId && i.tradingVolume == this.analyzeResponseData.CurrentTradingVolume
+      (i) =>
+        i.ACTIVEGROUPId == ActialPosition.ACTIVEGROUPId &&
+        i.tradingVolume == this.analyzeResponseData.CurrentTradingVolume
     ).length;
-
-    console.log('ARD1:', currentPatternEntersCount)
+    
+    console.log({currentPatternEntersCount})
 
     // Все правила входа по текущей активной группе
     let actualActiveGroupEnterRules =
@@ -206,6 +213,8 @@ module.exports = class DecisionsModule {
     // Оставшееся количество входов по текущей группе
     let lostEntersCountActualGroups =
       actualActiveGroupEnterRules.length - currentPatternEntersCount;
+
+    console.log({lostEntersCountActualGroups})
 
     if (lostEntersCountActualGroups == 0) return { code: "NON_ACTION" };
 
@@ -239,15 +248,26 @@ module.exports = class DecisionsModule {
 
     if (!activeFirstRule) return { code: "NON_ACTION" };
 
-    let totalPartsOfPositions = getTotalParts(
-      ActialPosition.ACTIVE_GROUP.POSITION_RULEs
+    let totalPartsOfPositions = await getTotalParts(
+      ActialPosition.ACTIVE_GROUP
     );
+    console.log({totalPartsOfPositions})
 
     let PERCENT_OF_DEPOSIT =
       ActialPosition.ACTIVE_GROUP.PATTERN.PERCENT_OF_DEPOSIT;
 
-    let PatternTradingVolume =
-      (PERCENT_OF_DEPOSIT * ActialPosition.deposit) / 100;
+    let PatternTradingVolume = 0;
+
+    
+
+    if(this.analyzeResponseData.CurrentTradingVolume != ActialPosition.deposit){
+        PatternTradingVolume = (PERCENT_OF_DEPOSIT * this.analyzeResponseData.CurrentTradingVolume) / 100;
+    }else{
+        PatternTradingVolume = (PERCENT_OF_DEPOSIT * ActialPosition.deposit) / 100;        
+    }
+    
+
+    
 
     // Сумма частей обьема рабочей группы
     let PartsForPatterns = await this._getPartsInWorkingGroup(
@@ -257,7 +277,6 @@ module.exports = class DecisionsModule {
     // Обьем депозита для текущего паттерна
     let patternTradingVolume = PatternTradingVolume / PartsForPatterns;
 
-    console.log('ARD', this.analyzeResponseData)
     // Единица обьема
     let singlePart =
       (patternTradingVolume / totalPartsOfPositions) *
@@ -268,18 +287,6 @@ module.exports = class DecisionsModule {
 
     // Объем в активе
     let qty = parseFloat((enterRuleVolume / lastPrice) * 10).toFixed(3);
-
-    console.log({
-      currentDiffOfAverage,
-      AFPDP: activeFirstRule.priceDifferencePercent,
-      minusDiff,
-      OPID: this.openedPatternToEnter.id,
-      currentPatternEntersCount,
-      RULES: ActialPosition.ACTIVE_GROUP.POSITION_RULEs.map(
-        (i) => i.positionIndex
-      ),
-      POSITION_INDEX,
-    });
 
     if (
       (Math.abs(currentDiffOfAverage) >=
@@ -298,7 +305,7 @@ module.exports = class DecisionsModule {
             qty,
             lastPrice,
             this.openedPatternToEnter.id,
-            ActialPosition.deposit,
+            PatternTradingVolume,
             marketBuy,
             currentPatternEntersCount + 1,
             this.marketData.startTime
@@ -330,6 +337,9 @@ module.exports = class DecisionsModule {
    * return value of completed action - AVERAGE_BY_NEW_CONTIDION | AVERAGE_BY_CURRENT_CONDITION | CREATE_NEW_POSITION | NON_ACTION
    */
   async decisionAction() {
+
+    console.log("WTR:", this.wailtToResetOpennedPattern);
+    console.log("OPID:", this.openedPatternToEnter?.id)
     if (this.wailtToResetOpennedPattern) {
       this.openedPatternToEnter = undefined;
       this.wailtToResetOpennedPattern = false;
@@ -366,7 +376,7 @@ module.exports = class DecisionsModule {
 
     // Clean Signal - First positive Candle after green
     let CLEAN__SIGNAL = this._firstPositiveCandle();
-
+    console.log({CLEAN__SIGNAL})
     if (CLEAN__SIGNAL) {
       this.wailtToResetOpennedPattern = true;
     }
@@ -387,6 +397,7 @@ module.exports = class DecisionsModule {
        */
       if (!this.openedPatternToEnter) {
         // Чисто на устреднение
+        return await this._averagePositionByCurrentRule(ActialPosition);
         return { code: "NON_ACTION" };
       }
 
@@ -394,29 +405,60 @@ module.exports = class DecisionsModule {
 
       //if(ActialPosition.averagePrice < lastPrice) return { code: 'NON_ACTION' }
 
-      if (this.openedPatternToEnter.id != ActialPosition.ACTIVEGROUPId) {
+      if (this.openedPatternToEnter.id != ActialPosition.ACTIVEGROUPId && this.analyzeResponseData.CODE != "ACTUAL") {
         // К нам пришел новый паттерн
+        console.log('HERE')
+        console.log("PRID:", this.analyzeResponseData.Pattern.id)
+        console.log("PRIDPD:", this.analyzeResponseData.Pattern.PERCENT_OF_DEPOSIT);
+        console.log("OPTEID:", this.openedPatternToEnter.id)
+        console.log("PARTP:", this.analyzeResponseData.PartsForPatterns)
         if (
-          this.analyzeResponseData.CurrentTradingVolume >=
-          ActialPosition.deposit
+          true && this.analyzeResponseData.Pattern
         ) {
-          let POSITION_INDEX = 1;
+          let POSITION_INDEX = 1;          
+          
+          
+
+
+           // Количество входов по текущей активной группу
+          let currentPatternEntersCount = ActialPosition.POSITION_ENTERs.filter(
+            (i) =>
+              i.ACTIVEGROUPId == this.openedPatternToEnter.id &&
+              i.tradingVolume == this.analyzeResponseData.CurrentTradingVolume
+          ).length;
+
+          // Все правила входа по текущей активной группе
+          let actualActiveGroupEnterRules =
+            this.openedPatternToEnter.POSITION_RULEs;
+
+          POSITION_INDEX = currentPatternEntersCount + 1;
+
+
           // Проверяем условия для усреднения и усредняемся с новой позицией
           let activeFirstRule = getRuleByIndex(
             this.openedPatternToEnter.POSITION_RULEs,
             POSITION_INDEX
           );
 
+          if (!activeFirstRule) return { code: "NON_ACTION" };
+
+          // Оставшееся количество входов по текущей группе
+          let lostEntersCountActualGroups =
+            actualActiveGroupEnterRules.length - currentPatternEntersCount;
+
+            console.log({lostEntersCountActualGroups, currentPatternEntersCount})
+
+          if (lostEntersCountActualGroups == 0) return { code: "NON_ACTION" };
+
           let currentDiffOfAverage =
             (lastPrice * 100) / ActialPosition.lastEnterPrice - 100;
 
           let minusDiff = currentDiffOfAverage < 0;
-          console.log({
-            currentDiffOfAverage,
-            AFPDP: activeFirstRule.priceDifferencePercent,
-            minusDiff,
-            OPID: this.openedPatternToEnter.id,
-          });
+
+          console.log("MATHABS:", (Math.abs(currentDiffOfAverage)))
+          console.log("priceDifferencePercent:", activeFirstRule.priceDifferencePercent)
+          console.log("minusDiff:", minusDiff)
+
           if (
             (Math.abs(currentDiffOfAverage) >=
               activeFirstRule.priceDifferencePercent &&
@@ -434,13 +476,19 @@ module.exports = class DecisionsModule {
             let patternTradingVolume =
               PatternTradingVolume / this.analyzeResponseData.PartsForPatterns;
 
-            let totalPartsOfPositions = getTotalParts(
-              this.openedPatternToEnter.POSITION_RULEs
+            console.log({patternTradingVolume})
+
+            let totalPartsOfPositions = await getTotalParts(
+              this.openedPatternToEnter
             );
+
+            console.log({totalPartsOfPositions})
 
             let singlePart =
               (patternTradingVolume / totalPartsOfPositions) *
               this.analyzeResponseData.Pattern.PART_OF_VOLUME;
+
+            console.log({singlePart})
 
             let enterRuleVolume = Math.floor(
               singlePart * activeFirstRule.depositPart
@@ -466,17 +514,17 @@ module.exports = class DecisionsModule {
                   1,
                   this.marketData.startTime
                 );
+                return 'AVERAGE_BY_NEW_CONTIDION'
               }
             } catch (e) {
               console.log(e);
             }
           }
         } else {
-          console.log('HERE 472')
           return await this._averagePositionByCurrentRule(ActialPosition);
         }
       } else {
-        console.log('HERE 475')
+        console.log("HERE 461")
         return await this._averagePositionByCurrentRule(ActialPosition);
       }
 
@@ -490,12 +538,7 @@ module.exports = class DecisionsModule {
         (lastPrice * 100) / ActialPosition.lastEnterPrice - 100;
 
       let minusDiff = currentDiffOfAverage < 0;
-      console.log({
-        currentDiffOfAverage,
-        AFPDP: activeFirstRule.priceDifferencePercent,
-        minusDiff,
-        OPID: this.openedPatternToEnter.id,
-      });
+
       if (
         (Math.abs(currentDiffOfAverage) >=
           activeFirstRule.priceDifferencePercent &&
@@ -504,39 +547,28 @@ module.exports = class DecisionsModule {
       ) {
         // // TODO - забыл тут
         // console.log("Заебись, можно усредняться");
-
         // let firstRule = getRuleByIndex(
         //   this.openedPatternToEnter.POSITION_RULEs,
         //   1
         // );
-
         // let totalPartsOfPositions = getTotalParts(
         //   this.openedPatternToEnter.POSITION_RULEs
         // );
-
         // let PERCENT_OF_DEPOSIT =
         //   this.analyzeResponseData.Pattern.PERCENT_OF_DEPOSIT;
-
         // let PatternTradingVolume =
         //   (PERCENT_OF_DEPOSIT * this.analyzeResponseData.CurrentTradingVolume) /
         //   100;
-
         // let patternTradingVolume =
         //   PatternTradingVolume / this.analyzeResponseData.PartsForPatterns;
-
         // let singlePart =
         //   (patternTradingVolume / totalPartsOfPositions) *
         //   this.analyzeResponseData.Pattern.PART_OF_VOLUME;
-
         // let enterRuleVolume = Math.floor(singlePart * firstRule.depositPart);
-
         // let lastPrice = parseFloat(this.marketData.close);
-
         // let qty = parseFloat((enterRuleVolume / lastPrice) * 10).toFixed(3);
-
         // try {
         //   let marketBuy = await this.futuresModule.marketBuy(qty, lastPrice);
-
         //   if (marketBuy.orderId) {
         //     this._updatePositionInDb(
         //       qty,
@@ -551,20 +583,20 @@ module.exports = class DecisionsModule {
         // } catch (e) {
         //   console.log(e);
         // }
-
         // return {
         //   code: "CREATE_NEW_POSITION",
         // };
       }
-    } else if (this.openedPatternToEnter) {
+    } else if (this.openedPatternToEnter && this.analyzeResponseData.CODE != "ACTUAL") {
       let firstRule = getRuleByIndex(
         this.openedPatternToEnter.POSITION_RULEs,
         1
       );
 
-      let totalPartsOfPositions = getTotalParts(
-        this.openedPatternToEnter.POSITION_RULEs
+      let totalPartsOfPositions = await getTotalParts(
+        this.openedPatternToEnter
       );
+      console.log({totalPartsOfPositions})
 
       let PERCENT_OF_DEPOSIT =
         this.analyzeResponseData.Pattern.PERCENT_OF_DEPOSIT;
@@ -619,6 +651,38 @@ const getRuleByIndex = (RULEs, index) => {
   return RULEs.sort((a, b) => a.positionIndex - b.positionIndex)[index - 1];
 };
 
-const getTotalParts = (RULEs) => {
-  return RULEs.reduce((prev, curr) => prev + curr.depositPart, 0);
+const getTotalParts = async (ACTIVEGROUP) => {
+  let AGS = await db.models.ActiveGroups.findAll({
+    where: {
+      PATTERNId: ACTIVEGROUP.PATTERNId,
+    },
+    include: [
+      {
+        model: db.models.Rules,
+      },
+    ],
+  });
+
+  let rulesTotal = AGS.map((i) =>
+    i.POSITION_RULEs.reduce((prev, curr) => prev + curr.depositPart, 0)
+  ).reduce((prev, curr) => prev + curr, 0);
+
+  return rulesTotal;
+
+};
+
+
+
+const groupByRules = (ACTIVE_GROUP_TRIGGERs) => {
+  let zoneRulesBB = getBBRulesIndexes();
+
+  let rules = zoneRulesBB.map((i) => getBBRuleByIddex(i));
+
+  let grouppedTriggers = rules.map((i) =>
+    ACTIVE_GROUP_TRIGGERs.filter(
+      (j) => j.sigma == i.sigma && j.intervals == i.intervals
+    )
+  );
+
+  return grouppedTriggers.filter((i) => i.length > 0);
 };

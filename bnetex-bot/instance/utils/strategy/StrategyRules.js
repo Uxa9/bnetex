@@ -18,8 +18,7 @@ const StrategyRules = (intervalsData, triggers = [], groupped = false, log = fal
 let calcOneGroupd = (triggers, intervalsData, log = false) => {
   
 
-  log && console.log({triggers})
-  log && console.log('TG LEN:', triggers.length)
+  
   
   let signal = false;
   

@@ -137,7 +137,7 @@ module.exports = class PositionsModule {
 
     if(!nonPattern){
 
-      patternCompare = StrategyRules(this.lastKline, groupped, true, true);
+      patternCompare = StrategyRules(this.lastKline, groupped, true, false);
 
     }
     let POSITION_ACTIVE = undefined;

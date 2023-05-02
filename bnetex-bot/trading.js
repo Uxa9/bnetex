@@ -28,10 +28,11 @@ const dbValidator = require("./instance/utils/dbValidator");
 const copySinglePattern = require("./instance/utils/copySinglePattern");
 const { sendMessageToMainChanel } = require("./instance/utils/telegram/tg");
 const getPairDataFromExchange = require("./instance/utils/getPairDataFromExchange");
-const LocalStore = require("./instance/utils/LocalStore");
+
+const AnalyzeModule = require("./instance/classes/AnalyzeModules");
+const PositionsModule = require("./instance/classes/PositionsModule");
 
 const server = require('http').createServer(app);
-
 
 
 
@@ -49,11 +50,13 @@ const server = require('http').createServer(app);
 
     await db.setup();
 
+    
+
     //await dbValidator();
 
     //return;
 
-    //await copySinglePattern('1D_LONG_1_7D_45-30D_23-360D', '1_123_234_1D_LONG_1_7D_123_30D_234_360D')
+    //await copySinglePattern('1D_LONG_9_7D_45_30D_23_360D', '1D_LONG_9_7D_6789_30D_23_360D')
 
     //return;
 

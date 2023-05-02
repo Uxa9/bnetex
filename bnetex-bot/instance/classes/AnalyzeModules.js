@@ -36,6 +36,10 @@ module.exports = class AnalyzeModule {
 
     this._UpdaterWeekMatchingList();
 
+    this.LAST_MACRO_WEEK_SITUATION_INDEX;
+
+    this.LAST_MICRO_WEEK_SITUATION_INDEX;
+
     this.POSITION = undefined;
   }
 
@@ -53,6 +57,11 @@ module.exports = class AnalyzeModule {
    */
   async analyze() {
     // TODO + ЗАменить на год
+
+    // Флаг что на этой свече переключался макро анализ
+    let MACRO_WEEK_SITUATION_INDEX_HAS_CHANGE_IN_CURRENT_ITERATION = false;
+
+    let MICRO_WEEK_SITUATION_INDEX_HAS_CHANGE_IN_CURRENT_ITERATION = false;
 
     let MICRO_WEEK_SITUATION_INDEX = matching(this.marketData[10080][2], {
       week: true,
@@ -111,9 +120,25 @@ module.exports = class AnalyzeModule {
     //         }
     //     }
     // });
-    //console.log({MICRO_WEEK_SITUATION_INDEX, MACRO_WEEK_SITUATION_INDEX})
+
+    // Если макро изменился - деактивируем все паттерны
+    if (MACRO_WEEK_SITUATION_INDEX != this.LAST_MACRO_WEEK_SITUATION_INDEX) {
+      MACRO_WEEK_SITUATION_INDEX_HAS_CHANGE_IN_CURRENT_ITERATION = true;
+      this._deactivatePatterntByExcludedLogicalGroup("");
+    }
+
+
+    if (MICRO_WEEK_SITUATION_INDEX != this.LAST_MICRO_WEEK_SITUATION_INDEX) {
+      MICRO_WEEK_SITUATION_INDEX_HAS_CHANGE_IN_CURRENT_ITERATION = true;
+      this._deactivatePatterntByExcludedLogicalGroup("");
+    }
+
+    console.log({ MICRO_WEEK_SITUATION_INDEX, MACRO_WEEK_SITUATION_INDEX });
     if (!MICRO_WEEK_SITUATION_INDEX || !MACRO_WEEK_SITUATION_INDEX)
       return { CODE: "ACTUAL" };
+    //console.log({ LMWSI: this.LAST_MACRO_WEEK_SITUATION_INDEX });
+    this.LAST_MACRO_WEEK_SITUATION_INDEX = MACRO_WEEK_SITUATION_INDEX;
+    this.LAST_MICRO_WEEK_SITUATION_INDEX = MICRO_WEEK_SITUATION_INDEX;
 
     let WeekMatchingFiltered = undefined;
 
@@ -130,7 +155,19 @@ module.exports = class AnalyzeModule {
           i.MICRO_WEEK_SITUATION_INDEX == MICRO_WEEK_SITUATION_INDEX
       ).sort((a, b) => a.tradingVolume - b.tradingVolume);
     }
+
+    console.log(
+      WeekMatchingFiltered.map((i) => {
+        return {
+          id: i,
+          LOGICAL_GROUP: i.LOGICAL_GROUP,
+          tradingVolume: i.tradingVolume,
+        };
+      })
+    );
+
     
+
     if (WeekMatchingFiltered.length == 0) return { CODE: "ACTUAL" };
 
     // Если никакая группировка не выбрана, или найденная группировка больше по объему, или позиций нету - переключаемся
@@ -138,7 +175,9 @@ module.exports = class AnalyzeModule {
       !this.ActiveWeekMatching ||
       this.ActiveWeekMatching.tradingVolume <
         WeekMatchingFiltered[0].tradingVolume ||
-      !this.POSITION
+      !this.POSITION ||
+      MACRO_WEEK_SITUATION_INDEX_HAS_CHANGE_IN_CURRENT_ITERATION ||
+      MICRO_WEEK_SITUATION_INDEX_HAS_CHANGE_IN_CURRENT_ITERATION    
     ) {
       this.ActiveWeekMatching = WeekMatchingFiltered[0];
 
@@ -147,7 +186,7 @@ module.exports = class AnalyzeModule {
         this.ActiveWeekMatching.LOGICAL_GROUP
       );
     }
-    
+
     // Надо определить, с каким паттерном дальше работаем
     // Для этого надо проверить каждый паттерн на возможность активации
     // Определили больший по объему паттерн активный
@@ -163,16 +202,16 @@ module.exports = class AnalyzeModule {
         this.ActiveWeekMatching.LOGICAL_GROUP,
         true
       );
-        
+
     // Temp variable to hold local groups patterns
     let patternsTempIds = [];
 
     // patternsGroupInLogicalGroup.map(i => {
-    //   console.log({
+    //   console.log('BBBB',{
     //     id: i.id,
-    //     WORKING_GROUP: i.WORKING_GROUP,        
+    //     WORKING_GROUP: i.WORKING_GROUP,
     //   })
-    //   console.log(i.PATTERN_TRIGGERs)
+      
     // })
 
     // Loop every pattern for activate
@@ -182,17 +221,17 @@ module.exports = class AnalyzeModule {
       let ActivateTriggers = groupByRules(
         element.PATTERN_TRIGGERs.filter((i) => i.type == "ACTIVATION")
       );
-      
+
       let patternCompare = StrategyRules(
         this.marketData,
         ActivateTriggers,
         true,
-        element.id == 1016
+        false
       );
 
       if (patternCompare || element.status) patternsTempIds.push(element);
     }
-
+    console.log({ PTILEN: patternsTempIds.length });
     if (patternsTempIds.length == 0) {
       // Тут остается проверить только текущую позицию на усреднение
 
@@ -217,12 +256,14 @@ module.exports = class AnalyzeModule {
         (a, b) => a.PERCENT_OF_DEPOSIT - b.PERCENT_OF_DEPOSIT
       )[0];
     }
-    
+
     this.ActivePatternsInWorkingGroup =
       await this._getPatternGroupsByWorkinglGroup(
         maxPatternByVolume.WORKING_GROUP,
         true
       );
+
+    console.log({ APIWGLEN: this.ActivePatternsInWorkingGroup.length });
 
     // If there are trading patterns - check to activate
     if (this.ActivePatternsInWorkingGroup.length == 0) {
@@ -237,12 +278,21 @@ module.exports = class AnalyzeModule {
     let CurrentTradingVolume =
       (this.ActiveWeekMatching.tradingVolume * TotalTradingVolume) / 100;
 
+    console.log({ CurrentTradingVolume });
+
     if (!CurrentTradingVolume) {
       // Тут остается проверить только текущую позицию на усреднение
       return { CODE: "ACTUAL" };
     }
 
     let activePatternToForce = undefined;
+    
+    // console.log('AAAAAAAA:', this.ActivePatternsInWorkingGroup.map(i => {
+    //   return {
+    //     LOGICAL: i.LOGICAL_GROUP,
+    //     WORKING: i.WORKING_GROUP
+    //   }
+    // }))
 
     if (this.POSITION) {
       activePatternToForce = this.ActivePatternsInWorkingGroup.filter(
@@ -253,6 +303,8 @@ module.exports = class AnalyzeModule {
         (i) => i.status
       ).sort((a, b) => a.PART_OF_VOLUME - b.PART_OF_VOLUME)[0];
     }
+
+    if (!activePatternToForce) return { CODE: "ACTUAL" };
 
     let analyzeResponse = {
       TotalTradingVolume,
@@ -266,6 +318,13 @@ module.exports = class AnalyzeModule {
     };
 
     this.currentAnalyze = analyzeResponse;
+
+    console.log({
+      TotalTradingVolume,
+      CurrentTradingVolume,
+      Pattern: activePatternToForce.id,
+      PatternLogical: activePatternToForce.LOGICAL_GROUP,
+    });
 
     return analyzeResponse;
   }
