@@ -4,14 +4,14 @@ import {getUserInfo} from 'lib/utils/getUserInfo';
 import {Dispatch} from 'redux';
 import {AlgotradeAction, AlgotradeActionTypes, AlgotradeDataResponse} from 'store/actions/algotrade';
 
-const { protectedApi } = useApi();
+const { api } = useApi();
 
 export const getAlgotradeData = () => {
     return (dispatch: Dispatch<AlgotradeAction>) => {
         dispatch({ type: AlgotradeActionTypes.SEND_REQUEST});
 
-        return protectedApi
-            .get<AlgotradeDataResponse>(`/users/invest/${decodeUserJwt().userId}`)
+        return api
+            .get<AlgotradeDataResponse>(`/users/invest`)
             .then((res) => {
                 dispatch({ type: AlgotradeActionTypes.GET_ALGOTRADE_DATA, data: res.data});
             })

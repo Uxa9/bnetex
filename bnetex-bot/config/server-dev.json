@@ -13,7 +13,7 @@
     "startTime": 1675296000000,
     "initTelgram": false,
     "serverPort": 3009,
-    "serverOnly": false,
+    "serverOnly": true,
     "database": {
       "user" : "mysql",
       "database": "exchange",

@@ -1,11 +1,11 @@
 import useApi from 'lib/hooks/useApi';
 import { getUserInfo } from 'lib/utils/getUserInfo';
 
-const { protectedApi } = useApi();
+const { api } = useApi();
 
 export const startInvestTrading = async (amount: number) => {
 
-    return await protectedApi.post(
+    return await api.post(
         '/users/startInvest', {
             amount: amount,
             userId: getUserInfo().userId,
@@ -13,7 +13,7 @@ export const startInvestTrading = async (amount: number) => {
 };
 
 export const stopInvestTrading = async () => {
-    return await protectedApi.get(
+    return await api.get(
         `/users/stopInvest`
     );
 };

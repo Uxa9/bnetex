@@ -148,9 +148,11 @@ export class AuthService {
         }
     }
 
-    async verifyToken(dto: TokenVerify) {
+    async verifyToken(authHeader: string) {
         try {
-            await this.jwtService.verify(dto.token);
+            const token = authHeader.split(' ')[1];
+
+            await this.jwtService.verify(token);
             return {
                 valid: true
             }

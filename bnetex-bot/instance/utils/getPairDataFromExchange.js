@@ -150,7 +150,7 @@ let getFromExchange = async (limit = 1000, startTime, pair, timeframe) => {
     //       "Ignore",
     //     ];
 
-        
+        console.log(err);
 
     //     a.map((i, index) => {
     //       let obj = {};

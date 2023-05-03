@@ -1,14 +1,14 @@
 import useApi from 'lib/hooks/useApi';
 import { getUserInfo } from 'lib/utils/getUserInfo';
 
-const { api, protectedApi } = useApi();
+const { api } = useApi();
 
 export const getUser = async () => {
-    return await protectedApi.get(`/users/info`);
+    return await api.get(`/users/info`);
 };
 
 export const changeUserPassword = async (prevPassword: string, newPassword: string) => {
-    return await protectedApi.post(
+    return await api.post(
         '/users/changePassword', {
             prevPassword: prevPassword,
             newPassword: newPassword,
@@ -16,18 +16,18 @@ export const changeUserPassword = async (prevPassword: string, newPassword: stri
 };
 
 export const getRoeAndPnl = async () => {
-    return await protectedApi.get(
+    return await api.get(
         `/users/getRoeAndPnl`,
     );
 };
 
 export const getInvestInfo = async () => {
-    return await protectedApi.get(
+    return await api.get(
         `/users/invest`);
 };
 
 export const getUserOpenPosition = async () => {
-    return await protectedApi.get(
+    return await api.get(
         `/users/invest/positions`);
 };
 
