@@ -9,7 +9,7 @@ export class GetPositionsDto {
   @IsInt()
   @Min(1)
   @Max(12)
-  readonly monthsNumber: number;
+  readonly monthsCount: number;
 
   @ApiProperty()
   @IsNumber()

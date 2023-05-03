@@ -85,7 +85,7 @@ export class PositionsService {
         console.log(dto);
         
         const to = new Date().valueOf();
-        const from = new Date().setMonth(new Date().getMonth() - dto.monthsNumber)
+        const from = new Date().setMonth(new Date().getMonth() - dto.monthsCount)
 
         const positions: any[] = (await lastValueFrom(this.httpService
             .post(`${process.env.BOT_URL}front/history`, {
