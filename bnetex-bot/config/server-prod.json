@@ -1,17 +1,22 @@
 {
   "port": 4800,
   "binance": {
-    "APIKEY": "WGqUwaTriNCuXjzoxycU5JTJpnhRJGlQDsrzwgDflKoqxprvJtsBSXsSBK89tIlt1",
-    "APISECRET": "RZ8o0o8bA3oDKqR1a3AemecdJL57SSpuj8UAzOEIEKCttSTHJfOiwRQvGwzp2K59",
+    "APIKEY": "N18LBilceXKywULZ6uy8lqgFi6FIMadlXt9rWTlFiPL5jxttzccn5sV435n1ixSR",
+    "APISECRET": "Guhz7IMcbR8j9qgwK5JJReImPFDoiFe9BddWsy4kYmd5LB1St2FYvUYRyTqZNYoQ",
     "TEST": false
   },
-  "tradingPairs" : ["BTCUSDT"],
-  "tradingTimeframes": ["1m", "5m", "15m", "30m", "1h", "2h", "8h", "12h", "1d"],
-  "tgBotKey": "5694798604:AAFu6z12hkOrDZU-VrOHFeJKOnNTT6m_6Ok",
-  "tgGroupId": -673023135,
+  "tradingPairs" : ["BTCUSDT"],    
+  "tradingTimeframes": ["1m"],
+  "tgBotKey": "5642351090:AAEcNaA0oJgEW5u6cZrjdsgPTZDMZSWi47s",
+  "tgGroupId": -861751435,
   "simulate": false,
-  "startTime": null,
+  "startTime": 1675296000000,
   "initTelgram": true,
   "serverPort": 3009,
-  "serverOnly": false
+  "serverOnly": false,
+  "database": {
+    "user" : "simulator___usr",
+    "database": "simulator__test",
+    "password": "3VdpETtZ"
+  }
 }

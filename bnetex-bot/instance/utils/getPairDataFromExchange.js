@@ -60,7 +60,7 @@ module.exports = async (pair, timeframe, limit, startTimeFrom = false, lastTime 
     data = data.concat(dataFromExhange);
 
     
-
+      
     startTime =
       data[data.length - 1].startTime
 
@@ -80,47 +80,95 @@ module.exports = async (pair, timeframe, limit, startTimeFrom = false, lastTime 
   return data;
 };
 
-let getFromExchange = async (limit, startTime, pair, timeframe) => {
+let getFromExchange = async (limit = 1000, startTime, pair, timeframe) => {
   return new Promise(async (res, rej) => {
-    let a = await binance.candlesticks(
-      pair,
-      timeframe,
-      async (err, a, symbol) => {
-        let result = [];
-        let attributes = [
-          "startTime",
-          "open",
-          "high",
-          "low",
-          "close",
-          "volume",
-          "endTime",
-          "quoteVolume",
-          "trades",
-          "takerBuyBaseVolume",
-          "takerBuyQuoteVolume",
-          "Ignore",
-        ];
+
+    if(limit > 1500) limit = 1500;
+    await binance.publicRequest('https://fapi.binance.com/fapi/v1/klines', {
+        symbol: 'BTCUSDT',
+        interval: timeframe,
+        startTime: startTime,  
+        limit: limit,  
+    }, async (err, a) => {
+      
+      let result = [];
+      let attributes = [
+        "startTime",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume",
+        "endTime",
+        "quoteVolume",
+        "trades",
+        "takerBuyBaseVolume",
+        "takerBuyQuoteVolume",
+        "Ignore",
+      ];
+
+      
+
+      a.map((i, index) => {
+        let obj = {};
+        i.map((attr, index) => {
+          obj[[attributes[index]]] = attr;
+        });
+
+        // Устанавливаем интервал
+        obj["interval"] = timeframe;
+        obj["symbol"] = pair;
+        if (index == a.length - 1) return;
+        result.push(obj);
+        
+        
+      });
+      
+
+      res(result);
+    });
+    
+    
+
+    // let a = await binance.candlesticks(
+    //   pair,
+    //   timeframe,
+    //   async (err, a, symbol) => {
+    //     let result = [];
+    //     let attributes = [
+    //       "startTime",
+    //       "open",
+    //       "high",
+    //       "low",
+    //       "close",
+    //       "volume",
+    //       "endTime",
+    //       "quoteVolume",
+    //       "trades",
+    //       "takerBuyBaseVolume",
+    //       "takerBuyQuoteVolume",
+    //       "Ignore",
+    //     ];
 
         
 
-        a.map((i, index) => {
-          let obj = {};
-          i.map((attr, index) => {
-            obj[[attributes[index]]] = attr;
-          });
+    //     a.map((i, index) => {
+    //       let obj = {};
+    //       i.map((attr, index) => {
+    //         obj[[attributes[index]]] = attr;
+    //       });
 
-          // Устанавливаем интервал
-          obj["interval"] = timeframe;
-          obj["symbol"] = pair;
-          if (index == a.length - 1) return;
+    //       // Устанавливаем интервал
+    //       obj["interval"] = timeframe;
+    //       obj["symbol"] = pair;
+    //       if (index == a.length - 1) return;
 
-          result.push(obj);
-        });
+    //       result.push(obj);
+    //     });
 
-        res(result);
-      },
-      { limit: limit, startTime }
-    );
+    //     res(result);
+    //   },
+    //   { limit: limit, startTime }
+    // );
   });
 };
