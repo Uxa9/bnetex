@@ -1,6 +1,4 @@
-import { forwardRef, HttpException, HttpStatus, Inject, Injectable, Scope } from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
-import { Request } from 'express';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { UserNotFoundException } from '../exceptions/userNotFound.exception';
 import { RolesService } from '../roles/roles.service';
@@ -21,7 +19,7 @@ import { UserAlreadyExist } from 'src/exceptions/auth/userAlreadyExist.exception
 import { RoleNotFound } from 'src/exceptions/role/roleNotFound.exception';
 import { UserWrongPassword } from 'src/exceptions/user/userWrongPassword.exceptions';
 
-@Injectable({ scope: Scope.DEFAULT })
+@Injectable()
 export class UsersService {
 
     constructor(@InjectModel(User) private usersRepository: typeof User,
@@ -30,7 +28,6 @@ export class UsersService {
         private jwtService: JwtService,
         @Inject(forwardRef(() => InvestSessionsService)) // чета хуита какая-то
         private investSessions: InvestSessionsService,
-        @Inject(REQUEST) private readonly Request: Request,
         private positionService: PositionsService) { }
 
     async createUser(dto: CreateUserDto) {
@@ -66,9 +63,8 @@ export class UsersService {
         }
     }
 
-    async getCurrentUser(){
-        const req:any = this.Request;
-        return await this.getUserById(req.user.id);
+    async getCurrentUser(id: number){
+        return await this.getUserById(id);
     }
 
     async changePassword(dto: ChangePasswordDto, user: User) {
@@ -318,9 +314,11 @@ export class UsersService {
             }
         }
 
+        const userPercent = 100 / user.roles[0].investPercent;
+
         // Если позиция в профите, забираем 50%
-        const sessionPnL = session.lastPnl > 0 ? session.lastPnl / 2 : session.lastPnl;
-        const sessionRoE = session.lastRoe > 0 ? session.lastRoe / 2 : session.lastRoe;
+        const sessionPnL = session.lastPnl > 0 ? session.lastPnl / userPercent : session.lastPnl;
+        const sessionRoE = session.lastRoe > 0 ? session.lastRoe / userPercent : session.lastRoe;
 
         return {
             startSessionTime : session.startSessionTime,

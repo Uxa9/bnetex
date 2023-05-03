@@ -102,7 +102,7 @@ let getFromExchange = async (limit, startTime, pair, timeframe) => {
           "Ignore",
         ];
 
-        
+        console.log(err);
 
         a.map((i, index) => {
           let obj = {};

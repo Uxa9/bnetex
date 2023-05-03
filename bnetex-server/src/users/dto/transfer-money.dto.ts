@@ -1,12 +1,6 @@
 import { IsNumber, IsString, Min } from "class-validator";
 
 export class TransferMoney {
-
-    @IsNumber({}, {
-        message : "Id must be a number"
-    })
-    readonly userId : number;
-
     @IsString({
         message : "Value must be a string"
     })

@@ -137,6 +137,8 @@ export class PositionsService {
                 to: dto.to || new Date().valueOf()
             }).pipe(
                 catchError((error: AxiosError) => {
+                    console.log(error);
+                    
                     throw new HttpException(
                         {
                             status: "ERROR",
