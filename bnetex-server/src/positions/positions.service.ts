@@ -5,6 +5,7 @@ import { AxiosError } from 'axios';
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { Op } from 'sequelize';
 import { Position } from './position.model';
+import { GetPositionsDto } from './dto/get-positions.dto';
 
 @Injectable()
 export class PositionsService {
@@ -80,53 +81,48 @@ export class PositionsService {
         };
     }
 
-    async getHistoricalDataOrders(period: number) {
-        try {
-            const to = new Date().valueOf();
-            const from = new Date().setMonth(new Date().getMonth() - period)
+    async getHistoricalDataOrders(dto: GetPositionsDto) {
+        console.log(dto);
+        
+        const to = new Date().valueOf();
+        const from = new Date().setMonth(new Date().getMonth() - dto.monthsCount)
 
-            const positions: any[] = (await lastValueFrom(this.httpService
-                .post(`${process.env.BOT_URL}front/history`, {
-                    from,
-                    to
-                }))).data.response;
+        const positions: any[] = (await lastValueFrom(this.httpService
+            .post(`${process.env.BOT_URL}front/history`, {
+                from,
+                to
+            }))).data.response;
 
-            let res:any[] = [];
+        let res:any[] = [];
 
-            positions.map((position) => {
-                const positionEnters = position.POSITION_ENTERs;
+        positions.map((position) => {
+            const positionEnters = position.POSITION_ENTERs;
 
-                const lever = 10;
+            const percentOfTotalDeposit = dto.amount / position.totalDeposit;
 
-                const enters = positionEnters.map((enter) => {
-                    return {
-                        date: new Date(enter.createdAt),
-                        action: 'purchase',
-                        amount: enter.volumeUSDT * lever,
-                        price: enter.close,
-                        PNL: 0,
-                    };
-                });
-
-                res = [...res, ...enters];
-
-                res.push({
-                    date: new Date(position.closeTime),
-                    action: position.positionType === 'LONG' ? 'sale' : 'purchase',
-                    amount: position.volumeUSDT * lever,
-                    price: position.closePrice,
-                    PNL: position.sumProfit * lever,
-                });
-
+            const enters = positionEnters.map((enter) => {
+                return {
+                    date: new Date(enter.createdAt),
+                    action: 'purchase',
+                    amount: enter.volumeUSDT * percentOfTotalDeposit,
+                    price: enter.close,
+                    PNL: 0,
+                };
             });
 
-            return res;
+            res = [...res, ...enters];
 
-        } catch (error) {
-            console.log('hist data orders');
+            res.push({
+                date: new Date(position.closeTime),
+                action: position.positionType === 'LONG' ? 'sale' : 'purchase',
+                amount: position.volumeUSDT * percentOfTotalDeposit,
+                price: position.closePrice,
+                PNL: position.sumProfit * percentOfTotalDeposit,
+            });
 
-            console.log(error);
-        }
+        });
+
+        return res;
     }
 
     async getTVdata(dto: any) {
