@@ -51,7 +51,7 @@ export const signup = (email: string, password: string) => {
         dispatch({ type: AuthActionTypes.SEND_AUTH_REQUEST});
 
         return api
-            .post('/auth/registration', {
+            .put('/auth/registration', {
                 email: email,
                 password: password,
             })
@@ -64,7 +64,7 @@ export const signup = (email: string, password: string) => {
                 localStorage.setItem('userInfo-BNETEX', JSON.stringify(userInfo));
                 dispatch({ type: AuthActionTypes.AUTH_REQUEST_RETURNED});
             })
-            .catch((err) => {
+            .catch((err) => {                
                 dispatch({ type: AuthActionTypes.AUTH_REQUEST_RETURNED});
                 throw new Error(err.response.data.message);
             });
@@ -106,14 +106,10 @@ export const confirmEmail = (email: string, activationCode: string) => {
 export const verifyToken =  () => {
     return (dispatch: Dispatch<AuthAction>) => {
         dispatch({ type: AuthActionTypes.SEND_AUTH_REQUEST});
-        return api.post(
-            '/auth/token/verify', {
-                token: getUserInfo().token,
-            })
+        return api.post('/auth/token/verify')
             .then((res) => {
-                console.log(res);
-                
-                dispatch({ type: AuthActionTypes.LOGIN})
+                if (res.data.valid) dispatch({ type: AuthActionTypes.LOGIN});
+                else dispatch({ type: AuthActionTypes.AUTH_REQUEST_RETURNED});
             })
             .catch(() => {
                 dispatch({ type: AuthActionTypes.AUTH_REQUEST_RETURNED});

@@ -3,7 +3,7 @@ import { getUserInfo } from 'lib/utils/getUserInfo';
 import { Dispatch } from 'redux';
 import { RoePnlAction, RoePnlActionTypes, RoePnlState, SuccessfulRoePnlRequestData } from 'store/actions/roepnl';
 
-const { protectedApi, api } = useApi();
+const { api } = useApi();
 
 // toDo: такая штука должна быть на беке
 const transformDataToFixed = (data: SuccessfulRoePnlRequestData): Omit<RoePnlState, 'loading'> => {
@@ -22,7 +22,7 @@ export const getRoeAndPnl = () => {
     return (dispatch: Dispatch<RoePnlAction>) => {
         dispatch({ type: RoePnlActionTypes.SEND_REQUEST});
 
-        return protectedApi
+        return api
             .get<SuccessfulRoePnlRequestData>(`/users/getRoeAndPnl`)
             .then((res) => {
                 dispatch({ type: RoePnlActionTypes.GET_ROE_PNL, data: transformDataToFixed(res.data)});
