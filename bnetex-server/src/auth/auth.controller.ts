@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Put, UnauthorizedException } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post, Put, Request, UnauthorizedException } from '@nestjs/common';
 import { ApiOperation, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { ConfirmEmail } from '../users/dto/confirm-email.dto';
@@ -132,8 +132,10 @@ export class AuthController {
         InternalServerError
     ])
     @Post('token/verify')
-    verifyToken(@Body() dto: TokenVerify) {
-        return this.authService.verifyToken(dto);
+    verifyToken(@Request() req: any) {
+        const { authorization } = req.headers;        
+        
+        return this.authService.verifyToken(authorization);
     }
 
     @ApiOperation({

@@ -29,7 +29,9 @@ const copySinglePattern = require("./instance/utils/copySinglePattern");
 const { sendMessageToMainChanel } = require("./instance/utils/telegram/tg");
 const getPairDataFromExchange = require("./instance/utils/getPairDataFromExchange");
 const LocalStore = require("./instance/utils/LocalStore");
-
+const binance = require("./instance/utils/binance");
+const FuturesModule = require("./instance/classes/FuturesModule");
+const PositionsModule = require("./instance/classes/PositionsModule");
 const server = require('http').createServer(app);
 
 
@@ -46,6 +48,52 @@ const server = require('http').createServer(app);
     //let klines = await getPairDataFromExchange('BTCUSDT', '1m', 1000, 1675242540000 + 60000);
 
     //console.log(klines[0].startTime - 1675242540000)
+
+    
+
+    // let hist = await binance.futuresHistDataId(
+    //     "BTCUSDT", {
+    //       startTime: new Date().getTime() - 24 * 60 * 60 * 1000,
+    //       endTime: new Date().getTime(),
+    //       dataType: 'T_TRADE'
+    // });
+
+    //let positions = new PositionsModule("BTCUSDT");
+    //let futures = new FuturesModule("BTCUSDT", positions);
+
+    // let mb = await futures.marketBuy(0.001);
+
+
+    // let response = await binance.publicRequest('https://fapi.binance.com/fapi/v1/klines', {
+    //     symbol: 'BTCUSDT',
+    //     interval: "1m",
+    //     startTime: 1683014400000,    
+    // });
+
+    // console.log(response)
+
+    /**
+     * 
+     * publicRequest( base + 'v3/klines', params, function ( error, data ) {
+                    return callback.call( this, error, data, symbol );
+                } );
+     */
+
+
+
+    // let dataFromExhange = await getPairDataFromExchange(
+    //     "BTCUSDT",
+    //     "1m",
+    //     1000,
+    //     1683014400000
+    //   );
+
+    //console.log(dataFromExhange[dataFromExhange.length-1])
+  
+
+    
+
+    //return;
 
     await db.setup();
 

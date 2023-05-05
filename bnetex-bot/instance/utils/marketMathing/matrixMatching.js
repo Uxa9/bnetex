@@ -314,7 +314,327 @@ const matrix = [
             }
         ]
         
-    }
+    },
+
+
+     // Index 27
+
+
+     {
+        index: 27,
+        data: [
+            { 
+                // 360
+                sigma: 2,
+                intervals: 518400,
+                variations: [4]
+            },
+            {
+                // 180
+                sigma: 2,
+                intervals: 259200,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 90
+                sigma: 2,
+                intervals: 129600,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 60
+                sigma: 2,
+                intervals: 86400,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 30
+                sigma: 2,
+                intervals: 43200,
+                variations: [6,7,8,9]
+            },
+            {
+                // 14
+                sigma: 2,
+                intervals: 20160,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 7
+                sigma: 2,
+                intervals: 10080,
+                variations: [4,5,6,7,8,9]
+            }
+        ]
+        
+    },
+
+
+
+    // Index 28
+
+
+    {
+        index: 28,
+        data: [
+            { 
+                // 360
+                sigma: 2,
+                intervals: 518400,
+                variations: [4]
+            },
+            {
+                // 180
+                sigma: 2,
+                intervals: 259200,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 90
+                sigma: 2,
+                intervals: 129600,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 60
+                sigma: 2,
+                intervals: 86400,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 30
+                sigma: 2,
+                intervals: 43200,
+                variations: [6,7,8,9]
+            },
+            {
+                // 14
+                sigma: 2,
+                intervals: 20160,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 7
+                sigma: 2,
+                intervals: 10080,
+                variations: [1,2,3]
+            }
+        ]
+        
+    },
+
+
+
+     // Index 29
+
+
+     {
+        index: 29,
+        data: [
+            { 
+                // 360
+                sigma: 2,
+                intervals: 518400,
+                variations: [4]
+            },
+            {
+                // 180
+                sigma: 2,
+                intervals: 259200,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 90
+                sigma: 2,
+                intervals: 129600,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 60
+                sigma: 2,
+                intervals: 86400,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 30
+                sigma: 2,
+                intervals: 43200,
+                variations: [6,7,8,9]
+            },
+            {
+                // 14
+                sigma: 2,
+                intervals: 20160,
+                variations: [1,2,3]
+            },
+            {
+                // 7
+                sigma: 2,
+                intervals: 10080,
+                variations: [1,2,3,4,5,6,7,8,9]
+            }
+        ]
+        
+    },
+
+
+    // Index 30
+
+
+    {
+        index: 30,
+        data: [
+            { 
+                // 360
+                sigma: 2,
+                intervals: 518400,
+                variations: [4]
+            },
+            {
+                // 180
+                sigma: 2,
+                intervals: 259200,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 90
+                sigma: 2,
+                intervals: 129600,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 60
+                sigma: 2,
+                intervals: 86400,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 30
+                sigma: 2,
+                intervals: 43200,
+                variations: [1,2,3]
+            },
+            {
+                // 14
+                sigma: 2,
+                intervals: 20160,
+                variations: [1,2,3,4,5,6,7,8,9]
+            },
+            {
+                // 7
+                sigma: 2,
+                intervals: 10080,
+                variations: [1,2,3,4,5,6,7,8,9]
+            }
+        ]
+        
+    },
+
+
+    // Index 31
+
+
+    {
+        index: 31,
+        data: [
+            { 
+                // 360
+                sigma: 2,
+                intervals: 518400,
+                variations: [4]
+            },
+            {
+                // 180
+                sigma: 2,
+                intervals: 259200,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 90
+                sigma: 2,
+                intervals: 129600,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 60
+                sigma: 2,
+                intervals: 86400,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 30
+                sigma: 2,
+                intervals: 43200,
+                variations: [4,5]
+            },
+            {
+                // 14
+                sigma: 2,
+                intervals: 20160,
+                variations: [1,2,3,4,5,6,7,8,9]
+            },
+            {
+                // 7
+                sigma: 2,
+                intervals: 10080,
+                variations: [1,2,3,4,5,6,7,8,9]
+            }
+        ]
+        
+    },
+
+
+    // Index 31
+
+
+    {
+        index: 32,
+        data: [
+            { 
+                // 360
+                sigma: 2,
+                intervals: 518400,
+                variations: [4]
+            },
+            {
+                // 180
+                sigma: 2,
+                intervals: 259200,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 90
+                sigma: 2,
+                intervals: 129600,
+                variations: [4,5,6,7,8,9]
+            },
+            {
+                // 60
+                sigma: 2,
+                intervals: 86400,
+                variations: [1,2,3]
+            },
+            {
+                // 30
+                sigma: 2,
+                intervals: 43200,
+                variations: [1,2,3,4,5]
+            },
+            {
+                // 14
+                sigma: 2,
+                intervals: 20160,
+                variations: [1,2,3,4,5,6,7,8,9]
+            },
+            {
+                // 7
+                sigma: 2,
+                intervals: 10080,
+                variations: [1,2,3,4,5,6,7,8,9]
+            }
+        ]
+        
+    },
 
 ]
 

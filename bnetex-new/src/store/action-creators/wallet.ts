@@ -4,13 +4,13 @@ import useApi from 'lib/hooks/useApi';
 import { WalletCategoryType } from 'lib/types/wallet';
 import { getUserInfo } from 'lib/utils/getUserInfo';
 
-const { protectedApi } = useApi();
+const { api } = useApi();
 
 export const getWallets = () => {
     return (dispatch: Dispatch<WalletAction>) => {
         dispatch({ type: WalletActionTypes.SEND_WALLET_REQUEST});
 
-        return protectedApi
+        return api
             .get(`/users/getWallets`)
             .then((res) => {
                 dispatch({
@@ -37,7 +37,7 @@ export const transferBetweenWallets = (sender: WalletCategoryType, reciever: Wal
             userId: getUserInfo().userId,
         };
 
-        return protectedApi.post('/users/transfer-money', requestBody)
+        return api.post('/users/transfer-money', requestBody)
             .then(() => {
                 dispatch({ type: WalletActionTypes.WALLET_REQUEST_RETURNED});
             })
@@ -53,7 +53,7 @@ export const withdrawConfirm = (confirmCode: string) => {
     return (dispatch: Dispatch<WalletAction>) => {
         dispatch({ type: WalletActionTypes.SEND_WALLET_REQUEST});
 
-        return protectedApi.post('/request/fulfill', {
+        return api.post('/request/fulfill', {
             confirmCode,
             requestId: Number(localStorage.getItem('requestId')),
         })
@@ -71,7 +71,7 @@ export const withdrawRequest = (walletAddress: string, amount: number, type: str
     return (dispatch: Dispatch<WalletAction>) => {
         dispatch({ type: WalletActionTypes.SEND_WALLET_REQUEST});
 
-        return protectedApi.post('/request/create', {
+        return api.post('/request/create', {
             walletAddress,
             amount,
             type,

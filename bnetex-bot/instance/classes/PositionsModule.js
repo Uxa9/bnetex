@@ -10,6 +10,7 @@ const moment = require('moment');
 const binance = require("../utils/binance");
 const { Op } = require("sequelize");
 const { sendMessageToMainChanel } = require("../utils/telegram/tg");
+const config = require('../../config/config')()
 
 module.exports = class PositionsModule {
   constructor(pair) {
@@ -265,18 +266,37 @@ module.exports = class PositionsModule {
     exchangePosition = exchangePosition[0];
 
     
+    if(config.simulate){
 
-    await db.models.PositionEnters.create({
-      volumeUSDT: parseFloat(marketBuy.cumQty)/10,
-      volume: parseFloat(marketBuy.cumQuote),
-      step: enterStep,
-      POSITIONId: POSITION.id,
-      ACTIVEGROUPId: ACTIVE_GROUP,
-      close: enterPrice,
-      createdAt: moment(this.lastKline.startTime, 'x').toDate(),
-      unittimestamp: this.lastKline.startTime,
-      tradingVolume
-    })
+      await db.models.PositionEnters.create({
+        volumeUSDT: parseFloat(marketBuy.cumQty)/10,
+        volume: parseFloat(marketBuy.cumQuote),
+        step: enterStep,
+        POSITIONId: POSITION.id,
+        ACTIVEGROUPId: ACTIVE_GROUP,
+        close: enterPrice,
+        createdAt: moment(this.lastKline.startTime, 'x').toDate(),
+        unittimestamp: this.lastKline.startTime,
+        tradingVolume
+      })
+
+
+    }else{
+
+      await db.models.PositionEnters.create({
+        volumeUSDT: parseFloat(marketBuy.cumQuote),
+        volume: parseFloat(marketBuy.cumQty),
+        step: enterStep,
+        POSITIONId: POSITION.id,
+        ACTIVEGROUPId: ACTIVE_GROUP,
+        close: enterPrice,
+        createdAt: moment(this.lastKline.startTime, 'x').toDate(),
+        unittimestamp: this.lastKline.startTime,
+        tradingVolume
+      })
+
+    }
+    
 
     
     return await db.models.Position.update({

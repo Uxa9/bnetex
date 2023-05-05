@@ -1,9 +1,9 @@
 {
     "port": 4800,
     "binance": {
-      "APIKEY": "8f7b54d669216d815d2a9ec42700eecb5fd5e15b42fb3dfb598f7fb5355b39ea",
-      "APISECRET": "82edf111707a6332f5852483a3e4b2e5c0f844dc1dfca4bb3c2ef54d730533b5",
-      "TEST": false
+      "APIKEY": "a72b5db1ca27c01ed87c9c675679ab5468fbff4644ffa431ccaec614b29f8cb5",
+      "APISECRET": "5acca65f0ec8fe5ed9788f447a9e3646f8f5e81d576be06f3ab80e871e3176c0",
+      "TEST": true
     },
     "tradingPairs" : ["BTCUSDT"],    
     "tradingTimeframes": ["1m"],
@@ -13,7 +13,7 @@
     "startTime": 1675296000000,
     "initTelgram": false,
     "serverPort": 3009,
-    "serverOnly": false,
+    "serverOnly": true,
     "database": {
       "user" : "mysql",
       "database": "exchange",

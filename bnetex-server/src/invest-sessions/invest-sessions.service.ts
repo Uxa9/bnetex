@@ -1,15 +1,13 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, HttpStatus, Inject, Injectable, Scope } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { PositionsService } from '../positions/positions.service';
 import { UsersService } from '../users/users.service';
 import { CreateTradeSessionDto } from './dto/create-session.dto';
 import { InvestSession } from './invest-sessions.model';
-import { REQUEST } from '@nestjs/core';
-import { Request } from 'express';
 import { User } from 'src/users/users.model';
 
-@Injectable({ scope: Scope.DEFAULT })
+@Injectable()
 export class InvestSessionsService {
 
     constructor(
@@ -18,7 +16,6 @@ export class InvestSessionsService {
         private userService: UsersService,
         private positionService: PositionsService,
         private readonly httpService: HttpService,
-        @Inject(REQUEST) private readonly Request: Request,
     ) { }
 
     async createSession(dto: CreateTradeSessionDto, user: User) {

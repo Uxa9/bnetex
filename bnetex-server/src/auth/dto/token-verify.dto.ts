@@ -4,10 +4,10 @@ import { IsNotEmpty, IsString } from "class-validator";
 export class TokenVerify {
     @ApiProperty({
         example: "aboba.aboba.aboba",
-        description: "user e-mail"
+        description: "user token"
     })
     @IsString({
-        message : 'E-mail must be a string'
+        message : 'Token must be a string'
     })
     @IsNotEmpty({})
     readonly token: string;

@@ -380,7 +380,7 @@ module.exports = class AnalyzeModule {
 
   async _getTotalTradingVolume() {
     // TODO - брать с сайта
-    return 50000;
+    return 30000;
   }
 
   async _UpdaterWeekMatchingList() {

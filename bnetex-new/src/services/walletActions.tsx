@@ -20,7 +20,7 @@ const WalletCategoryEnum: {[key: string]: string} = {
 
 const useWalletActions = () => {
 
-    const { protectedApi, api } = useApi();
+    const { api } = useApi();
     
     const transferBetweenWallets = async (data: transferBetweenWalletsData) => {
 
@@ -30,7 +30,7 @@ const useWalletActions = () => {
             amount: data.amount,
         };
 
-        return await protectedApi.post(
+        return await api.post(
             '/users/transfer-money', 
             {...sendData},
             {headers: {
@@ -40,7 +40,7 @@ const useWalletActions = () => {
     };
     
     const withdrawConfirm = async (data: WithdrawConfirmFormData) => {
-        return await protectedApi.post(
+        return await api.post(
             '/request/fulfill', 
             {...data, requestId: Number(localStorage.getItem('requestId'))},
             {headers: {
@@ -57,7 +57,7 @@ const useWalletActions = () => {
     }
     
     const withdrawRequest = async (data: WithdrawFormData) => {
-        return await protectedApi.post(
+        return await api.post(
             '/request/create', 
             data,
             {headers: {
