@@ -135,11 +135,6 @@ export class UsersController {
     getUserTradeSession(@ReqUser() user: User) {
         return this.userService.getUserActiveSession(user);
     }
-    
-    @Get('totalInvestAmount/get')
-    getTotalInvestAmount() {
-        return this.userService.getTotalInvestAmount();
-    }
 
     @Get('invest/positions')
     @ApiBearerAuth()

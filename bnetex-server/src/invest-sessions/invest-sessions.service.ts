@@ -217,4 +217,17 @@ export class InvestSessionsService {
         }
 
     }
+
+    async getTotalInvestAmount() {
+        const res = await this.investSessionRepository.findAll({
+            where: {
+                stopSessionTime: null
+            },
+        });
+
+        return {
+            sessions: res,
+            totalAmount: res.reduce((acc, session) => acc + session.tradeBalance, 0),
+        };
+    }
 }

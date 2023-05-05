@@ -1,0 +1,32 @@
+stages:
+  - prepare
+  - lint
+  - build
+  - deploy
+
+# The following variables are declared here for information purpose only.
+variables:
+  # Start pipeline always or manual.
+  AUTO_START_PIPELINE: "0"
+
+  NODE_IMAGE: node:18-alpine
+
+  # Linting code.
+  NODE_LINT: "0"
+
+# Configuration of the workflow.
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      variables:
+        AUTO_START_PIPELINE: "1"
+        NODE_LINT: "1"
+    - if: "$CI_COMMIT_TAG"
+      variables:
+        AUTO_START_PIPELINE: "1"
+
+include:
+  - local: .gitlab/pipeline/prepare.yml
+  - local: .gitlab/pipeline/lint.yml
+  - local: .gitlab/pipeline/build.yml
+  - local: .gitlab/pipeline/deploy.yml

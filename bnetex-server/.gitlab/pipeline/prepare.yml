@@ -1,0 +1,29 @@
+.prepare:
+  stage: prepare
+
+node:modules:
+  extends: .prepare
+  allow_failure: true
+  cache: &node-modules-cache
+    key:
+      prefix: node.$CI_COMMIT_REF_SLUG
+      files:
+        - package.json
+        - package-lock.json
+    paths:
+      - node_modules/
+  image: $NODE_IMAGE
+  rules:
+    - if: $AUTO_START_PIPELINE != "1"
+      when: manual
+    - exists:
+        - package.json
+  script:
+    - npm i
+
+.node:modules:
+  before_script:
+    - '[ ! -d "node_modules" ] && npm i'
+  cache:
+    <<: *node-modules-cache
+    policy: pull

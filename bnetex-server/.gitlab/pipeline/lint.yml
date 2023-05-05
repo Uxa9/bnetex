@@ -1,0 +1,14 @@
+.lint:
+  stage: lint
+
+node:lint:
+  image: $NODE_IMAGE
+  extends:
+    - .lint
+    - .node:modules
+  needs:
+    - job: node:modules
+  rules:
+    - if: $NODE_LINT == "1"
+  script:
+    - npm run lint

@@ -330,19 +330,6 @@ export class UsersService {
         }
     }
 
-    async getTotalInvestAmount() {
-        const res = await this.usersRepository.findAll({
-            where: {
-                tradeBalance: {
-                    [Op.gt]: 0
-                }
-            },
-            attributes: ['tradeBalance']
-        });
-
-        return res.reduce((acc, user) => acc + user.tradeBalance, 0);
-    }
-
     async getCurrentOpenPosition(user: User) {    
         const position = await this.positionService.getCurrentOpenPosition();
 

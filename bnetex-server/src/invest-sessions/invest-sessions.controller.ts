@@ -1,7 +1,9 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { InvestSessionsService } from './invest-sessions.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('invest-sessions')
+@ApiTags('Invest sessions')
 export class InvestSessionsController {
 
     constructor(
@@ -12,5 +14,10 @@ export class InvestSessionsController {
     @Post()
     acceptBotCallback() {
         return this.investSesssionsService.acceptBotCallback();
+    }
+
+    @Get('total-invest-amount')
+    getTotalInvestAmount() {
+        return this.investSesssionsService.getTotalInvestAmount();
     }
 }

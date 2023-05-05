@@ -1,0 +1,20 @@
+.build:
+  stage: build
+
+node:build:
+  extends:
+    - .build
+    - .node:modules
+  image: $NODE_IMAGE
+  artifacts:
+    name: $CI_PROJECT_NAME
+    paths:
+      - dist
+      - node_modules
+  needs:
+    - job: node:modules
+    - job: node:lint
+      optional: true
+  script:
+    - npm run build
+    - du -sh dist node_modules
