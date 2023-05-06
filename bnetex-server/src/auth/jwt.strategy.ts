@@ -3,6 +3,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from 'src/users/users.model';
+import { Role } from 'src/roles/roles.model';
+import { Wallet } from 'src/wallet/models/wallet.model';
 
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(@InjectModel(User) private readonly userRepository: typeof User) {
@@ -14,7 +16,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    const user = await this.userRepository.findByPk(payload.id, { include: { all: true } });
+    const user = await this.userRepository.findByPk(payload.id, { include: [
+      { model: Role },
+      { model: Wallet }
+    ] });
 
     if (!user) {
       throw new UnauthorizedException({

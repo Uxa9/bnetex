@@ -6,6 +6,7 @@ import { UsersService } from '../users/users.service';
 import { CreateTradeSessionDto } from './dto/create-session.dto';
 import { InvestSession } from './invest-sessions.model';
 import { User } from 'src/users/users.model';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class InvestSessionsService {
@@ -226,5 +227,103 @@ export class InvestSessionsService {
             sessions: res,
             totalAmount: res.reduce((acc, session) => acc + session.tradeBalance, 0),
         };
+    }
+
+    async getHistory(user: User) {
+        const sessions = await this.investSessionRepository.findAll({
+            where: { userId: user.id },
+            order: [['createdAt', 'DESC']],
+            limit: 30,
+        });
+
+        const sessionsMap = new Map<number, InvestSession>();
+        sessions.forEach((session) => {
+            sessionsMap.set(session.id, session);
+        });
+
+        const sessionsFromBot = (await lastValueFrom(this.httpService
+            .post(`${process.env.BOT_REST_URL}positions/positions-by-invest-sessions`, {
+                investSessions: Array.from(sessionsMap.keys()),
+            }))).data;
+
+        if (!sessionsFromBot.length) {
+            return {
+                dates: [],
+                pnl: [],
+                roe: [],
+                positions: [],
+            }
+        }
+        
+        let datesMap = new Map<string, number>();
+
+        const lastEnters = sessionsFromBot[sessionsFromBot.length - 1].POSITION.POSITION_ENTERs;
+        const curDate = new Date(lastEnters[lastEnters.length - 1].createdAt);
+        let startDate = new Date(sessionsFromBot[0].POSITION.enterTime);
+
+        while (
+            startDate.getMonth() !== curDate.getMonth() ||
+            startDate.getDate() !== curDate.getDate() ||
+            startDate.getFullYear() !== curDate.getFullYear()
+        ) {
+            datesMap.set(startDate.toISOString().split('T')[0], datesMap.size);
+            startDate = new Date(startDate.setDate(startDate.getDate() + 1));
+        }
+
+        const pnl = Array(datesMap.size).fill(0);
+        const roe = Array(datesMap.size).fill(0);
+        const positions = [];
+        let acc = 0;
+
+        sessionsFromBot.forEach((session) => {
+            const position = session.POSITION;
+            const posCloseTime = new Date(position.closeTime);
+            const index = datesMap.get(posCloseTime.toISOString().split('T')[0]);
+            const userDeposit = sessionsMap.get(session.INVEST_SESSION_ID).tradeBalance;
+
+            if (index !== undefined) {
+                const rate = userDeposit / position.totalDeposit;
+                
+                const percent = position.sumProfit / position.totalDeposit;
+                acc += percent * 100;
+
+                pnl[index] += position.sumProfit * rate;
+                roe[index] = acc;
+            }
+
+            const enters = position.POSITION_ENTERs;
+            const percentOfTotalDeposit = userDeposit / position.totalDeposit;
+
+            const mappedEnters = enters.map((enter) => {
+                return {
+                    date: new Date(enter.createdAt),
+                    action: 'purchase',
+                    amount: enter.volumeUSDT * percentOfTotalDeposit,
+                    price: enter.close,
+                    PNL: 0,
+                };
+            });
+
+            positions.push(...mappedEnters, {
+                date: new Date(position.closeTime),
+                action: position.positionType === 'LONG' ? 'sale' : 'purchase',
+                amount: position.volumeUSDT * percentOfTotalDeposit,
+                price: position.closePrice,
+                PNL: position.sumProfit * percentOfTotalDeposit,
+            })
+        });
+
+        roe.slice(1).forEach((item, index) => {
+            if (item === 0) {
+                roe[index + 1] = roe[index];
+            }
+        });
+        
+        return {
+            dates: Array.from(datesMap.keys()),
+            pnl: pnl.map((el) => Number(el.toFixed(2))),
+            roe: roe.map((el) => Number(el.toFixed(2))),
+            positions,
+        }
     }
 }

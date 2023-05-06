@@ -12,7 +12,6 @@ node:modules:
         - package-lock.json
     paths:
       - node_modules/
-  image: $NODE_IMAGE
   rules:
     - if: $AUTO_START_PIPELINE != "1"
       when: manual

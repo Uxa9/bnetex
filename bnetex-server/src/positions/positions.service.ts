@@ -82,8 +82,6 @@ export class PositionsService {
     }
 
     async getHistoricalDataOrders(dto: GetPositionsDto) {
-        console.log(dto);
-        
         const to = new Date().valueOf();
         const from = new Date().setMonth(new Date().getMonth() - dto.monthsCount)
 
