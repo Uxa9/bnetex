@@ -6,13 +6,14 @@ import { Position } from './position.model';
 import { PositionEnters } from './positionEnters.model';
 import { PositionsController } from './positions.controller';
 import { PositionsService } from './positions.service';
+import { InvestSession } from 'src/invest-sessions/invest-sessions.model';
 // import { Position, _positionSchema } from './shemas/_position.schema';
 
 @Module({
   controllers: [PositionsController],
   providers: [PositionsService],
   imports: [
-    SequelizeModule.forFeature([Position, PositionEnters]),
+    SequelizeModule.forFeature([Position, PositionEnters, InvestSession]),
     HttpModule
     // MongooseModule.forFeature([{ name: Position.name, schema: _positionSchema }])
   ],

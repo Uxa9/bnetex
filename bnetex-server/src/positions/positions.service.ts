@@ -6,11 +6,16 @@ import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { Op } from 'sequelize';
 import { Position } from './position.model';
 import { GetPositionsDto } from './dto/get-positions.dto';
+import { InvestSession } from 'src/invest-sessions/invest-sessions.model';
 
 @Injectable()
 export class PositionsService {
     constructor(
-        @InjectModel(Position) private positionRepository: typeof Position,
+        @InjectModel(Position)
+        private readonly positionRepository: typeof Position,
+        @InjectModel(InvestSession)
+        private readonly sessionsRepository: typeof InvestSession,
+
         private readonly httpService: HttpService,
     ) { }
 
@@ -208,5 +213,27 @@ export class PositionsService {
             },
             order: [['closeTime', 'DESC']],
         });
+    }
+
+    async closeCallback(dto: any) {
+        const sessionsIds = dto.POSITION.INVEST_SESSIONs.reduce((acc, cur) => {
+            acc.push(cur.INVEST_SESSION_ID);
+            return acc;
+        }, []);
+        
+        const sessions = await this.sessionsRepository.findAll({ where: {
+            id: sessionsIds }
+        });
+
+        await Promise.all(
+            sessions.map((session) => {
+                const coef = session.tradeBalance / dto.POSITION.totalDeposit;
+                
+                session.lastPnl += dto.POSITION.sumProfit * coef;
+                session.lastRoe = (session.lastPnl * 100) / session.tradeBalance;
+                
+                return session.save();
+            })
+        );
     }
 }

@@ -6,7 +6,7 @@ import { ValidationException } from "../exceptions/validation.exception";
 @Injectable()
 export class ValidationPipe implements PipeTransform<any> {
     async transform(value: any, metadata: ArgumentMetadata): Promise<any> {
-        if (metadata.type === 'custom') {
+        if (metadata.type === 'custom' || metadata.metatype.toString().startsWith('function')) {
             return value;
         }
     

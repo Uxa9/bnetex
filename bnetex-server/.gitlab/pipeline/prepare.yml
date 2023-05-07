@@ -3,6 +3,8 @@
 
 node:modules:
   extends: .prepare
+  tags:
+    - backend
   allow_failure: true
   cache: &node-modules-cache
     key:
