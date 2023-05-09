@@ -147,8 +147,7 @@ export default {
         const isResolutionForbidden = !!forbiddenMarkResolutions.find(it => it === resolution);
 
         if (isResolutionForbidden) return onDataCallback([]);
-        console.log(_from);
-        console.log(_to);
+        
         
         getTVData({
             from: _from * 1000,

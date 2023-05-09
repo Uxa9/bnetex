@@ -1,6 +1,6 @@
 import useApi from 'lib/hooks/useApi';
 import { getUserInfo } from 'lib/utils/getUserInfo';
-
+import moment from 'moment';
 const { api } = useApi();
 
 export const getUser = async () => {
@@ -16,8 +16,12 @@ export const changeUserPassword = async (prevPassword: string, newPassword: stri
 };
 
 export const getRoeAndPnl = async () => {
+
+    let from = moment(new Date()).subtract(6, 'months').format('x');
+    let to = moment(new Date()).format('x');
+
     return await api.get(
-        `/users/getRoeAndPnl`,
+        `/users/getRoeAndPnl?from=${from}&to=${to}`,
     );
 };
 

@@ -3,6 +3,9 @@ import { getUserInfo } from 'lib/utils/getUserInfo';
 import { Dispatch } from 'redux';
 import { RoePnlAction, RoePnlActionTypes, RoePnlState, SuccessfulRoePnlRequestData } from 'store/actions/roepnl';
 
+import moment from 'moment';
+
+
 const { api } = useApi();
 
 // toDo: такая штука должна быть на беке
@@ -22,8 +25,11 @@ export const getRoeAndPnl = () => {
     return (dispatch: Dispatch<RoePnlAction>) => {
         dispatch({ type: RoePnlActionTypes.SEND_REQUEST});
 
+        let from = moment(new Date()).subtract(6, 'months').format('x');
+        let to = moment(new Date()).format('x');
+
         return api
-            .get<SuccessfulRoePnlRequestData>(`/users/getRoeAndPnl`)
+            .get<SuccessfulRoePnlRequestData>(`/users/getRoeAndPnl?from=${from}&to=${to}`)
             .then((res) => {
                 dispatch({ type: RoePnlActionTypes.GET_ROE_PNL, data: transformDataToFixed(res.data)});
             })

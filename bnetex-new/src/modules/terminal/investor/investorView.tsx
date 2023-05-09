@@ -55,8 +55,12 @@ const InvestorView = () => {
 
     useEffect(() => {
 
-        //const tradeSession = io(`https://socket.bnetex.com?id=${decodeUserJwt().userId}`);      
-        const tradeSession = io(`http://localhost:5001?id=${decodeUserJwt().userId}`);
+        const tradeSession = io(`https://socket.bnetex.com?id=${decodeUserJwt().userId}`, {
+            transports: ["websocket", "polling"] // use WebSocket first, if available
+        });      
+        // const tradeSession = io(`http://localhost:5001?id=${decodeUserJwt().userId}`, {
+        //     transports: ["websocket", "polling"] // use WebSocket first, if available
+        // });
 
         socket.on('connect', () => {
             console.log('Connected!');
@@ -124,7 +128,7 @@ const InvestorView = () => {
                 )}
             >
                 <ToolTip
-                    title='Доход инвестора'
+                    title={`Доход инвестора ${viewType == 'trade' ? 'за открытую позицию' : ''}`}
                     infoText={`Доход инвестора это PNL алгоритма за вычетом комиссии BNETEX (${userInfo.roles[0].investPercent || 50}%), от суммы переданной алгоритму.`}
                 />
                 <div
