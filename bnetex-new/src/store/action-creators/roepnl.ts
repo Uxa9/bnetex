@@ -1,10 +1,7 @@
 import useApi from 'lib/hooks/useApi';
-import { getUserInfo } from 'lib/utils/getUserInfo';
 import { Dispatch } from 'redux';
 import { RoePnlAction, RoePnlActionTypes, RoePnlState, SuccessfulRoePnlRequestData } from 'store/actions/roepnl';
-
-import moment from 'moment';
-
+import { subMonths, getUnixTime } from 'date-fns';
 
 const { api } = useApi();
 
@@ -25,8 +22,8 @@ export const getRoeAndPnl = () => {
     return (dispatch: Dispatch<RoePnlAction>) => {
         dispatch({ type: RoePnlActionTypes.SEND_REQUEST});
 
-        let from = moment(new Date()).subtract(6, 'months').format('x');
-        let to = moment(new Date()).format('x');
+        const from = getUnixTime(subMonths(new Date, 6));
+        const to = getUnixTime(new Date);
 
         return api
             .get<SuccessfulRoePnlRequestData>(`/users/getRoeAndPnl?from=${from}&to=${to}`)
@@ -54,7 +51,6 @@ export const getHistoricalData = (period: number, amount: number) => {
                 amount,
             })
             .then((res) => {
-                
                 dispatch({ type: RoePnlActionTypes.GET_HISTORICAL_DATA, data: transformDataToFixed(res.data)});
             })
             .catch((err) => {
