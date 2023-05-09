@@ -116,13 +116,13 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
     }, [ theme, pair ]);
 
     // при изменении интервала времени в истории торгов запрашивать marks
-    useEffect(() => {
-        tvWidget?.onChartReady(() => {
-            tvWidget.activeChart().clearMarks();
-            tvWidget.activeChart().refreshMarks();
-        });
+    // useEffect(() => {
+    //     tvWidget?.onChartReady(() => {
+    //         tvWidget.activeChart().clearMarks();
+    //         tvWidget.activeChart().refreshMarks();
+    //     });
 
-    }, [ markRefreshFlag, tvWidget ]);
+    // }, [ markRefreshFlag, tvWidget ]);
 
     return (
         <div

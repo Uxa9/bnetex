@@ -1,7 +1,7 @@
 import { api } from 'config/api';
 
-const getPnL = async (id: number) => {
-    return await api.post('/users/getpnl', { userId: id })
+const getPnL = async () => {
+    return await api.post('/users/getpnl')
         .then((response) => {
             return {
                 dates: response.data.pnl.dates,

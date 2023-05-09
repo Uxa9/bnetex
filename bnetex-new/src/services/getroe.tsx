@@ -1,11 +1,7 @@
 import { api } from 'config/api';
 
-const getRoE = async (id: number) => {
-    return await api.post(
-        '/users/getroe', {
-            userId: id,
-        }
-    )
+const getRoE = async () => {
+    return await api.post('/users/getroe')
         .then((response) => {
             return {
                 dates: response.data.roe.dates,

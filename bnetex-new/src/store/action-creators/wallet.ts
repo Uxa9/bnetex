@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux';
 import { WalletAction, WalletActionTypes } from 'store/actions/wallets';
 import { WalletCategoryType } from 'lib/types/wallet';
-import { getUserInfo } from 'lib/utils/getUserInfo';
 import { api } from 'config/api';
 
 export const getWallets = () => {
@@ -32,7 +31,6 @@ export const transferBetweenWallets = (sender: WalletCategoryType, reciever: Wal
             sender: `${sender}Wallet`,
             reciever: `${reciever}Wallet`,
             amount: amount,
-            userId: getUserInfo().userId,
         };
 
         return api.post('/users/transfer-money', requestBody)
@@ -73,7 +71,6 @@ export const withdrawRequest = (walletAddress: string, amount: number, type: str
             walletAddress,
             amount,
             type,
-            userId: getUserInfo().userId,
         })
             .then(() => {
                 dispatch({ type: WalletActionTypes.WALLET_REQUEST_RETURNED});

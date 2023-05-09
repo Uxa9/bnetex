@@ -1,5 +1,5 @@
 import { api } from 'config/api';
-import { getUnixTime, subMonths } from 'date-fns';
+import { getTime, subMonths } from 'date-fns';
 
 export const getUser = async () => {
     return await api.get('/users/info');
@@ -15,8 +15,8 @@ export const changeUserPassword = async (prevPassword: string, newPassword: stri
 
 export const getRoeAndPnl = async () => {
 
-    const from = getUnixTime(subMonths(new Date, 6));
-    const to = getUnixTime(new Date);
+    const from = getTime(subMonths(new Date, 6));
+    const to = getTime(new Date);
 
     return await api.get(
         `/users/getRoeAndPnl?from=${from}&to=${to}`,
