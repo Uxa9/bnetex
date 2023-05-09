@@ -8,12 +8,12 @@ import clsx from 'clsx';
 import SignedNumber from 'modules/Global/components/signedNumber/signedNumber';
 import Chart from 'modules/Global/components/lightChart/chart';
 import { useTypedSelector } from 'lib/hooks/useTypedSelector';
-import { getUserInfo } from 'lib/utils/getUserInfo';
 import { WebsocketContext } from '../../../context/WebsocketContext';
-import { io, Socket } from 'socket.io-client';
+import { io } from 'socket.io-client';
 import { useAppDispatch } from 'lib/hooks/useAppDispatch';
-import {changeViewType, triggerTVMarkRefresh} from 'store/action-creators/algotrade';
+import { changeViewType, triggerTVMarkRefresh } from 'store/action-creators/algotrade';
 import { decodeUserJwt } from 'lib/utils/decodeJwt';
+import { getRoeAndPnl } from 'store/action-creators/roepnl';
 
 type InvestorViewType = 'trade' | 'history';
 
@@ -30,49 +30,27 @@ interface tradeSessionInfoInterface {
 const InvestorView = () => {
 
     const [viewType, setViewType] = useState<InvestorViewType>('trade');
-    const [investorPnl, setInvestorPnl] = useState<Number>(0);
-    const [invesotrRoe, setInvestorRoe] = useState<Number>(0);
 
     const dispatch = useAppDispatch();
     const userInfo = decodeUserJwt();
 
     const { dates, roe, pnl, loading } = useTypedSelector(state => state.roePnl);
 
-    // const tradeSession = io(`http://localhost:5001?id=${userInfo.userId}`);
-    
-    // const tradeSession = io(`http://localhost:5001?id=${userInfo.userId}`);
-
-    // tradeSession.on('connect', () => {
-    //     console.log('connected');
-    // });
-
-    // tradeSession.on('currentPosition', (newMessage: any) => {
-    //     console.log(newMessage);
-    // });
-
     const socket = useContext(WebsocketContext);
     const [userTradeInfo, setUserTradeInfo] = useState<tradeSessionInfoInterface>();
 
     useEffect(() => {
+        dispatch(getRoeAndPnl());
 
-        const tradeSession = io(`https://socket.bnetex.com?id=${decodeUserJwt().userId}`, {
-            transports: ["websocket", "polling"] // use WebSocket first, if available
-        });      
-        // const tradeSession = io(`http://localhost:5001?id=${decodeUserJwt().userId}`, {
-        //     transports: ["websocket", "polling"] // use WebSocket first, if available
-        // });
-
-        socket.on('connect', () => {
-            console.log('Connected!');
+        io(`https://socket.bnetex.com?id=${decodeUserJwt().userId}`, {
+            transports: ['websocket', 'polling'], // use WebSocket first, if available
         });
 
         socket.on('currentPosition', (tradeInfo: any) => {
-            console.log('onMessage event received!');            
             setUserTradeInfo(tradeInfo);
         });
 
         return () => {
-            console.log('Unregistering Events...');
             socket.off('connect');
             socket.off('onMessage');
         };
@@ -128,8 +106,9 @@ const InvestorView = () => {
                 )}
             >
                 <ToolTip
-                    title={`Доход инвестора ${viewType == 'trade' ? 'за открытую позицию' : ''}`}
-                    infoText={`Доход инвестора это PNL алгоритма за вычетом комиссии BNETEX (${userInfo.roles[0].investPercent || 50}%), от суммы переданной алгоритму.`}
+                    title={`Доход инвестора ${viewType === 'trade' ? 'за открытую позицию' : ''}`}
+                    infoText={`Доход инвестора это PNL алгоритма за вычетом комиссии
+                    BNETEX (${userInfo.roles[0].investPercent || 50}%), от суммы переданной алгоритму.`}
                 />
                 <div
                     className={styles['data-card__row']}
@@ -163,14 +142,12 @@ const InvestorView = () => {
             </div>
             <Chart
                 data={
-                    viewType === 'history' ?
-                        dates.map((date, index) => {
-                            return {
-                                time: date,
-                                value: pnl[index],
-                            };
-                        }) :
-                        []
+                    dates.map((date, index) => {
+                        return {
+                            time: date,
+                            value: pnl[index],
+                        };
+                    })
                 }
                 type={'PNL'}
                 className={clsx(
@@ -181,14 +158,12 @@ const InvestorView = () => {
             />
             <Chart
                 data={
-                    viewType === 'history' ?
-                        dates.map((date, index) => {
-                            return {
-                                time: date,
-                                value: roe[index],
-                            };
-                        }) :
-                        []
+                    dates.map((date, index) => {
+                        return {
+                            time: date,
+                            value: roe[index],
+                        };
+                    })
                 }
                 type={'ROE'}
                 className={clsx(

@@ -61,7 +61,7 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
     const widgetRef = useRef<HTMLDivElement | null>(null);
     const [tvWidget, setTvWidget] = useState<IChartingLibraryWidget | null>(null);
     const { theme } = useTheme();
-    const {pair} = useParams();
+    const { pair } = useParams();
     const props = {...defaultProps, ...componentProps};
     const { markRefreshFlag } = useTypedSelector(state => state.algotrade);
 
@@ -75,7 +75,7 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
             interval: props.interval as ChartingLibraryWidgetOptions['interval'],
             container: widgetRef.current,
             library_path: props.libraryPath as string,
-
+            autosize: true,
             locale: getLanguageFromURL() || 'ru',
             disabled_features: ['use_localstorage_for_settings'],
             enabled_features: ['study_templates'],
@@ -84,7 +84,6 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
             client_id: props.clientId,
             user_id: props.userId,
             fullscreen: props.fullscreen,
-            autosize: props.autosize,
             studies_overrides: props.studiesOverrides,
             // единственный рабочий вариант - подгрузка из папки public
             custom_css_url: '/charting_library/tradingviewRecolor.scss',
@@ -97,25 +96,12 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
         // навешиваем слушаетель события на смену resolution
         // если выбран 1d или 3d - очистить маркеры
         _widget?.onChartReady(() => {
-
-            let visibleRange = _widget.activeChart().getVisibleRange();
-            let intervalLength = visibleRange.to - visibleRange.from;
-
             _widget.activeChart().onIntervalChanged().subscribe(null,
                 (interval) => {
                     const isResolutionForbidden = !!forbiddenMarkResolutions.find(it => it === interval);
 
                     if (isResolutionForbidden) _widget.activeChart().clearMarks();
                 });
-            
-            _widget.activeChart().onVisibleRangeChanged().subscribe(null, 
-                (interval) => {
-                    if (Math.abs(visibleRange.from - interval.from) > intervalLength / 2) {
-                        _widget.activeChart().clearMarks();
-                        _widget.activeChart().refreshMarks();
-                    }
-                }
-            );
         });
 
         setTvWidget(_widget);
@@ -131,13 +117,12 @@ const TradingViewWidget = (componentProps: TradingViewWidgetProps = defaultProps
 
     // при изменении интервала времени в истории торгов запрашивать marks
     useEffect(() => {
-
         tvWidget?.onChartReady(() => {
             tvWidget.activeChart().clearMarks();
             tvWidget.activeChart().refreshMarks();
         });
 
-    }, [markRefreshFlag, tvWidget]);
+    }, [ markRefreshFlag, tvWidget ]);
 
     return (
         <div

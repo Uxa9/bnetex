@@ -1,54 +1,54 @@
 :root {
-  --grayscale-card-light: #fff;
-  --grayscale-card-dark: #151216;
+    --grayscale-card-light: #fff;
+    --grayscale-card-dark: #151216;
 
-  --grayscale-11-light: #1b161e;
-  --grayscale-11-dark: #fcf5ff;
+    --grayscale-11-light: #1b161e;
+    --grayscale-11-dark: #fcf5ff;
 
-  --grayscale-2-light: #f1eef2;
-  --grayscale-2-dark: #161418;
+    --grayscale-2-light: #f1eef2;
+    --grayscale-2-dark: #161418;
 
-  --accent-6-light: #f8f0ff;
-  --accent-6-dark: #281b31;
+    --accent-6-light: #f8f0ff;
+    --accent-6-dark: #281b31;
 
-  --accent-4-light: #d39afe;
-  --accent-4-dark: #550b8d;
+    --accent-4-light: #d39afe;
+    --accent-4-dark: #550b8d;
 
-  --accent-3-light: #9202ff;
-  --accent-3-dark: #8e13ec;
+    --accent-3-light: #9202ff;
+    --accent-3-dark: #8e13ec;
 
-  --accent-2-light: #7500cc;
-  --accent-2-dark: #a25cd6;
-}
+    --accent-2-light: #7500cc;
+    --accent-2-dark: #a25cd6;
+  }
 
-:root:not(.theme-dark) {
-  --tv-color-platform-background: var(--grayscale-card-light);
-  --tv-color-pane-background: var(--grayscale-card-light);
-  --tv-color-pane-background-secondary: var(--grayscale-2-light);
-  --tv-color-toolbar-button-background-hover: var(--accent-6-light);
-  --tv-color-toolbar-button-background-secondary-hover: var(--accent-6-light);
-  --tv-color-toolbar-button-background-expanded: var(--accent-6-light);
-  --tv-color-toolbar-button-text: var(--grayscale-11-light);
-  --tv-color-toolbar-button-text-hover: var(--accent-3-light);
-  --tv-color-toolbar-button-text-active: var(--accent-4-light);
-  --tv-color-toolbar-button-text-active-hover: var(--accent-2-light);
-  --tv-color-item-active-text: red;
-  --tv-color-toolbar-toggle-button-background-active: blue;
-  --tv-color-toolbar-toggle-button-background-active-hover: magenta;
-}
+  :root:not(.theme-dark) {
+    --tv-color-platform-background: var(--grayscale-card-light);
+    --tv-color-pane-background: var(--grayscale-card-light);
+    --tv-color-pane-background-secondary: var(--grayscale-2-light);
+    --tv-color-toolbar-button-background-hover: var(--accent-6-light);
+    --tv-color-toolbar-button-background-secondary-hover: var(--accent-6-light);
+    --tv-color-toolbar-button-background-expanded: var(--accent-6-light);
+    --tv-color-toolbar-button-text: var(--grayscale-11-light);
+    --tv-color-toolbar-button-text-hover: var(--accent-3-light);
+    --tv-color-toolbar-button-text-active: var(--accent-4-light);
+    --tv-color-toolbar-button-text-active-hover: var(--accent-2-light);
+    --tv-color-item-active-text: red;
+    --tv-color-toolbar-toggle-button-background-active: blue;
+    --tv-color-toolbar-toggle-button-background-active-hover: magenta;
+  }
 
-.theme-dark:root {
-  --tv-color-platform-background: var(--grayscale-card-dark);
-  --tv-color-pane-background: var(--grayscale-card-dark);
-  --tv-color-pane-background-secondary: var(--grayscale-2-dark);
-  --tv-color-toolbar-button-background-hover: var(--accent-6-dark);
-  --tv-color-toolbar-button-background-secondary-hover: var(--accent-6-dark);
-  --tv-color-toolbar-button-background-expanded: var(--accent-6-dark);
-  --tv-color-toolbar-button-text: var(--grayscale-11-dark);
-  --tv-color-toolbar-button-text-hover: var(--accent-3-dark);
-  --tv-color-toolbar-button-text-active: var(--accent-4-dark);
-  --tv-color-toolbar-button-text-active-hover: var(--accent-2-dark);
-  --tv-color-item-active-text: red;
-  --tv-color-toolbar-toggle-button-background-active: rgb(229, 255, 0);
-  --tv-color-toolbar-toggle-button-background-active-hover: magenta;
-}
+  .theme-dark:root {
+    --tv-color-platform-background: var(--grayscale-card-dark);
+    --tv-color-pane-background: var(--grayscale-card-dark);
+    --tv-color-pane-background-secondary: var(--grayscale-2-dark);
+    --tv-color-toolbar-button-background-hover: var(--accent-6-dark);
+    --tv-color-toolbar-button-background-secondary-hover: var(--accent-6-dark);
+    --tv-color-toolbar-button-background-expanded: var(--accent-6-dark);
+    --tv-color-toolbar-button-text: var(--grayscale-11-dark);
+    --tv-color-toolbar-button-text-hover: var(--accent-3-dark);
+    --tv-color-toolbar-button-text-active: var(--accent-4-dark);
+    --tv-color-toolbar-button-text-active-hover: var(--accent-2-dark);
+    --tv-color-item-active-text: red;
+    --tv-color-toolbar-toggle-button-background-active: rgb(229, 255, 0);
+    --tv-color-toolbar-toggle-button-background-active-hover: magenta;
+  }
