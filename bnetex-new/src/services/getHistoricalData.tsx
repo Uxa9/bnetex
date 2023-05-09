@@ -1,6 +1,4 @@
-import useApi from 'lib/hooks/useApi';
-
-const { api } = useApi();
+import { api } from 'config/api';
 
 interface ReturnType {
     dates: string[],
@@ -15,7 +13,6 @@ export const getHistoricalData = async (period: number, amount: number): Promise
             amount,
         });
 
-        
 
     return {
         dates: result.data.dates,
@@ -24,6 +21,6 @@ export const getHistoricalData = async (period: number, amount: number): Promise
     };
 };
 
-export const getHistoricalDataOrders = async (period: number) => {    
+export const getHistoricalDataOrders = async (period: number) => {
     return await api.get(`/positions/${period}`);
 };

@@ -1,6 +1,5 @@
+import { api } from 'config/api';
 import { getUnixTime, subMonths } from 'date-fns';
-import useApi from 'lib/hooks/useApi';
-const { api } = useApi();
 
 export const getUser = async () => {
     return await api.get('/users/info');

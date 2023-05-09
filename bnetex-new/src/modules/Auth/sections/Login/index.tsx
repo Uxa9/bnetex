@@ -42,14 +42,9 @@ const Login = () => {
 
     const onSubmit = (data: LoginFormData) => {
         dispatch(loginUser(data.email, data.password))
-            // .then(() => {
-            //     setTimeout(() => goToState(DASHBOARD), 2000);
-            //     })
-            .then(() => {
-                location.assign(`${location.origin}/dashboard`);
-            })
+            .then(() => goToState(DASHBOARD))
             .catch((error: Error) => {
-                error.message === 'USER_NOT_ACTIVATED' && 
+                error.message === 'USER_NOT_ACTIVATED' &&
                     goToState(`${AUTH}/${VERIFY_EMAIL}`);
                 bakeToast.error(error.message);
             });
@@ -57,7 +52,7 @@ const Login = () => {
 
     return(
         <>
-            <FormCard 
+            <FormCard
                 title={'Добро пожаловать!'}
                 subtitle={'Войдите, чтобы получить доступ к торговле на бирже BNETEX.'}
                 onSubmit={handleSubmit(onSubmit)}
@@ -76,19 +71,19 @@ const Login = () => {
                         key={'password'}
                         type={isPasswordVisible ? 'text' : 'password'}
                         autoComplete={'current-password'}
-                        postfix={isPasswordVisible ? 
+                        postfix={isPasswordVisible ?
                             <EyeSlash
                                 onClick={() => setIsPasswordVisible(false)}
                                 className={styles['password-postfix']}
-                            /> : 
-                            <Eye 
-                                onClick={() => setIsPasswordVisible(true)} 
+                            /> :
+                            <Eye
+                                onClick={() => setIsPasswordVisible(true)}
                                 className={styles['password-postfix']}
                             />}
                     />,
-                ]} 
+                ]}
                 button={
-                    <Button 
+                    <Button
                         text={'Войти'}
                         type={'submit'}
                         disabled={!isValid}
@@ -97,19 +92,19 @@ const Login = () => {
                 }
                 actions={
                     <>
-                        {/* <Button 
+                        {/* <Button
                             text='Забыли пароль?'
                             buttonStyle={'flat'}
                             type={'button'}
                             key={'forgot-password'}
                             mini
-                        /> */} 
-                        <div 
+                        /> */}
+                        <div
                             className={styles['register-action']}
                             key={'register-action'}
                         >
                             <span className='text'>Нет аккаунта?</span>
-                            <Button 
+                            <Button
                                 text={'Зарегистрироваться'}
                                 buttonStyle={'flat'}
                                 type={'button'}

@@ -1,10 +1,7 @@
-import useApi from 'lib/hooks/useApi';
+import { api } from 'config/api';
 import { Transaction } from 'lib/types/transaction';
-import { getUserInfo } from 'lib/utils/getUserInfo';
 import { Dispatch } from 'redux';
 import { TransactionAction, TransactionActionTypes } from 'store/actions/transactions';
-
-const { api } = useApi();
 
 // не должно быть такой хуйни - нужно править бек
 const parseTransactions = (transactions: any[]): Transaction[] => {
@@ -27,7 +24,7 @@ export const getTransactions = () => {
         dispatch({ type: TransactionActionTypes.SEND_REQUEST});
 
         return api
-            .get(`/wallets/transactions`)
+            .get('/wallets/transactions')
             .then((res) => {
                 dispatch({ type: TransactionActionTypes.GET_TRANSACTIONS, data: parseTransactions(res.data)});
             })

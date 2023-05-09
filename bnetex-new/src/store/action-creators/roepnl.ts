@@ -1,9 +1,7 @@
-import useApi from 'lib/hooks/useApi';
 import { Dispatch } from 'redux';
 import { RoePnlAction, RoePnlActionTypes, RoePnlState, SuccessfulRoePnlRequestData } from 'store/actions/roepnl';
 import { subMonths, getUnixTime } from 'date-fns';
-
-const { api } = useApi();
+import { api } from 'config/api';
 
 // toDo: такая штука должна быть на беке
 const transformDataToFixed = (data: SuccessfulRoePnlRequestData): Omit<RoePnlState, 'loading'> => {

@@ -1,9 +1,6 @@
-import useApi from 'lib/hooks/useApi';
+import { api } from 'config/api';
 
 const getRoE = async (id: number) => {
-
-    const { api } = useApi();
-
     return await api.post(
         '/users/getroe', {
             userId: id,

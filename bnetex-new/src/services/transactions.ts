@@ -1,7 +1,5 @@
-import useApi from 'lib/hooks/useApi';
+import { api } from 'config/api';
 import { getUserInfo } from 'lib/utils/getUserInfo';
-
-const { api } = useApi();
 
 export const createTransaction = async (amount: number) => {
     return await api.post(

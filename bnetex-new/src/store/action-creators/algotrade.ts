@@ -1,17 +1,13 @@
-import useApi from 'lib/hooks/useApi';
-import { decodeUserJwt } from 'lib/utils/decodeJwt';
-import {getUserInfo} from 'lib/utils/getUserInfo';
-import {Dispatch} from 'redux';
-import {AlgotradeAction, AlgotradeActionTypes, AlgotradeDataResponse} from 'store/actions/algotrade';
-
-const { api } = useApi();
+import { api } from 'config/api';
+import { Dispatch } from 'redux';
+import { AlgotradeAction, AlgotradeActionTypes, AlgotradeDataResponse } from 'store/actions/algotrade';
 
 export const getAlgotradeData = () => {
     return (dispatch: Dispatch<AlgotradeAction>) => {
         dispatch({ type: AlgotradeActionTypes.SEND_REQUEST});
 
         return api
-            .get<AlgotradeDataResponse>(`/users/invest`)
+            .get<AlgotradeDataResponse>('/users/invest')
             .then((res) => {
                 dispatch({ type: AlgotradeActionTypes.GET_ALGOTRADE_DATA, data: res.data});
             })
@@ -31,5 +27,5 @@ export const triggerTVMarkRefresh = () => {
 export const changeViewType = (payload: string) => {
     return (dispatch: Dispatch<AlgotradeAction>) => {
         dispatch({type: AlgotradeActionTypes.CHANGE_VIEW_TYPE, payload: payload});
-    }
-}
+    };
+};

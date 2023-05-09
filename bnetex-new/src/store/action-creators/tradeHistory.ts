@@ -1,10 +1,8 @@
 import { AxiosResponse } from 'axios';
-import useApi from 'lib/hooks/useApi';
+import { api } from 'config/api';
 import { TradeHistoryItem } from 'lib/types/tradeHistoryItem';
 import { Dispatch } from 'redux';
 import { TradeHistoryAction, TradeHistoryActionTypes } from 'store/actions/tradeHistory';
-
-const { api } = useApi();
 
 export const getTradeHistory = (period: number, _amount: number) => {
     return async (dispatch: Dispatch<TradeHistoryAction>) => {

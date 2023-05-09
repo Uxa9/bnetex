@@ -1,11 +1,8 @@
-import useApi from 'lib/hooks/useApi';
+import { api } from 'config/api';
 
 const getUserTransactions = async () => {
-
-    const { api } = useApi();
-
     return await api.get(
-        `/request/user`,
+        '/request/user',
     )
         .then((response) => {
             return response.data;

@@ -1,17 +1,15 @@
 import { Dispatch } from 'redux';
 import { WalletAction, WalletActionTypes } from 'store/actions/wallets';
-import useApi from 'lib/hooks/useApi';
 import { WalletCategoryType } from 'lib/types/wallet';
 import { getUserInfo } from 'lib/utils/getUserInfo';
-
-const { api } = useApi();
+import { api } from 'config/api';
 
 export const getWallets = () => {
     return (dispatch: Dispatch<WalletAction>) => {
         dispatch({ type: WalletActionTypes.SEND_WALLET_REQUEST});
 
         return api
-            .get(`/users/getWallets`)
+            .get('/users/getWallets')
             .then((res) => {
                 dispatch({
                     type: WalletActionTypes.GET_WALLETS,

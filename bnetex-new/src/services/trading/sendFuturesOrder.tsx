@@ -1,13 +1,10 @@
-import useApi from "lib/hooks/useApi";
-import { getUserInfo } from "lib/utils/getUserInfo";
-
-const { api } = useApi();
+import { api } from 'config/api';
+import { getUserInfo } from 'lib/utils/getUserInfo';
 
 export const sendFuturesOrder = async (params: any) => {
-
     return await api.post(
-        `/invest-trading/place-order`, {
+        '/invest-trading/place-order', {
             ...params,
-            id: getUserInfo().userId
+            id: getUserInfo().userId,
         });
 };

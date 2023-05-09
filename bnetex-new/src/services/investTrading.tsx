@@ -1,10 +1,7 @@
-import useApi from 'lib/hooks/useApi';
+import { api } from 'config/api';
 import { getUserInfo } from 'lib/utils/getUserInfo';
 
-const { api } = useApi();
-
 export const startInvestTrading = async (amount: number) => {
-
     return await api.post(
         '/users/startInvest', {
             amount: amount,
@@ -14,6 +11,6 @@ export const startInvestTrading = async (amount: number) => {
 
 export const stopInvestTrading = async () => {
     return await api.get(
-        `/users/stopInvest`
+        '/users/stopInvest'
     );
 };

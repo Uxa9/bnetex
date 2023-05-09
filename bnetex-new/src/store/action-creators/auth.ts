@@ -1,9 +1,6 @@
-import useApi from 'lib/hooks/useApi';
-import { getUserInfo } from 'lib/utils/getUserInfo';
 import { Dispatch } from 'redux';
 import { AuthAction, AuthActionTypes } from '../actions/auth';
-
-const { api } = useApi();
+import { api } from 'config/api';
 
 interface LoginResponse {
     message: string;
@@ -22,8 +19,6 @@ export const loginUser = (email: string, password: string) => {
                 password: password,
             })
             .then((res) => {
-                console.log(res);
-                
                 const userInfo = {
                     token: res.data.token,
                     userId: res.data.userId,
@@ -64,7 +59,7 @@ export const signup = (email: string, password: string) => {
                 localStorage.setItem('userInfo-BNETEX', JSON.stringify(userInfo));
                 dispatch({ type: AuthActionTypes.AUTH_REQUEST_RETURNED});
             })
-            .catch((err) => {                
+            .catch((err) => {
                 dispatch({ type: AuthActionTypes.AUTH_REQUEST_RETURNED});
                 throw new Error(err.response.data.message);
             });

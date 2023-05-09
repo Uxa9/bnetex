@@ -1,14 +1,7 @@
-import useApi from 'lib/hooks/useApi';
+import { api } from 'config/api';
 
 const getPnL = async (id: number) => {
-
-    const { api } = useApi();
-
-    return await api.post(
-        '/users/getpnl', {
-            userId: id,
-        }
-    )
+    return await api.post('/users/getpnl', { userId: id })
         .then((response) => {
             return {
                 dates: response.data.pnl.dates,
